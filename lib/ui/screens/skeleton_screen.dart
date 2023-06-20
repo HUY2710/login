@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../cubit/banner_ad_cubit.dart';
 import '../../cubit/bottom_nav_cubit.dart';
 import '../../service/admob/app_lifecycle_reactor.dart';
 import '../../service/admob/app_open_ad_manager.dart';
+import '../../service/admob/banner_ad_manager.dart';
 import '../widgets/app_bar_gone.dart';
 import '../widgets/bottom_nav_bar.dart';
+import '../widgets/first_screen/ad_banner.dart';
 import 'first_screen.dart';
 import 'second_screen.dart';
 
@@ -43,24 +46,37 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
       SecondScreen(),
     ];
 
-    return BlocProvider<BottomNavCubit>(
-        create: (BuildContext context) => BottomNavCubit(),
-        child: Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: const AppBarGone(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (BuildContext context) => BannerAdCubit(BannerAdManager())),
+        BlocProvider(
+          create: (BuildContext context) => BottomNavCubit(),
+        )
+      ],
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: const AppBarGone(),
 
-          /// When switching between tabs this will fade the old
-          /// layout out and the new layout in.
-          body: BlocBuilder<BottomNavCubit, int>(
-            builder: (BuildContext context, int state) {
-              return AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: pageNavigation.elementAt(state));
-            },
-          ),
+        /// When switching between tabs this will fade the old
+        /// layout out and the new layout in.
+        body: Column(
+          children: [
+            Expanded(
+              child: BlocBuilder<BottomNavCubit, int>(
+                builder: (BuildContext context, int state) {
+                  return AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: pageNavigation.elementAt(state));
+                },
+              ),
+            ),
+            const BannerAdWidget()
+          ],
+        ),
 
-          bottomNavigationBar: const BottomNavBar(),
-          backgroundColor: Theme.of(context).colorScheme.background,
-        ));
+        bottomNavigationBar: const BottomNavBar(),
+        backgroundColor: Theme.of(context).colorScheme.background,
+      ),
+    );
   }
 }
