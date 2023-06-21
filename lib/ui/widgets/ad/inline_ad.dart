@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../cubit/inline_ad_cubit.dart';
-import '../../../service/admob/banner_ad_manager.dart';
+import '../../../service/admob/ad_manager/banner_ad_manager.dart';
 
 class InlineAdWidget extends StatefulWidget {
   const InlineAdWidget({super.key});

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import 'admob_key_constant.dart';
+import '../admob_key_constant.dart';
 
 class BannerAdManager {
   BannerAdManager({required this.context, this.insets = 16});

@@ -1,11 +1,11 @@
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import 'app_open_ad_manager.dart';
+import 'ad_manager/app_open_ad_manager.dart';
 
 /// Listens for app foreground events and shows app open ads.
 class AppLifecycleReactor {
-
   AppLifecycleReactor({required this.appOpenAdManager});
+
   final AppOpenAdManager appOpenAdManager;
 
   void listenToAppStateChanges() {

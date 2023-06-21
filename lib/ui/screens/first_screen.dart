@@ -2,12 +2,26 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
+import '../../service/admob/ad_manager/interstitial_ad_manager.dart';
 import '../widgets/first_screen/info_card.dart';
 import '../widgets/first_screen/theme_card.dart';
 import '../widgets/header.dart';
 
-class FirstScreen extends StatelessWidget {
+class FirstScreen extends StatefulWidget {
   const FirstScreen({super.key});
+
+  @override
+  State<FirstScreen> createState() => _FirstScreenState();
+}
+
+class _FirstScreenState extends State<FirstScreen> {
+  final InterstitialAdManager interstitialAdManager = InterstitialAdManager();
+
+  @override
+  void initState() {
+    interstitialAdManager.loadAd();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +44,10 @@ class FirstScreen extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(12))),
               child: SwitchListTile(
                 onChanged: (bool newValue) {
+                  if (interstitialAdManager.interstitialAd != null) {
+                    interstitialAdManager.interstitialAd!.show();
+                  }
+
                   /// Example: Change locale
                   /// The initial locale is automatically determined by the library.
                   /// Changing the locale like this will persist the selected locale.
