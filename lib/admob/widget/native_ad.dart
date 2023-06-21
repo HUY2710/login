@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../../../cubit/ad/native_ad_cubit.dart';
-import '../../../service/admob/ad_manager/native_ad_manager.dart';
+import '../../../admob/cubit/native_ad_cubit.dart';
+import '../manager/native_ad_manager.dart';
 
 class NativeAdWidget extends StatefulWidget {
   const NativeAdWidget({

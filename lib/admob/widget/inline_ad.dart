@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../../../cubit/ad/inline_ad_cubit.dart';
-import '../../../service/admob/ad_manager/banner_ad_manager.dart';
+import '../cubit/inline_ad_cubit.dart';
+import '../manager/banner_ad_manager.dart';
 
 class InlineAdWidget extends StatefulWidget {
-  const InlineAdWidget({super.key});
+  const InlineAdWidget({super.key, required this.size, this.insets});
+
+  final AdSize size;
+  final double? insets;
 
   @override
   State<InlineAdWidget> createState() => _InlineAdWidgetState();
@@ -18,14 +21,16 @@ class _InlineAdWidgetState extends State<InlineAdWidget> {
 
   @override
   void initState() {
-    inlineAdCubit = InlineAdCubit(BannerAdManager(context: context));
+    final BannerAdManager bannerAdManager =
+        BannerAdManager(context: context, insets: widget.insets ?? 16);
+    inlineAdCubit = InlineAdCubit(bannerAdManager);
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    inlineAdCubit.loadAd();
+    inlineAdCubit.loadAd(widget.size);
     _currentOrientation = MediaQuery.of(context).orientation;
   }
 
@@ -64,7 +69,7 @@ class _InlineAdWidgetState extends State<InlineAdWidget> {
         // Reload the ad if the orientation changes.
         if (_currentOrientation != orientation) {
           _currentOrientation = orientation;
-          inlineAdCubit.loadAd();
+          inlineAdCubit.loadAd(widget.size);
         }
         return Container();
       },

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../admob_key_constant.dart';
+import '../util/admob_key_constant.dart';
 
 class InterstitialAdManager {
   InterstitialAd? interstitialAd;
@@ -33,7 +33,7 @@ class InterstitialAdManager {
 
   void _onAdLoaded(InterstitialAd ad) {
     ad.fullScreenContentCallback = FullScreenContentCallback<InterstitialAd>(
-        // Called when the ad showed the full screen content.
+      // Called when the ad showed the full screen content.
         onAdShowedFullScreenContent: (InterstitialAd ad) {},
         // Called when an impression occurs on the ad.
         onAdImpression: (InterstitialAd ad) {},

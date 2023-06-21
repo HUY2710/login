@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../admob_key_constant.dart';
+import '../util/admob_key_constant.dart';
 
 class AppOpenAdManager {
   /// Maximum duration allowed between loading and showing the ad.

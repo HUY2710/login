@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../../service/admob/ad_manager/native_ad_manager.dart';
+import '../manager/native_ad_manager.dart';
 
 class NativeAdCubit extends Cubit<NativeAd?> {
   NativeAdCubit(this.adManager) : super(null);

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:ionicons/ionicons.dart';
 
-import '../../service/admob/ad_manager/interstitial_ad_manager.dart';
-import '../widgets/ad/native_ad.dart';
+import '../../admob/manager/interstitial_ad_manager.dart';
+import '../../admob/widget/native_ad.dart';
 import '../widgets/first_screen/info_card.dart';
 import '../widgets/first_screen/theme_card.dart';
 import '../widgets/header.dart';

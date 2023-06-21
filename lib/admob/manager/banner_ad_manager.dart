@@ -4,13 +4,13 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../admob_key_constant.dart';
+import '../util/admob_key_constant.dart';
 
 class BannerAdManager {
   BannerAdManager({required this.context, this.insets = 16});
 
   BuildContext context;
-  double insets;
+  double? insets;
 
   BannerAd? bannerAd;
   final String adUnitId = Platform.isAndroid
@@ -30,8 +30,7 @@ class BannerAdManager {
     return _loadAd(size: size);
   }
 
-  Future<BannerAd?> loadInlineAdaptiveAd() async {
-    const AdSize size = AdSize.mediumRectangle;
+  Future<BannerAd?> loadInlineAdaptiveAd(AdSize size) async {
     return _loadAd(size: size);
   }
 
