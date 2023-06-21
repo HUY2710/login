@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:ionicons/ionicons.dart';
 
 import '../../service/admob/ad_manager/interstitial_ad_manager.dart';
+import '../widgets/ad/native_ad.dart';
 import '../widgets/first_screen/info_card.dart';
 import '../widgets/first_screen/theme_card.dart';
 import '../widgets/header.dart';
@@ -118,7 +120,7 @@ class _FirstScreenState extends State<FirstScreen> {
               mainAxisSpacing: 8,
               childAspectRatio: 4 / 5.5,
               padding: EdgeInsets.zero,
-              children: const <InfoCard>[
+              children: const <Widget>[
                 /// Example: it is good practice to put widgets in separate files.
                 /// This way the screen files won't become too large and
                 /// the code becomes more clear.
@@ -127,6 +129,7 @@ class _FirstScreenState extends State<FirstScreen> {
                     content: 'localization_content',
                     icon: Ionicons.language_outline,
                     isPrimaryColor: true),
+                NativeAdWidget(templateType: TemplateType.medium),
                 InfoCard(
                     title: 'linting_title',
                     content: 'linting_content',

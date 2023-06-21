@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../cubit/anchored_ad_cubit.dart';
+import '../../cubit/ad/anchored_ad_cubit.dart';
 import '../../cubit/bottom_nav_cubit.dart';
 import '../../service/admob/ad_manager/app_open_ad_manager.dart';
 import '../../service/admob/ad_manager/banner_ad_manager.dart';
@@ -22,7 +22,6 @@ class SkeletonScreen extends StatefulWidget {
 class _SkeletonScreenState extends State<SkeletonScreen> {
   late AppLifecycleReactor _appLifecycleReactor;
   final AppOpenAdManager appOpenAdManager = AppOpenAdManager();
-
 
   @override
   void initState() {
@@ -80,10 +79,7 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
         ),
 
         bottomNavigationBar: const BottomNavBar(),
-        backgroundColor: Theme
-            .of(context)
-            .colorScheme
-            .background,
+        backgroundColor: Theme.of(context).colorScheme.background,
       ),
     );
   }
