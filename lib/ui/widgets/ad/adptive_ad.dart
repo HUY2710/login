@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../cubit/ad/anchored_ad_cubit.dart';
+import '../../../service/admob/ad_manager/banner_ad_manager.dart';
 
 class AdaptiveAdWidget extends StatefulWidget {
   const AdaptiveAdWidget({super.key});
@@ -12,15 +13,26 @@ class AdaptiveAdWidget extends StatefulWidget {
 }
 
 class _AdaptiveAdWidgetState extends State<AdaptiveAdWidget> {
+  late AnchoredAdCubit anchoredAdCubit;
+
   @override
   void initState() {
-    context.read<AnchoredAdCubit>().loadAd();
+    final BannerAdManager bannerAdManager = BannerAdManager(context: context);
+    anchoredAdCubit = AnchoredAdCubit(bannerAdManager);
+
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    anchoredAdCubit.loadAd();
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AnchoredAdCubit, BannerAd?>(
+      bloc: anchoredAdCubit,
       builder: (BuildContext context, BannerAd? state) {
         Widget child;
         if (state != null) {

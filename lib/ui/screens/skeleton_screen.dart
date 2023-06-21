@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../cubit/ad/anchored_ad_cubit.dart';
 import '../../cubit/bottom_nav_cubit.dart';
 import '../../service/admob/ad_manager/app_open_ad_manager.dart';
-import '../../service/admob/ad_manager/banner_ad_manager.dart';
 import '../../service/admob/app_lifecycle_reactor.dart';
 import '../widgets/ad/adptive_ad.dart';
 import '../widgets/app_bar_gone.dart';
@@ -48,15 +46,8 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
       SecondScreen(),
     ];
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AnchoredAdCubit>(
-            create: (BuildContext context) =>
-                AnchoredAdCubit(BannerAdManager(context: context))),
-        BlocProvider<BottomNavCubit>(
-          create: (BuildContext context) => BottomNavCubit(),
-        )
-      ],
+    return BlocProvider<BottomNavCubit>(
+      create: (BuildContext context) => BottomNavCubit(),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: const AppBarGone(),

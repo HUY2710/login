@@ -12,7 +12,7 @@ class BannerAdManager {
   BuildContext context;
   double insets;
 
-  BannerAd? _bannerAd;
+  BannerAd? bannerAd;
   final String adUnitId = Platform.isAndroid
       ? AdmobKeyConstant.bannerAndroid
       : AdmobKeyConstant.bannerIos;
@@ -39,13 +39,19 @@ class BannerAdManager {
       {required AdSize size,
       Function(Ad ad)? onAdLoaded,
       Function(Ad ad, LoadAdError err)? onAdFailedToLoad}) async {
-    _bannerAd = BannerAd(
+    final Completer<BannerAd> completer = Completer<BannerAd>();
+    bannerAd = BannerAd(
       adUnitId: adUnitId,
       request: const AdRequest(),
       size: size,
       listener: BannerAdListener(
         // Called when an ad is successfully received.
-        onAdLoaded: onAdLoaded,
+        onAdLoaded: (Ad ad) {
+          if (onAdLoaded != null) {
+            onAdLoaded(ad);
+          }
+          completer.complete(bannerAd);
+        },
         // Called when an ad request failed.
         onAdFailedToLoad: (Ad ad, LoadAdError err) {
           if (onAdFailedToLoad != null) {
@@ -55,11 +61,11 @@ class BannerAdManager {
         },
       ),
     );
-    await _bannerAd!.load();
-    return _bannerAd!;
+    bannerAd!.load();
+    return completer.future;
   }
 
   void dispose() {
-    _bannerAd?.dispose();
+    bannerAd?.dispose();
   }
 }

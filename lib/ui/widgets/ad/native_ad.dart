@@ -23,14 +23,8 @@ class _NativeAdWidgetState extends State<NativeAdWidget> {
   @override
   void initState() {
     nativeAdCubit = NativeAdCubit(NativeAdManager(widget.templateType));
-
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
     nativeAdCubit.loadAd();
-    super.didChangeDependencies();
+    super.initState();
   }
 
   @override
