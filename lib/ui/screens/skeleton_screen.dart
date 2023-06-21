@@ -8,7 +8,7 @@ import '../../service/admob/app_open_ad_manager.dart';
 import '../../service/admob/banner_ad_manager.dart';
 import '../widgets/app_bar_gone.dart';
 import '../widgets/bottom_nav_bar.dart';
-import '../widgets/first_screen/ad_banner.dart';
+import '../widgets/first_screen/banner_ad.dart';
 import 'first_screen.dart';
 import 'second_screen.dart';
 
@@ -29,16 +29,18 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
     loadAdOnAppStateChange();
     super.initState();
   }
-  Future<void> loadAdOnStart() async {
 
+  Future<void> loadAdOnStart() async {
     await appOpenAdManager.loadAd();
     appOpenAdManager.showAdIfAvailable();
   }
+
   void loadAdOnAppStateChange() {
-    _appLifecycleReactor = AppLifecycleReactor(
-        appOpenAdManager: appOpenAdManager);
+    _appLifecycleReactor =
+        AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
     _appLifecycleReactor.listenToAppStateChanges();
   }
+
   @override
   Widget build(BuildContext context) {
     const List<Widget> pageNavigation = <Widget>[
@@ -48,8 +50,10 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (BuildContext context) => BannerAdCubit(BannerAdManager())),
-        BlocProvider(
+        BlocProvider<BannerAdCubit>(
+            create: (BuildContext context) =>
+                BannerAdCubit(BannerAdManager(context))),
+        BlocProvider<BottomNavCubit>(
           create: (BuildContext context) => BottomNavCubit(),
         )
       ],

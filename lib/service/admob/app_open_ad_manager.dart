@@ -8,6 +8,7 @@ import 'admob_key_constant.dart';
 class AppOpenAdManager {
   /// Maximum duration allowed between loading and showing the ad.
   final Duration maxCacheDuration = const Duration(hours: 4);
+
   /// Keep track of load time so we don't show an expired ad.
   DateTime? _appOpenLoadTime;
 
@@ -58,7 +59,8 @@ class AppOpenAdManager {
       return;
     }
     // Set the fullScreenContentCallback and show the ad.
-    _appOpenAd!.fullScreenContentCallback = FullScreenContentCallback(
+    _appOpenAd!.fullScreenContentCallback =
+        FullScreenContentCallback<AppOpenAd>(
       onAdShowedFullScreenContent: (AppOpenAd ad) {
         _isShowingAd = true;
         print('$ad onAdShowedFullScreenContent');

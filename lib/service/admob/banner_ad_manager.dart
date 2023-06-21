@@ -6,20 +6,30 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'admob_key_constant.dart';
 
-class BannerAdManager{
-  BannerAd? bannerAd;
+class BannerAdManager {
+  BannerAdManager(this.context);
 
+  BuildContext context;
+
+  BannerAd? _bannerAd;
   final String adUnitId = Platform.isAndroid
       ? AdmobKeyConstant.bannerAndroid
       : AdmobKeyConstant.bannerIos;
 
   /// Loads a banner ad.
-  Future<void> loadAd() async {
-    // final Completer<void> completer = Completer<void>();
-    bannerAd = BannerAd(
+  Future<BannerAd?> loadAnchoredAdaptiveAd() async {
+    final AnchoredAdaptiveBannerAdSize? size =
+        await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+            MediaQuery.of(context).size.width.truncate());
+
+    if (size == null) {
+      print('Unable to get height of anchored banner.');
+      return null;
+    }
+    _bannerAd = BannerAd(
       adUnitId: adUnitId,
       request: const AdRequest(),
-      size: AdSize.banner,
+      size: size,
       listener: BannerAdListener(
         // Called when an ad is successfully received.
         onAdLoaded: (Ad ad) {
@@ -34,7 +44,12 @@ class BannerAdManager{
         },
       ),
     );
-    return bannerAd!.load();
+    _bannerAd!.load();
+    return _bannerAd!;
     // return completer.future;
+  }
+
+  void dispose() {
+    _bannerAd?.dispose();
   }
 }
