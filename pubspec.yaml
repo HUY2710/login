@@ -1,4 +1,4 @@
-name: flutter_production_boilerplate
+name: Flutter_Base
 description: A new Flutter project containing bloc, hive & easy localization.
 
 # The following line prevents the package from being accidentally published to
@@ -34,6 +34,12 @@ dependencies:
   hive: ^2.2.3
   url_launcher: ^6.1.7
   ionicons: ^0.2.2
+
+  #IAP: comment if unused
+  in_app_purchase: ^3.1.7
+  in_app_purchase_android: ^0.3.0
+  in_app_purchase_storekit: ^0.3.4
+  shared_preferences: ^2.0.0
 
 dev_dependencies:
   flutter_test:

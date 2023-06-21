@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
+import '../../iap/purchase_page.dart';
 import '../widgets/header.dart';
 import '../widgets/second_screen/grid_item.dart';
 import '../widgets/second_screen/link_card.dart';
@@ -23,6 +24,13 @@ class SecondScreen extends StatelessWidget {
                 icon: Ionicons.logo_github,
                 url: Uri.parse(
                     'https://github.com/anfeichtinger/flutter_production_boilerplate')),
+            const SizedBox(height: 20,),
+            IconButton(onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (BuildContext context) => const PurchasePage()),
+              );
+            }, icon: const Icon(Icons.ac_unit, size: 30,)),
             const TextDivider(text: 'author_divider_title'),
             GridView.count(
               physics: const NeverScrollableScrollPhysics(),
