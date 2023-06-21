@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../cubit/banner_ad_cubit.dart';
+import '../../cubit/anchored_ad_cubit.dart';
 import '../../cubit/bottom_nav_cubit.dart';
 import '../../service/admob/app_lifecycle_reactor.dart';
 import '../../service/admob/app_open_ad_manager.dart';
 import '../../service/admob/banner_ad_manager.dart';
+import '../widgets/ad/adptive_ad.dart';
 import '../widgets/app_bar_gone.dart';
 import '../widgets/bottom_nav_bar.dart';
-import '../widgets/first_screen/banner_ad.dart';
 import 'first_screen.dart';
 import 'second_screen.dart';
 
@@ -50,9 +50,9 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<BannerAdCubit>(
+        BlocProvider<AnchoredAdCubit>(
             create: (BuildContext context) =>
-                BannerAdCubit(BannerAdManager(context))),
+                AnchoredAdCubit(BannerAdManager(context: context))),
         BlocProvider<BottomNavCubit>(
           create: (BuildContext context) => BottomNavCubit(),
         )
@@ -74,7 +74,7 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
                 },
               ),
             ),
-            const BannerAdWidget()
+            const AdaptiveAdWidget()
           ],
         ),
 

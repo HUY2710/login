@@ -7,9 +7,10 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'admob_key_constant.dart';
 
 class BannerAdManager {
-  BannerAdManager(this.context);
+  BannerAdManager({required this.context, this.insets = 16});
 
   BuildContext context;
+  double insets;
 
   BannerAd? _bannerAd;
   final String adUnitId = Platform.isAndroid
@@ -26,27 +27,36 @@ class BannerAdManager {
       print('Unable to get height of anchored banner.');
       return null;
     }
+    return _loadAd(size: size);
+  }
+
+  Future<BannerAd?> loadInlineAdaptiveAd() async {
+    const AdSize size = AdSize.mediumRectangle;
+    return _loadAd(size: size);
+  }
+
+  Future<BannerAd> _loadAd(
+      {required AdSize size,
+      Function(Ad ad)? onAdLoaded,
+      Function(Ad ad, LoadAdError err)? onAdFailedToLoad}) async {
     _bannerAd = BannerAd(
       adUnitId: adUnitId,
       request: const AdRequest(),
       size: size,
       listener: BannerAdListener(
         // Called when an ad is successfully received.
-        onAdLoaded: (Ad ad) {
-          debugPrint('$ad loaded.');
-          // completer.complete();
-        },
+        onAdLoaded: onAdLoaded,
         // Called when an ad request failed.
         onAdFailedToLoad: (Ad ad, LoadAdError err) {
-          debugPrint('BannerAd failed to load: $err');
-          // Dispose the ad here to free resources.
+          if (onAdFailedToLoad != null) {
+            onAdFailedToLoad(ad, err);
+          }
           ad.dispose();
         },
       ),
     );
-    _bannerAd!.load();
+    await _bannerAd!.load();
     return _bannerAd!;
-    // return completer.future;
   }
 
   void dispose() {

@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../../../cubit/banner_ad_cubit.dart';
+import '../../../cubit/anchored_ad_cubit.dart';
 
-class BannerAdWidget extends StatefulWidget {
-  const BannerAdWidget({super.key});
+class AdaptiveAdWidget extends StatefulWidget {
+  const AdaptiveAdWidget({super.key});
 
   @override
-  State<BannerAdWidget> createState() => _BannerAdWidgetState();
+  State<AdaptiveAdWidget> createState() => _AdaptiveAdWidgetState();
 }
 
-class _BannerAdWidgetState extends State<BannerAdWidget> {
+class _AdaptiveAdWidgetState extends State<AdaptiveAdWidget> {
   @override
   void initState() {
-    context.read<BannerAdCubit>().loadAd();
+    context.read<AnchoredAdCubit>().loadAd();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BannerAdCubit, BannerAd?>(
+    return BlocBuilder<AnchoredAdCubit, BannerAd?>(
       builder: (BuildContext context, BannerAd? state) {
         Widget child;
         if (state != null) {

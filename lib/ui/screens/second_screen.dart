@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
+import '../widgets/ad/inline_ad.dart';
 import '../widgets/header.dart';
 import '../widgets/second_screen/grid_item.dart';
 import '../widgets/second_screen/link_card.dart';
@@ -56,6 +57,7 @@ class SecondScreen extends StatelessWidget {
                 ),
               ],
             ),
+            const InlineAdWidget(),
             const TextDivider(text: 'packages_divider_title'),
             GridView.count(
               physics: const NeverScrollableScrollPhysics(),
