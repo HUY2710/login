@@ -43,7 +43,6 @@ class _FirstScreenState extends State<FirstScreen> {
           physics: const BouncingScrollPhysics(),
           children: <Widget>[
             const Header(text: 'app_name'),
-
             Card(
               elevation: 2,
               shadowColor: Theme.of(context).colorScheme.shadow,

@@ -5,6 +5,7 @@ import '../../admob/app_lifecycle_reactor.dart';
 import '../../admob/manager/app_open_ad_manager.dart';
 import '../../admob/widget/adptive_ad.dart';
 import '../../cubit/bottom_nav_cubit.dart';
+import '../../iap/purchase_page.dart';
 import '../widgets/app_bar_gone.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'first_screen.dart';
