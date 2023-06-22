@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive/hive.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -17,6 +18,7 @@ import 'ui/screens/skeleton_screen.dart';
 void main() async {
   /// Initialize packages
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   await EasyLocalization.ensureInitialized();
   if (Platform.isAndroid) {
     await FlutterDisplayMode.setHighRefreshRate();
