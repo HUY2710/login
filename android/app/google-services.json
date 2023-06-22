@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "813948623967",
+    "project_id": "flutter-base-f96a5",
+    "storage_bucket": "flutter-base-f96a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813948623967:android:560d865fc601a9df3d0fea",
+        "android_client_info": {
+          "package_name": "com.moon.base"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "813948623967-imh6f21mpoplmpsqrcqip4r52c39f84h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhjn9KAVIAo4yltl0TmwmXNO4oBSaIW3o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "813948623967-imh6f21mpoplmpsqrcqip4r52c39f84h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "813948623967-66jjhm5q8p4mv8fpbn7dsgrkarl7c2ie.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.moon.base"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -35,6 +35,8 @@ dependencies:
   url_launcher: ^6.1.7
   ionicons: ^0.2.2
   google_mobile_ads: ^3.0.0
+  firebase_core:
+  firebase_remote_config: ^4.2.3
 
   #IAP: comment if unused
   in_app_purchase: ^3.1.7
