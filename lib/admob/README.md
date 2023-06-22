@@ -39,7 +39,7 @@ Thêm package [firebase_core](https://pub.dev/packages/firebase_core) và [fireb
 flutter pub add firebase_core 
 flutter pub add firebase_remote_config 
 ```
-Xem hướng dẫn cấu hình firebase cho project tạo [FlutterFire](https://firebase.google.com/docs)
+Xem hướng dẫn cấu hình firebase cho project tại [FlutterFire](https://firebase.google.com/docs)
 
 # Thiết lập
 
