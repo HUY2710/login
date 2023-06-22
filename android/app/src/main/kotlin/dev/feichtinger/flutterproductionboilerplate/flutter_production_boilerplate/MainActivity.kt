@@ -1,6 +1,6 @@
-package dev.feichtinger.flutterproductionboilerplate.flutter_production_boilerplate
+package com.moon.base
 
 import io.flutter.embedding.android.FlutterActivity
 
-class MainActivity: FlutterActivity() {
+class MainActivity : FlutterActivity() {
 }
