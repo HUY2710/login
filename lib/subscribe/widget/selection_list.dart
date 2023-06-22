@@ -23,19 +23,22 @@ class _SelectionListState extends State<SelectionList> {
     _products = widget.products;
     if (widget.products.isEmpty) {
       _products = [
-        ProductDetails(id: '1',
+        ProductDetails(
+            id: '1',
             title: 'Weekly',
             description: 'description',
             price: '3.99',
             rawPrice: 3.99,
             currencyCode: 'currencyCode'),
-        ProductDetails(id: '2',
+        ProductDetails(
+            id: '2',
             title: 'Monthly',
             description: 'description',
             price: '9.99',
             rawPrice: 9.99,
             currencyCode: 'currencyCode'),
-        ProductDetails(id: '3',
+        ProductDetails(
+            id: '3',
             title: 'LifeTime',
             description: 'description',
             price: '29.99',
@@ -53,18 +56,17 @@ class _SelectionListState extends State<SelectionList> {
       builder: (BuildContext context, int state) {
         return ListView.separated(
             shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) =>
-                SelectionItem(
+            itemBuilder: (BuildContext context, int index) => SelectionItem(
                   onTap: () => cubit.select(index),
-                  data: widget.products[index],
+                  data: _products[index],
                   isSelected: state == index,
                   isRecommend: index == 0,
                 ),
             separatorBuilder: (BuildContext context, int index) =>
-            const SizedBox(
-              height: 20,
-            ),
-            itemCount: widget.products.length);
+                const SizedBox(
+                  height: 20,
+                ),
+            itemCount: _products.length);
       },
     );
   }
