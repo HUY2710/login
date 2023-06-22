@@ -1,11 +1,6 @@
-
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 
-enum AdKey {
-  banner,
-  inter,
-  open_app
-}
+enum AdKey { banner, inter, open_app }
 
 extension AdKeyExt on AdKey {
   String get value {
@@ -13,12 +8,12 @@ extension AdKeyExt on AdKey {
   }
 
   static AdKey fromString(String string) {
-    return AdKey.values.firstWhere((AdKey e) => e.toString() == 'AdKey.$string');
+    return AdKey.values
+        .firstWhere((AdKey e) => e.toString() == 'AdKey.$string');
   }
 }
 
 class ConfigItem {
-
   ConfigItem(this.value, this.key);
 
   final bool value;
@@ -28,7 +23,8 @@ class ConfigItem {
 class RemoteConfigManager {
   RemoteConfigManager._privateConstructor();
 
-  static final RemoteConfigManager instance = RemoteConfigManager._privateConstructor();
+  static final RemoteConfigManager instance =
+      RemoteConfigManager._privateConstructor();
 
   final FirebaseRemoteConfig _remoteConfig = FirebaseRemoteConfig.instance;
 
@@ -40,10 +36,10 @@ class RemoteConfigManager {
           seconds: 1), // a fetch will wait up to 10 seconds before timing out
       minimumFetchInterval: const Duration(
           seconds:
-          10), // fetch parameters will be cached for a maximum of 1 hour
+              10), // fetch parameters will be cached for a maximum of 1 hour
     ));
 
-    _fetchConfig();
+    await _fetchConfig();
   }
 
   bool isShowAd(AdKey key) {
@@ -52,7 +48,7 @@ class RemoteConfigManager {
 
   void _getConfigValue() {
     _items.clear();
-    for(final AdKey key in AdKey.values) {
+    for (final AdKey key in AdKey.values) {
       final bool value = _remoteConfig.getBool(key.value);
       _items.add(ConfigItem(value, key));
     }
