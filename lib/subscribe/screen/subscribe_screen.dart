@@ -52,11 +52,11 @@ class SubscribeScreen extends StatelessWidget {
               'Cancel anytime',
               textAlign: TextAlign.center,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: const [
                   Text(
                     'Terms of service',
                     style: TextStyle(
