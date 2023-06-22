@@ -4,7 +4,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../admob/cubit/native_ad_cubit.dart';
 import '../manager/native_ad_manager.dart';
-import '../remote_config/remote_config_manager.dart';
 
 class NativeAdWidget extends StatefulWidget {
   const NativeAdWidget({
@@ -20,16 +19,12 @@ class NativeAdWidget extends StatefulWidget {
 
 class _NativeAdWidgetState extends State<NativeAdWidget> {
   late NativeAdCubit nativeAdCubit;
-  late bool isShowAd;
 
   @override
   void initState() {
-    isShowAd = RemoteConfigManager.instance.isShowAd(AdKey.native);
     nativeAdCubit = NativeAdCubit(NativeAdManager(widget.templateType));
 
-    if (isShowAd) {
-      nativeAdCubit.loadAd();
-    }
+    nativeAdCubit.loadAd();
     super.initState();
   }
 

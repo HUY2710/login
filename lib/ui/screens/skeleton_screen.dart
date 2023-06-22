@@ -22,16 +22,17 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
   late AppLifecycleReactor _appLifecycleReactor;
   final AppOpenAdManager appOpenAdManager = AppOpenAdManager();
   late bool isShowAppOpenAd;
+  late bool isShowBannerAd;
 
   @override
   void initState() {
     isShowAppOpenAd = RemoteConfigManager.instance.isShowAd(AdKey.open_app);
+    isShowBannerAd = RemoteConfigManager.instance.isShowAd(AdKey.banner);
     if (isShowAppOpenAd) {
       loadAdOnAppStateChange();
     }
     super.initState();
   }
-
 
   Future<void> loadAdOnAppStateChange() async {
     await appOpenAdManager.loadAd();
@@ -67,15 +68,12 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
                 },
               ),
             ),
-            const AdaptiveAdWidget()
+            if (isShowBannerAd) const AdaptiveAdWidget()
           ],
         ),
 
         bottomNavigationBar: const BottomNavBar(),
-        backgroundColor: Theme
-            .of(context)
-            .colorScheme
-            .background,
+        backgroundColor: Theme.of(context).colorScheme.background,
       ),
     );
   }

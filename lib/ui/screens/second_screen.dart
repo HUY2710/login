@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:ionicons/ionicons.dart';
 
+import '../../admob/remote_config/remote_config_manager.dart';
 import '../../admob/widget/inline_ad.dart';
 import '../../iap/purchase_page.dart';
 import '../../subscribe/screen/subscribe_screen.dart';
@@ -10,8 +11,21 @@ import '../widgets/second_screen/grid_item.dart';
 import '../widgets/second_screen/link_card.dart';
 import '../widgets/second_screen/text_divider.dart';
 
-class SecondScreen extends StatelessWidget {
+class SecondScreen extends StatefulWidget {
   const SecondScreen({super.key});
+
+  @override
+  State<SecondScreen> createState() => _SecondScreenState();
+}
+
+class _SecondScreenState extends State<SecondScreen> {
+  late bool isShowBannerAd;
+
+  @override
+  void initState() {
+    isShowBannerAd = RemoteConfigManager.instance.isShowAd(AdKey.banner);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,9 +103,10 @@ class SecondScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const InlineAdWidget(
-              size: AdSize.mediumRectangle,
-            ),
+            if (isShowBannerAd)
+              const InlineAdWidget(
+                size: AdSize.mediumRectangle,
+              ),
             const TextDivider(text: 'packages_divider_title'),
             GridView.count(
               physics: const NeverScrollableScrollPhysics(),

@@ -4,7 +4,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../cubit/anchored_ad_cubit.dart';
 import '../manager/banner_ad_manager.dart';
-import '../remote_config/remote_config_manager.dart';
 
 class AdaptiveAdWidget extends StatefulWidget {
   const AdaptiveAdWidget({super.key, this.insets});
@@ -17,12 +16,9 @@ class AdaptiveAdWidget extends StatefulWidget {
 
 class _AdaptiveAdWidgetState extends State<AdaptiveAdWidget> {
   late AnchoredAdCubit anchoredAdCubit;
-  late bool isShowAd;
 
   @override
   void initState() {
-    isShowAd = RemoteConfigManager.instance.isShowAd(AdKey.banner);
-
     final BannerAdManager bannerAdManager =
         BannerAdManager(context: context, insets: widget.insets);
     anchoredAdCubit = AnchoredAdCubit(bannerAdManager);
@@ -32,9 +28,7 @@ class _AdaptiveAdWidgetState extends State<AdaptiveAdWidget> {
 
   @override
   void didChangeDependencies() {
-    if (isShowAd) {
-      anchoredAdCubit.loadAd();
-    }
+    anchoredAdCubit.loadAd();
     super.didChangeDependencies();
   }
 

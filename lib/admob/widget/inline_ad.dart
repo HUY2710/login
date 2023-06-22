@@ -4,7 +4,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../cubit/inline_ad_cubit.dart';
 import '../manager/banner_ad_manager.dart';
-import '../remote_config/remote_config_manager.dart';
 
 class InlineAdWidget extends StatefulWidget {
   const InlineAdWidget({super.key, required this.size, this.insets});
@@ -19,13 +18,11 @@ class InlineAdWidget extends StatefulWidget {
 class _InlineAdWidgetState extends State<InlineAdWidget> {
   late InlineAdCubit inlineAdCubit;
   Orientation? _currentOrientation;
-  late bool isShowAd;
 
   @override
   void initState() {
-    isShowAd = RemoteConfigManager.instance.isShowAd(AdKey.banner);
     final BannerAdManager bannerAdManager =
-    BannerAdManager(context: context, insets: widget.insets ?? 16);
+        BannerAdManager(context: context, insets: widget.insets ?? 16);
     inlineAdCubit = InlineAdCubit(bannerAdManager);
     super.initState();
   }
@@ -33,12 +30,8 @@ class _InlineAdWidgetState extends State<InlineAdWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (isShowAd) {
-      inlineAdCubit.loadAd(widget.size);
-      _currentOrientation = MediaQuery
-          .of(context)
-          .orientation;
-    }
+    inlineAdCubit.loadAd(widget.size);
+    _currentOrientation = MediaQuery.of(context).orientation;
   }
 
   @override
