@@ -18,20 +18,19 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
-  final InterstitialAdManager interstitialAdManager = InterstitialAdManager();
+  late final InterstitialAdManager interstitialAdManager =
+      InterstitialAdManager();
 
   @override
   void initState() {
-    interstitialAdManager.loadAd();
+    if (_checkConfig()) {
+      interstitialAdManager.loadAd();
+    }
     super.initState();
   }
 
-  void _checkConfig() {
-    if (RemoteConfigManager.instance.isShowAd(AdKey.banner)) {
-      print('Enable banner');
-    } else {
-      print('Disable banner');
-    }
+  bool _checkConfig() {
+    return RemoteConfigManager.instance.isShowAd(AdKey.inter);
   }
 
   @override
@@ -54,9 +53,8 @@ class _FirstScreenState extends State<FirstScreen> {
                   borderRadius: BorderRadius.all(Radius.circular(12))),
               child: SwitchListTile(
                 onChanged: (bool newValue) {
-                  _checkConfig();
-                  return;
-                  if (interstitialAdManager.interstitialAd != null) {
+                  if (_checkConfig() &&
+                      interstitialAdManager.interstitialAd != null) {
                     interstitialAdManager.interstitialAd!.show();
                   }
 
