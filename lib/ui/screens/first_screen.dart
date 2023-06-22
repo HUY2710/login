@@ -1,13 +1,29 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:ionicons/ionicons.dart';
 
+import '../../admob/manager/interstitial_ad_manager.dart';
+import '../../admob/widget/native_ad.dart';
 import '../widgets/first_screen/info_card.dart';
 import '../widgets/first_screen/theme_card.dart';
 import '../widgets/header.dart';
 
-class FirstScreen extends StatelessWidget {
+class FirstScreen extends StatefulWidget {
   const FirstScreen({super.key});
+
+  @override
+  State<FirstScreen> createState() => _FirstScreenState();
+}
+
+class _FirstScreenState extends State<FirstScreen> {
+  final InterstitialAdManager interstitialAdManager = InterstitialAdManager();
+
+  @override
+  void initState() {
+    interstitialAdManager.loadAd();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +45,10 @@ class FirstScreen extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(12))),
               child: SwitchListTile(
                 onChanged: (bool newValue) {
+                  if (interstitialAdManager.interstitialAd != null) {
+                    interstitialAdManager.interstitialAd!.show();
+                  }
+
                   /// Example: Change locale
                   /// The initial locale is automatically determined by the library.
                   /// Changing the locale like this will persist the selected locale.
@@ -99,7 +119,7 @@ class FirstScreen extends StatelessWidget {
               mainAxisSpacing: 8,
               childAspectRatio: 4 / 5.5,
               padding: EdgeInsets.zero,
-              children: const <InfoCard>[
+              children: const <Widget>[
                 /// Example: it is good practice to put widgets in separate files.
                 /// This way the screen files won't become too large and
                 /// the code becomes more clear.
@@ -108,6 +128,7 @@ class FirstScreen extends StatelessWidget {
                     content: 'localization_content',
                     icon: Ionicons.language_outline,
                     isPrimaryColor: true),
+                NativeAdWidget(templateType: TemplateType.medium),
                 InfoCard(
                     title: 'linting_title',
                     content: 'linting_content',

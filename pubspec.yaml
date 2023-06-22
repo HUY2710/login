@@ -34,6 +34,7 @@ dependencies:
   hive: ^2.2.3
   url_launcher: ^6.1.7
   ionicons: ^0.2.2
+  google_mobile_ads: ^3.0.0
 
   #IAP: comment if unused
   in_app_purchase: ^3.1.7
