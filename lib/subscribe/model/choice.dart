@@ -1,5 +1,5 @@
-class Choice {
-  Choice(this.text, this.value);
+class Product {
+  Product(this.text, this.value);
 
   String text;
   double value;
