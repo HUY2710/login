@@ -4,6 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:ionicons/ionicons.dart';
 
 import '../../admob/manager/interstitial_ad_manager.dart';
+import '../../admob/remote_config/remote_config_manager.dart';
 import '../../admob/widget/native_ad.dart';
 import '../widgets/first_screen/info_card.dart';
 import '../widgets/first_screen/theme_card.dart';
@@ -23,6 +24,14 @@ class _FirstScreenState extends State<FirstScreen> {
   void initState() {
     interstitialAdManager.loadAd();
     super.initState();
+  }
+
+  void _checkConfig() {
+    if (RemoteConfigManager.instance.isShowAd(AdKey.banner)) {
+      print('Enable banner');
+    } else {
+      print('Disable banner');
+    }
   }
 
   @override
@@ -45,6 +54,8 @@ class _FirstScreenState extends State<FirstScreen> {
                   borderRadius: BorderRadius.all(Radius.circular(12))),
               child: SwitchListTile(
                 onChanged: (bool newValue) {
+                  _checkConfig();
+                  return;
                   if (interstitialAdManager.interstitialAd != null) {
                     interstitialAdManager.interstitialAd!.show();
                   }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -9,6 +10,7 @@ import 'package:hive/hive.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'admob/remote_config/remote_config_manager.dart';
 import 'config/theme.dart';
 import 'cubit/theme_cubit.dart';
 import 'ui/screens/skeleton_screen.dart';
@@ -28,6 +30,10 @@ void main() async {
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: tmpDir,
   );
+
+  await Firebase.initializeApp();
+
+  await RemoteConfigManager.instance.initConfig();
 
   runApp(
     EasyLocalization(
