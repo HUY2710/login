@@ -19,24 +19,28 @@ class FirstScreen extends StatefulWidget {
 
 class _FirstScreenState extends State<FirstScreen> {
   late final InterstitialAdManager interstitialAdManager =
-      InterstitialAdManager();
+  InterstitialAdManager();
+  late bool isShowInterAd;
+  late bool isShowNativeAd;
 
   @override
   void initState() {
-    if (_checkConfig()) {
+    isShowInterAd = RemoteConfigManager.instance.isShowAd(AdKey.inter);
+    isShowNativeAd = RemoteConfigManager.instance.isShowAd(AdKey.native);
+    if (isShowInterAd) {
       interstitialAdManager.loadAd();
     }
     super.initState();
   }
 
-  bool _checkConfig() {
-    return RemoteConfigManager.instance.isShowAd(AdKey.inter);
-  }
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme
+          .of(context)
+          .colorScheme
+          .background,
       child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           physics: const BouncingScrollPhysics(),
@@ -44,16 +48,22 @@ class _FirstScreenState extends State<FirstScreen> {
             const Header(text: 'app_name'),
             Card(
               elevation: 2,
-              shadowColor: Theme.of(context).colorScheme.shadow,
+              shadowColor: Theme
+                  .of(context)
+                  .colorScheme
+                  .shadow,
 
               /// Example: Many items have their own colors inside of the ThemData
               /// You can overwrite them in [config/theme.dart].
-              color: Theme.of(context).colorScheme.surface,
+              color: Theme
+                  .of(context)
+                  .colorScheme
+                  .surface,
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12))),
               child: SwitchListTile(
                 onChanged: (bool newValue) {
-                  if (_checkConfig() &&
+                  if (isShowInterAd &&
                       interstitialAdManager.interstitialAd != null) {
                     interstitialAdManager.interstitialAd!.show();
                   }
@@ -70,11 +80,15 @@ class _FirstScreenState extends State<FirstScreen> {
                 title: Row(
                   children: <Widget>[
                     Icon(Ionicons.language_outline,
-                        color: Theme.of(context).colorScheme.primary),
+                        color: Theme
+                            .of(context)
+                            .colorScheme
+                            .primary),
                     const SizedBox(width: 16),
                     Text(
                       tr('language_switch_title'),
-                      style: Theme.of(context)
+                      style: Theme
+                          .of(context)
                           .textTheme
                           .titleMedium!
                           .apply(fontWeightDelta: 2),
@@ -115,7 +129,11 @@ class _FirstScreenState extends State<FirstScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Divider(
                 color:
-                    Theme.of(context).colorScheme.onBackground.withOpacity(.4),
+                Theme
+                    .of(context)
+                    .colorScheme
+                    .onBackground
+                    .withOpacity(.4),
               ),
             ),
             const SizedBox(height: 8),
@@ -128,37 +146,39 @@ class _FirstScreenState extends State<FirstScreen> {
               mainAxisSpacing: 8,
               childAspectRatio: 4 / 5.5,
               padding: EdgeInsets.zero,
-              children: const <Widget>[
+              children: <Widget>[
+
                 /// Example: it is good practice to put widgets in separate files.
                 /// This way the screen files won't become too large and
                 /// the code becomes more clear.
-                InfoCard(
+                const InfoCard(
                     title: 'localization_title',
                     content: 'localization_content',
                     icon: Ionicons.language_outline,
                     isPrimaryColor: true),
-                NativeAdWidget(templateType: TemplateType.medium),
-                InfoCard(
+                if(isShowNativeAd)
+                  const NativeAdWidget(templateType: TemplateType.medium),
+                const InfoCard(
                     title: 'linting_title',
                     content: 'linting_content',
                     icon: Ionicons.code_slash_outline,
                     isPrimaryColor: false),
-                InfoCard(
+                const InfoCard(
                     title: 'storage_title',
                     content: 'storage_content',
                     icon: Ionicons.folder_open_outline,
                     isPrimaryColor: false),
-                InfoCard(
+                const InfoCard(
                     title: 'dark_mode_title',
                     content: 'dark_mode_content',
                     icon: Ionicons.moon_outline,
                     isPrimaryColor: true),
-                InfoCard(
+                const InfoCard(
                     title: 'state_title',
                     content: 'state_content',
                     icon: Ionicons.leaf_outline,
                     isPrimaryColor: true),
-                InfoCard(
+                const InfoCard(
                     title: 'display_title',
                     content: 'display_content',
                     icon: Ionicons.speedometer_outline,

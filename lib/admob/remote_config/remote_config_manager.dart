@@ -1,6 +1,6 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 
-enum AdKey { banner, inter, open_app }
+enum AdKey { banner, inter, open_app, native }
 
 extension AdKeyExt on AdKey {
   String get value {

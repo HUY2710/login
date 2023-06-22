@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../admob/app_lifecycle_reactor.dart';
 import '../../admob/manager/app_open_ad_manager.dart';
 import '../../admob/remote_config/remote_config_manager.dart';
-import '../../admob/widget/adptive_ad.dart';
+import '../../admob/widget/adaptive_ad.dart';
 import '../../cubit/bottom_nav_cubit.dart';
 import '../widgets/app_bar_gone.dart';
 import '../widgets/bottom_nav_bar.dart';
@@ -21,20 +21,21 @@ class SkeletonScreen extends StatefulWidget {
 class _SkeletonScreenState extends State<SkeletonScreen> {
   late AppLifecycleReactor _appLifecycleReactor;
   final AppOpenAdManager appOpenAdManager = AppOpenAdManager();
+  late bool isShowAppOpenAd;
 
   @override
   void initState() {
-    if (_checkConfig()) {
+    isShowAppOpenAd = RemoteConfigManager.instance.isShowAd(AdKey.open_app);
+    if (isShowAppOpenAd) {
       loadAdOnAppStateChange();
     }
     super.initState();
   }
 
-  bool _checkConfig() {
-    return RemoteConfigManager.instance.isShowAd(AdKey.inter);
-  }
 
-  void loadAdOnAppStateChange() {
+  Future<void> loadAdOnAppStateChange() async {
+    await appOpenAdManager.loadAd();
+
     _appLifecycleReactor =
         AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
     _appLifecycleReactor.listenToAppStateChanges();
@@ -71,7 +72,10 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
         ),
 
         bottomNavigationBar: const BottomNavBar(),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme
+            .of(context)
+            .colorScheme
+            .background,
       ),
     );
   }
