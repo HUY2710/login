@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../model/choice.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 
 class SelectionItem extends StatelessWidget {
   const SelectionItem(
@@ -10,7 +9,7 @@ class SelectionItem extends StatelessWidget {
       this.isRecommend = false,
       required this.onTap});
 
-  final Choice data;
+  final ProductDetails data;
   final bool isSelected;
   final bool isRecommend;
   final Function() onTap;
@@ -43,9 +42,9 @@ class SelectionItem extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(data.text),
+                  Text(data.title),
                   Text(
-                    '\$ ${data.value}',
+                    '\$ ${data.price}',
                     style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 18,
