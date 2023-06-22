@@ -11,6 +11,7 @@ import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
 
 import 'consumable_store.dart';
 
+/// Sandbox tester: moon_test@gmail.com/Hanoi2023
 
 final bool _kAutoConsume = Platform.isIOS || true;
 
@@ -487,7 +488,7 @@ class _PurchasePageState extends State<PurchasePage> {
 /// Example implementation of the
 /// [`SKPaymentQueueDelegate`](https://developer.apple.com/documentation/storekit/skpaymentqueuedelegate?language=objc).
 ///
-/// The payment queue delegate can be implementated to provide information
+/// The payment queue delegate can be implemented to provide information
 /// needed to complete transactions.
 class ExamplePaymentQueueDelegate implements SKPaymentQueueDelegateWrapper {
   @override

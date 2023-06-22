@@ -18,7 +18,6 @@ class FirstScreen extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           children: <Widget>[
             const Header(text: 'app_name'),
-
             Card(
               elevation: 2,
               shadowColor: Theme.of(context).colorScheme.shadow,
