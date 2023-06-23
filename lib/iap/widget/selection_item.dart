@@ -18,7 +18,7 @@ class SelectionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Column(
         children: [
@@ -35,7 +35,7 @@ class SelectionItem extends StatelessWidget {
                       : Radius.circular(_borderRadius)),
               border: isSelected
                   ? Border.all(color: Colors.indigoAccent)
-                  : Border.all(color: Colors.white),
+                  : Border.all(color: const Color(0xfff5f5f5)),
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),

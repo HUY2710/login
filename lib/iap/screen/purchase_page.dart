@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 
 import '../cubit/purchase_cubit.dart';
 import '../cubit/purchase_state.dart';
@@ -21,14 +22,14 @@ const List<String> kProductIds = <String>[
   kMonthyId,
 ];
 
-class SubscribeScreen extends StatefulWidget {
-  const SubscribeScreen({super.key});
+class PurchasePage extends StatefulWidget {
+  const PurchasePage({super.key});
 
   @override
-  State<SubscribeScreen> createState() => _SubscribeScreenState();
+  State<PurchasePage> createState() => _PurchasePageState();
 }
 
-class _SubscribeScreenState extends State<SubscribeScreen> {
+class _PurchasePageState extends State<PurchasePage> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   late StreamSubscription<List<PurchaseDetails>> _subscription;
   late final PurchaseCubit purchaseCubit = PurchaseCubit(_inAppPurchase);
@@ -39,12 +40,13 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
         _inAppPurchase.purchaseStream;
     _subscription =
         purchaseUpdated.listen((List<PurchaseDetails> purchaseDetailsList) {
-      purchaseCubit.listenToPurchaseUpdated(purchaseDetailsList);
-    }, onDone: () {
-      _subscription.cancel();
-    }, onError: (Object error) {
-      // handle error here.
-    });
+          purchaseCubit.listenToPurchaseUpdated(purchaseDetailsList);
+        }, onDone: () {
+          _subscription.cancel();
+        }, onError: (Object error) {
+          // handle error here.
+        });
+
     purchaseCubit.init();
     super.initState();
   }
@@ -75,7 +77,7 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
-            _buildPurchaseCard(),
+            _buildPurchaseCardBuilder(),
             const Text(
               'Cancel anytime',
               textAlign: TextAlign.center,
@@ -115,7 +117,7 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
     );
   }
 
-  Expanded _buildPurchaseCard() {
+  Expanded _buildPurchaseCardBuilder() {
     return Expanded(
       child: BlocBuilder<PurchaseCubit, PurchaseState>(
         bloc: purchaseCubit,
@@ -126,29 +128,46 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
 
           final StoreData? storeData =
               (state as PurchaseSuccess<StoreData>).data;
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                SelectionList(
-                  products: storeData?.products ?? [],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                FilledButton(
-                    onPressed: () {}, child: const Text('SUBSCRIBE NOW'))
-              ],
-            ),
-          );
+          return _buildPurchaseCard(storeData?.products ?? []);
         },
       ),
     );
   }
 
+  Widget _buildPurchaseCard(List<ProductDetails> products){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          SelectionList(
+            products: products,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          FilledButton(
+              onPressed: () {}, child: const Text('SUBSCRIBE NOW'))
+        ],
+      ),
+    );
+  }
+
   Widget _buildLoading() {
-    return const Column(children: [CircularProgressIndicator()]);
+    return Column(children: const <Widget>[CircularProgressIndicator()]);
+  }
+
+  @override
+  void dispose() {
+    if (Platform.isIOS) {
+      final InAppPurchaseStoreKitPlatformAddition iosPlatformAddition =
+      _inAppPurchase
+          .getPlatformAddition<InAppPurchaseStoreKitPlatformAddition>();
+      iosPlatformAddition.setDelegate(null);
+    }
+    _subscription.cancel();
+    super.dispose();
   }
 }
+

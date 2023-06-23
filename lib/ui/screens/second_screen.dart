@@ -4,8 +4,7 @@ import 'package:ionicons/ionicons.dart';
 
 import '../../admob/remote_config/remote_config_manager.dart';
 import '../../admob/widget/inline_ad.dart';
-import '../../iap/purchase_page.dart';
-import '../../subscribe/screen/subscribe_screen.dart';
+import '../../iap/screen/purchase_page.dart';
 import '../widgets/header.dart';
 import '../widgets/second_screen/grid_item.dart';
 import '../widgets/second_screen/link_card.dart';
@@ -48,7 +47,7 @@ class _SecondScreenState extends State<SecondScreen> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
+                    MaterialPageRoute<PurchasePage>(
                         builder: (BuildContext context) =>
                             const PurchasePage()),
                   );
@@ -57,19 +56,6 @@ class _SecondScreenState extends State<SecondScreen> {
                   Icons.ac_unit,
                   size: 30,
                 )),
-            InkWell(
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const SubscribeScreen(),
-                  )),
-              child: const Card(
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Subscribe'),
-                ),
-              ),
-            ),
             const TextDivider(text: 'author_divider_title'),
             GridView.count(
               physics: const NeverScrollableScrollPhysics(),
