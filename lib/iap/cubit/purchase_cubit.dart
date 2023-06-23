@@ -7,7 +7,7 @@ import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
 
-import '../../iap/consumable_store.dart';
+import '../model/consumable_store.dart';
 import '../model/store_data.dart';
 import '../screen/purchase_page.dart';
 import 'purchase_state.dart';
