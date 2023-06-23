@@ -17,7 +17,7 @@ class InlineAdWidget extends StatefulWidget {
 
 class _InlineAdWidgetState extends State<InlineAdWidget> {
   late InlineAdCubit inlineAdCubit;
-  late Orientation _currentOrientation;
+  Orientation? _currentOrientation;
 
   @override
   void initState() {

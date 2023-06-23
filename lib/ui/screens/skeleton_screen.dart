@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../admob/app_lifecycle_reactor.dart';
 import '../../admob/manager/app_open_ad_manager.dart';
-import '../../admob/widget/adptive_ad.dart';
+import '../../admob/remote_config/remote_config_manager.dart';
+import '../../admob/widget/adaptive_ad.dart';
 import '../../cubit/bottom_nav_cubit.dart';
-import '../../iap/purchase_page.dart';
 import '../widgets/app_bar_gone.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'first_screen.dart';
@@ -21,20 +21,22 @@ class SkeletonScreen extends StatefulWidget {
 class _SkeletonScreenState extends State<SkeletonScreen> {
   late AppLifecycleReactor _appLifecycleReactor;
   final AppOpenAdManager appOpenAdManager = AppOpenAdManager();
+  late bool isShowAppOpenAd;
+  late bool isShowBannerAd;
 
   @override
   void initState() {
-    loadAdOnStart();
-    loadAdOnAppStateChange();
+    isShowAppOpenAd = RemoteConfigManager.instance.isShowAd(AdKey.open_app);
+    isShowBannerAd = RemoteConfigManager.instance.isShowAd(AdKey.banner);
+    if (isShowAppOpenAd) {
+      loadAdOnAppStateChange();
+    }
     super.initState();
   }
 
-  Future<void> loadAdOnStart() async {
+  Future<void> loadAdOnAppStateChange() async {
     await appOpenAdManager.loadAd();
-    appOpenAdManager.showAdIfAvailable();
-  }
 
-  void loadAdOnAppStateChange() {
     _appLifecycleReactor =
         AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
     _appLifecycleReactor.listenToAppStateChanges();
@@ -66,7 +68,7 @@ class _SkeletonScreenState extends State<SkeletonScreen> {
                 },
               ),
             ),
-            const AdaptiveAdWidget()
+            if (isShowBannerAd) const AdaptiveAdWidget()
           ],
         ),
 
