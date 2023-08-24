@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'dependencies/dependencies.dart';
+import '../../flavors.dart';
+import 'di/di.dart';
 
 class AppConfig {
   factory AppConfig.getInstance() {
@@ -14,9 +15,17 @@ class AppConfig {
 
   Future<void> init() async {
     // await Firebase.initializeApp();
-    await dotenv.load();
+    await loadEnv();
     configureDependencies();
     _settingSystemUI();
+  }
+
+  Future<void> loadEnv() async {
+    if (F.appFlavor == Flavor.dev) {
+      await dotenv.load(fileName: '.env.dev');
+    } else {
+      await dotenv.load(fileName: '.env.prod');
+    }
   }
 
   //show hide bottom navigation bar of device

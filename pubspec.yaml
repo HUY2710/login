@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-
+  intl: ^0.18.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -21,18 +21,29 @@ dependencies:
   injectable: ^2.3.0
   shared_preferences: ^2.2.0
   flutter_svg: ^2.0.7
-  build_runner: ^2.4.6
   flutter_dotenv: ^5.1.0
   firebase_remote_config: ^4.2.5
   firebase_analytics: ^10.4.5
+  json_annotation: ^4.8.1
+  freezed_annotation: ^2.4.1
+  # Route
+  auto_route: 7.8.0
+  flutter_screenutil: ^5.9.0
+
   cloud_firestore: ^4.9.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  injectable_generator: null
+  freezed: ^2.3.2
+  json_serializable: ^6.5.4
+  build_runner:
+  injectable_generator:
+  auto_route_generator:
   flutter_lints: ^2.0.2
   flutter_gen_runner: ^5.3.1
+
+  # Flavor
+  flutter_flavorizr: ^2.2.1
 
 flutter:
   generate: true
@@ -40,6 +51,13 @@ flutter:
 
   assets:
    - assets/images/
+   - assets/images/onboarding/
+   - assets/images/languages/
+
+
+
+   - .env.dev
+   - .env.prod
 
   fonts:
    - family: OpenSans
@@ -62,5 +80,37 @@ flutter_gen:
 
   assets:
     outputs:
-      class_name: MyAssets
+      class_name: Assets
 
+
+#flavor
+flavorizr:
+  flavors:
+    dev:
+      app:
+        name: "Example Dev"
+
+      android:
+        applicationId: "com.vtn.example.dev"
+        # icon: "assets/images/logo.png"
+        # firebase:
+        #   config: "android/app/src/dev/google-services.json"
+      ios:
+        bundleId: "com.vtn.example.dev"
+        # icon: "assets/images/logo.png"
+        # firebase:
+        #   config: "ios/Runner/GoogleService-Info-Dev.plist"
+
+    prod:
+      app:
+        name: "Example"
+      android:
+        applicationId: "com.vtn.example.prod"
+        # icon: "assets/images/logo_app.png"
+        # firebase:
+        #   config: "android/app/src/prod/google-services.json"
+      ios:
+        bundleId: "com.vtn.example.prod"
+        # icon: "assets/images/logo_app.png"
+        # firebase:
+        #   config: "ios/Runner/GoogleService-Info-Prod.plist"
