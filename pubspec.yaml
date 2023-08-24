@@ -25,18 +25,20 @@ dependencies:
   firebase_remote_config: ^4.2.5
   firebase_analytics: ^10.4.5
   json_annotation: ^4.8.1
-  freezed_annotation: ^2.4.1  
+  freezed_annotation: ^2.4.1
   # Route
   auto_route: 7.8.0
   flutter_screenutil: ^5.9.0
 
+  cloud_firestore: ^4.9.0
+  firebase_core: ^2.15.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
   freezed: ^2.3.2
   json_serializable: ^6.5.4
   build_runner:
-  injectable_generator: 
+  injectable_generator:
   auto_route_generator:
   flutter_lints: ^2.0.2
   flutter_gen_runner: ^5.3.1
