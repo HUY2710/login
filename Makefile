@@ -1,29 +1,29 @@
 clean:
-	flutter pub clean
+	fvm flutter pub clean
 
 dependencies:
-	flutter pub get
+	fvm flutter pub get
 
 upgrade-dependencies:
-	flutter pub upgrade --major-versions
+	fvm flutter pub upgrade --major-versions
 
 build-runner:
-	flutter packages pub run build_runner build
+	fvm flutter packages pub run build_runner build
 
 watch-runner:
-	flutter packages pub run build_runner watch
+	fvm flutter packages pub run build_runner watch
 
 build-runner-delete:
-	flutter packages pub run build_runner build --delete-conflicting-outputs
+	fvm flutter packages pub run build_runner build --delete-conflicting-outputs
 
 watch-runner-delete:
-	flutter packages pub run build_runner watch --delete-conflicting-outputs
+	fvm flutter packages pub run build_runner watch --delete-conflicting-outputs
 
 gen-l10n:
-	flutter gen-l10n
+	fvm flutter gen-l10n
 
 gen-flavor:
-	flutter pub run flutter_flavorizr
+	fvm flutter pub run flutter_flavorizr
 
 build-apk-dev:
-	flutter build apk --flavor dev
+	fvm flutter build apk --flavor dev
