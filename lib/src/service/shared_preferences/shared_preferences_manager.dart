@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'preference_keys.dart';
 
 class SharedPreferencesManager {
+  SharedPreferencesManager._();
+
   /// First time app launch
   static Future<void> saveFirstTime(bool isFirstTime) async {
     final SharedPreferences sharedPreferences =
