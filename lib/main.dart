@@ -1,9 +1,20 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'src/config/dependencies/dependencies.dart';
+import 'src/config/app_config.dart';
 import 'src/presentation/presentation.dart';
 
-void main() {
-  configureDependencies();
-  runApp(const MyApp());
+Future<void> main() async {
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await AppConfig.getInstance().init();
+    runApp(
+      const MyApp(),
+    );
+  }, (error, stack) {
+    if (kDebugMode) {
+      print(stack);
+      print(error);
+    }
+  });
 }
