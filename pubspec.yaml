@@ -26,9 +26,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  build_runner:
   injectable_generator: null
   flutter_lints: ^2.0.2
   flutter_gen_runner: ^5.3.1
+
+  # Flavor
+  flutter_flavorizr: ^2.2.1
 
 flutter:
   uses-material-design: true
@@ -59,3 +63,35 @@ flutter_gen:
     outputs:
       class_name: MyAssets
 
+
+#flavor
+flavorizr:
+  flavors:
+    dev:
+      app:
+        name: "Example Dev"
+
+      android:
+        applicationId: "com.vtn.example.dev"
+        # icon: "assets/images/logo.png"
+        # firebase:
+        #   config: "android/app/src/dev/google-services.json"
+      ios:
+        bundleId: "com.vtn.example.dev"
+        # icon: "assets/images/logo.png"
+        # firebase:
+        #   config: "ios/Runner/GoogleService-Info-Dev.plist"
+
+    prod:
+      app:
+        name: "Example"
+      android:
+        applicationId: "com.vtn.example.prod"
+        # icon: "assets/images/logo_app.png"
+        # firebase:
+        #   config: "android/app/src/prod/google-services.json"
+      ios:
+        bundleId: "com.vtn.example.prod"
+        # icon: "assets/images/logo_app.png"
+        # firebase:
+        #   config: "ios/Runner/GoogleService-Info-Prod.plist"
