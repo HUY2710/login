@@ -24,6 +24,7 @@ dependencies:
   build_runner: ^2.4.6
   flutter_dotenv: ^5.1.0
   firebase_remote_config: ^4.2.5
+  firebase_analytics: ^10.4.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
