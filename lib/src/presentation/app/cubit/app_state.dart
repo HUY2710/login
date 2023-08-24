@@ -1,13 +1,13 @@
 part of 'app_cubit.dart';
 
 class AppState {
-  final Language currentLanguage;
-  final String errorMessage;
 
   const AppState({
     this.currentLanguage = Language.english,
-    this.errorMessage = "",
+    this.errorMessage = '',
   });
+  final Language currentLanguage;
+  final String errorMessage;
 
   AppState copyWith({
     Language? currentLanguage,

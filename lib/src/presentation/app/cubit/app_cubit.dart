@@ -2,11 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:flutter_base/src/shared/enum/language.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../service/services.dart';
+import '../../../shared/enum/language.dart';
 
 part 'app_state.dart';
 
