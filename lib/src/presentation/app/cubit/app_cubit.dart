@@ -1,36 +1,34 @@
-import 'dart:ui';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../service/services.dart';
+import '../../../config/di/di.dart';
+import '../../../service/shared_preferences/shared_preferences_manager.dart';
 import '../../../shared/enum/language.dart';
 
 part 'app_state.dart';
+part 'app_cubit.freezed.dart';
 
 @singleton
 class AppCubit extends Cubit<AppState> {
-  AppCubit(super.initialState);
+  AppCubit() : super(const AppState());
 
   Future<void> init() async {
     try {
       final languageCode =
-          await SharedPreferencesManager.getCurrentLanguageCode;
+          await getIt<SharedPreferencesManager>().getCurrentLanguageCode;
 
       final currentLanguage = languageCode != null
           ? Language.values.firstWhere(
               (element) => element.languageCode == languageCode,
             )
           : Language.english;
-      debugPrint('currentLanguage: $currentLanguage');
       emit(
         state.copyWith(
           currentLanguage: currentLanguage,
         ),
       );
     } catch (e) {
-      debugPrint(e.toString());
       emit(
         state.copyWith(
           errorMessage: e.toString(),
@@ -41,15 +39,14 @@ class AppCubit extends Cubit<AppState> {
 
   Future<void> changeLanguage(Language language) async {
     try {
-      await SharedPreferencesManager.saveCurrentLanguageCode(
-          language.languageCode);
+      await getIt<SharedPreferencesManager>()
+          .saveCurrentLanguageCode(language.languageCode);
       emit(
         state.copyWith(
           currentLanguage: language,
         ),
       );
     } catch (e) {
-      debugPrint(e.toString());
       emit(
         state.copyWith(
           errorMessage: e.toString(),

@@ -1,9 +1,10 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../config/dependencies/dependencies.dart';
-import '../../shared/extension/context_extension.dart';
+import '../../config/di/di.dart';
+import '../../config/navigation/app_router.dart';
 import 'cubit/app_cubit.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
@@ -16,72 +17,45 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  AppCubit get appCubit => getIt<AppCubit>()..init();
+  double get designWidth => 360; //default
+  double get designHeight => 800; //default
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AppCubit>(
-          create: (BuildContext context) => appCubit,
-        ),
-      ],
-      child: MaterialApp(
-        title: context.l10n.app_title,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: const MyHomeScreen(title: 'Flutter Demo Home Page'),
+    return ScreenUtilInit(
+      designSize: Size(designWidth, designHeight),
+      minTextAdapt: true,
+      useInheritedMediaQuery: true,
+      splitScreenMode: true,
+      builder: (context, child) => GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: BodyApp(),
       ),
     );
   }
 }
 
-@RoutePage()
-class MyHomeScreen extends StatefulWidget {
-  const MyHomeScreen({super.key, required this.title});
+class BodyApp extends StatelessWidget {
+  BodyApp({
+    super.key,
+  });
 
-  final String title;
-
-  @override
-  State<MyHomeScreen> createState() => _MyHomeScreenState();
-}
-
-class _MyHomeScreenState extends State<MyHomeScreen> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  AppCubit get appCubit => getIt<AppCubit>()..init();
+  final AppRouter _appRouter = getIt<AppRouter>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+    return BlocBuilder<AppCubit, AppState>(
+      bloc: appCubit,
+      builder: (context, state) => MaterialApp.router(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: Locale(state.currentLanguage.languageCode),
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        routerConfig: _appRouter.config(),
       ),
     );
   }

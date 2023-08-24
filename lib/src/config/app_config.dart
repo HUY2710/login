@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../flavors.dart';
-import 'dependencies/dependencies.dart';
+import 'di/di.dart';
 
 class AppConfig {
   factory AppConfig.getInstance() {
