@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
+import '../../config/observer/route_observer.dart';
 import 'cubit/app_cubit.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
@@ -55,7 +56,9 @@ class BodyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        routerConfig: _appRouter.config(),
+        routerConfig: _appRouter.config(
+          navigatorObservers: () => [MainRouteObserver()],
+        ),
       ),
     );
   }
