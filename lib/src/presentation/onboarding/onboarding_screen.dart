@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../gen/assets.gen.dart';
 import '../../config/navigation/app_router.dart';
+import '../../gen/assets.gen.dart';
 import 'widgets/indicator.dart';
 import 'widgets/page_widget.dart';
 

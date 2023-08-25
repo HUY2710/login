@@ -72,7 +72,7 @@ flutter:
 
 #generate
 flutter_gen:
-  output: lib/gen/ # Optional (default: lib/gen/)
+  output: lib/src/gen/ # Optional (default: lib/gen/)
   line_length: 80 # Optional (default: 80)
 
   integrations:

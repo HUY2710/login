@@ -1,4 +1,4 @@
-import '../../../gen/assets.gen.dart';
+import '../../gen/gens.dart';
 
 enum Language {
   english(
