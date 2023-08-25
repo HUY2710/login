@@ -2,9 +2,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../config/di/di.dart';
-import '../../../service/shared_preferences/shared_preferences_manager.dart';
-import '../../../shared/enum/language.dart';
+import '../../src/config/di/di.dart';
+import '../../src/service/services.dart';
+import '../../src/shared/enum/language.dart';
 
 part 'app_state.dart';
 part 'app_cubit.freezed.dart';

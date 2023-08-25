@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../config/di/di.dart';
-import '../../config/navigation/app_router.dart';
-import '../../config/observer/route_observer.dart';
+import '../src/config/di/di.dart';
+import '../src/config/navigation/app_router.dart';
+import '../src/config/observer/route_observer.dart';
 import 'cubit/app_cubit.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
