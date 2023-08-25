@@ -1,4 +1,5 @@
 import '../utils/log_utils.dart';
+import '../utils/logger_utils.dart';
 
 mixin LogMixin on Object {
   void logD(String message, {DateTime? time}) {
@@ -19,5 +20,25 @@ mixin LogMixin on Object {
       stackTrace: stackTrace,
       time: time,
     );
+  }
+
+  void logDebug(String message) {
+    LoggerUtil.logDebug(message);
+  }
+
+  void logInfo(String message) {
+    LoggerUtil.logInfo(message);
+  }
+
+  void logWarning(String message) {
+    LoggerUtil.logWarning(message);
+  }
+
+  void logError(String message) {
+    LoggerUtil.logError(message);
+  }
+
+  void logVerbose(String message) {
+    LoggerUtil.logVerbose(message);
   }
 }
