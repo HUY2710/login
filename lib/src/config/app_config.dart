@@ -4,12 +4,14 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../firebase_options.dart';
 import '../../flavors.dart';
 import '../shared/constants/app_constants.dart';
 import 'di/di.dart';
+import 'observer/bloc_observer.dart';
 
 class AppConfig {
   factory AppConfig.getInstance() {
@@ -36,6 +38,14 @@ class AppConfig {
     configureDependencies();
     _settingSystemUI();
     await initAppsflyer();
+    inItDebugger();
+  }
+
+  //for dev
+  void inItDebugger() {
+    if (kDebugMode) {
+      Bloc.observer = MainBlocObserver();
+    }
   }
 
   Future<void> initAppsflyer() async {
