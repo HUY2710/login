@@ -1,0 +1,3 @@
+[submodule "flutter_ads"]
+	path = flutter_ads
+	url = https://bitbucket.org/innofyapp/flutter_ads.git
