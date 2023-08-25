@@ -4,7 +4,6 @@ enum Flavor {
 }
 
 class F {
-  F._();
   static Flavor? appFlavor;
 
   static String get name => appFlavor?.name ?? '';
@@ -12,11 +11,12 @@ class F {
   static String get title {
     switch (appFlavor) {
       case Flavor.dev:
-        return 'Example Dev';
+        return 'VTN Base Flutter Dev';
       case Flavor.prod:
         return 'Example';
-      case null:
-        return '____';
+      default:
+        return 'title';
     }
   }
+
 }

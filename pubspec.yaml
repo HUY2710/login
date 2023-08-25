@@ -32,6 +32,7 @@ dependencies:
 
   cloud_firestore: ^4.9.0
   firebase_core: ^2.15.1
+  firebase_crashlytics: ^3.3.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -89,13 +90,13 @@ flavorizr:
   flavors:
     dev:
       app:
-        name: "Example Dev"
+        name: "VTN Base Flutter Dev"
 
       android:
-        applicationId: "com.vtn.example.dev"
+        applicationId: "com.vtn.global.base.flutter"
         # icon: "assets/images/logo.png"
-        # firebase:
-        #   config: "android/app/src/dev/google-services.json"
+        firebase:
+          config: "android/app/src/dev/google-services.json"
       ios:
         bundleId: "com.vtn.example.dev"
         # icon: "assets/images/logo.png"
