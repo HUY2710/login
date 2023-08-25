@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'firebase_options.dart';
 import 'src/config/app_config.dart';
 import 'src/presentation/presentation.dart';
 
@@ -10,16 +9,16 @@ Future<void> main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await AppConfig.getInstance().init();
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
     runApp(
       const MyApp(),
     );
   }, (error, stack) {
+    debugPrint('error:$error');
     if (kDebugMode) {
       print(stack);
       print(error);
+    } else {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     }
   });
 }

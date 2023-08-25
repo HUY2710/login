@@ -20,9 +20,24 @@ class SplashScreen extends StatelessWidget {
         AutoRouter.of(context).replace(const MyHomeRoute());
       }
     });
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          TextButton(
+            onPressed: () {
+              // FirebaseCrashlytics.instance.crash();
+              // FirebaseCrashlytics.instance.recordError('error', null);
+              throw Exception();
+            },
+            child: const Text('Throw Test Exception'),
+          ),
+          const Center(
+            child: CircularProgressIndicator(),
+          ),
+          //error render
+          // ListView()
+        ],
       ),
     );
   }

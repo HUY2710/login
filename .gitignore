@@ -133,3 +133,4 @@ app.*.symbols
 
 # fvm
 .fvm/flutter_sdk
+.tmp
