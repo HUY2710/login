@@ -1,3 +1,4 @@
+import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../firebase_options.dart';
 import '../../flavors.dart';
+import '../shared/constants/app_constants.dart';
 import 'di/di.dart';
 
 class AppConfig {
@@ -33,6 +35,18 @@ class AppConfig {
     await loadEnv();
     configureDependencies();
     _settingSystemUI();
+    await initAppsflyer();
+  }
+
+  Future<void> initAppsflyer() async {
+    final AppsFlyerOptions appsFlyerOptions = AppsFlyerOptions(
+      afDevKey: AppConstants.appFlyerKey,
+      appId: AppConstants.appIOSId,
+      showDebug: kDebugMode,
+      timeToWaitForATTUserAuthorization: 50,
+    );
+    final AppsflyerSdk appsflyerSdk = AppsflyerSdk(appsFlyerOptions);
+    await appsflyerSdk.initSdk();
   }
 
   Future<void> loadEnv() async {
