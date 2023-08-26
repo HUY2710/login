@@ -1,6 +1,7 @@
 import UIKit
 import Flutter
-
+import FirebaseCore
+import google_mobile_ads
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
   override func application(
@@ -8,6 +9,22 @@ import Flutter
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
+//    FirebaseApp.configure()
+    registerAdFactory()
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
+
+  private func registerAdFactory() {
+          FLTGoogleMobileAdsPlugin.registerNativeAdFactory(
+                  self, factoryId: "LargeNative", nativeAdFactory: LargeNativeAdFactory())
+
+          FLTGoogleMobileAdsPlugin.registerNativeAdFactory(
+                  self, factoryId: "SmallNative", nativeAdFactory: SmallNativeAdFactory())
+
+          FLTGoogleMobileAdsPlugin.registerNativeAdFactory(
+                  self, factoryId: "NonMediaBottomNative", nativeAdFactory: NonMediaBottomNativeAdFactory())
+
+          FLTGoogleMobileAdsPlugin.registerNativeAdFactory(
+                  self, factoryId: "NonMediaTopNative", nativeAdFactory: NonMediaTopNativeAdFactory())
+      }
 }

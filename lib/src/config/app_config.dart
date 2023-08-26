@@ -37,7 +37,7 @@ class AppConfig {
     await loadEnv();
     configureDependencies();
     _settingSystemUI();
-    await initAppsflyer();
+     // await initAppsflyer();
     inItDebugger();
   }
 

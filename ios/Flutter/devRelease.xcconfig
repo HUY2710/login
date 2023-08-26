@@ -2,5 +2,5 @@
 
 FLUTTER_TARGET=lib/main_dev.dart
 ASSET_PREFIX=dev
-BUNDLE_NAME=Example Dev
-BUNDLE_DISPLAY_NAME=Example Dev
+BUNDLE_NAME=VTN Base Flutter Dev
+BUNDLE_DISPLAY_NAME=VTN Base Flutter Dev

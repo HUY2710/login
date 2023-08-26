@@ -105,10 +105,10 @@ flavorizr:
         firebase:
           config: "android/app/src/dev/google-services.json"
       ios:
-        bundleId: "com.vtn.example.dev"
+        bundleId: "com.vtn.global.base.flutter"
         # icon: "assets/images/logo.png"
-        # firebase:
-        #   config: "ios/Runner/GoogleService-Info-Dev.plist"
+        firebase:
+           config: "ios/Runner/dev/GoogleService-Info.plist"
 
     prod:
       app:
