@@ -25,4 +25,12 @@ class SharedPreferencesManager {
     return (await _preference)
         .getString(PreferenceKeys.currentLanguageCode.name);
   }
+
+  Future<bool?> isExistRated() async {
+    return (await _preference).getBool(PreferenceKeys.rateApp.name);
+  }
+
+  Future<void> saveExistRated() async {
+    (await _preference).setBool(PreferenceKeys.rateApp.name, true);
+  }
 }
