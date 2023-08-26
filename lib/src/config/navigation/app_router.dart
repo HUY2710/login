@@ -4,6 +4,8 @@ import 'package:injectable/injectable.dart';
 import '../../presentation/home/home_screen.dart';
 import '../../presentation/language/screen/language_screen.dart';
 import '../../presentation/onboarding/onboarding_screen.dart';
+import '../../presentation/setting/about_screen.dart';
+import '../../presentation/setting/setting_screen.dart';
 import '../../presentation/splash/splash_screen.dart';
 
 part 'app_router.gr.dart';
