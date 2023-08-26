@@ -2,12 +2,14 @@ import UIKit
 import Flutter
 import FirebaseCore
 import google_mobile_ads
+import FBAudienceNetwork
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+        FBAdSettings.setAdvertiserTrackingEnabled(true)
     GeneratedPluginRegistrant.register(with: self)
 //    FirebaseApp.configure()
     registerAdFactory()

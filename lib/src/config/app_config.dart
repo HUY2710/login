@@ -9,11 +9,15 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../firebase_options.dart';
 import '../../flavors.dart';
+import '../global/global.dart';
 import '../shared/constants/app_constants.dart';
+import '../shared/enum/ads/ad_remote_key.dart';
+import '../shared/mixin/ads_mixin.dart';
 import 'di/di.dart';
 import 'observer/bloc_observer.dart';
+import 'remote_config.dart';
 
-class AppConfig {
+class AppConfig with AdsMixin {
   factory AppConfig.getInstance() {
     return _instance;
   }
@@ -29,7 +33,6 @@ class AppConfig {
     FlutterError.onError = (errorDetails) {
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
     };
-    // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
     PlatformDispatcher.instance.onError = (error, stack) {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
       return true;
@@ -37,8 +40,12 @@ class AppConfig {
     await loadEnv();
     configureDependencies();
     _settingSystemUI();
-     // await initAppsflyer();
+    // await initAppsflyer();
     inItDebugger();
+    await RemoteConfigManager.instance.initConfig();
+    Global.instance.showAd =
+        RemoteConfigManager.instance.isShowAd(AdRemoteKeys.show);
+    loadAdUnitId();
   }
 
   //for dev

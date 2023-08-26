@@ -11,6 +11,8 @@ class ConfigItem {
 
 class RemoteConfigManager {
   RemoteConfigManager._privateConstructor();
+  static final RemoteConfigManager instance =
+      RemoteConfigManager._privateConstructor();
   final FirebaseRemoteConfig _remoteConfig = FirebaseRemoteConfig.instance;
   final List<ConfigItem> _items = [];
   Future<void> initConfig() async {
@@ -30,7 +32,7 @@ class RemoteConfigManager {
 
   Future<void> _fetchConfig() async {
     await _remoteConfig.fetchAndActivate();
-    // _getConfigValue();
+    _getConfigValue();
   }
 
   bool globalShowAd() {
