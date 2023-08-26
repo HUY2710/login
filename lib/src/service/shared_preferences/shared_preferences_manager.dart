@@ -33,4 +33,12 @@ class SharedPreferencesManager {
   Future<void> saveExistRated() async {
     (await _preference).setBool(PreferenceKeys.rateApp.name, true);
   }
+
+  Future<void> saveIsStarted(bool status) async {
+    (await _preference).setBool(PreferenceKeys.isStarted.name, status);
+  }
+
+  Future<bool> getIsStarted() async {
+    return (await _preference).getBool(PreferenceKeys.isStarted.name) ?? true;
+  }
 }

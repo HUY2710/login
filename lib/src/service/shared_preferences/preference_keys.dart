@@ -2,5 +2,6 @@ enum PreferenceKeys {
   isFistTime,
   permissionAllow,
   currentLanguageCode,
-  rateApp
+  rateApp,
+  isStarted
 }

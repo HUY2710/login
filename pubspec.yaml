@@ -39,6 +39,7 @@ dependencies:
   url_launcher: ^6.1.12
   share_plus: ^7.1.0
   package_info_plus: ^4.1.0
+  shimmer: ^3.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -64,7 +65,8 @@ flutter:
    - assets/images/languages/
 
 
-
+   - assets/ad_unit_id/dev/
+   - assets/ad_unit_id/prod/
    - .env.dev
    - .env.prod
 

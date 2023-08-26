@@ -5,14 +5,36 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
+import '../../../service/app_ad_id_manager.dart';
+import '../../../shared/enum/ads/ad_remote_key.dart';
 import '../../../shared/enum/language.dart';
+import '../../../shared/mixin/ads_mixin.dart';
+import '../../../shared/widgets/ads/large_native_ad.dart';
+import '../../../shared/widgets/ads/large_native_ad_high.dart';
 import '../bloc/language_bloc.dart';
 
 @RoutePage()
-class LanguageScreen extends StatelessWidget {
+class LanguageScreen extends StatelessWidget with AdsMixin {
   const LanguageScreen({super.key, this.isFirst});
 
   final bool? isFirst;
+  AppAdIdManager get adManager => getIt<AppAdIdManager>();
+  Widget? _buildAd() {
+    final bool isVisible = checkVisibleAd(AdRemoteKeys.native_language);
+    if (!isVisible) {
+      return null;
+    }
+    if (isFirst ?? false) {
+      return LargeNativeAdHigh(
+        unitId: adManager.adUnitId.nativeLanguage,
+        unitIdHigh: adManager.adUnitId.nativeLanguage2,
+      );
+    } else {
+      return LargeNativeAd(
+        unitId: adManager.adUnitId.nativeLanguage3,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +42,7 @@ class LanguageScreen extends StatelessWidget {
       create: (context) => LanguageCubit(),
       child: Scaffold(
         body: SafeArea(child: _BodyWidget(isFirst)),
+        bottomNavigationBar: _buildAd(),
       ),
     );
   }
