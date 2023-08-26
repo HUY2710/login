@@ -74,6 +74,6 @@
 		<key>FacebookClientToken</key>
 		<string>CLIENT-TOKEN</string>
 		<key>FacebookDisplayName</key>
-		<string>APP-NAME</string>
+		<string>$(BUNDLE_NAME)</string>
 	</dict>
 </plist>
