@@ -83,20 +83,6 @@ class AppConfig with AdsMixin {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
       SystemUiOverlay.top,
     ]);
-    SystemChrome.setSystemUIChangeCallback(
-        (bool systemOverlaysAreVisible) async {
-      if (systemOverlaysAreVisible) {
-        Future<void>.delayed(
-          const Duration(seconds: 3),
-          () => SystemChrome.setEnabledSystemUIMode(
-            SystemUiMode.manual,
-            overlays: <SystemUiOverlay>[
-              SystemUiOverlay.top,
-            ],
-          ),
-        );
-      }
-    });
 
     SystemChrome.setPreferredOrientations(<DeviceOrientation>[
       DeviceOrientation.portraitUp,
