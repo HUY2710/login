@@ -1,4 +1,4 @@
-part of '../light_theme.dart';
+part of '../dark_theme.dart';
 
 class MyTextTheme extends TextTheme {
   @override

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../gen/colors.gen.dart';
+import '../../../gen/colors.gen.dart';
 
 part 'component_theme/text_theme.dart';
 

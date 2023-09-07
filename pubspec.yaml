@@ -13,9 +13,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.18.0
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   flutter_bloc: ^8.1.3
   get_it: ^7.6.0
   injectable: ^2.3.0
@@ -40,6 +37,9 @@ dependencies:
   share_plus: ^7.1.0
   package_info_plus: ^4.1.0
   shimmer: ^3.0.0
+  easy_ads_flutter:
+    path: flutter_ads
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -50,8 +50,6 @@ dev_dependencies:
   auto_route_generator:
   flutter_lints: ^2.0.2
   flutter_gen_runner: ^5.3.1
-  easy_ads_flutter:
-    path: flutter_ads
   # Flavor
   flutter_flavorizr: ^2.2.1
 
@@ -92,36 +90,3 @@ flutter_gen:
   assets:
     outputs:
       class_name: Assets
-
-
-#flavor
-flavorizr:
-  flavors:
-    dev:
-      app:
-        name: "VTN Base Flutter Dev"
-
-      android:
-        applicationId: "com.vtn.global.base.flutter"
-        # icon: "assets/images/logo.png"
-        firebase:
-          config: "android/app/src/dev/google-services.json"
-      ios:
-        bundleId: "com.vtn.global.base.flutter"
-        # icon: "assets/images/logo.png"
-        firebase:
-           config: "ios/Runner/dev/GoogleService-Info.plist"
-
-    prod:
-      app:
-        name: "Example"
-      android:
-        applicationId: "com.vtn.example.prod"
-        # icon: "assets/images/logo_app.png"
-        # firebase:
-        #   config: "android/app/src/prod/google-services.json"
-      ios:
-        bundleId: "com.vtn.example.prod"
-        # icon: "assets/images/logo_app.png"
-        # firebase:
-        #   config: "ios/Runner/GoogleService-Info-Prod.plist"
