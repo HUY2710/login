@@ -38,7 +38,8 @@ dependencies:
   package_info_plus: ^4.1.0
   shimmer: ^3.0.0
   easy_ads_flutter:
-    path: flutter_ads
+    git:
+      url: https://bitbucket.org/innofyapp/flutter_ads.git
 
 dev_dependencies:
   flutter_test:
