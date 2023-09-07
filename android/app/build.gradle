@@ -99,4 +99,6 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.0.0'
     
 }
+
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
