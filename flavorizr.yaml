@@ -1,0 +1,29 @@
+flavors:
+  dev:
+    app:
+      name: "VTN Base Flutter Dev"
+
+    android:
+      applicationId: "com.vtn.global.base.flutter"
+      # icon: "assets/images/logo.png"
+      firebase:
+        config: "android/app/src/dev/google-services.json"
+    ios:
+      bundleId: "com.vtn.global.base.flutter"
+      # icon: "assets/images/logo.png"
+      firebase:
+        config: "ios/Runner/dev/GoogleService-Info.plist"
+
+  prod:
+    app:
+      name: "Example"
+    android:
+      applicationId: "com.vtn.example.prod"
+      # icon: "assets/images/logo_app.png"
+      # firebase:
+      #   config: "android/app/src/prod/google-services.json"
+    ios:
+      bundleId: "com.vtn.example.prod"
+      # icon: "assets/images/logo_app.png"
+      # firebase:
+      #   config: "ios/Runner/GoogleService-Info-Prod.plist"

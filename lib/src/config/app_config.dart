@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import '../../firebase_options.dart';
 import '../../flavors.dart';
 import '../global/global.dart';
 import '../shared/constants/app_constants.dart';
@@ -26,9 +25,7 @@ class AppConfig with AdsMixin {
   static final AppConfig _instance = AppConfig._();
 
   Future<void> init() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp();
     // Pass all uncaught "fatal" errors from the framework to Crashlytics
     FlutterError.onError = (errorDetails) {
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
