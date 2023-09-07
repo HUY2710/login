@@ -1,52 +1,44 @@
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'preference_keys.dart';
 
+@singleton
 class SharedPreferencesManager {
-  /// First time app launch
-  static Future<void> saveFirstTime(bool isFirstTime) async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
+  Future<SharedPreferences> get _preference => SharedPreferences.getInstance();
 
-    await sharedPreferences.setBool(
-        PreferenceKeys.isFistTime.name, isFirstTime);
+  Future<bool> getIsFirstLaunch() async {
+    return (await _preference).getBool(PreferenceKeys.isFistTime.name) ?? true;
   }
 
-  static Future<bool?> get isFirstTime async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    return sharedPreferences.getBool(PreferenceKeys.isFistTime.name);
-  }
-
-  /// Permission allow
-  static Future<void> savePermissionAllow(bool isAllow) async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-
-    await sharedPreferences.setBool(
-        PreferenceKeys.permissionAllow.name, isAllow);
-  }
-
-  static Future<bool?> get isPermissionAllow async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-
-    return sharedPreferences.getBool(PreferenceKeys.permissionAllow.name);
+  Future<void> saveIsFirstLaunch(bool isFirstLaunch) async {
+    (await _preference).setBool(PreferenceKeys.isFistTime.name, isFirstLaunch);
   }
 
   /// Language code
-  static Future<void> saveCurrentLanguageCode(String languageCode) async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-
-    await sharedPreferences.setString(
-        PreferenceKeys.currentLanguageCode.name, languageCode);
+  Future<void> saveCurrentLanguageCode(String languageCode) async {
+    (await _preference)
+        .setString(PreferenceKeys.currentLanguageCode.name, languageCode);
   }
 
-  static Future<String?> get getCurrentLanguageCode async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
+  Future<String?> get getCurrentLanguageCode async {
+    return (await _preference)
+        .getString(PreferenceKeys.currentLanguageCode.name);
+  }
 
-    return sharedPreferences.getString(PreferenceKeys.currentLanguageCode.name);
+  Future<bool?> isExistRated() async {
+    return (await _preference).getBool(PreferenceKeys.rateApp.name);
+  }
+
+  Future<void> saveExistRated() async {
+    (await _preference).setBool(PreferenceKeys.rateApp.name, true);
+  }
+
+  Future<void> saveIsStarted(bool status) async {
+    (await _preference).setBool(PreferenceKeys.isStarted.name, status);
+  }
+
+  Future<bool> getIsStarted() async {
+    return (await _preference).getBool(PreferenceKeys.isStarted.name) ?? true;
   }
 }

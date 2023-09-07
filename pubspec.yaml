@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-
+  intl: ^0.18.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -20,23 +20,55 @@ dependencies:
   get_it: ^7.6.0
   injectable: ^2.3.0
   shared_preferences: ^2.2.0
-  cupertino_icons: ^1.0.5
   flutter_svg: ^2.0.7
+  flutter_dotenv: ^5.1.0
+  firebase_remote_config: ^4.2.5
+  firebase_analytics: ^10.4.5
+  json_annotation: ^4.8.1
+  freezed_annotation: ^2.4.1
+  # Route
+  auto_route: 7.8.0
+  flutter_screenutil: ^5.9.0
 
+  cloud_firestore: ^4.9.0
+  firebase_core: ^2.15.1
+  firebase_crashlytics: ^3.3.5
+  appsflyer_sdk: ^6.11.3
+  change_app_package_name: ^1.1.0
+  logger: ^1.4.0
+  url_launcher: ^6.1.12
+  share_plus: ^7.1.0
+  package_info_plus: ^4.1.0
+  shimmer: ^3.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  injectable_generator: null
-  build_runner: ^2.4.6
+  freezed: ^2.3.2
+  json_serializable: ^6.5.4
+  build_runner:
+  injectable_generator:
+  auto_route_generator:
   flutter_lints: ^2.0.2
   flutter_gen_runner: ^5.3.1
+  easy_ads_flutter:
+    path: flutter_ads
+  # Flavor
+  flutter_flavorizr: ^2.2.1
 
 flutter:
+  generate: true
   uses-material-design: true
 
   assets:
    - assets/images/
+   - assets/images/onboarding/
+   - assets/images/languages/
+
+
+   - assets/ad_unit_id/dev/
+   - assets/ad_unit_id/prod/
+   - .env.dev
+   - .env.prod
 
   fonts:
    - family: OpenSans
@@ -45,7 +77,7 @@ flutter:
 
 #generate
 flutter_gen:
-  output: lib/gen/ # Optional (default: lib/gen/)
+  output: lib/src/gen/ # Optional (default: lib/gen/)
   line_length: 80 # Optional (default: 80)
 
   integrations:
@@ -59,5 +91,37 @@ flutter_gen:
 
   assets:
     outputs:
-      class_name: MyAssets
+      class_name: Assets
 
+
+#flavor
+flavorizr:
+  flavors:
+    dev:
+      app:
+        name: "VTN Base Flutter Dev"
+
+      android:
+        applicationId: "com.vtn.global.base.flutter"
+        # icon: "assets/images/logo.png"
+        firebase:
+          config: "android/app/src/dev/google-services.json"
+      ios:
+        bundleId: "com.vtn.global.base.flutter"
+        # icon: "assets/images/logo.png"
+        firebase:
+           config: "ios/Runner/dev/GoogleService-Info.plist"
+
+    prod:
+      app:
+        name: "Example"
+      android:
+        applicationId: "com.vtn.example.prod"
+        # icon: "assets/images/logo_app.png"
+        # firebase:
+        #   config: "android/app/src/prod/google-services.json"
+      ios:
+        bundleId: "com.vtn.example.prod"
+        # icon: "assets/images/logo_app.png"
+        # firebase:
+        #   config: "ios/Runner/GoogleService-Info-Prod.plist"

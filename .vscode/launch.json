@@ -1,0 +1,66 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "example -dev",
+            "request": "launch",
+            "program": "lib/main_dev.dart",
+            "type": "dart",
+            "args": [
+                "--flavor", "dev",
+            ],
+        },
+        {
+            "name": "example -dev (profile mode)",
+            "request": "launch",
+            "program": "lib/main_dev.dart",
+            "type": "dart",
+            "args": [
+                "--flavor", "dev",
+            ],
+            "flutterMode": "profile"
+        },
+        {
+            "name": "example -dev (release mode)",
+            "request": "launch",
+            "program": "lib/main_dev.dart",
+            "type": "dart",
+            "args": [
+                "--flavor", "dev",
+            ],
+            "flutterMode": "release"
+        },
+        {
+            "name": "example -prod",
+            "request": "launch",
+            "program": "lib/main_prod.dart",
+            "type": "dart",
+            "args": [
+                "--flavor", "prod",
+            ],
+        },
+        {
+            "name": "example -prod (profile mode)",
+            "request": "launch",
+            "program": "lib/main_prod.dart",
+            "type": "dart",
+            "args": [
+                "--flavor", "prod",
+            ],
+            "flutterMode": "profile"
+        },
+        {
+            "name": "example -prod (release mode)",
+            "request": "launch",
+            "program": "lib/main_prod.dart",
+            "type": "dart",
+            "args": [
+                "--flavor", "prod",
+            ],
+            "flutterMode": "release"
+        }
+    ]
+}
