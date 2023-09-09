@@ -3,11 +3,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../config/di/di.dart';
-import '../../../service/shared_preferences/shared_preferences_manager.dart';
+import '../../../data/local/shared_preferences_manager.dart';
 import '../../../shared/enum/language.dart';
 
-part 'language_state.dart';
 part 'language_bloc.freezed.dart';
+part 'language_state.dart';
 
 @singleton
 class LanguageCubit extends Cubit<LanguageState> {

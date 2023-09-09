@@ -6,10 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../config/remote_config.dart';
+import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
 import '../../service/app_ad_id_manager.dart';
-import '../../service/shared_preferences/shared_preferences_manager.dart';
 import '../../shared/enum/ads/ad_remote_key.dart';
 import '../../shared/mixin/ads_mixin.dart';
 

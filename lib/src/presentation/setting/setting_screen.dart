@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
-import '../../service/services.dart';
+import '../../data/local/shared_preferences_manager.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
 import '../../shared/widgets/dialog/rate_dialog.dart';
