@@ -1,26 +1,21 @@
+import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
-class LoggerUtil {
-  LoggerUtil._();
-  static final logger = Logger();
+final logger = MyLogger.instance;
 
-  static void logDebug(String message) {
-    logger.d(message);
-  }
+class MyLogger extends Logger {
+  MyLogger._()
+      : super(
+          filter: MyFilter(),
+          printer: PrettyPrinter(),
+        );
 
-  static void logInfo(String message) {
-    logger.i(message);
-  }
+  static MyLogger get instance => MyLogger._();
+}
 
-  static void logWarning(String message) {
-    logger.w(message);
-  }
-
-  static void logError(String message) {
-    logger.e(message);
-  }
-
-  static void logVerbose(String message) {
-    logger.v(message);
+class MyFilter extends LogFilter {
+  @override
+  bool shouldLog(LogEvent event) {
+    return kDebugMode;
   }
 }

@@ -1,9 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
+
+import '../../shared/utils/logger_utils.dart';
 
 class MainBlocObserver extends BlocObserver {
-  Logger logger = Logger();
-
   @override
   void onCreate(BlocBase<dynamic> bloc) {
     logger.w('CREATE', '${bloc.runtimeType}');
