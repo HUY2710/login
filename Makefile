@@ -1,5 +1,5 @@
 clean:
-	fvm flutter pub clean
+	fvm flutter clean
 
 get-dependencies:
 	fvm flutter pub get
