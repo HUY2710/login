@@ -33,7 +33,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with AdsMixin {
 
   @override
   void initState() {
-    visibleAd = checkVisibleAd(AdRemoteKeys.native_intro);
+    visibleAd = checkVisibleStatus(AdRemoteKeys.native_intro);
     super.initState();
   }
 
