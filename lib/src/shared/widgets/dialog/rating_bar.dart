@@ -361,7 +361,9 @@ class _RatingBarState extends State<RatingBar> {
   void _onDragUpdate(DragUpdateDetails dragDetails) {
     if (!widget.tapOnlyMode) {
       final RenderBox? box = context.findRenderObject() as RenderBox?;
-      if (box == null) return;
+      if (box == null) {
+        return;
+      }
 
       final Offset pos = box.globalToLocal(dragDetails.globalPosition);
       double i;
@@ -382,7 +384,9 @@ class _RatingBarState extends State<RatingBar> {
       }
 
       _rating = currentRating.clamp(_minRating, _maxRating);
-      if (widget.updateOnDrag) widget.onRatingUpdate(iconRating);
+      if (widget.updateOnDrag) {
+        widget.onRatingUpdate(iconRating);
+      }
       setState(() {});
     }
   }

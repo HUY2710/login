@@ -15,7 +15,6 @@ class SplashScreen extends StatefulWidget with AdsMixin {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  bool _isInitialized = false;
   @override
   void initState() {
     super.initState();
@@ -29,7 +28,6 @@ class _SplashScreenState extends State<SplashScreen> {
     if (mounted) {
       await setInitScreen(context);
     }
-    _isInitialized = true;
   }
 
   Future<void> setInitScreen(BuildContext context) async {
