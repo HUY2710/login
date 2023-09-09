@@ -59,20 +59,21 @@ flutter:
   uses-material-design: true
 
   assets:
-   - assets/images/
-   - assets/images/onboarding/
-   - assets/images/languages/
+    - assets/images/
+    - assets/images/onboarding/
+    - assets/images/languages/
 
 
-   - assets/ad_unit_id/dev/
-   - assets/ad_unit_id/prod/
-   - .env.dev
-   - .env.prod
+    - assets/ad_unit_id/dev/
+    - assets/ad_unit_id/prod/
+    - .env
+    - .env.dev
+    - .env.prod
 
   fonts:
-   - family: OpenSans
-     fonts:
-       - asset: assets/fonts/open_sans/OpenSans-Regular.ttf
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/open_sans/OpenSans-Regular.ttf
 
 #generate
 flutter_gen:

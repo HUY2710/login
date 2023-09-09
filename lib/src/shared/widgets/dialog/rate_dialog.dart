@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
-import '../../extension/context_extension.dart';
 
 Future<void> showRatingDialog() {
   return showDialog(
