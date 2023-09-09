@@ -1,7 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'preference_keys.dart';
+import '../../shared/enum/preference_keys.dart';
 
 @singleton
 class SharedPreferencesManager {

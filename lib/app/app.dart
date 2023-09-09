@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../src/config/di/di.dart';
 import '../src/config/navigation/app_router.dart';
 import '../src/config/observer/route_observer.dart';
+import '../src/config/theme/light/light_theme.dart';
 import 'cubit/app_cubit.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
@@ -37,26 +38,21 @@ class _MyAppState extends State<MyApp> {
 }
 
 class BodyApp extends StatelessWidget {
-  BodyApp({
+  const BodyApp({
     super.key,
   });
-
-  AppCubit get appCubit => getIt<AppCubit>()..init();
-  final AppRouter _appRouter = getIt<AppRouter>();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
-      bloc: appCubit,
+      bloc: getIt<AppCubit>()..init(),
       builder: (context, state) => MaterialApp.router(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         locale: Locale(state.currentLanguage.languageCode),
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        routerConfig: _appRouter.config(
+        theme: lightThemeData,
+        // darkTheme: darkThemeData, //optional
+        routerConfig: getIt<AppRouter>().config(
           navigatorObservers: () => [MainRouteObserver()],
         ),
       ),

@@ -77,7 +77,7 @@ class _ActionRowState extends State<ActionRow> with AdsMixin {
   Future<bool> _checkVisibleInterAd() async {
     final bool isStarted =
         await getIt<SharedPreferencesManager>().getIsStarted();
-    final bool isShowAd = checkVisibleAd(AdRemoteKeys.inter_intro);
+    final bool isShowAd = checkVisibleStatus(AdRemoteKeys.inter_intro);
     return isStarted && isShowAd;
   }
 }

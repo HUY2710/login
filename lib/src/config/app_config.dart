@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -8,7 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../flavors.dart';
+import '../data/model/ad_unit_id_model.dart';
 import '../global/global.dart';
+import '../service/app_ad_id_manager.dart';
 import '../shared/constants/app_constants.dart';
 import '../shared/enum/ads/ad_remote_key.dart';
 import '../shared/helpers/env_params.dart';
@@ -47,11 +52,20 @@ class AppConfig with AdsMixin {
     loadAdUnitId();
   }
 
+  Future<void> loadAdUnitId() async {
+    final String environment = F.appFlavor == Flavor.dev ? 'dev' : 'prod';
+    final String platform = Platform.isAndroid ? 'android' : 'ios';
+    final String filePath =
+        'assets/ad_unit_id/$environment/ad_id_$platform.json';
+    final String text = await rootBundle.loadString(filePath);
+    final Map<String, dynamic> json = jsonDecode(text) as Map<String, dynamic>;
+
+    getIt<AppAdIdManager>().adUnitId = AdUnitIdModel.fromJson(json);
+  }
+
   //for dev
   void inItDebugger() {
-    if (kDebugMode) {
-      Bloc.observer = MainBlocObserver();
-    }
+    Bloc.observer = MainBlocObserver();
   }
 
   Future<void> initAppsflyer() async {

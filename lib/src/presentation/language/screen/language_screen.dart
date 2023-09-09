@@ -18,9 +18,11 @@ class LanguageScreen extends StatelessWidget with AdsMixin {
   const LanguageScreen({super.key, this.isFirst});
 
   final bool? isFirst;
+
   AppAdIdManager get adManager => getIt<AppAdIdManager>();
+
   Widget? _buildAd() {
-    final bool isVisible = checkVisibleAd(AdRemoteKeys.native_language);
+    final bool isVisible = checkVisibleStatus(AdRemoteKeys.native_language);
     if (!isVisible) {
       return null;
     }

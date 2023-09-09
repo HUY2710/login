@@ -1,39 +1,36 @@
 # Flutter Base
 
+## Information
+
+Flutter version: `3.10.6`
+
 ### Base Flutter with:
 
-- State management: BLoC
-- Asset management: flutter gen
-- Flavor management: flavorzir
-- Evironment management:
-- Flutter version management: fvm
-- Route management: auto_route
-- Dependencies Injection: di + injectable
-- Responsiveness: screen_util
-- Localization: l10n
+- State management: [flutter_bloc](https://pub.dev/packages/flutter_bloc)
+- Asset management: [flutter_gen](https://pub.dev/packages/flutter_gen)
+- Flavor management: [flutter_flavorizr](https://pub.dev/packages/flutter_flavorizr)
+- Evironment management: [flutter_dotenv](https://pub.dev/packages/flutter_dotenv)
+- Route management: [auto_route](https://pub.dev/packages/auto_route)
+- Dependencies
+  Injection: [get_it](https://pub.dev/packages/get_it) + [injectable](https://pub.dev/packages/injectable)
+- Responsiveness: [flutter_screenutil](https://pub.dev/packages/flutter_screenutil)
+-
+Localization: [flutter_localizations](https://docs.flutter.dev/ui/accessibility-and-localization/internationalization)
 
-### and Boilerplate code for:  
+### and Boilerplate code for:
+
 - Screen: Splash, Intro, Language, Settings
 - Firebase: Remote config, Analytics
 - Admob intergration & meta ads mediation
 - AppsFlyers SDK
 - IAP (optional) --> later
 
-## Cố lên mọi người ơi
+## Usage
 
-This project is a starting point for a Flutter application.
+Setup
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-
-### Flutter Version Manager
-
-This project is use FVM to control the version Flutter
-
+```console
+flutter pub get
+flutter gen-l10n
+flutter pub run build_runner build --delete-conflicting-outputs
+```

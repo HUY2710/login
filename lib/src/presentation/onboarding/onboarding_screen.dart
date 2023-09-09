@@ -5,9 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
+import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/assets.gen.dart';
 import '../../service/app_ad_id_manager.dart';
-import '../../service/shared_preferences/shared_preferences_manager.dart';
 import '../../shared/cubit/value_cubit.dart';
 import '../../shared/enum/ads/ad_remote_key.dart';
 import '../../shared/extension/context_extension.dart';
@@ -33,7 +33,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with AdsMixin {
 
   @override
   void initState() {
-    visibleAd = checkVisibleAd(AdRemoteKeys.native_intro);
+    visibleAd = checkVisibleStatus(AdRemoteKeys.native_intro);
     super.initState();
   }
 
