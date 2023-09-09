@@ -11,6 +11,7 @@ import '../../flavors.dart';
 import '../global/global.dart';
 import '../shared/constants/app_constants.dart';
 import '../shared/enum/ads/ad_remote_key.dart';
+import '../shared/helpers/env_params.dart';
 import '../shared/mixin/ads_mixin.dart';
 import 'di/di.dart';
 import 'observer/bloc_observer.dart';
@@ -20,6 +21,7 @@ class AppConfig with AdsMixin {
   factory AppConfig.getInstance() {
     return _instance;
   }
+
   AppConfig._();
 
   static final AppConfig _instance = AppConfig._();
@@ -54,7 +56,7 @@ class AppConfig with AdsMixin {
 
   Future<void> initAppsflyer() async {
     final AppsFlyerOptions appsFlyerOptions = AppsFlyerOptions(
-      afDevKey: AppConstants.appFlyerKey,
+      afDevKey: EnvParams.appsflyerKey,
       appId: AppConstants.appIOSId,
       showDebug: kDebugMode,
       timeToWaitForATTUserAuthorization: 50,
@@ -64,10 +66,12 @@ class AppConfig with AdsMixin {
   }
 
   Future<void> loadEnv() async {
-    if (F.appFlavor == Flavor.dev) {
-      await dotenv.load(fileName: '.env.dev');
+    await dotenv.load();
+    final Map<String, String> generalKey = Map.from(dotenv.env);
+    if (F.appFlavor == Flavor.prod) {
+      await dotenv.load(fileName: '.env.prod', mergeWith: generalKey);
     } else {
-      await dotenv.load(fileName: '.env.prod');
+      await dotenv.load(fileName: '.env.dev', mergeWith: generalKey);
     }
   }
 
