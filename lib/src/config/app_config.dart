@@ -12,10 +12,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../flavors.dart';
 import '../data/model/ad_unit_id_model.dart';
-import '../global/global.dart';
 import '../service/app_ad_id_manager.dart';
 import '../shared/constants/app_constants.dart';
-import '../shared/enum/ads/ad_remote_key.dart';
 import '../shared/helpers/env_params.dart';
 import '../shared/mixin/ads_mixin.dart';
 import 'di/di.dart';
@@ -47,8 +45,6 @@ class AppConfig with AdsMixin {
     // await initAppsflyer();
     inItDebugger();
     await RemoteConfigManager.instance.initConfig();
-    Global.instance.showAd =
-        RemoteConfigManager.instance.isShowAd(AdRemoteKeys.show);
     loadAdUnitId();
   }
 

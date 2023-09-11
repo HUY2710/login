@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
       splitScreenMode: true,
       builder: (context, child) => GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: BodyApp(),
+        child: const BodyApp(),
       ),
     );
   }

@@ -8,7 +8,6 @@ import '../../config/navigation/app_router.dart';
 import '../../config/remote_config.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/assets.gen.dart';
-import '../../global/global.dart';
 import '../../service/app_ad_id_manager.dart';
 import '../../shared/enum/ads/ad_remote_key.dart';
 import '../../shared/mixin/ads_mixin.dart';
@@ -52,9 +51,8 @@ class _SplashScreenState extends State<SplashScreen> {
         RemoteConfigManager.instance.isShowAd(AdRemoteKeys.inter_splash);
     final bool isOpenAppAd =
         RemoteConfigManager.instance.isShowAd(AdRemoteKeys.app_open_on_resume);
-    final bool isShowAd = Global.instance.showAd;
     //init and show ad
-    if (mounted && isShowInterAd && isShowAd) {
+    if (mounted && isShowInterAd) {
       await initializeAd();
       if (mounted) {
         await widget.showInterAd(context,
@@ -62,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     }
     //set up ad open
-    if (mounted && isOpenAppAd && isShowAd) {
+    if (mounted && isOpenAppAd) {
       EasyAds.instance.initAdmob(
         appOpenAdUnitId: getIt<AppAdIdManager>().adUnitId.appOpenOnResume,
       );

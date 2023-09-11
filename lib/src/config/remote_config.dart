@@ -11,10 +11,12 @@ class ConfigItem {
 
 class RemoteConfigManager {
   RemoteConfigManager._privateConstructor();
+
   static final RemoteConfigManager instance =
       RemoteConfigManager._privateConstructor();
   final FirebaseRemoteConfig _remoteConfig = FirebaseRemoteConfig.instance;
   final List<ConfigItem> _items = [];
+
   Future<void> initConfig() async {
     await _remoteConfig.setConfigSettings(
       RemoteConfigSettings(
@@ -35,15 +37,15 @@ class RemoteConfigManager {
     _getConfigValue();
   }
 
-  bool globalShowAd() {
-    return _items
-        .firstWhere((ConfigItem e) => e.key == AdRemoteKeys.show)
-        .value;
-  }
-
   bool isShowAd(AdRemoteKeys key) {
-    return globalShowAd() &&
-        _items.firstWhere((ConfigItem element) => element.key == key).value;
+    final result = _items.fold(0, (previousValue, element) {
+      if (element.key == AdRemoteKeys.show || element.key == key) {
+        return previousValue + 1;
+      } else {
+        return previousValue;
+      }
+    });
+    return result == 2;
   }
 
   void _getConfigValue() {
