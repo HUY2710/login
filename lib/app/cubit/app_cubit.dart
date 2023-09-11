@@ -17,12 +17,10 @@ class AppCubit extends Cubit<AppState> {
     try {
       final languageCode =
           await getIt<SharedPreferencesManager>().getCurrentLanguageCode;
-
-      final currentLanguage = languageCode != null
-          ? Language.values.firstWhere(
-              (element) => element.languageCode == languageCode,
-            )
-          : Language.english;
+      final Language currentLanguage = Language.values.firstWhere(
+        (element) => element.languageCode == languageCode,
+        orElse: () => Language.english,
+      );
       emit(
         state.copyWith(
           currentLanguage: currentLanguage,
