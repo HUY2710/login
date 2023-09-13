@@ -52,7 +52,9 @@ class RemoteConfigManager {
     _items.clear();
     for (final AdRemoteKeys key in AdRemoteKeys.values) {
       final bool value = _remoteConfig.getBool(key.keyName);
-      _items.add(ConfigItem(value, key));
+      if (value) {
+        _items.add(ConfigItem(value, key));
+      }
     }
   }
 }
