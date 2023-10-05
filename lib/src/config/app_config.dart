@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -41,7 +42,7 @@ class AppConfig with AdsMixin {
     };
     await loadEnv();
     configureDependencies();
-    _settingSystemUI();
+    await _settingSystemUI();
     // await initAppsflyer();
     inItDebugger();
     await RemoteConfigManager.instance.initConfig();
@@ -86,18 +87,42 @@ class AppConfig with AdsMixin {
   }
 
   //show hide bottom navigation bar of device
-  void _settingSystemUI() {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  Future<void> _settingSystemUI() async {
+    if (Platform.isAndroid) {
+      SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        systemNavigationBarColor: Colors.transparent));
+        systemNavigationBarColor: Colors.transparent,
+      ));
 
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
-      SystemUiOverlay.top,
-    ]);
+      void setBehavior(SystemUiMode mode) {
+        SystemChrome.setEnabledSystemUIMode(mode, overlays: <SystemUiOverlay>[
+          SystemUiOverlay.top,
+        ]);
 
-    SystemChrome.setPreferredOrientations(<DeviceOrientation>[
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+        SystemChrome.setSystemUIChangeCallback(
+            (bool systemOverlaysAreVisible) async {
+          if (systemOverlaysAreVisible) {
+            Future<void>.delayed(
+              const Duration(seconds: 3),
+              () => SystemChrome.setEnabledSystemUIMode(mode,
+                  overlays: <SystemUiOverlay>[
+                    SystemUiOverlay.top,
+                  ]),
+            );
+          }
+        });
+      }
+
+      if ((await DeviceInfoPlugin().androidInfo).version.sdkInt > 30) {
+        setBehavior(SystemUiMode.manual);
+      } else {
+        setBehavior(SystemUiMode.immersive);
+      }
+    }
   }
 }
