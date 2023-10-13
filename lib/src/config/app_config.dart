@@ -88,12 +88,12 @@ class AppConfig with AdsMixin {
 
   //show hide bottom navigation bar of device
   Future<void> _settingSystemUI() async {
-    if (Platform.isAndroid) {
-      SystemChrome.setPreferredOrientations(<DeviceOrientation>[
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
+    SystemChrome.setPreferredOrientations(<DeviceOrientation>[
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
+    if (Platform.isAndroid) {
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         systemNavigationBarColor: Colors.transparent,
