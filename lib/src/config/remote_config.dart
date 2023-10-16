@@ -9,6 +9,8 @@ class ConfigItem {
   final AdRemoteKeys key;
 }
 
+bool remoteConfigInitialized = false;
+
 class RemoteConfigManager {
   RemoteConfigManager._privateConstructor();
 
@@ -29,23 +31,36 @@ class RemoteConfigManager {
       ),
     );
 
+    await _remoteConfig.activate();
+    await Future.delayed(const Duration(seconds: 1));
     await _fetchConfig();
+    remoteConfigInitialized = true;
   }
 
-  Future<void> _fetchConfig() async {
-    await _remoteConfig.fetchAndActivate();
-    _getConfigValue();
+  Future<void> _fetchConfig([bool refresh = false]) async {
+    try {
+      if (!refresh) {
+        await _remoteConfig.fetchAndActivate();
+      }
+      _getConfigValue();
+    } catch (_) {
+      _fetchConfig(true);
+    }
   }
 
   bool isShowAd(AdRemoteKeys key) {
-    final result = _items.fold(0, (previousValue, element) {
-      if (element.key == AdRemoteKeys.show || element.key == key) {
-        return previousValue + 1;
-      } else {
-        return previousValue;
-      }
-    });
-    return result == 2;
+    if (remoteConfigInitialized) {
+      return false;
+    } else {
+      final result = _items.fold(0, (previousValue, element) {
+        if (element.key == AdRemoteKeys.show || element.key == key) {
+          return previousValue + 1;
+        } else {
+          return previousValue;
+        }
+      });
+      return result == 2;
+    }
   }
 
   void _getConfigValue() {
