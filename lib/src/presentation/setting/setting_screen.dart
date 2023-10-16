@@ -16,9 +16,15 @@ import '../../shared/widgets/dialog/rate_dialog.dart';
 import 'widgets/item_setting.dart';
 
 @RoutePage()
-class SettingScreen extends StatelessWidget {
+class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
 
+  @override
+  State<SettingScreen> createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
+  bool isSharing = false;
   Future<void> _launchUrl() async {
     EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
     if (!await launchUrl(Uri.parse(UrlConstants.urlPOLICY),
@@ -28,14 +34,20 @@ class SettingScreen extends StatelessWidget {
   }
 
   Future<void> shareApp() async {
-    EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
-    // Set the app link and the message to be shared
-    final String appLink = Platform.isAndroid
-        ? AppConstants.appAndroidUrl
-        : AppConstants.appIOSUrl;
+    if (isSharing) {
+      return;
+    }
+    isSharing = true;
+    try {
+      final String appLink = Platform.isAndroid
+          ? AppConstants.appAndroidUrl
+          : AppConstants.appIOSUrl;
 
-    // Share the app link and message using the share dialog
-    await Share.share(appLink);
+      EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+      await Share.shareWithResult(appLink);
+    } finally {
+      isSharing = false;
+    }
   }
 
   Future<void> rateApp() async {
