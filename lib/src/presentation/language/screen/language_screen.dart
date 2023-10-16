@@ -28,8 +28,8 @@ class LanguageScreen extends StatelessWidget with AdsMixin {
     }
     if (isFirst ?? false) {
       return LargeNativeAdHigh(
-        unitId: adManager.adUnitId.nativeLanguage,
-        unitIdHigh: adManager.adUnitId.nativeLanguage2,
+        unitIdHigh: adManager.adUnitId.nativeLanguage,
+        unitId: adManager.adUnitId.nativeLanguage2,
       );
     } else {
       return LargeNativeAd(
