@@ -9,9 +9,10 @@ import 'package:path_provider/path_provider.dart';
 
 import '../global/global.dart';
 import '../shared/mixin/ads_mixin.dart';
+import '../shared/mixin/system_ui_mixin.dart';
 import 'di/di.dart';
 
-class AppConfig with AdsMixin {
+class AppConfig with AdsMixin, SystemUiMixin {
   factory AppConfig.getInstance() {
     return _instance;
   }
@@ -62,30 +63,16 @@ class AppConfig with AdsMixin {
         systemNavigationBarColor: Colors.transparent,
       ));
 
-      void setBehavior(SystemUiMode mode) {
-        SystemChrome.setEnabledSystemUIMode(mode, overlays: <SystemUiOverlay>[
-          SystemUiOverlay.top,
-        ]);
-
-        SystemChrome.setSystemUIChangeCallback(
-            (bool systemOverlaysAreVisible) async {
-          if (systemOverlaysAreVisible) {
-            Future<void>.delayed(
-              const Duration(seconds: 3),
-              () => SystemChrome.setEnabledSystemUIMode(mode,
-                  overlays: <SystemUiOverlay>[
-                    SystemUiOverlay.top,
-                  ]),
-            );
-          }
-        });
-      }
-
-      if (Global.instance.androidSdkVersion > 30) {
-        setBehavior(SystemUiMode.manual);
-      } else {
-        setBehavior(SystemUiMode.immersive);
-      }
+      hideNavigationBar();
+      SystemChrome.setSystemUIChangeCallback(
+          (bool systemOverlaysAreVisible) async {
+        if (systemOverlaysAreVisible) {
+          Future<void>.delayed(
+            const Duration(seconds: 3),
+            hideNavigationBar,
+          );
+        }
+      });
     }
   }
 }
