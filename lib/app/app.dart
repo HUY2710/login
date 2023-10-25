@@ -7,7 +7,8 @@ import '../src/config/di/di.dart';
 import '../src/config/navigation/app_router.dart';
 import '../src/config/observer/route_observer.dart';
 import '../src/config/theme/light/light_theme.dart';
-import 'cubit/app_cubit.dart';
+import '../src/shared/enum/language.dart';
+import 'cubit/language_cubit.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
@@ -24,14 +25,22 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: Size(designWidth, designHeight),
-      minTextAdapt: true,
-      useInheritedMediaQuery: true,
-      splitScreenMode: true,
-      builder: (context, child) => GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: const BodyApp(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => LanguageCubit(),
+        ),
+      ],
+      child: ScreenUtilInit(
+        designSize: Size(designWidth, designHeight),
+        minTextAdapt: true,
+        useInheritedMediaQuery: true,
+        splitScreenMode: true,
+        builder: (context, child) =>
+            GestureDetector(
+              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+              child: const BodyApp(),
+            ),
       ),
     );
   }
@@ -44,18 +53,18 @@ class BodyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppCubit, AppState>(
-      bloc: getIt<AppCubit>()..init(),
-      builder: (context, state) => MaterialApp.router(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: Locale(state.currentLanguage.languageCode),
-        theme: lightThemeData,
-        // darkTheme: darkThemeData, //optional
-        routerConfig: getIt<AppRouter>().config(
-          navigatorObservers: () => [MainRouteObserver()],
-        ),
-      ),
+    return BlocBuilder<LanguageCubit, Language>(
+      builder: (context, state) =>
+          MaterialApp.router(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            locale: Locale(state.languageCode),
+            theme: lightThemeData,
+            // darkTheme: darkThemeData, //optional
+            routerConfig: getIt<AppRouter>().config(
+              navigatorObservers: () => [MainRouteObserver()],
+            ),
+          ),
     );
   }
 }

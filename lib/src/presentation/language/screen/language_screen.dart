@@ -3,50 +3,70 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../config/di/di.dart';
+import '../../../../app/cubit/language_cubit.dart';
 import '../../../config/navigation/app_router.dart';
-import '../../../service/app_ad_id_manager.dart';
-import '../../../shared/enum/ads/ad_remote_key.dart';
+import '../../../gen/colors.gen.dart';
+import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/language.dart';
-import '../../../shared/mixin/ads_mixin.dart';
-import '../../../shared/widgets/ads/large_native_ad.dart';
-import '../../../shared/widgets/ads/large_native_ad_high.dart';
-import '../bloc/language_bloc.dart';
+import '../../../shared/extension/context_extension.dart';
 
 @RoutePage()
-class LanguageScreen extends StatelessWidget with AdsMixin {
-  const LanguageScreen({super.key, this.isFirst});
+class LanguageScreen extends StatefulWidget {
+  const LanguageScreen({super.key, this.isFirst,});
 
   final bool? isFirst;
 
-  AppAdIdManager get adManager => getIt<AppAdIdManager>();
+  @override
+  State<LanguageScreen> createState() => _LanguageScreenState();
+}
 
-  Widget? _buildAd() {
-    final bool isVisible = checkVisibleStatus(AdRemoteKeys.native_language);
-    if (!isVisible) {
-      return null;
-    }
-    if (isFirst ?? false) {
-      return LargeNativeAdHigh(
-        unitIdHigh: adManager.adUnitId.nativeLanguage,
-        unitId: adManager.adUnitId.nativeLanguage2,
-      );
-    } else {
-      return LargeNativeAd(
-        unitId: adManager.adUnitId.nativeLanguage3,
-      );
-    }
-  }
-
+class _LanguageScreenState extends State<LanguageScreen> {
   @override
   Widget build(BuildContext context) {
+    final Language currentLanguage = context.read<LanguageCubit>().state;
     return BlocProvider(
-      create: (context) => LanguageCubit(),
+      create: (context) => ValueCubit<Language>(currentLanguage),
       child: Scaffold(
-        body: SafeArea(child: _BodyWidget(isFirst)),
-        bottomNavigationBar: _buildAd(),
+        appBar: AppBar(
+          toolbarHeight: 80.h,
+          leading: (widget.isFirst == null || widget.isFirst == false)
+              ? IconButton(
+            onPressed: () => context.popRoute(),
+            icon: const Icon(Icons.arrow_back_ios_new_outlined),
+          )
+              : null,
+          title: Text(
+            context.l10n.language,
+            style: TextStyle(
+              fontSize: 24.sp,
+            ),
+          ),
+          actions: [_buildAcceptButton()],
+        ),
+        body: SafeArea(child: _BodyWidget(widget.isFirst,)),
       ),
     );
+  }
+
+  Builder _buildAcceptButton() {
+    return Builder(builder: (context) {
+      return IconButton(
+        onPressed: () {
+          final Language selectedLanguage =
+              context.read<ValueCubit<Language>>().state;
+          context.read<LanguageCubit>().update(selectedLanguage);
+          if (widget.isFirst == null || widget.isFirst == false) {
+            context.popRoute();
+          } else {
+            context.replaceRoute(const OnBoardingRoute());
+          }
+        },
+        icon: Icon(
+          Icons.check,
+          color: context.colorScheme.primary,
+        ),
+      );
+    });
   }
 }
 
@@ -60,82 +80,22 @@ class _BodyWidget extends StatefulWidget {
 }
 
 class _BodyWidgetState extends State<_BodyWidget> {
-  final LanguageCubit languageCubit = getIt<LanguageCubit>();
-  late String oldLanguage;
-
-  @override
-  void initState() {
-    languageCubit.state.maybeWhen(
-      loaded: (language) => oldLanguage = language,
-      orElse: () => oldLanguage = Language.english.languageCode,
-    );
-    super.initState();
-  }
-
-  void changeLanguage(String language) {
-    languageCubit.changeLanguage(language);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Row(
-            children: <Widget>[
-              if (widget.isFirst == null || widget.isFirst == false)
-                IconButton(
-                  onPressed: () {
-                    context.popRoute();
-                    changeLanguage(oldLanguage);
-                  },
-                  icon: const Icon(Icons.abc),
-                ),
-              Expanded(
-                child: Text(
-                  'Language',
-                  style:
-                      TextStyle(fontWeight: FontWeight.w700, fontSize: 20.sp),
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  if (widget.isFirst == null || widget.isFirst == false) {
-                    context.popRoute();
-                  } else {
-                    context.replaceRoute(const OnBoardingRoute());
-                  }
-                },
-                icon: const Icon(
-                  Icons.check,
-                ),
-                // color: context.colorScheme.primary,
-              )
-            ],
-          ),
-        ),
         Expanded(
-          child: BlocBuilder<LanguageCubit, LanguageState>(
-            bloc: languageCubit,
+          child: BlocBuilder<ValueCubit<Language>, Language>(
             builder: (context, state) {
-              return state.when(
-                initial: () => const SizedBox(),
-                loaded: (String language) {
-                  return ListView.builder(
-                    itemCount: Language.values.length,
-                    itemBuilder: (BuildContext context1, int index) {
-                      final Language item = Language.values[index];
-                      return _buildItemLanguage(
-                        context: context,
-                        language: item,
-                        value: language,
-                        onTap: changeLanguage,
-                      );
-                    },
-                  );
+              return ListView.builder(
+                itemCount: Language.values.length,
+                itemBuilder: (BuildContext context1, int index) {
+                  final Language item = Language.values[index];
+                  return _buildItemLanguage(
+                      context: context,
+                      language: item,
+                      selectedValue: state,);
                 },
-                error: (String message) => Center(child: Text(message)),
               );
             },
           ),
@@ -148,54 +108,55 @@ class _BodyWidgetState extends State<_BodyWidget> {
 Widget _buildItemLanguage({
   required BuildContext context,
   required Language language,
-  required String value,
-  required CallbackFunction onTap,
+  required Language selectedValue,
 }) {
+  final selectedLanguageCubit = context.read<ValueCubit<Language>>();
   return GestureDetector(
-    onTap: () => onTap(language.languageCode),
-    child: Card(
-      surfaceTintColor: const Color(0xffD9D9D9),
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16.0,
-        vertical: 10.0,
+    onTap: () => selectedLanguageCubit.update(language),
+    child: Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: 16.w,
+        vertical: 4.h,
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-        side: const BorderSide(
-          color: Color(0xffD9D9D9),
-          width: 0.2,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: MyColors.primary.shade100,
         ),
+        borderRadius: BorderRadius.circular(15.r),
       ),
-      child: ListTile(
-        title: Text(
-          language.languageName,
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400),
-        ),
-        leading: Image.asset(
-          language.flagPath,
-          width: 36.w,
-          height: 24.h,
-        ),
-        trailing: Transform.scale(
-          scale: 1.3,
-          child: Radio<String>(
-            value: language.languageCode,
-            groupValue: value,
-            onChanged: (String? value) => onTap(value ?? 'en'),
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            // fillColor: MaterialStateProperty.resolveWith<Color?>(
-            //   (Set<MaterialState> states) {
-            //     if (states.contains(MaterialState.selected)) {
-            //       return context.colorScheme.primary;
-            //     }
-            //     return const Color(0xffC6C6C6);
-            //   },
-            // ),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16).w,
+            child: Image.asset(
+              language.flagPath,
+              width: 24.w,
+              height: 24.h,
+            ),
           ),
-        ),
+          Expanded(
+            child: Text(
+              language.languageName,
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Radio<Language>(
+            value: language,
+            fillColor: MaterialStateProperty.resolveWith((states) {
+              if (states.contains(MaterialState.selected)) {
+                return context.colorScheme.primary;
+              }
+              return MyColors.primary.shade100;
+            }),
+            groupValue: selectedValue,
+            onChanged: (Language? value) =>
+                selectedLanguageCubit.update(language),
+          )
+        ],
       ),
     ),
   );
 }
-
-typedef CallbackFunction = void Function(String data);

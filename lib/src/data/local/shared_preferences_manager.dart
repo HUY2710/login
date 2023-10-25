@@ -15,17 +15,6 @@ class SharedPreferencesManager {
     (await _preference).setBool(PreferenceKeys.isFistTime.name, isFirstLaunch);
   }
 
-  /// Language code
-  Future<void> saveCurrentLanguageCode(String languageCode) async {
-    (await _preference)
-        .setString(PreferenceKeys.currentLanguageCode.name, languageCode);
-  }
-
-  Future<String?> get getCurrentLanguageCode async {
-    return (await _preference)
-        .getString(PreferenceKeys.currentLanguageCode.name);
-  }
-
   Future<bool?> isExistRated() async {
     return (await _preference).getBool(PreferenceKeys.rateApp.name);
   }
