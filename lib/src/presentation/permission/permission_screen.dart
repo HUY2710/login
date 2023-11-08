@@ -8,7 +8,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../../app/cubit/native_ad_status_cubit.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
-import '../../../module/admob/enum/ad_remote_key.dart';
 import '../../../module/admob/mixin/ads_mixin.dart';
 import '../../../module/admob/widget/ads/large_native_ad.dart';
 import '../../config/di/di.dart';
@@ -36,7 +35,7 @@ class _PermissionScreenState extends State<PermissionScreen> with AdsMixin {
 
   @override
   void initState() {
-    isVisibleAd = checkVisibleStatus(AdRemoteKeys.native_permission);
+    // isVisibleAd = checkVisibleStatus(AdRemoteKeys.native_permission);
     super.initState();
   }
 

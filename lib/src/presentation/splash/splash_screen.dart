@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:applovin_max/applovin_max.dart';
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
@@ -49,13 +48,17 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
     if (!kDebugMode) {
       initCrashlytics();
     }
-    await loadEnv();
-    await initAppsflyer();
-    await AppLovinMAX.initialize(EnvParams.appLovinKey);
+
     initDebugger();
+    await loadEnv();
     await RemoteConfigManager.instance.initConfig();
-    await loadAdUnitId();
-    await configureAd();
+
+    // TODO(son): Bỏ comment khi gắn ad
+    // await initAppsflyer();
+    // await AppLovinMAX.initialize(EnvParams.appLovinKey);
+    // await loadAdUnitId();
+    // await configureAd();
+
     if (EasyAds.instance.hasInternet) {
       await initUpgrader();
     }
@@ -92,27 +95,36 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
       debugLogging: true,
       showLater: !forceUpdate,
       onLater: () {
-        showSplashInter().then((_) => setInitScreen());
+        onInitializedConfig();
         return true;
       },
     );
     await upgrader.initialize();
     if (!upgrader.shouldDisplayUpgrade()) {
-      showSplashInter().then((_) => setInitScreen());
+      onInitializedConfig();
     } else {
       showUpgradeDialog(upgrader, forceUpdate);
     }
+  }
+
+  Future<void> onInitializedConfig() async {
+    // TODO(son): Bỏ comment khi gắn ad
+    // if (RemoteConfigManager.instance.globalShowAd()) {
+    //   await showSplashInter();
+    // }
+    await setInitScreen();
   }
 
   void showUpgradeDialog(Upgrader upgrader, bool forceUpdate) {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => WillPopScope(
-        onWillPop: () async => false,
-        child: UpdateDialog(
-            upgrader: upgrader, context: context, forceUpdate: forceUpdate),
-      ),
+      builder: (_) =>
+          WillPopScope(
+            onWillPop: () async => false,
+            child: UpdateDialog(
+                upgrader: upgrader, context: context, forceUpdate: forceUpdate),
+          ),
     );
   }
 
@@ -133,18 +145,18 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
   }
 
   Future<void> configureAd() async {
-    final bool isShowInterAd =
-        checkVisibleStatus(AdRemoteKeys.inter_splash);
-    final bool isOpenAppAd = checkVisibleStatus(AdRemoteKeys.app_open_on_resume);
+    final bool isShowAd = RemoteConfigManager.instance.globalShowAd();
     //init and show ad
-    if (mounted && isShowInterAd) {
+    if (mounted && isShowAd) {
       await initializeAd();
-    }
-    //set up ad open
-    if (mounted && isOpenAppAd) {
-      EasyAds.instance.initAdmob(
-        appOpenAdUnitId: getIt<AppAdIdManager>().adUnitId.appOpenOnResume,
-      );
+      final bool isOpenAppAd =
+      checkVisibleStatus(AdRemoteKeys.app_open_on_resume);
+      //set up ad open
+      if (mounted && isOpenAppAd) {
+        EasyAds.instance.initAdmob(
+          appOpenAdUnitId: getIt<AppAdIdManager>().adUnitId.appOpenOnResume,
+        );
+      }
     }
   }
 

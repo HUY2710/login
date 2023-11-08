@@ -40,11 +40,10 @@ class _MyAppState extends State<MyApp> {
         minTextAdapt: true,
         useInheritedMediaQuery: true,
         splitScreenMode: true,
-        builder: (context, child) =>
-            GestureDetector(
-              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-              child: const BodyApp(),
-            ),
+        builder: (context, child) => GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: const BodyApp(),
+        ),
       ),
     );
   }
@@ -58,17 +57,17 @@ class BodyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LanguageCubit, Language>(
-      builder: (context, state) =>
-          MaterialApp.router(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            locale: Locale(state.languageCode),
-            theme: lightThemeData,
-            // darkTheme: darkThemeData, //optional
-            routerConfig: getIt<AppRouter>().config(
-              navigatorObservers: () => [MainRouteObserver()],
-            ),
-          ),
+      builder: (context, state) => MaterialApp.router(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        locale: Locale(state.languageCode),
+        debugShowCheckedModeBanner: false,
+        theme: lightThemeData,
+        // darkTheme: darkThemeData, //optional
+        routerConfig: getIt<AppRouter>().config(
+          navigatorObservers: () => [MainRouteObserver()],
+        ),
+      ),
     );
   }
 }

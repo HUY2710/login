@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../app/cubit/language_cubit.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
-import '../../../module/admob/enum/ad_remote_key.dart';
 import '../../../module/admob/mixin/ads_mixin.dart';
 import '../../../module/admob/widget/ads/large_native_ad.dart';
 import '../../config/di/di.dart';
@@ -33,12 +32,12 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> with AdsMixin {
   final PageController _pageController = PageController();
-  late bool visibleAd;
+  bool visibleAd = false;
 
   @override
   void initState() {
     context.read<LanguageCubit>().update(widget.language);
-    visibleAd = checkVisibleStatus(AdRemoteKeys.native_intro);
+    // visibleAd = checkVisibleStatus(AdRemoteKeys.native_intro);
     super.initState();
   }
 
