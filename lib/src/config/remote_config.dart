@@ -1,6 +1,7 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 import '../../module/admob/enum/ad_remote_key.dart';
+import '../../module/admob/enum/remote_key.dart';
 
 class ConfigItem {
   ConfigItem(this.value, this.key);
@@ -8,8 +9,6 @@ class ConfigItem {
   final bool value;
   final AdRemoteKeys key;
 }
-
-bool remoteConfigInitialized = false;
 
 class RemoteConfigManager {
   RemoteConfigManager._privateConstructor();
@@ -34,7 +33,6 @@ class RemoteConfigManager {
     await _remoteConfig.activate();
     await Future.delayed(const Duration(seconds: 1));
     await _fetchConfig();
-    remoteConfigInitialized = true;
   }
 
   Future<void> _fetchConfig([bool refresh = false]) async {
@@ -49,18 +47,14 @@ class RemoteConfigManager {
   }
 
   bool isShowAd(AdRemoteKeys key) {
-    if (remoteConfigInitialized) {
-      return false;
-    } else {
-      final result = _items.fold(0, (previousValue, element) {
-        if (element.key == AdRemoteKeys.show || element.key == key) {
-          return previousValue + 1;
-        } else {
-          return previousValue;
-        }
-      });
-      return result == 2;
-    }
+    final result = _items.fold(0, (previousValue, element) {
+      if (element.key == AdRemoteKeys.show || element.key == key) {
+        return previousValue + 1;
+      } else {
+        return previousValue;
+      }
+    });
+    return result == 2;
   }
 
   void _getConfigValue() {
@@ -71,5 +65,8 @@ class RemoteConfigManager {
         _items.add(ConfigItem(value, key));
       }
     }
+  }
+  bool isForceUpdate() {
+    return _remoteConfig.getBool(RemoteKeys.force_update.name);
   }
 }

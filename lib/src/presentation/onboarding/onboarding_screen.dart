@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../module/admob/app_ad_id_manager.dart';
 import '../../../module/admob/enum/ad_remote_key.dart';
 import '../../../module/admob/mixin/ads_mixin.dart';
 import '../../../module/admob/widget/ads/large_native_ad.dart';
@@ -10,7 +11,6 @@ import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/assets.gen.dart';
-import '../../../module/admob/app_ad_id_manager.dart';
 import '../../shared/cubit/value_cubit.dart';
 import '../../shared/extension/context_extension.dart';
 import 'widgets/indicator.dart';

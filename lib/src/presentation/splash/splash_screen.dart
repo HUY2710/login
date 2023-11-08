@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -9,9 +10,11 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_base/src/presentation/splash/update_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:upgrader/upgrader.dart';
 
 import '../../../flavors.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
@@ -52,8 +55,63 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
     initDebugger();
     await RemoteConfigManager.instance.initConfig();
     await loadAdUnitId();
-    await showAd();
-    await setInitScreen();
+    await configureAd();
+    if (EasyAds.instance.hasInternet) {
+      await initUpgrader();
+    }
+  }
+  Future<bool> showSplashInter() async {
+    final Completer<bool> completer = Completer();
+    final bool isShowInterAd =
+    RemoteConfigManager.instance.isShowAd(AdRemoteKeys.inter_splash);
+    if (isShowInterAd) {
+      await EasyAds.instance.showSplashInterstitialAd(
+        getIt<AppRouter>().navigatorKey.currentContext!,
+        adId: getIt<AppAdIdManager>().adUnitId.interSplash,
+        onShowed: () {
+          completer.complete(true);
+        },
+        onFailed: () {
+          completer.complete(false);
+        },
+        onNoInternet: () {
+          completer.complete(false);
+        },
+      );
+    } else{
+      completer.complete(false);
+    }
+    return completer.future;
+  }
+  Future<void> initUpgrader() async {
+    final bool forceUpdate = RemoteConfigManager.instance.isForceUpdate();
+    final Upgrader upgrader = Upgrader(
+      showIgnore: false,
+      showReleaseNotes: false,
+      debugLogging: true,
+      showLater: !forceUpdate,
+      onLater: () {
+        showSplashInter().then((_) => setInitScreen());
+        return true;
+      },
+    );
+    await upgrader.initialize();
+    if (!upgrader.shouldDisplayUpgrade()) {
+      showSplashInter().then((_) => setInitScreen());
+    } else {
+      showUpgradeDialog(upgrader, forceUpdate);
+    }
+  }
+  void showUpgradeDialog(Upgrader upgrader, bool forceUpdate) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => WillPopScope(
+        onWillPop: () async => false,
+        child: UpdateDialog(
+            upgrader: upgrader, context: context, forceUpdate: forceUpdate),
+      ),
+    );
   }
 
   Future<void> setInitScreen() async {
@@ -66,7 +124,7 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
     }
   }
 
-  Future<void> showAd() async {
+  Future<void> configureAd() async {
     final bool isShowInterAd =
         RemoteConfigManager.instance.isShowAd(AdRemoteKeys.inter_splash);
     final bool isOpenAppAd =
@@ -74,10 +132,6 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
     //init and show ad
     if (mounted && isShowInterAd) {
       await initializeAd();
-      if (mounted) {
-        await showInterAd(context,
-            id: getIt<AppAdIdManager>().adUnitId.interSplash);
-      }
     }
     //set up ad open
     if (mounted && isOpenAppAd) {

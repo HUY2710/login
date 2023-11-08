@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../src/config/di/di.dart';
-import '../../app_ad_id_manager.dart';
 import '../../../../src/shared/widgets/my_placeholder.dart';
+import '../../app_ad_id_manager.dart';
 
 class SmallNativeAd extends StatelessWidget {
   const SmallNativeAd({super.key, required this.unitId});
