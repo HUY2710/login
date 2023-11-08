@@ -118,11 +118,17 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
 
   Future<void> setInitScreen() async {
     final bool isFirstLaunch =
-        await getIt<SharedPreferencesManager>().getIsFirstLaunch();
-    if (isFirstLaunch && context.mounted) {
-      AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
-    } else {
-      AutoRouter.of(context).replace(const MyHomeRoute());
+    await getIt<SharedPreferencesManager>().getIsStarted();
+    final bool isPermissionAllow =
+    await getIt<SharedPreferencesManager>().getIsPermissionAllow();
+    if (mounted) {
+      if (isFirstLaunch) {
+        AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
+      } else if (isPermissionAllow) {
+        AutoRouter.of(context).replace(const PermissionRoute());
+      } else {
+        AutoRouter.of(context).replace(const HomeRoute());
+      }
     }
   }
 

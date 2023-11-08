@@ -2,16 +2,16 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
-class MyHomeScreen extends StatefulWidget {
-  const MyHomeScreen({
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({
     super.key,
   });
 
   @override
-  State<MyHomeScreen> createState() => _MyHomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MyHomeScreenState extends State<MyHomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   int _counter = 0;
 
   void _incrementCounter() {

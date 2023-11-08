@@ -54,11 +54,10 @@ class _LanguageScreenState extends State<LanguageScreen> {
         onPressed: () {
           final Language selectedLanguage =
               context.read<ValueCubit<Language>>().state;
-          context.read<LanguageCubit>().update(selectedLanguage);
           if (widget.isFirst == null || widget.isFirst == false) {
             context.popRoute();
           } else {
-            context.replaceRoute(const OnBoardingRoute());
+            context.replaceRoute(OnBoardingRoute(language: selectedLanguage));
           }
         },
         icon: Icon(

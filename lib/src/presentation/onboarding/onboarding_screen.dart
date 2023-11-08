@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../app/cubit/language_cubit.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
 import '../../../module/admob/enum/ad_remote_key.dart';
 import '../../../module/admob/mixin/ads_mixin.dart';
@@ -12,6 +13,7 @@ import '../../config/navigation/app_router.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/assets.gen.dart';
 import '../../shared/cubit/value_cubit.dart';
+import '../../shared/enum/language.dart';
 import '../../shared/extension/context_extension.dart';
 import 'widgets/indicator.dart';
 import 'widgets/page_widget.dart';
@@ -21,7 +23,9 @@ part 'widgets/onboarding_carousel.dart';
 
 @RoutePage()
 class OnBoardingScreen extends StatefulWidget {
-  const OnBoardingScreen({super.key});
+  const OnBoardingScreen({super.key, required this.language});
+
+  final Language language;
 
   @override
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
@@ -33,6 +37,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with AdsMixin {
 
   @override
   void initState() {
+    context.read<LanguageCubit>().update(widget.language);
     visibleAd = checkVisibleStatus(AdRemoteKeys.native_intro);
     super.initState();
   }

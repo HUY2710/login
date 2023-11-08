@@ -7,14 +7,6 @@ import '../../shared/enum/preference_keys.dart';
 class SharedPreferencesManager {
   Future<SharedPreferences> get _preference => SharedPreferences.getInstance();
 
-  Future<bool> getIsFirstLaunch() async {
-    return (await _preference).getBool(PreferenceKeys.isFistTime.name) ?? true;
-  }
-
-  Future<void> saveIsFirstLaunch(bool isFirstLaunch) async {
-    (await _preference).setBool(PreferenceKeys.isFistTime.name, isFirstLaunch);
-  }
-
   Future<bool?> isExistRated() async {
     return (await _preference).getBool(PreferenceKeys.rateApp.name);
   }
@@ -29,5 +21,14 @@ class SharedPreferencesManager {
 
   Future<bool> getIsStarted() async {
     return (await _preference).getBool(PreferenceKeys.isStarted.name) ?? true;
+  }
+
+  Future<void> saveIsPermissionAllow(bool status) async {
+    (await _preference).setBool(PreferenceKeys.permissionAllow.name, status);
+  }
+
+  Future<bool> getIsPermissionAllow() async {
+    return (await _preference).getBool(PreferenceKeys.permissionAllow.name) ??
+        true;
   }
 }

@@ -4,9 +4,11 @@ import 'package:injectable/injectable.dart';
 import '../../presentation/home/home_screen.dart';
 import '../../presentation/language/screen/language_screen.dart';
 import '../../presentation/onboarding/onboarding_screen.dart';
+import '../../presentation/permission/permission_screen.dart';
 import '../../presentation/setting/about_screen.dart';
 import '../../presentation/setting/setting_screen.dart';
 import '../../presentation/splash/splash_screen.dart';
+import '../../shared/enum/language.dart';
 
 part 'app_router.gr.dart';
 
@@ -20,7 +22,8 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: SplashRoute.page, initial: true),
         AutoRoute(page: LanguageRoute.page),
         AutoRoute(page: OnBoardingRoute.page),
-        AutoRoute(page: MyHomeRoute.page),
+        AutoRoute(page: PermissionRoute.page),
+        AutoRoute(page: HomeRoute.page),
       ];
 
   AutoRoute routeWithFadeTransition(

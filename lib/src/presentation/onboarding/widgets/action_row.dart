@@ -60,24 +60,9 @@ class _ActionRowState extends State<ActionRow> with AdsMixin {
   }
 
   Future<void> _done() async {
-    final bool isVisible = await _checkVisibleInterAd();
-    if (isVisible) {
-      await _showInterAd();
-      await getIt<SharedPreferencesManager>().saveIsStarted(false);
-    }
+    await getIt<SharedPreferencesManager>().saveIsStarted(false);
     if (mounted) {
-      context.replaceRoute(const MyHomeRoute());
+      context.replaceRoute(const PermissionRoute());
     }
-  }
-
-  Future<void> _showInterAd() async {
-    await showInterAd(context, id: getIt<AppAdIdManager>().adUnitId.interIntro);
-  }
-
-  Future<bool> _checkVisibleInterAd() async {
-    final bool isStarted =
-        await getIt<SharedPreferencesManager>().getIsStarted();
-    final bool isShowAd = checkVisibleStatus(AdRemoteKeys.inter_intro);
-    return isStarted && isShowAd;
   }
 }
