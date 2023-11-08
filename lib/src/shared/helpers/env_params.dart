@@ -10,4 +10,6 @@ class EnvParams {
   static String get appId => dotenv.get('APP_ID_$_platform');
 
   static String get appsflyerKey => dotenv.get('APPSFLYER_KEY');
+
+  static String get appLovinKey => dotenv.get('APPLOVIN_KEY');
 }

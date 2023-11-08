@@ -97,7 +97,8 @@ dependencies {
     implementation 'com.google.ads.mediation:facebook:6.15.0.0'
     implementation 'com.facebook.android:audience-network-sdk:6.10.0'
     implementation 'androidx.annotation:annotation:1.0.0'
-    
+    implementation 'com.google.ads.mediation:applovin:11.11.3.0'
+    implementation 'com.google.ads.mediation:mintegral:16.5.21.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

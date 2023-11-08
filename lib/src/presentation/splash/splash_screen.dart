@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:applovin_max/applovin_max.dart';
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../flavors.dart';
+import '../../../module/admob/app_ad_id_manager.dart';
 import '../../../module/admob/enum/ad_remote_key.dart';
 import '../../../module/admob/mixin/ads_mixin.dart';
 import '../../../module/admob/model/ad_unit_id/ad_unit_id_model.dart';
@@ -22,7 +24,6 @@ import '../../config/observer/bloc_observer.dart';
 import '../../config/remote_config.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/assets.gen.dart';
-import '../../../module/admob/app_ad_id_manager.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/helpers/env_params.dart';
 
@@ -43,19 +44,16 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
 
   Future<void> _init() async {
     if (!kDebugMode) {
-      _initCrashlytics();
+      initCrashlytics();
     }
-    await _loadEnv();
-    // await initAppsflyer();
-    _initDebugger();
+    await loadEnv();
+    await initAppsflyer();
+    await AppLovinMAX.initialize(EnvParams.appLovinKey);
+    initDebugger();
     await RemoteConfigManager.instance.initConfig();
-    _loadAdUnitId();
-    if (mounted) {
-      await showAd();
-    }
-    if (mounted) {
-      await setInitScreen();
-    }
+    await loadAdUnitId();
+    await showAd();
+    await setInitScreen();
   }
 
   Future<void> setInitScreen() async {
@@ -99,7 +97,7 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
       navigatorKey: getIt<AppRouter>().navigatorKey,
     );
   }
-  void _initCrashlytics() {
+  void initCrashlytics() {
     if(!kDebugMode){
       FlutterError.onError = (errorDetails) {
         FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
@@ -111,7 +109,7 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
     }
   }
 
-  Future<void> _loadAdUnitId() async {
+  Future<void> loadAdUnitId() async {
     final String environment = F.appFlavor == Flavor.dev ? 'dev' : 'prod';
     final String platform = Platform.isAndroid ? 'android' : 'ios';
     final String filePath =
@@ -123,7 +121,7 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
   }
 
   //for dev
-  void _initDebugger() {
+  void initDebugger() {
     if(kDebugMode){
       Bloc.observer = MainBlocObserver();
     }
@@ -140,7 +138,7 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
     await appsflyerSdk.initSdk();
   }
 
-  Future<void> _loadEnv() async {
+  Future<void> loadEnv() async {
     await dotenv.load(); //Load file .env
     final Map<String, String> generalKey = Map.from(dotenv.env);
     if (F.appFlavor == Flavor.prod) {
