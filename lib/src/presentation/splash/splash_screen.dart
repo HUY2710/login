@@ -18,7 +18,7 @@ import '../../config/navigation/app_router.dart';
 import '../../config/observer/bloc_observer.dart';
 import '../../config/remote_config.dart';
 import '../../data/local/shared_preferences_manager.dart';
-import '../../data/model/ad_unit_id_model.dart';
+import '../../data/model/ad_unit_id/ad_unit_id_model.dart';
 import '../../gen/assets.gen.dart';
 import '../../service/app_ad_id_manager.dart';
 import '../../shared/constants/app_constants.dart';
