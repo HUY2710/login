@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:upgrader/upgrader.dart';
 
-import '../../gen/assets.gen.dart';
-
 class UpdateDialog extends AlertDialog {
   const UpdateDialog({
     super.key,

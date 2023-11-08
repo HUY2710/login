@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../shared/mixin/system_ui_mixin.dart';
-import '../../shared/utils/logger_utils.dart';
+import '../../shared/helpers/logger_utils.dart';
 
 class MainRouteObserver extends AutoRouterObserver with SystemUiMixin {
   @override

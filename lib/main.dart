@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'app/app.dart';
 import 'src/config/app_config.dart';
-import 'src/shared/utils/logger_utils.dart';
+import 'src/shared/helpers/logger_utils.dart';
 
 Future<void> main() async {
   runZonedGuarded(() async {

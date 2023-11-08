@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../shared/utils/logger_utils.dart';
+import '../../shared/helpers/logger_utils.dart';
 
 class MainBlocObserver extends BlocObserver {
   @override

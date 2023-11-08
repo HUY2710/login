@@ -46,24 +46,21 @@ class RemoteConfigManager {
     }
   }
 
+  bool globalShowAd() {
+    return _items
+        .firstWhere((ConfigItem e) => e.key == AdRemoteKeys.show).value;
+  }
+
   bool isShowAd(AdRemoteKeys key) {
-    final result = _items.fold(0, (previousValue, element) {
-      if (element.key == AdRemoteKeys.show || element.key == key) {
-        return previousValue + 1;
-      } else {
-        return previousValue;
-      }
-    });
-    return result == 2;
+    return globalShowAd() &&
+        _items.firstWhere((ConfigItem element) => element.key == key).value;
   }
 
   void _getConfigValue() {
     _items.clear();
     for (final AdRemoteKeys key in AdRemoteKeys.values) {
       final bool value = _remoteConfig.getBool(key.keyName);
-      if (value) {
-        _items.add(ConfigItem(value, key));
-      }
+      _items.add(ConfigItem(value, key));
     }
   }
   bool isForceUpdate() {

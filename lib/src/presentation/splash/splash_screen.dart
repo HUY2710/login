@@ -10,7 +10,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_base/src/presentation/splash/update_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,16 +28,17 @@ import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/assets.gen.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/helpers/env_params.dart';
+import 'update_dialog.dart';
 
 @RoutePage()
-class SplashScreen extends StatefulWidget{
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
+class _SplashScreenState extends State<SplashScreen> with AdsMixin {
   @override
   void initState() {
     super.initState();
@@ -60,11 +60,11 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
       await initUpgrader();
     }
   }
+
   Future<bool> showSplashInter() async {
     final Completer<bool> completer = Completer();
-    final bool isShowInterAd =
-    RemoteConfigManager.instance.isShowAd(AdRemoteKeys.inter_splash);
-    if (isShowInterAd) {
+    final bool isShowAd = RemoteConfigManager.instance.globalShowAd();
+    if (isShowAd) {
       await EasyAds.instance.showSplashInterstitialAd(
         getIt<AppRouter>().navigatorKey.currentContext!,
         adId: getIt<AppAdIdManager>().adUnitId.interSplash,
@@ -78,11 +78,12 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
           completer.complete(false);
         },
       );
-    } else{
+    } else {
       completer.complete(false);
     }
     return completer.future;
   }
+
   Future<void> initUpgrader() async {
     final bool forceUpdate = RemoteConfigManager.instance.isForceUpdate();
     final Upgrader upgrader = Upgrader(
@@ -102,6 +103,7 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
       showUpgradeDialog(upgrader, forceUpdate);
     }
   }
+
   void showUpgradeDialog(Upgrader upgrader, bool forceUpdate) {
     showDialog(
       context: context,
@@ -126,9 +128,8 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
 
   Future<void> configureAd() async {
     final bool isShowInterAd =
-        RemoteConfigManager.instance.isShowAd(AdRemoteKeys.inter_splash);
-    final bool isOpenAppAd =
-        RemoteConfigManager.instance.isShowAd(AdRemoteKeys.app_open_on_resume);
+        checkVisibleStatus(AdRemoteKeys.inter_splash);
+    final bool isOpenAppAd = checkVisibleStatus(AdRemoteKeys.app_open_on_resume);
     //init and show ad
     if (mounted && isShowInterAd) {
       await initializeAd();
@@ -144,15 +145,16 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
   Future<void> initializeAd() async {
     await EasyAds.instance.initialize(
       getIt<AppAdIdManager>(),
-      Assets.images.logo.image(height: 293.h, width: 259.w),
+      Assets.images.logo.image(height: 120.r, width: 120.r),
       unityTestMode: true,
       adMobAdRequest: const AdRequest(httpTimeoutMillis: 30000),
       admobConfiguration: RequestConfiguration(),
       navigatorKey: getIt<AppRouter>().navigatorKey,
     );
   }
+
   void initCrashlytics() {
-    if(!kDebugMode){
+    if (!kDebugMode) {
       FlutterError.onError = (errorDetails) {
         FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
       };
@@ -176,7 +178,7 @@ class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
 
   //for dev
   void initDebugger() {
-    if(kDebugMode){
+    if (kDebugMode) {
       Bloc.observer = MainBlocObserver();
     }
   }
