@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../module/admob/mixin/ads_mixin.dart';
 import '../global/global.dart';
-import '../shared/mixin/ads_mixin.dart';
 import '../shared/mixin/system_ui_mixin.dart';
 import 'di/di.dart';
 

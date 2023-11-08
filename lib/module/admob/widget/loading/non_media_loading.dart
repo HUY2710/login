@@ -1,31 +1,15 @@
-import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../../config/di/di.dart';
-import '../../../service/app_ad_id_manager.dart';
-import '../my_placeholder.dart';
+import '../../../../src/shared/widgets/my_placeholder.dart';
 
-class SmallNativeAd extends StatelessWidget {
-  const SmallNativeAd({super.key, required this.unitId});
 
-  final String unitId;
+class NonMediaLoading extends StatelessWidget {
+  const NonMediaLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10).h,
-      child: EasyNativeAd(
-        factoryId: getIt<AppAdIdManager>().smallNativeFactory,
-        adId: unitId,
-        height: 130,
-        loadingWidget: _buildLoadingWidget(),
-      ),
-    );
-  }
-
-  Widget _buildLoadingWidget() {
     return Shimmer.fromColors(
       baseColor: Colors.grey.shade300,
       highlightColor: Colors.grey.shade100,
@@ -33,13 +17,6 @@ class SmallNativeAd extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            MyPlaceholder(
-              width: 1.sw,
-              height: 50,
-            ),
-            const SizedBox(
-              height: 5,
-            ),
             Row(
               children: [
                 MyPlaceholder(
@@ -67,6 +44,13 @@ class SmallNativeAd extends StatelessWidget {
                   ),
                 )
               ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            MyPlaceholder(
+              width: 1.sw,
+              height: 50,
             ),
           ],
         ),

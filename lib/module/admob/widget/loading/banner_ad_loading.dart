@@ -1,39 +1,26 @@
-import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../my_placeholder.dart';
+import '../../../../src/shared/widgets/my_placeholder.dart';
 
-class MyBannerAd extends StatelessWidget {
-  const MyBannerAd({
+class BannerAdLoading extends StatelessWidget {
+  const BannerAdLoading({
     super.key,
-    required this.id,
-    this.isCollapsible = false,
   });
-
-  final String id;
-  final bool isCollapsible;
 
   @override
   Widget build(BuildContext context) {
-    return EasyBannerAd(
-      adId: id,
-      isCollapsible: isCollapsible,
-      loadingWidget: _buildLoadingAd(),
-    );
-  }
-
-  Widget _buildLoadingAd() {
     return Shimmer.fromColors(
       baseColor: Colors.grey.shade300,
       highlightColor: Colors.grey.shade100,
       child: Padding(
-        padding: const EdgeInsets.all(8).r,
+        padding: const EdgeInsets.all(8),
         child: Row(
           children: [
             MyPlaceholder(
-              width: 40.r,
+              width: 36,
+              height: 36,
             ),
             10.horizontalSpace,
             Expanded(
@@ -41,12 +28,14 @@ class MyBannerAd extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MyPlaceholder(
-                    height: 12.h,
+                    height: 12,
                   ),
-                  5.verticalSpace,
+                  const SizedBox(
+                    height: 6,
+                  ),
                   MyPlaceholder(
                     width: 100.w,
-                    height: 12.h,
+                    height: 12,
                   ),
                 ],
               ),

@@ -13,28 +13,28 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../flavors.dart';
+import '../../../module/admob/enum/ad_remote_key.dart';
+import '../../../module/admob/mixin/ads_mixin.dart';
+import '../../../module/admob/model/ad_unit_id/ad_unit_id_model.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../config/observer/bloc_observer.dart';
 import '../../config/remote_config.dart';
 import '../../data/local/shared_preferences_manager.dart';
-import '../../data/model/ad_unit_id/ad_unit_id_model.dart';
 import '../../gen/assets.gen.dart';
-import '../../service/app_ad_id_manager.dart';
+import '../../../module/admob/app_ad_id_manager.dart';
 import '../../shared/constants/app_constants.dart';
-import '../../shared/enum/ads/ad_remote_key.dart';
 import '../../shared/helpers/env_params.dart';
-import '../../shared/mixin/ads_mixin.dart';
 
 @RoutePage()
-class SplashScreen extends StatefulWidget with AdsMixin {
+class SplashScreen extends StatefulWidget{
   const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>  with AdsMixin {
   @override
   void initState() {
     super.initState();
@@ -77,7 +77,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (mounted && isShowInterAd) {
       await initializeAd();
       if (mounted) {
-        await widget.showInterAd(context,
+        await showInterAd(context,
             id: getIt<AppAdIdManager>().adUnitId.interSplash);
       }
     }

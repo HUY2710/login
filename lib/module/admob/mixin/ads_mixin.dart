@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 
-import '../../config/di/di.dart';
-import '../../config/navigation/app_router.dart';
-import '../../config/remote_config.dart';
-import '../enum/ads/ad_remote_key.dart';
+import '../../../src/config/di/di.dart';
+import '../../../src/config/navigation/app_router.dart';
+import '../../../src/config/remote_config.dart';
+import '../enum/ad_remote_key.dart';
 
 mixin AdsMixin {
   bool checkVisibleStatus(AdRemoteKeys key) {

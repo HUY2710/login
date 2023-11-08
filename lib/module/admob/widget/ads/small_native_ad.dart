@@ -1,14 +1,31 @@
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../my_placeholder.dart';
+import '../../../../src/config/di/di.dart';
+import '../../app_ad_id_manager.dart';
+import '../../../../src/shared/widgets/my_placeholder.dart';
 
-class LargeAdLoading extends StatelessWidget {
-  const LargeAdLoading({super.key});
+class SmallNativeAd extends StatelessWidget {
+  const SmallNativeAd({super.key, required this.unitId});
+
+  final String unitId;
 
   @override
   Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10).h,
+      child: EasyNativeAd(
+        factoryId: getIt<AppAdIdManager>().smallNativeFactory,
+        adId: unitId,
+        height: 130,
+        loadingWidget: _buildLoadingWidget(),
+      ),
+    );
+  }
+
+  Widget _buildLoadingWidget() {
     return Shimmer.fromColors(
       baseColor: Colors.grey.shade300,
       highlightColor: Colors.grey.shade100,
@@ -50,15 +67,6 @@ class LargeAdLoading extends StatelessWidget {
                   ),
                 )
               ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: MyPlaceholder(
-                width: 0.7.sw,
-                height: double.infinity,
-              ),
             ),
           ],
         ),

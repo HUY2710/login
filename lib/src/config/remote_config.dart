@@ -1,6 +1,6 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 
-import '../shared/enum/ads/ad_remote_key.dart';
+import '../../module/admob/enum/ad_remote_key.dart';
 
 class ConfigItem {
   ConfigItem(this.value, this.key);
