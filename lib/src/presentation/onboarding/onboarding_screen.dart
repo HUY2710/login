@@ -43,13 +43,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with AdsMixin {
       create: (context) => ValueCubit<int>(0),
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.transparent,
-        ),
         bottomNavigationBar: _buildAd(),
         body: Column(
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
               child: OnboardingCarousel(pageController: _pageController),
@@ -69,15 +65,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with AdsMixin {
   }
 
   Widget _buildAd() {
-    if (visibleAd) {
-      return LargeNativeAd(
-        unitId: getIt<AppAdIdManager>().adUnitId.nativeIntro,
-      );
-    } else {
-      return SizedBox(
-        height: 200.h,
+    if (!visibleAd) {
+      return const SizedBox(
+        height: 272,
       );
     }
+    return LargeNativeAd(
+      unitId: getIt<AppAdIdManager>().adUnitId.nativeIntro,
+    );
   }
 
   @override

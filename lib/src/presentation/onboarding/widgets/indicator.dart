@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget indicator(BuildContext context, bool isActive) {
   return AnimatedContainer(
     duration: const Duration(milliseconds: 300),
-    height: 8,
-    width: isActive ? 24 : 8,
-    margin: const EdgeInsets.only(right: 5.0),
+    height: 8.r,
+    width: isActive ? 24.r : 8.r,
+    margin: EdgeInsets.only(right: 5.w),
     decoration: BoxDecoration(
       color: Colors.red,
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(5.r),
     ),
   );
 }
