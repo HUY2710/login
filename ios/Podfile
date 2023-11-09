@@ -42,3 +42,5 @@ end
 
 pod 'GoogleMobileAdsMediationFacebook'
 pod 'FBAudienceNetwork'
+pod 'GoogleMobileAdsMediationAppLovin'
+pod 'GoogleMobileAdsMediationMintegral'
