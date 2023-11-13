@@ -92,6 +92,8 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
     final Upgrader upgrader = Upgrader(
       showIgnore: false,
       showReleaseNotes: false,
+      // TODO(all): uncomment to check upgrader
+      // debugDisplayAlways: true,
       debugLogging: true,
       showLater: !forceUpdate,
       onLater: () {
@@ -122,7 +124,10 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
       builder: (_) => WillPopScope(
         onWillPop: () async => false,
         child: UpdateDialog(
-            upgrader: upgrader, context: context, forceUpdate: forceUpdate),
+          upgrader: upgrader,
+          context: context,
+          forceUpdate: forceUpdate,
+        ),
       ),
     );
   }
