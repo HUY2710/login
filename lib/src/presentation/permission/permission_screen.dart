@@ -51,8 +51,7 @@ class _PermissionScreenState extends State<PermissionScreen> with AdsMixin {
         appBar: PermissionAppbar(
           context,
           onActionTapped: () async {
-            await getIt<SharedPreferencesManager>()
-                .saveIsPermissionAllow(false);
+            await SharedPreferencesManager.saveIsPermissionAllow(false);
             if (context.mounted) {
               context.router.replaceAll([const HomeRoute()]);
             }

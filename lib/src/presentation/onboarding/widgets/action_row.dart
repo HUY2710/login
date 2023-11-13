@@ -60,7 +60,7 @@ class _ActionRowState extends State<ActionRow> with AdsMixin {
   }
 
   Future<void> _done() async {
-    await getIt<SharedPreferencesManager>().saveIsStarted(false);
+    await SharedPreferencesManager.saveIsStarted(false);
     if (mounted) {
       context.replaceRoute(const PermissionRoute());
     }

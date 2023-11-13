@@ -4,11 +4,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
+import '../../config/remote_config.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
@@ -51,8 +53,16 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Future<void> rateApp() async {
-    final isExistRate =
-        await getIt<SharedPreferencesManager>().isExistRated() ?? false;
+    final isExistRate = await SharedPreferencesManager.isExistRated() ?? false;
+
+    if (RemoteConfigManager.instance.shouldShowDefaultRating()) {
+      EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+      await InAppReview.instance.openStoreListing(
+        appStoreId: AppConstants.appIOSId,
+      );
+      return;
+    }
+
     if (!isExistRate) {
       showRatingDialog();
     } else {

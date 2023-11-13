@@ -14,23 +14,63 @@ Flutter version: `3.10.6`
 - Dependencies
   Injection: [get_it](https://pub.dev/packages/get_it) + [injectable](https://pub.dev/packages/injectable)
 - Responsiveness: [flutter_screenutil](https://pub.dev/packages/flutter_screenutil)
--
-Localization: [flutter_localizations](https://docs.flutter.dev/ui/accessibility-and-localization/internationalization)
+- Localization: [flutter_localizations](https://docs.flutter.dev/ui/accessibility-and-localization/internationalization)
 
 ### and Boilerplate code for:
 
 - Screen: Splash, Intro, Language, Settings
 - Firebase: Remote config, Analytics
-- Admob intergration & meta ads mediation
+- Admob intergration & meta ads mediation & mintegral + app lovin
 - AppsFlyers SDK
 - IAP (optional) --> later
 
 ## Usage
 
-Setup
+### Setup
 
 ```console
 flutter pub get
 flutter gen-l10n
 flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+### Set up firebase
+
+- Tạo dự án Firebase mới, thay file config firebase tương ứng
+- Vào Release & Monitor -> Remote config -> Copy nội dung như sau vào file json để import các parameters cần thiết (thêm các key tương tự nếu cần)
+```json
+{
+  "parameters": {
+    "forceUpdate": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "valueType": "BOOLEAN"
+    },
+    "showDefaultRating": {
+      "defaultValue": {
+        "value": "false"
+      },
+      "valueType": "BOOLEAN"
+    },
+    "adOffVersion": {
+      "defaultValue": {
+        "value": "0"
+      },
+      "valueType": "STRING"
+    },
+    "ios_show": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "valueType": "BOOLEAN"
+    },
+    "android_show": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "valueType": "BOOLEAN"
+    },
+  }
+}
 ```

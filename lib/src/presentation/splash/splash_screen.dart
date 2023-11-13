@@ -119,20 +119,18 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) =>
-          WillPopScope(
-            onWillPop: () async => false,
-            child: UpdateDialog(
-                upgrader: upgrader, context: context, forceUpdate: forceUpdate),
-          ),
+      builder: (_) => WillPopScope(
+        onWillPop: () async => false,
+        child: UpdateDialog(
+            upgrader: upgrader, context: context, forceUpdate: forceUpdate),
+      ),
     );
   }
 
   Future<void> setInitScreen() async {
-    final bool isFirstLaunch =
-    await getIt<SharedPreferencesManager>().getIsStarted();
+    final bool isFirstLaunch = await SharedPreferencesManager.getIsStarted();
     final bool isPermissionAllow =
-    await getIt<SharedPreferencesManager>().getIsPermissionAllow();
+        await SharedPreferencesManager.getIsPermissionAllow();
     if (mounted) {
       if (isFirstLaunch) {
         AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
@@ -150,7 +148,7 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
     if (mounted && isShowAd) {
       await initializeAd();
       final bool isOpenAppAd =
-      checkVisibleStatus(AdRemoteKeys.app_open_on_resume);
+          checkVisibleStatus(AdRemoteKeys.app_open_on_resume);
       //set up ad open
       if (mounted && isOpenAppAd) {
         EasyAds.instance.initAdmob(

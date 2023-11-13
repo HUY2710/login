@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:in_app_review/in_app_review.dart';
 
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
+import '../../../config/remote_config.dart';
+import '../../../data/local/shared_preferences_manager.dart';
 
-Future<void> showRatingDialog() {
+Future<void> showRatingDialog() async {
+  if (RemoteConfigManager.instance.shouldShowDefaultRating()) {
+    await InAppReview.instance.requestReview();
+    await SharedPreferencesManager.saveExistRated();
+    return;
+  }
+
   return showDialog(
     context: getIt<AppRouter>().navigatorKey.currentContext!,
     barrierColor: Colors.black.withOpacity(0.8),

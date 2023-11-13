@@ -1,34 +1,39 @@
-import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../shared/enum/preference_keys.dart';
 
-@singleton
 class SharedPreferencesManager {
-  Future<SharedPreferences> get _preference => SharedPreferences.getInstance();
+  const SharedPreferencesManager._();
 
-  Future<bool?> isExistRated() async {
-    return (await _preference).getBool(PreferenceKeys.rateApp.name);
+  static Future<bool?> isExistRated() async {
+    return (await SharedPreferences.getInstance())
+        .getBool(PreferenceKeys.rateApp.name);
   }
 
-  Future<void> saveExistRated() async {
-    (await _preference).setBool(PreferenceKeys.rateApp.name, true);
+  static Future<void> saveExistRated() async {
+    (await SharedPreferences.getInstance())
+        .setBool(PreferenceKeys.rateApp.name, true);
   }
 
-  Future<void> saveIsStarted(bool status) async {
-    (await _preference).setBool(PreferenceKeys.isStarted.name, status);
+  static Future<void> saveIsStarted(bool status) async {
+    (await SharedPreferences.getInstance())
+        .setBool(PreferenceKeys.isStarted.name, status);
   }
 
-  Future<bool> getIsStarted() async {
-    return (await _preference).getBool(PreferenceKeys.isStarted.name) ?? true;
+  static Future<bool> getIsStarted() async {
+    return (await SharedPreferences.getInstance())
+            .getBool(PreferenceKeys.isStarted.name) ??
+        true;
   }
 
-  Future<void> saveIsPermissionAllow(bool status) async {
-    (await _preference).setBool(PreferenceKeys.permissionAllow.name, status);
+  static Future<void> saveIsPermissionAllow(bool status) async {
+    (await SharedPreferences.getInstance())
+        .setBool(PreferenceKeys.permissionAllow.name, status);
   }
 
-  Future<bool> getIsPermissionAllow() async {
-    return (await _preference).getBool(PreferenceKeys.permissionAllow.name) ??
+  static Future<bool> getIsPermissionAllow() async {
+    return (await SharedPreferences.getInstance())
+            .getBool(PreferenceKeys.permissionAllow.name) ??
         true;
   }
 }
