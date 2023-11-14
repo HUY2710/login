@@ -8,6 +8,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugins.googlemobileads.GoogleMobileAdsPlugin
 
 import com.unity3d.ads.metadata.MetaData
+import com.ironsource.mediationsdk.IronSource
 
 class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +26,20 @@ class MainActivity : FlutterActivity() {
         val ccpaMetaData = MetaData(this)
         ccpaMetaData["privacy.consent"] = true
         ccpaMetaData.commit()
+
+        // ironSource privacy settings
+        IronSource.setConsent(true)
+        IronSource.setMetaData("do_not_sell", "true")
+    }
+
+    public override fun onResume() {
+        super.onResume()
+        IronSource.onResume(this)
+    }
+
+    public override fun onPause() {
+        super.onPause()
+        IronSource.onPause(this)
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
