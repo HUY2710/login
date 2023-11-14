@@ -4,6 +4,8 @@ import FirebaseCore
 import google_mobile_ads
 import FBAudienceNetwork
 import UnityAds
+import VungleAdsSDK
+import VungleAdapter
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -20,6 +22,18 @@ import UnityAds
         let ccpaMetaData = UADSMetaData()
         ccpaMetaData.set("privacy.consent", value: true)
         ccpaMetaData.commit()
+        // vungle/liftoff
+        VunglePrivacySettings.setGDPRStatus(true)
+        VunglePrivacySettings.setGDPRMessageVersion("v1.0.0")
+        VunglePrivacySettings.setCCPAStatus(true)
+
+        let request = GADRequest()
+        let extras = VungleAdNetworkExtras()
+
+        let placements = ["PLACEMENT_ID_1", "PLACEMENT_ID_2"]
+        extras.allPlacements = placements
+        request.register(extras)
+
 
     GeneratedPluginRegistrant.register(with: self)
 //    FirebaseApp.configure()

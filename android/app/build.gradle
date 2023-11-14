@@ -103,6 +103,7 @@ dependencies {
     implementation 'com.unity3d.ads:unity-ads:4.9.1'
     implementation 'com.google.ads.mediation:unity:4.9.1.0'
     implementation 'com.google.ads.mediation:ironsource:7.5.2.0'
+    implementation 'com.google.ads.mediation:vungle:7.0.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

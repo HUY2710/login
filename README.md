@@ -74,3 +74,9 @@ flutter pub run build_runner build --delete-conflicting-outputs
   }
 }
 ```
+
+### Set up quảng cáo
+
+- Meta ads: Android: thay ClientToken & ApplicationId trong Android Manifest, iOS: thay CLIENT-TOKEN và APP-ID tương ứng
+- App lovin: cần thêm pub phía flutter
+- Cần thay list placement id của vungle trong AppDelegate.swift: search "placements"
