@@ -64,7 +64,6 @@
     <string>CLIENT-TOKEN</string>
     <key>FacebookDisplayName</key>
     <string>$(BUNDLE_NAME)</string>
-  </dict>
   <!-- Advertising -->
   <key>NSAdvertisingAttributionReportEndpoint</key>
   <string>https://postbacks-app.com</string>
@@ -100,6 +99,7 @@
       <string>5a6flpkh64.skadnetwork</string>
     </dict>
     <dict>
+     <!--  APS   -->
       <key>SKAdNetworkIdentifier</key>
       <string>p78axxw29g.skadnetwork</string>
     </dict>
@@ -187,12 +187,19 @@
       <string>n6fk4nfna4.skadnetwork</string>
     </dict>
     <dict>
+      <!--  meta  -->
       <key>SKAdNetworkIdentifier</key>
       <string>v9wttpbfk9.skadnetwork</string>
     </dict>
     <dict>
+      <!--  meta  -->
       <key>SKAdNetworkIdentifier</key>
       <string>n38lu8286q.skadnetwork</string>
+    </dict>
+    <dict>
+      <!--  Digital Turbine  -->
+      <key>SKAdNetworkIdentifier</key>
+      <string>9g2aggbj52.skadnetwork</string>
     </dict>
     <dict>
       <key>SKAdNetworkIdentifier</key>
@@ -647,6 +654,7 @@
       <string>s69wq72ugq.skadnetwork</string>
     </dict>
     <dict>
+      <!--  ironSource  -->
       <key>SKAdNetworkIdentifier</key>
       <string>su67r6k2v3.skadnetwork</string>
     </dict>
@@ -710,4 +718,5 @@
     </dict>
     <!-- mintegral (all duplicate)-->
   </array>
+  </dict>
 </plist>

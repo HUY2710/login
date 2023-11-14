@@ -4,6 +4,7 @@ import FirebaseCore
 import google_mobile_ads
 import FBAudienceNetwork
 import UnityAds
+import IronSource
 import VungleAdsSDK
 import VungleAdapter
 
@@ -22,6 +23,9 @@ import VungleAdapter
         let ccpaMetaData = UADSMetaData()
         ccpaMetaData.set("privacy.consent", value: true)
         ccpaMetaData.commit()
+        // ironSource
+        IronSource.setConsent(true)
+        IronSource.setMetaDataWithKey("do_not_sell", value: "YES")
         // vungle/liftoff
         VunglePrivacySettings.setGDPRStatus(true)
         VunglePrivacySettings.setGDPRMessageVersion("v1.0.0")
