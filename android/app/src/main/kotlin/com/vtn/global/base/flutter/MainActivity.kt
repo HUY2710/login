@@ -7,6 +7,8 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugins.googlemobileads.GoogleMobileAdsPlugin
 
+import com.unity3d.ads.metadata.MetaData
+
 class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,6 +17,14 @@ class MainActivity : FlutterActivity() {
             WindowCompat.getInsetsController(window, window.decorView)
         // Configure the behavior of the hidden system bars.
         windowInsetsController?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+        // unity ads privacy settings
+        val gdprMetaData = MetaData(this)
+        gdprMetaData["gdpr.consent"] = true
+        gdprMetaData.commit()
+        val ccpaMetaData = MetaData(this)
+        ccpaMetaData["privacy.consent"] = true
+        ccpaMetaData.commit()
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {

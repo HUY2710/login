@@ -37,6 +37,7 @@ target 'Runner' do
   pod 'GoogleMobileAdsMediationMintegral'
 
   pod 'GoogleMobileAdsMediationPangle'
+  pod 'GoogleMobileAdsMediationUnity'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
