@@ -64,8 +64,7 @@
     <string>CLIENT-TOKEN</string>
     <key>FacebookDisplayName</key>
     <string>$(BUNDLE_NAME)</string>
-  </dict>
-  <!-- Advertising -->
+    <!-- Advertising -->
   <key>NSAdvertisingAttributionReportEndpoint</key>
   <string>https://postbacks-app.com</string>
   <key>SKAdNetworkItems</key>
@@ -657,4 +656,6 @@
     </dict>
     <!-- mintegral (all duplicate)-->
   </array>
+  </dict>
+  
 </plist>
