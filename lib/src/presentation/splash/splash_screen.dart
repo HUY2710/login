@@ -61,6 +61,8 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
 
     if (EasyAds.instance.hasInternet) {
       await initUpgrader();
+    } else {
+      setInitScreen();
     }
   }
 
