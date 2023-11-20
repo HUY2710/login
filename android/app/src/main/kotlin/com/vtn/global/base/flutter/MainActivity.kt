@@ -9,7 +9,6 @@ import io.flutter.plugins.googlemobileads.GoogleMobileAdsPlugin
 
 import com.unity3d.ads.metadata.MetaData
 import com.ironsource.mediationsdk.IronSource
-import com.vungle.warren.Vungle
 
 class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,10 +30,6 @@ class MainActivity : FlutterActivity() {
         // ironSource privacy settings
         IronSource.setConsent(true)
         IronSource.setMetaData("do_not_sell", "true")
-
-        // vungle/liftoff privacy settings
-        Vungle.updateConsentStatus(Vungle.Consent.OPTED_IN, "1.0.0")
-        Vungle.updateCCPAStatus(Vungle.Consent.OPTED_IN)
     }
 
     public override fun onResume() {
