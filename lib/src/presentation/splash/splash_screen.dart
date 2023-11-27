@@ -95,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
       showIgnore: false,
       showReleaseNotes: false,
       // TODO(all): uncomment to check upgrader
-      debugDisplayAlways: true,
+      // debugDisplayAlways: true,
       debugLogging: true,
       showLater: !forceUpdate,
       onLater: () {
