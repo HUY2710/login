@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../gen/colors.gen.dart';
 import '../extension/context_extension.dart';
 
 class CustomSwitch extends StatefulWidget {
@@ -25,35 +24,32 @@ class _CustomSwitchState extends State<CustomSwitch> {
       onTap: () {
         widget.onChanged(!widget.value);
       },
-      child: Stack(
-        children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.fastOutSlowIn,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.fastOutSlowIn,
+        decoration: BoxDecoration(
+          color: widget.value
+              ? context.colorScheme.primary
+              : const Color(0xffDFDFDF),
+          borderRadius: BorderRadius.circular(30).r,
+        ),
+        padding: EdgeInsets.all(2.4.r),
+        width: 46.r,
+        height: 24.r,
+        child: AnimatedAlign(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.fastOutSlowIn,
+          alignment:
+              widget.value ? Alignment.centerRight : Alignment.centerLeft,
+          child: Container(
+            width: 20.r,
+            height: 20.r,
             decoration: BoxDecoration(
-              color: widget.value
-                  ? context.colorScheme.primary
-                  : MyColors.primary.shade100,
               borderRadius: BorderRadius.circular(30).r,
+              color: Colors.white,
             ),
-            width: 48.r,
-            height: 24.r,
           ),
-          AnimatedPositioned(
-            top: 2.r,
-            left: widget.value ? 26.r : 2.r,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.fastOutSlowIn,
-            child: Container(
-              width: 20.r,
-              height: 20.r,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30).r,
-                color: Colors.white,
-              ),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
