@@ -27,3 +27,6 @@ gen-flavor:
 
 build-apk-dev:
 	fvm flutter build apk --flavor dev -t lib/main_dev.dart
+
+gen-assets:
+	fluttergen -c pubspec.yaml
