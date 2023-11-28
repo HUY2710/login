@@ -1,4 +1,5 @@
 {
   "app_title": "Flutter Base",
-  "language": "Language"
+  "language": "Language",
+  "thisActionCanContainAds": "This action can contain ads"
 }

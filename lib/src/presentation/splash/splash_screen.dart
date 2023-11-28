@@ -15,6 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../../../flavors.dart';
+import '../../../gen/colors.gen.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
 import '../../../module/admob/enum/ad_remote_key.dart';
 import '../../../module/admob/mixin/ads_mixin.dart';
@@ -26,6 +27,7 @@ import '../../config/remote_config.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/assets.gen.dart';
 import '../../shared/constants/app_constants.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/env_params.dart';
 import 'update_dialog.dart';
 
@@ -168,7 +170,7 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
   Future<void> initializeAd() async {
     await EasyAds.instance.initialize(
       getIt<AppAdIdManager>(),
-      Assets.images.logo.image(height: 120.r, width: 120.r),
+      Assets.images.logo.logo.image(height: 120.r, width: 120.r),
       unityTestMode: true,
       adMobAdRequest: const AdRequest(httpTimeoutMillis: 30000),
       admobConfiguration: RequestConfiguration(),
@@ -230,14 +232,60 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: const Column(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Center(
-            child: CircularProgressIndicator(),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Assets.images.logo.roundedLogo.image(
+                    width: 145.r,
+                    height: 145.r,
+                    fit: BoxFit.contain,
+                    frameBuilder:
+                        (context, child, frame, wasSynchronouslyLoaded) {
+                      if (frame != 0) {
+                        return 145.verticalSpace;
+                      }
+                      return child;
+                    },
+                  ),
+                  16.verticalSpace,
+                  Text(
+                    F.title,
+                    style: TextStyle(
+                      color: context.colorScheme.primary,
+                      fontSize: 22.sp,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-          //error render
-          // ListView()
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ColorFiltered(
+                colorFilter: const ColorFilter.mode(
+                  MyColors.primary,
+                  BlendMode.srcIn,
+                ),
+                child: Assets.lottie.loading.lottie(
+                  width: 70.r,
+                ),
+              ),
+              15.verticalSpace,
+              Text(
+                context.l10n.thisActionCanContainAds,
+                style: const TextStyle(
+                  color: MyColors.primary,
+                ),
+              ),
+            ],
+          ),
+          40.verticalSpace,
         ],
       ),
     );
