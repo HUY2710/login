@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -19,6 +21,7 @@ class RemoteConfigManager {
   final FirebaseRemoteConfig _remoteConfig = FirebaseRemoteConfig.instance;
   final List<ConfigItem> _items = [];
 
+  bool _showDefaultRating = false;
   bool willShowAd = true;
 
   Future<void> initConfig() async {
@@ -46,6 +49,9 @@ class RemoteConfigManager {
     final offVersion = _remoteConfig.getString(RemoteKeys.adOffVersion.name);
 
     willShowAd = offVersion != version;
+    if (Platform.isIOS) {
+      _showDefaultRating = offVersion == version;
+    }
   }
 
   Future<void> _fetchConfig([bool refresh = false]) async {
@@ -82,6 +88,6 @@ class RemoteConfigManager {
   }
 
   bool shouldShowDefaultRating() {
-    return _remoteConfig.getBool(RemoteKeys.showDefaultRating.name);
+    return _showDefaultRating;
   }
 }
