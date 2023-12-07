@@ -5,4 +5,5 @@ class Global {
   String documentPath = '';
   String temporaryPath = '';
   int androidSdkVersion = 0;
+  bool isExitApp = false;
 }

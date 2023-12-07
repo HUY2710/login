@@ -10,6 +10,7 @@ import '../src/config/theme/light/light_theme.dart';
 import '../src/shared/enum/language.dart';
 import 'cubit/language_cubit.dart';
 import 'cubit/native_ad_status_cubit.dart';
+import 'cubit/rate_status_cubit.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
 
@@ -33,6 +34,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (context) => NativeAdStatusCubit(),
+        ),
+        BlocProvider(
+          create: (context) => RateStatusCubit(),
         ),
       ],
       child: ScreenUtilInit(

@@ -4,14 +4,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:in_app_review/in_app_review.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
-import '../../config/remote_config.dart';
-import '../../data/local/shared_preferences_manager.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
 import '../../shared/widgets/dialog/rate_dialog.dart';
@@ -27,6 +23,7 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   bool isSharing = false;
+
   Future<void> _launchUrl() async {
     EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
     if (!await launchUrl(Uri.parse(UrlConstants.urlPOLICY),
@@ -49,61 +46,6 @@ class _SettingScreenState extends State<SettingScreen> {
       await Share.shareWithResult(appLink);
     } finally {
       isSharing = false;
-    }
-  }
-
-  Future<void> rateApp() async {
-    final isExistRate = await SharedPreferencesManager.isExistRated() ?? false;
-
-    if (RemoteConfigManager.instance.shouldShowDefaultRating()) {
-      EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
-      await InAppReview.instance.openStoreListing(
-        appStoreId: AppConstants.appIOSId,
-      );
-      return;
-    }
-
-    if (!isExistRate) {
-      showRatingDialog();
-    } else {
-      showDialog(
-        context: getIt<AppRouter>().navigatorKey.currentContext!,
-        builder: (context) {
-          return Dialog(
-              surfaceTintColor: Colors.white,
-              insetPadding: EdgeInsets.symmetric(
-                horizontal: 16.w,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 30.h),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // SvgPicture.asset(Assets.icons.svg.rates.rated.path),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.h),
-                      child: const Text('Rate App'),
-                    ),
-                    // SizedBox(
-                    //   width: MediaQuery.of(context).size.width * 0.45,
-                    //   child: mainBtn(
-                    //     radius: 12,
-                    //     height: 40,
-                    //     context: context,
-                    //     title: 'Ok',
-                    //     onTap: () async {
-                    //       Navigator.pop(context);
-                    //     },
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ));
-        },
-      );
     }
   }
 
@@ -133,7 +75,7 @@ class _SettingScreenState extends State<SettingScreen> {
           ItemSetting(
             text: 'context.l10n.rate',
             icon: 'Assets.icons.settings.icRate.path',
-            onTap: () => rateApp(),
+            onTap: () => showRatingDialog(fromSetting: true),
           ),
           ItemSetting(
             text: 'context.l10n.privacyPolicy',

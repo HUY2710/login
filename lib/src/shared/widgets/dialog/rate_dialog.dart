@@ -1,29 +1,58 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:auto_route/auto_route.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_base/src/shared/widgets/dialog/rate_success_dialog.dart';
+import 'package:flutter_base/src/shared/widgets/dialog/rating_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:in_app_review/in_app_review.dart';
 
+import '../../../../app/cubit/rate_status_cubit.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../config/remote_config.dart';
-import '../../../data/local/shared_preferences_manager.dart';
+import '../../../gen/assets.gen.dart';
+import '../../../global/global.dart';
+import '../../constants/app_constants.dart';
+import '../../extension/context_extension.dart';
+import '../../helpers/logger_utils.dart';
 
-Future<void> showRatingDialog() async {
-  if (RemoteConfigManager.instance.shouldShowDefaultRating()) {
-    await InAppReview.instance.requestReview();
-    await SharedPreferencesManager.saveExistRated();
+Future<void> showRatingDialog({bool fromSetting = false}) async {
+  final appContext = getIt<AppRouter>().navigatorKey.currentContext!;
+  final rated = appContext.read<RateStatusCubit>().state;
+  if (rated && !fromSetting) {
     return;
   }
 
-  return showDialog(
-    context: getIt<AppRouter>().navigatorKey.currentContext!,
-    barrierColor: Colors.black.withOpacity(0.8),
-    builder: (BuildContext ctx) => const RatingDialog(),
-  );
+  EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+  final InAppReview inAppReview = InAppReview.instance;
+  if (RemoteConfigManager.instance.shouldShowDefaultRating() &&
+      Platform.isIOS) {
+    if (await inAppReview.isAvailable()) {
+      return inAppReview.requestReview();
+    } else if (fromSetting) {
+      return inAppReview.openStoreListing(
+        appStoreId: AppConstants.appIOSId,
+      );
+    }
+  } else {
+    return showDialog(
+      barrierDismissible: false,
+      context: appContext,
+      barrierColor: Colors.black.withOpacity(0.8),
+      builder: (BuildContext ctx) => RatingDialog(fromSetting: fromSetting),
+    );
+  }
 }
 
 class RatingDialog extends StatefulWidget {
-  const RatingDialog({super.key});
+  const RatingDialog({super.key, this.fromSetting = false});
+
+  final bool fromSetting;
 
   @override
   State<RatingDialog> createState() => _RatingDialogState();
@@ -54,14 +83,15 @@ class _RatingDialogState extends State<RatingDialog> {
             ValueListenableBuilder<double>(
               valueListenable: rateValue,
               builder: (_, double value, __) {
-                return SvgPicture.asset(
-                  'assets/icons/svg/rates/rate_${value.toInt()}.svg',
-                  height: 72.h,
-                  width: 72.w,
+                return Image.asset(
+                  'assets/icons/rates/emotion${value.toInt()}.png',
+                  height: 72.r,
+                  width: 72.r,
+                  fit: BoxFit.fill,
                 );
               },
             ),
-            SizedBox(height: 16.h),
+            16.verticalSpace,
             ValueListenableBuilder<double>(
                 valueListenable: rateValue,
                 builder: (_, double value, __) {
@@ -81,80 +111,45 @@ class _RatingDialogState extends State<RatingDialog> {
                   );
                 }),
             SizedBox(height: 16.h),
-            //  RatingBar.builder(
-            //     minRating: 1,
-            //     initialRating: 5,
-            //     glowColor: Colors.white,
-            //     itemPadding: const EdgeInsets.symmetric(horizontal: 4),
-            //     itemBuilder: (BuildContext context, int index) {
-            //       return Assets.icons.svg.rates.starRate.svg(
-            //         height: 30.h,
-            //         width: 30.w,
-            //       );
-            //     },
-            //     unratedBuilder: (BuildContext context, int index) {
-            //       return Assets.icons.svg.rates.starRate.svg(
-            //           height: 30.h, width: 30.w, color: const Color(0xffD9D9D9));
-            //     },
-            //     onRatingUpdate: (double value) => rateValue.value = value,
-            //   ),
-            SizedBox(height: 24.h),
-            // SizedBox(
-            //   width: MediaQuery.of(context).size.width * 0.7,
-            //   child: mainBtn(
-            //     height: 40,
-            //     radius: 12,
-            //     fontSize: 20,
-            //     context: context,
-            //     title: context.l10n.rate,
-            //     onTap: () async {
-            //       if (rateValue.value == 0) {
-            //         return;
-            //       }
-            //       if (rateValue.value == 5) {
-            //         EasyAds.instance.appLifecycleReactor
-            //             ?.setIsExcludeScreen(true);
-            //         await InAppReview.instance.openStoreListing();
-            //       }
-            //       await getIt<AppStatusStorage>().saveExistRated();
-            //       if (mounted) {
-            //         Navigator.pop(context);
-            //         ScaffoldMessenger.of(context).showSnackBar(
-            //           SnackBar(
-            //             margin: const EdgeInsets.all(16),
-            //             behavior: SnackBarBehavior.floating,
-            //             duration: const Duration(seconds: 3),
-            //             backgroundColor: context.colorScheme.primary,
-            //             content: Center(
-            //               child: Text(
-            //                 context.l10n.thanks,
-            //                 style: TextStyle(
-            //                   color: Colors.white,
-            //                   fontSize: 20.sp,
-            //                   height: 20 / 14,
-            //                   fontWeight: FontWeight.w700,
-            //                 ),
-            //               ),
-            //             ),
-            //           ),
-            //         );
-            //       }
-            //       await Future.delayed(const Duration(seconds: 3));
-            //     },
-            //   ),
-            // ),
-
-            SizedBox(
-              height: 16.h,
+            RatingBar.builder(
+              minRating: 1,
+              initialRating: 5,
+              glowColor: Colors.white,
+              itemPadding: const EdgeInsets.symmetric(horizontal: 4),
+              itemBuilder: (BuildContext context, int index) {
+                return Assets.icons.rates.fullStar.svg(
+                  height: 30.h,
+                  width: 30.w,
+                );
+              },
+              unratedBuilder: (BuildContext context, int index) {
+                return Assets.icons.rates.emptyStar.svg(
+                  height: 30.h,
+                  width: 30.w,
+                );
+              },
+              onRatingUpdate: (double value) => rateValue.value = value,
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
+            SizedBox(height: 24.h),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                  minimumSize: Size(200.w, 40.h),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.r))),
+              onPressed: _rateApp,
+              child: const Text('Rate'),
+            ),
+            11.verticalSpace,
+            TextButton(
+              onPressed: () {
+                exitApp();
+                context.popRoute();
               },
               child: Text(
-                'context.l10n.notNow',
+                'Exit',
                 style: TextStyle(
-                  fontSize: 20.sp,
+                  fontSize: 14.sp,
+                  color: context.colorScheme.primary,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -163,5 +158,62 @@ class _RatingDialogState extends State<RatingDialog> {
         ),
       ),
     );
+  }
+
+  void exitApp() {
+    if (Global.instance.isExitApp) {
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      } else if (Platform.isIOS) {
+        exit(0);
+      }
+    }
+  }
+
+  Future<void> showThanksDialog() async {
+    await showDialog(
+      context: getIt<AppRouter>().navigatorKey.currentContext!,
+      builder: (context) {
+        Timer(
+          const Duration(seconds: 1),
+          () {
+            exitApp();
+            context.popRoute();
+          },
+        );
+        return RateSuccessDialog(context);
+      },
+    );
+  }
+
+  Future<void> _rateApp() async {
+    if (mounted) {
+      context.read<RateStatusCubit>().update(true);
+    }
+    if (rateValue.value == 5) {
+      EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+      await context.popRoute();
+      await _openReview();
+      await showThanksDialog();
+    } else {
+      if (context.mounted) {
+        exitApp();
+        await context.popRoute();
+      }
+    }
+  }
+
+  Future<void> _openReview() async {
+    try {
+      if (await InAppReview.instance.isAvailable()) {
+        await InAppReview.instance.requestReview();
+      } else if (widget.fromSetting) {
+        InAppReview.instance.openStoreListing(
+          appStoreId: AppConstants.appIOSId,
+        );
+      }
+    } catch (e) {
+      logger.e(e);
+    }
   }
 }
