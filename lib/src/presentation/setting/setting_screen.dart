@@ -32,7 +32,7 @@ class _SettingScreenState extends State<SettingScreen> {
     }
   }
 
-  Future<void> shareApp() async {
+  Future<void> shareApp(BuildContext context) async {
     if (isSharing) {
       return;
     }
@@ -43,7 +43,11 @@ class _SettingScreenState extends State<SettingScreen> {
           : AppConstants.appIOSUrl;
 
       EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
-      await Share.shareWithResult(appLink);
+      final box = context.findRenderObject() as RenderBox?;
+      await Share.shareWithResult(
+        appLink,
+        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+      );
     } finally {
       isSharing = false;
     }
@@ -62,11 +66,13 @@ class _SettingScreenState extends State<SettingScreen> {
             icon: 'Assets.icons.settings.icLanguage.path',
             onTap: () => context.pushRoute(LanguageRoute()),
           ),
-          ItemSetting(
-            text: 'context.l10n.share',
-            icon: 'Assets.icons.settings.icShare.path',
-            onTap: shareApp,
-          ),
+          Builder(builder: (context) {
+            return ItemSetting(
+              text: 'context.l10n.share',
+              icon: 'Assets.icons.settings.icShare.path',
+              onTap: () => shareApp(context),
+            );
+          }),
           ItemSetting(
             text: 'context.l10n.about',
             icon: 'Assets.icons.settings.icAbout.path',
