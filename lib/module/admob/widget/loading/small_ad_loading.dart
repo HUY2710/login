@@ -4,9 +4,8 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../src/shared/widgets/my_placeholder.dart';
 
-
-class NonMediaLoading extends StatelessWidget {
-  const NonMediaLoading({super.key});
+class SmallAdLoading extends StatelessWidget {
+  const SmallAdLoading({super.key});
 
   @override
   Widget build(BuildContext context) {

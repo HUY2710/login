@@ -13,8 +13,8 @@ class AppAdIdManager extends IAdIdManager {
 
   late AdUnitIdModel adUnitId;
 
-  final String largeNativeFactory = 'LargeNative';
-  final String smallNativeFactory = 'SmallNative';
-  final String nonMediaBottomNativeFactory = 'NonMediaBottomNative';
-  final String nonMediaTopNativeFactory = 'NonMediaTopNative';
+  final String topLargeNativeFactory = 'TopLargeNative';
+  final String bottomLargeNativeFactory = 'BottomLargeNative';
+  final String topSmallNativeFactory = 'TopSmallNative';
+  final String bottomSmallNativeFactory = 'BottomSmallNative';
 }

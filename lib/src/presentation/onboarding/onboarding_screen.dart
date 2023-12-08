@@ -75,7 +75,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with AdsMixin {
       );
     }
     return LargeNativeAd(
-      unitId: getIt<AppAdIdManager>().adUnitId.nativeIntro,
+      unitId: getIt<AppAdIdManager>().adUnitId.native,
     );
   }
 

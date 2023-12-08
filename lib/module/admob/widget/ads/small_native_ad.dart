@@ -1,75 +1,38 @@
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../../../src/config/di/di.dart';
-import '../../../../src/shared/widgets/my_placeholder.dart';
 import '../../app_ad_id_manager.dart';
+import '../../enum/ad_button_position.dart';
+import '../loading/small_ad_loading.dart';
 
 class SmallNativeAd extends StatelessWidget {
-  const SmallNativeAd({super.key, required this.unitId});
+  const SmallNativeAd({
+    super.key,
+    required this.unitId,
+    this.buttonPosition = AdButtonPosition.top,
+  });
 
   final String unitId;
+  final AdButtonPosition buttonPosition;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10).h,
+    final factoryId = switch (buttonPosition) {
+      AdButtonPosition.top => getIt<AppAdIdManager>().topSmallNativeFactory,
+      AdButtonPosition.bottom =>
+        getIt<AppAdIdManager>().bottomSmallNativeFactory,
+    };
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: EasyNativeAd(
-        factoryId: getIt<AppAdIdManager>().smallNativeFactory,
+        factoryId: factoryId,
         adId: unitId,
         height: 130,
-        loadingWidget: _buildLoadingWidget(),
-      ),
-    );
-  }
-
-  Widget _buildLoadingWidget() {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            MyPlaceholder(
-              width: 1.sw,
-              height: 50,
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Row(
-              children: [
-                MyPlaceholder(
-                  width: 42,
-                  height: 42,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      MyPlaceholder(
-                        width: double.infinity,
-                        height: 18,
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      MyPlaceholder(
-                        width: double.infinity,
-                        height: 18,
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ],
-        ),
+        loadingWidget: const SmallAdLoading(),
       ),
     );
   }

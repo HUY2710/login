@@ -3,22 +3,38 @@ import 'package:flutter/material.dart';
 
 import '../../../../src/config/di/di.dart';
 import '../../app_ad_id_manager.dart';
+import '../../enum/ad_button_position.dart';
 import '../loading/large_ad_loading.dart';
 
-
 class LargeNativeAd extends StatelessWidget {
-  const LargeNativeAd({super.key, required this.unitId});
+  const LargeNativeAd({
+    super.key,
+    required this.unitId,
+    this.buttonPosition = AdButtonPosition.top,
+  });
 
   final String unitId;
+  final AdButtonPosition buttonPosition;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 5),
+    final factoryId = switch (buttonPosition) {
+      AdButtonPosition.top => getIt<AppAdIdManager>().topLargeNativeFactory,
+      AdButtonPosition.bottom =>
+        getIt<AppAdIdManager>().bottomLargeNativeFactory,
+    };
+    return Container(
+      margin: const EdgeInsets.only(top: 5),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(10),
+        ),
+      ),
       child: EasyNativeAd(
-        factoryId: getIt<AppAdIdManager>().largeNativeFactory,
+        factoryId: factoryId,
         adId: unitId,
-        height: 272,
+        height: 270,
         loadingWidget: const LargeAdLoading(),
       ),
     );

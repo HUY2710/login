@@ -74,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
     if (isShowAd) {
       await EasyAds.instance.showSplashInterstitialAd(
         getIt<AppRouter>().navigatorKey.currentContext!,
-        adId: getIt<AppAdIdManager>().adUnitId.interSplash,
+        adId: getIt<AppAdIdManager>().adUnitId.inter,
         onShowed: () {
           completer.complete(true);
         },
@@ -161,7 +161,7 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
       //set up ad open
       if (mounted && isOpenAppAd) {
         EasyAds.instance.initAdmob(
-          appOpenAdUnitId: getIt<AppAdIdManager>().adUnitId.appOpenOnResume,
+          appOpenAdUnitId: getIt<AppAdIdManager>().adUnitId.adOpen,
         );
       }
     }
