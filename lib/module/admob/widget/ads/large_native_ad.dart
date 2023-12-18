@@ -10,10 +10,12 @@ class LargeNativeAd extends StatelessWidget {
   const LargeNativeAd({
     super.key,
     required this.unitId,
-    this.buttonPosition = AdButtonPosition.top,
+    this.buttonPosition = AdButtonPosition.bottom,
+    this.unitIdHigh,
   });
 
   final String unitId;
+  final String? unitIdHigh;
   final AdButtonPosition buttonPosition;
 
   @override
@@ -31,12 +33,24 @@ class LargeNativeAd extends StatelessWidget {
           top: Radius.circular(10),
         ),
       ),
-      child: EasyNativeAd(
-        factoryId: factoryId,
-        adId: unitId,
-        height: 270,
-        loadingWidget: const LargeAdLoading(),
-      ),
+      child: unitIdHigh != null
+          ? EasyNativeAdHigh(
+              factoryId: factoryId,
+              adId: unitId,
+              adIdHigh: unitIdHigh!,
+              height: 260,
+              loadingWidget: LargeAdLoading(
+                buttonPosition: buttonPosition,
+              ),
+            )
+          : EasyNativeAd(
+              factoryId: factoryId,
+              adId: unitId,
+              height: 260,
+              loadingWidget: LargeAdLoading(
+                buttonPosition: buttonPosition,
+              ),
+            ),
     );
   }
 }

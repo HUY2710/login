@@ -58,8 +58,8 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
     // TODO(son): Bỏ comment khi gắn ad
     // await initAppsflyer();
     // await AppLovinMAX.initialize(EnvParams.appLovinKey);
-    // await loadAdUnitId();
-    // await configureAd();
+    await loadAdUnitId();
+    await configureAd();
 
     if (EasyAds.instance.hasInternet) {
       await initUpgrader();

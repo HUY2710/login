@@ -10,7 +10,7 @@ class SmallNativeAd extends StatelessWidget {
   const SmallNativeAd({
     super.key,
     required this.unitId,
-    this.buttonPosition = AdButtonPosition.top,
+    this.buttonPosition = AdButtonPosition.bottom,
   });
 
   final String unitId;
@@ -31,8 +31,10 @@ class SmallNativeAd extends StatelessWidget {
       child: EasyNativeAd(
         factoryId: factoryId,
         adId: unitId,
-        height: 130,
-        loadingWidget: const SmallAdLoading(),
+        height: 140,
+        loadingWidget: SmallAdLoading(
+          buttonPosition: buttonPosition,
+        ),
       ),
     );
   }
