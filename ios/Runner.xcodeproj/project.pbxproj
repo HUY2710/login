@@ -10,16 +10,19 @@
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		504BA4BE2B2713580071CA2E /* ButtonPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504BA4BD2B2713580071CA2E /* ButtonPosition.swift */; };
+		504BA4C42B2715C20071CA2E /* BottomNativeAdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 504BA4C32B2715C20071CA2E /* BottomNativeAdView.xib */; };
+		504BA4C62B271D310071CA2E /* CustomNativeAdFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504BA4C52B271D310071CA2E /* CustomNativeAdFactory.swift */; };
+		504BA4CE2B27FD8E0071CA2E /* TopNativeAdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 504BA4CD2B27FD8E0071CA2E /* TopNativeAdView.xib */; };
 		504E71FF2A99A749003FFF9B /* NonMediaTopNativeAdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 504E71F52A99A748003FFF9B /* NonMediaTopNativeAdView.xib */; };
 		504E72002A99A749003FFF9B /* NonMediaBottomNativeAdFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504E71F62A99A748003FFF9B /* NonMediaBottomNativeAdFactory.swift */; };
 		504E72012A99A749003FFF9B /* NonMediaBottomNativeAdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 504E71F72A99A748003FFF9B /* NonMediaBottomNativeAdView.xib */; };
 		504E72022A99A749003FFF9B /* LargeNativeAdFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504E71F82A99A748003FFF9B /* LargeNativeAdFactory.swift */; };
 		504E72032A99A749003FFF9B /* SmallNativeAdFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504E71F92A99A748003FFF9B /* SmallNativeAdFactory.swift */; };
-		504E72042A99A749003FFF9B /* LargeNativeAdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 504E71FA2A99A748003FFF9B /* LargeNativeAdView.xib */; };
 		504E72052A99A749003FFF9B /* RoundedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504E71FB2A99A748003FFF9B /* RoundedLabel.swift */; };
-		504E72062A99A749003FFF9B /* View.xib in Resources */ = {isa = PBXBuildFile; fileRef = 504E71FC2A99A748003FFF9B /* View.xib */; };
 		504E72072A99A749003FFF9B /* SmallNativeAdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 504E71FD2A99A748003FFF9B /* SmallNativeAdView.xib */; };
 		504E72082A99A749003FFF9B /* NonMediaTopNativeAdFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504E71FE2A99A748003FFF9B /* NonMediaTopNativeAdFactory.swift */; };
+		50526BE12B26FB5000F45B1E /* LargeNativeAdView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50526BE02B26FB5000F45B1E /* LargeNativeAdView.xib */; };
 		6168A41C2510A3648BE3BCCD /* devProfile.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C0318C3CE5BFF51B5C7364A1 /* devProfile.xcconfig */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		83196E6F37D84861D1F3E2DC /* prodLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB816DF7758B6F5C0E6A6FA4 /* prodLaunchScreen.storyboard */; };
@@ -69,16 +72,19 @@
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		369B4D98E8E6D4FCCC9CFB7A /* Pods-Runner.profile-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile-prod.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile-prod.xcconfig"; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
+		504BA4BD2B2713580071CA2E /* ButtonPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonPosition.swift; sourceTree = "<group>"; };
+		504BA4C32B2715C20071CA2E /* BottomNativeAdView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BottomNativeAdView.xib; sourceTree = "<group>"; };
+		504BA4C52B271D310071CA2E /* CustomNativeAdFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNativeAdFactory.swift; sourceTree = "<group>"; };
+		504BA4CD2B27FD8E0071CA2E /* TopNativeAdView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TopNativeAdView.xib; sourceTree = "<group>"; };
 		504E71F52A99A748003FFF9B /* NonMediaTopNativeAdView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NonMediaTopNativeAdView.xib; sourceTree = "<group>"; };
 		504E71F62A99A748003FFF9B /* NonMediaBottomNativeAdFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonMediaBottomNativeAdFactory.swift; sourceTree = "<group>"; };
 		504E71F72A99A748003FFF9B /* NonMediaBottomNativeAdView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NonMediaBottomNativeAdView.xib; sourceTree = "<group>"; };
 		504E71F82A99A748003FFF9B /* LargeNativeAdFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LargeNativeAdFactory.swift; sourceTree = "<group>"; };
 		504E71F92A99A748003FFF9B /* SmallNativeAdFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmallNativeAdFactory.swift; sourceTree = "<group>"; };
-		504E71FA2A99A748003FFF9B /* LargeNativeAdView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LargeNativeAdView.xib; sourceTree = "<group>"; };
 		504E71FB2A99A748003FFF9B /* RoundedLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedLabel.swift; sourceTree = "<group>"; };
-		504E71FC2A99A748003FFF9B /* View.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = View.xib; sourceTree = "<group>"; };
 		504E71FD2A99A748003FFF9B /* SmallNativeAdView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SmallNativeAdView.xib; sourceTree = "<group>"; };
 		504E71FE2A99A748003FFF9B /* NonMediaTopNativeAdFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonMediaTopNativeAdFactory.swift; sourceTree = "<group>"; };
+		50526BE02B26FB5000F45B1E /* LargeNativeAdView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LargeNativeAdView.xib; sourceTree = "<group>"; };
 		58EB8843D460EC10058D48F1 /* Pods-Runner.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug-dev.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug-dev.xcconfig"; sourceTree = "<group>"; };
 		5F9DDD2E5E0F6D91AB9FA903 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		62C01E34BA061415293AE726 /* prodProfile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = prodProfile.xcconfig; path = Flutter/prodProfile.xcconfig; sourceTree = "<group>"; };
@@ -145,16 +151,19 @@
 		504E71F42A99A748003FFF9B /* Ads */ = {
 			isa = PBXGroup;
 			children = (
+				504BA4CD2B27FD8E0071CA2E /* TopNativeAdView.xib */,
 				504E71F52A99A748003FFF9B /* NonMediaTopNativeAdView.xib */,
 				504E71F62A99A748003FFF9B /* NonMediaBottomNativeAdFactory.swift */,
 				504E71F72A99A748003FFF9B /* NonMediaBottomNativeAdView.xib */,
+				50526BE02B26FB5000F45B1E /* LargeNativeAdView.xib */,
 				504E71F82A99A748003FFF9B /* LargeNativeAdFactory.swift */,
 				504E71F92A99A748003FFF9B /* SmallNativeAdFactory.swift */,
-				504E71FA2A99A748003FFF9B /* LargeNativeAdView.xib */,
 				504E71FB2A99A748003FFF9B /* RoundedLabel.swift */,
-				504E71FC2A99A748003FFF9B /* View.xib */,
 				504E71FD2A99A748003FFF9B /* SmallNativeAdView.xib */,
 				504E71FE2A99A748003FFF9B /* NonMediaTopNativeAdFactory.swift */,
+				504BA4BD2B2713580071CA2E /* ButtonPosition.swift */,
+				504BA4C32B2715C20071CA2E /* BottomNativeAdView.xib */,
+				504BA4C52B271D310071CA2E /* CustomNativeAdFactory.swift */,
 			);
 			path = Ads;
 			sourceTree = "<group>";
@@ -274,7 +283,7 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					331C8080294A63A400263BE5 = {
@@ -319,15 +328,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				504E72012A99A749003FFF9B /* NonMediaBottomNativeAdView.xib in Resources */,
+				504BA4C42B2715C20071CA2E /* BottomNativeAdView.xib in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
+				50526BE12B26FB5000F45B1E /* LargeNativeAdView.xib in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
+				504BA4CE2B27FD8E0071CA2E /* TopNativeAdView.xib in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				E47AE3F9B97B5AB2B696737C /* devDebug.xcconfig in Resources */,
 				6168A41C2510A3648BE3BCCD /* devProfile.xcconfig in Resources */,
 				A53E2AE46BA84C437CB7EC42 /* devRelease.xcconfig in Resources */,
-				504E72062A99A749003FFF9B /* View.xib in Resources */,
-				504E72042A99A749003FFF9B /* LargeNativeAdView.xib in Resources */,
 				504E72072A99A749003FFF9B /* SmallNativeAdView.xib in Resources */,
 				D25177CA1FE20D79F587EEB0 /* prodDebug.xcconfig in Resources */,
 				90614C994B900714C246AEDA /* prodProfile.xcconfig in Resources */,
@@ -462,12 +472,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				504BA4BE2B2713580071CA2E /* ButtonPosition.swift in Sources */,
 				504E72022A99A749003FFF9B /* LargeNativeAdFactory.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				504E72082A99A749003FFF9B /* NonMediaTopNativeAdFactory.swift in Sources */,
 				504E72052A99A749003FFF9B /* RoundedLabel.swift in Sources */,
 				504E72002A99A749003FFF9B /* NonMediaBottomNativeAdFactory.swift in Sources */,
 				504E72032A99A749003FFF9B /* SmallNativeAdFactory.swift in Sources */,
+				504BA4C62B271D310071CA2E /* CustomNativeAdFactory.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -543,7 +555,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -561,6 +573,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -627,7 +640,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -694,7 +707,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -764,7 +777,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -838,6 +851,7 @@
 			baseConfigurationReference = 58EB8843D460EC10058D48F1 /* Pods-Runner.debug-dev.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 4J8WSCVQ98;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_NAME = Runner;
 			};
 			name = "Debug-dev";
@@ -846,6 +860,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 971D0B357FCC017D1C6A02B5 /* Pods-Runner.profile-dev.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_NAME = Runner;
 			};
 			name = "Profile-dev";
@@ -854,6 +869,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 21AC2A6C5FA44E8A882FBC45 /* Pods-Runner.release-dev.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_NAME = Runner;
 			};
 			name = "Release-dev";
@@ -862,6 +878,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 702264A7A9C3AEF185FDBBC5 /* Pods-Runner.debug-prod.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_NAME = Runner;
 			};
 			name = "Debug-prod";
@@ -870,6 +887,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 369B4D98E8E6D4FCCC9CFB7A /* Pods-Runner.profile-prod.xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_NAME = Runner;
 			};
 			name = "Profile-prod";
@@ -881,6 +899,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4J8WSCVQ98;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.vtn.global.base.flutter;
 				PRODUCT_NAME = Runner;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -978,7 +997,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1046,7 +1065,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1113,7 +1132,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1162,7 +1181,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -1182,6 +1201,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1204,6 +1224,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1270,7 +1291,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Runner/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

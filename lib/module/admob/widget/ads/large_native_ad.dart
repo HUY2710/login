@@ -28,7 +28,7 @@ class LargeNativeAd extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 5),
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: Colors.black,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(10),
         ),
