@@ -69,8 +69,8 @@
                 <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="fNp-yu-K4i" customClass="GADMediaView">
                     <rect key="frame" x="62.5" y="77" width="250" height="120"/>
                     <constraints>
-                        <constraint firstAttribute="height" priority="750" constant="120" id="71m-kn-7Ug"/>
-                        <constraint firstAttribute="width" constant="250" id="e3T-fD-di4"/>
+                        <constraint firstAttribute="height" priority="999" constant="120" id="71m-kn-7Ug"/>
+                        <constraint firstAttribute="width" constant="250" id="YN2-Hg-4lf"/>
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ad" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lp1-oz-XOs" customClass="RoundedLabel" customModule="Runner" customModuleProvider="target">
@@ -86,12 +86,12 @@
                     <nil key="highlightedColor"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="topLeft" value="NO"/>
-                        <userDefinedRuntimeAttribute type="boolean" keyPath="bottomRight" value="YES"/>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                             <real key="value" value="6"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="topRight" value="NO"/>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="bottomLeft" value="NO"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="bottomRight" value="YES"/>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="masksToBounds" value="YES"/>
                     </userDefinedRuntimeAttributes>
                 </label>
@@ -100,6 +100,7 @@
             <constraints>
                 <constraint firstItem="lp1-oz-XOs" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="3lA-qv-Nkc"/>
                 <constraint firstItem="fNp-yu-K4i" firstAttribute="top" secondItem="1nI-gO-E4p" secondAttribute="bottom" id="41z-6Q-abE"/>
+                <constraint firstItem="E5w-YA-UY8" firstAttribute="top" secondItem="fNp-yu-K4i" secondAttribute="bottom" constant="8" id="7FI-G7-WFX"/>
                 <constraint firstAttribute="trailing" secondItem="1nI-gO-E4p" secondAttribute="trailing" constant="16" id="874-S6-4DG"/>
                 <constraint firstItem="lp1-oz-XOs" firstAttribute="left" secondItem="iN0-l3-epB" secondAttribute="left" id="BpX-yC-PZG"/>
                 <constraint firstItem="fNp-yu-K4i" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="TYN-lq-3DK"/>
@@ -107,7 +108,6 @@
                 <constraint firstItem="E5w-YA-UY8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="cVm-Nl-GJu"/>
                 <constraint firstAttribute="right" relation="greaterThanOrEqual" secondItem="lp1-oz-XOs" secondAttribute="right" constant="20" symbolic="YES" id="czi-qD-IaJ"/>
                 <constraint firstAttribute="trailing" secondItem="E5w-YA-UY8" secondAttribute="trailing" constant="16" id="eNM-dN-tvx"/>
-                <constraint firstItem="E5w-YA-UY8" firstAttribute="top" secondItem="fNp-yu-K4i" secondAttribute="bottom" constant="8" id="rup-e7-1CR"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="E5w-YA-UY8" secondAttribute="bottom" constant="20" symbolic="YES" id="uEI-XT-igi"/>
                 <constraint firstItem="1nI-gO-E4p" firstAttribute="top" secondItem="lp1-oz-XOs" secondAttribute="bottom" id="xZE-Z9-YX3"/>
             </constraints>

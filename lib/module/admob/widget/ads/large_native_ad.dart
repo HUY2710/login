@@ -27,18 +27,12 @@ class LargeNativeAd extends StatelessWidget {
     };
     return Container(
       margin: const EdgeInsets.only(top: 5),
-      decoration: const BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(10),
-        ),
-      ),
       child: unitIdHigh != null
           ? EasyNativeAdHigh(
               factoryId: factoryId,
               adId: unitId,
               adIdHigh: unitIdHigh!,
-              height: 260,
+              height: 270,
               loadingWidget: LargeAdLoading(
                 buttonPosition: buttonPosition,
               ),

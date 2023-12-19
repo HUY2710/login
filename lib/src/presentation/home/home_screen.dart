@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../module/admob/app_ad_id_manager.dart';
+import '../../../module/admob/enum/ad_button_position.dart';
 import '../../../module/admob/widget/ads/large_native_ad.dart';
 import '../../../module/admob/widget/ads/small_native_ad.dart';
 import '../../config/di/di.dart';
@@ -38,11 +40,17 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             SmallNativeAd(
               unitId: getIt<AppAdIdManager>().adUnitId.native,
-            )
+            ),
+            20.verticalSpace,
+            SmallNativeAd(
+              unitId: getIt<AppAdIdManager>().adUnitId.native,
+              buttonPosition: AdButtonPosition.top,
+            ),
           ],
         ),
       ),
       bottomNavigationBar: LargeNativeAd(
+        buttonPosition: AdButtonPosition.top,
         unitId: getIt<AppAdIdManager>().adUnitId.native,
       ),
     );
