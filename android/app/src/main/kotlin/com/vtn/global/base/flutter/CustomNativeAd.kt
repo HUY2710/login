@@ -13,14 +13,18 @@ import com.vtn.global.base.flutter.enum.ButtonPosition
 import io.flutter.plugins.googlemobileads.GoogleMobileAdsPlugin.NativeAdFactory
 
 
-class CommonNativeAd(private val context: Context, private val buttonPosition: ButtonPosition) :
+class CustomNativeAd(
+    private val context: Context,
+    private val buttonPosition: ButtonPosition = ButtonPosition.Bottom,
+    private val hasMedia: Boolean = true
+) :
     NativeAdFactory {
     override fun createNativeAd(
         nativeAd: NativeAd,
         customOptions: MutableMap<String, Any>?
     ): NativeAdView {
         val adView =
-            LayoutInflater.from(context).inflate(R.layout.large_native_ad, null) as NativeAdView
+            LayoutInflater.from(context).inflate(R.layout.custom_native_ad, null) as NativeAdView
 
         with(adView) {
             // Set the media view.
@@ -47,7 +51,13 @@ class CommonNativeAd(private val context: Context, private val buttonPosition: B
 
             // The headline and mediaContent are guaranteed to be in every NativeAd.
             headlineView.text = nativeAd.headline
-            mediaView.mediaContent = nativeAd.mediaContent
+
+            if (hasMedia) {
+                mediaView.mediaContent = nativeAd.mediaContent
+            } else {
+                mediaView.visibility = View.GONE
+            }
+
 
             // These assets aren't guaranteed to be in every NativeAd, so it's important to
             // check before trying to display them.

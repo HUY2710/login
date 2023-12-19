@@ -25,12 +25,15 @@ class SmallNativeAd extends StatelessWidget {
     };
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
-      child: EasyNativeAd(
-        factoryId: factoryId,
-        adId: unitId,
-        height: 140,
-        loadingWidget: SmallAdLoading(
-          buttonPosition: buttonPosition,
+      child: ColoredBox(
+        color: Colors.white,
+        child: EasyNativeAd(
+          factoryId: factoryId,
+          adId: unitId,
+          height: 140,
+          loadingWidget: SmallAdLoading(
+            buttonPosition: buttonPosition,
+          ),
         ),
       ),
     );

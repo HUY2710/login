@@ -25,26 +25,30 @@ class LargeNativeAd extends StatelessWidget {
       AdButtonPosition.bottom =>
         getIt<AppAdIdManager>().bottomLargeNativeFactory,
     };
-    return Container(
-      margin: const EdgeInsets.only(top: 5),
-      child: unitIdHigh != null
-          ? EasyNativeAdHigh(
-              factoryId: factoryId,
-              adId: unitId,
-              adIdHigh: unitIdHigh!,
-              height: 270,
-              loadingWidget: LargeAdLoading(
-                buttonPosition: buttonPosition,
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+      child: Container(
+        margin: const EdgeInsets.only(top: 5),
+        color: Colors.white,
+        child: unitIdHigh != null
+            ? EasyNativeAdHigh(
+                factoryId: factoryId,
+                adId: unitId,
+                adIdHigh: unitIdHigh!,
+                height: 270,
+                loadingWidget: LargeAdLoading(
+                  buttonPosition: buttonPosition,
+                ),
+              )
+            : EasyNativeAd(
+                factoryId: factoryId,
+                adId: unitId,
+                height: 260,
+                loadingWidget: LargeAdLoading(
+                  buttonPosition: buttonPosition,
+                ),
               ),
-            )
-          : EasyNativeAd(
-              factoryId: factoryId,
-              adId: unitId,
-              height: 260,
-              loadingWidget: LargeAdLoading(
-                buttonPosition: buttonPosition,
-              ),
-            ),
+      ),
     );
   }
 }

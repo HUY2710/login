@@ -43,14 +43,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             20.verticalSpace,
             SmallNativeAd(
-              unitId: getIt<AppAdIdManager>().adUnitId.native,
               buttonPosition: AdButtonPosition.top,
+              unitId: getIt<AppAdIdManager>().adUnitId.native,
             ),
           ],
         ),
       ),
       bottomNavigationBar: LargeNativeAd(
-        buttonPosition: AdButtonPosition.top,
         unitId: getIt<AppAdIdManager>().adUnitId.native,
       ),
     );

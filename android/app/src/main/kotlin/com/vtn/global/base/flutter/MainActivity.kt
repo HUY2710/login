@@ -25,22 +25,22 @@ class MainActivity : FlutterActivity() {
         GoogleMobileAdsPlugin.registerNativeAdFactory(
             flutterEngine,
             "TopLargeNative",
-            CommonNativeAd(context, buttonPosition = ButtonPosition.Top)
+            CustomNativeAd(context, buttonPosition = ButtonPosition.Top)
         )
         GoogleMobileAdsPlugin.registerNativeAdFactory(
             flutterEngine,
             "BottomLargeNative",
-            CommonNativeAd(context, buttonPosition = ButtonPosition.Bottom)
+            CustomNativeAd(context, buttonPosition = ButtonPosition.Bottom)
         )
         GoogleMobileAdsPlugin.registerNativeAdFactory(
             flutterEngine,
             "TopSmallNative",
-            SmallNativeAd(context, buttonPosition = ButtonPosition.Top)
+            CustomNativeAd(context, buttonPosition = ButtonPosition.Top, hasMedia = false)
         )
         GoogleMobileAdsPlugin.registerNativeAdFactory(
             flutterEngine,
             "BottomSmallNative",
-            SmallNativeAd(context, buttonPosition = ButtonPosition.Bottom)
+            CustomNativeAd(context, buttonPosition = ButtonPosition.Bottom, hasMedia = false)
         )
     }
 
