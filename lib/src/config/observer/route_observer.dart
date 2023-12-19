@@ -10,7 +10,7 @@ class MainRouteObserver extends AutoRouterObserver with SystemUiMixin {
     hideNavigationBar();
     logger.d(
       'Did Push',
-      'from ${previousRoute?.settings.name} to ${route.settings.name}',
+      error: 'from ${previousRoute?.settings.name} to ${route.settings.name}',
     );
   }
 
@@ -18,7 +18,7 @@ class MainRouteObserver extends AutoRouterObserver with SystemUiMixin {
   void didInitTabRoute(TabPageRoute route, TabPageRoute? previousRoute) {
     logger.d(
       'Init',
-      route.name,
+      error: route.name,
     );
   }
 
@@ -27,7 +27,7 @@ class MainRouteObserver extends AutoRouterObserver with SystemUiMixin {
     hideNavigationBar();
     logger.d(
       'Change tab',
-      'from ${previousRoute.name} to ${route.name}',
+      error: 'from ${previousRoute.name} to ${route.name}',
     );
   }
 

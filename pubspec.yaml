@@ -32,7 +32,7 @@ dependencies:
   firebase_crashlytics: ^3.3.5
   appsflyer_sdk: ^6.11.3
   change_app_package_name: ^1.1.0
-  logger: ^1.4.0
+  logger: ^2.0.2+1
   url_launcher: ^6.1.12
   share_plus: ^7.1.0
   package_info_plus: ^4.2.0
@@ -43,7 +43,7 @@ dependencies:
   device_info_plus: ^9.0.3
   hydrated_bloc: ^9.1.2
   path_provider: ^2.1.1
-  applovin_max: ^3.3.0
+  applovin_max: '3.3.0'
   upgrader: ^8.2.0
   permission_handler: ^11.0.1
   in_app_review: ^2.0.8

@@ -60,7 +60,7 @@ class _PermissionScreenState extends State<PermissionScreen> with AdsMixin {
         body: const PermissionBody(),
         bottomSheet: isVisibleAd
             ? LargeNativeAd(
-                unitId: adManager.adUnitId.nativePermission,
+                unitId: adManager.adUnitId.native,
               )
             : null,
       ),

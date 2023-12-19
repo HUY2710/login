@@ -15,7 +15,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../../../flavors.dart';
-import '../../../gen/colors.gen.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
 import '../../../module/admob/enum/ad_remote_key.dart';
 import '../../../module/admob/mixin/ads_mixin.dart';
@@ -26,6 +25,7 @@ import '../../config/observer/bloc_observer.dart';
 import '../../config/remote_config.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/assets.gen.dart';
+import '../../gen/colors.gen.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/env_params.dart';
@@ -58,8 +58,8 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
     // TODO(son): Bỏ comment khi gắn ad
     // await initAppsflyer();
     // await AppLovinMAX.initialize(EnvParams.appLovinKey);
-    // await loadAdUnitId();
-    // await configureAd();
+    await loadAdUnitId();
+    await configureAd();
 
     if (EasyAds.instance.hasInternet) {
       await initUpgrader();
@@ -74,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
     if (isShowAd) {
       await EasyAds.instance.showSplashInterstitialAd(
         getIt<AppRouter>().navigatorKey.currentContext!,
-        adId: getIt<AppAdIdManager>().adUnitId.interSplash,
+        adId: getIt<AppAdIdManager>().adUnitId.inter,
         onShowed: () {
           completer.complete(true);
         },
@@ -161,7 +161,7 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
       //set up ad open
       if (mounted && isOpenAppAd) {
         EasyAds.instance.initAdmob(
-          appOpenAdUnitId: getIt<AppAdIdManager>().adUnitId.appOpenOnResume,
+          appOpenAdUnitId: getIt<AppAdIdManager>().adUnitId.adOpen,
         );
       }
     }

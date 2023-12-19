@@ -16,7 +16,7 @@ Future<void> main() async {
       const MyApp(),
     );
   }, (error, stack) {
-    logger.e('ERROR', error, stack);
+    logger.e('ERROR', error: error, stackTrace: stack);
     if (!kDebugMode) {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     }
