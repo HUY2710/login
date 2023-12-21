@@ -7,12 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../module/admob/mixin/ads_mixin.dart';
 import '../global/global.dart';
 import '../shared/mixin/system_ui_mixin.dart';
 import 'di/di.dart';
 
-class AppConfig with AdsMixin, SystemUiMixin {
+class AppConfig with SystemUiMixin {
   factory AppConfig.getInstance() {
     return _instance;
   }

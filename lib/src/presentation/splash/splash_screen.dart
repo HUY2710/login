@@ -14,11 +14,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:upgrader/upgrader.dart';
 
+import '../../../app/cubit/language_cubit.dart';
 import '../../../flavors.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
-import '../../../module/admob/enum/ad_remote_key.dart';
-import '../../../module/admob/mixin/ads_mixin.dart';
 import '../../../module/admob/model/ad_unit_id/ad_unit_id_model.dart';
+import '../../../module/admob/utils/inter_ad_util.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../config/observer/bloc_observer.dart';
@@ -39,7 +39,7 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with AdsMixin {
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
@@ -58,8 +58,8 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
     // TODO(son): Bỏ comment khi gắn ad
     // await initAppsflyer();
     // await AppLovinMAX.initialize(EnvParams.appLovinKey);
-    await loadAdUnitId();
-    await configureAd();
+    // await loadAdUnitId();
+    // await configureAd();
 
     if (EasyAds.instance.hasInternet) {
       await initUpgrader();
@@ -72,9 +72,8 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
     final Completer<bool> completer = Completer();
     final bool isShowAd = RemoteConfigManager.instance.globalShowAd();
     if (isShowAd) {
-      await EasyAds.instance.showSplashInterstitialAd(
-        getIt<AppRouter>().navigatorKey.currentContext!,
-        adId: getIt<AppAdIdManager>().adUnitId.inter,
+      await InterAdUtil.instance.showInterSplashAd(
+        id: getIt<AppAdIdManager>().adUnitId.inter,
         onShowed: () {
           completer.complete(true);
         },
@@ -89,6 +88,18 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
       completer.complete(false);
     }
     return completer.future;
+  }
+
+  void initAdOpen() {
+    //check show ad using Remote Config
+    const bool isOpenAppAd = true;
+    //set up ad open
+    if (isOpenAppAd) {
+      EasyAds.instance.appLifecycleReactor?.setOnSplashScreen(false);
+      EasyAds.instance.initAdmob(
+        appOpenAdUnitId: getIt<AppAdIdManager>().adUnitId.adOpen,
+      );
+    }
   }
 
   Future<void> initUpgrader() async {
@@ -115,9 +126,13 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
 
   Future<void> onInitializedConfig() async {
     // TODO(son): Bỏ comment khi gắn ad
-    // if (RemoteConfigManager.instance.globalShowAd()) {
-    //   await showSplashInter();
-    // }
+    if (RemoteConfigManager.instance.globalShowAd()) {
+      final result = await showSplashInter();
+
+      if (!result) {
+        initAdOpen();
+      }
+    }
     await setInitScreen();
   }
 
@@ -137,16 +152,14 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
   }
 
   Future<void> setInitScreen() async {
-    final bool isFirstLaunch = await SharedPreferencesManager.getIsStarted();
-    final bool isPermissionAllow =
-        await SharedPreferencesManager.getIsPermissionAllow();
+    final bool isFirstLaunch =
+        await SharedPreferencesManager.getIsFirstLaunch();
     if (mounted) {
       if (isFirstLaunch) {
         AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
-      } else if (isPermissionAllow) {
-        AutoRouter.of(context).replace(const PermissionRoute());
       } else {
-        AutoRouter.of(context).replace(const HomeRoute());
+        final language = context.read<LanguageCubit>().state;
+        AutoRouter.of(context).replace(OnBoardingRoute(language: language));
       }
     }
   }
@@ -155,27 +168,15 @@ class _SplashScreenState extends State<SplashScreen> with AdsMixin {
     final bool isShowAd = RemoteConfigManager.instance.globalShowAd();
     //init and show ad
     if (mounted && isShowAd) {
-      await initializeAd();
-      final bool isOpenAppAd =
-          checkVisibleStatus(AdRemoteKeys.app_open_on_resume);
-      //set up ad open
-      if (mounted && isOpenAppAd) {
-        EasyAds.instance.initAdmob(
-          appOpenAdUnitId: getIt<AppAdIdManager>().adUnitId.adOpen,
-        );
-      }
+      await EasyAds.instance.initialize(
+        getIt<AppAdIdManager>(),
+        Assets.images.logo.logo.image(height: 120.r, width: 120.r),
+        unityTestMode: true,
+        adMobAdRequest: const AdRequest(httpTimeoutMillis: 30000),
+        admobConfiguration: RequestConfiguration(),
+        navigatorKey: getIt<AppRouter>().navigatorKey,
+      );
     }
-  }
-
-  Future<void> initializeAd() async {
-    await EasyAds.instance.initialize(
-      getIt<AppAdIdManager>(),
-      Assets.images.logo.logo.image(height: 120.r, width: 120.r),
-      unityTestMode: true,
-      adMobAdRequest: const AdRequest(httpTimeoutMillis: 30000),
-      admobConfiguration: RequestConfiguration(),
-      navigatorKey: getIt<AppRouter>().navigatorKey,
-    );
   }
 
   void initCrashlytics() {

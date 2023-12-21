@@ -1,43 +1,26 @@
 {
   "project_info": {
-    "project_number": "176777253646",
-    "project_id": "fir-for-base-flutter",
-    "storage_bucket": "fir-for-base-flutter.appspot.com"
+    "project_number": "623485307642",
+    "project_id": "vtn-base",
+    "storage_bucket": "vtn-base.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:176777253646:android:c86e092063828c8af9bd5f",
+        "mobilesdk_app_id": "1:623485307642:android:39dd7617beee65ea23d743",
         "android_client_info": {
           "package_name": "com.vtn.global.base.flutter"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "176777253646-2hihnmljfi08fnnnol5bg4ok249n1kpu.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCe8PxNWY9x8x7F_URHA2URkIlGC57xqIY"
+          "current_key": "AIzaSyCyo_uynAW-v1lIBxChB_A4YzOpnXxKM2I"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "176777253646-2hihnmljfi08fnnnol5bg4ok249n1kpu.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "176777253646-0q3ubq6vbofvb88sclo9n3muhtqdbn91.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.flutterBase"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

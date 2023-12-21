@@ -5,10 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../app/cubit/language_cubit.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
-import '../../../module/admob/mixin/ads_mixin.dart';
 import '../../../module/admob/widget/ads/large_native_ad.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
+import '../../config/remote_config.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/assets.gen.dart';
 import '../../shared/cubit/value_cubit.dart';
@@ -30,15 +30,36 @@ class OnBoardingScreen extends StatefulWidget {
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
 
-class _OnBoardingScreenState extends State<OnBoardingScreen> with AdsMixin {
+class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final PageController _pageController = PageController();
   bool visibleAd = false;
+  ValueNotifier<bool> showSkipButton = ValueNotifier(false);
 
   @override
   void initState() {
     context.read<LanguageCubit>().update(widget.language);
-    // visibleAd = checkVisibleStatus(AdRemoteKeys.native_intro);
+    checkShowSkipButton();
     super.initState();
+  }
+
+  Future<void> checkShowSkipButton() async {
+    final bool isStarted = await SharedPreferencesManager.getIsStarted();
+    final bool showButton =
+        RemoteConfigManager.instance.isShowSkipIntroButton();
+    showSkipButton.value = !isStarted && showButton;
+  }
+
+  Future<void> navigateToNextScreen() async {
+    await SharedPreferencesManager.saveIsStarted(false);
+    final bool isPermissionAllow =
+        await SharedPreferencesManager.getIsPermissionAllow();
+    if (mounted) {
+      if (!isPermissionAllow) {
+        context.replaceRoute(const PermissionRoute());
+      } else {
+        context.replaceRoute(const HomeRoute());
+      }
+    }
   }
 
   @override
@@ -52,13 +73,39 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with AdsMixin {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              child: OnboardingCarousel(pageController: _pageController),
+              child: Stack(
+                children: [
+                  OnboardingCarousel(pageController: _pageController),
+                  Positioned(
+                    top: ScreenUtil().statusBarHeight,
+                    left: 5,
+                    child: ValueListenableBuilder(
+                      valueListenable: showSkipButton,
+                      builder: (context, value, child) {
+                        if (!value) {
+                          return const SizedBox();
+                        }
+                        return TextButton(
+                          onPressed: navigateToNextScreen,
+                          child: Text(
+                            'Skip',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: BlocBuilder<ValueCubit<int>, int>(
                 builder: (context, currentIndex) => ActionRow(
                   pageController: _pageController,
+                  onStartedTap: navigateToNextScreen,
                 ),
               ),
             ),
