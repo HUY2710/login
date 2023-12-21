@@ -2,7 +2,7 @@
 
 ## Information
 
-Flutter version: `3.10.6`
+Flutter version: `3.13.9`
 
 ### Base Flutter with:
 
@@ -14,7 +14,8 @@ Flutter version: `3.10.6`
 - Dependencies
   Injection: [get_it](https://pub.dev/packages/get_it) + [injectable](https://pub.dev/packages/injectable)
 - Responsiveness: [flutter_screenutil](https://pub.dev/packages/flutter_screenutil)
-- Localization: [flutter_localizations](https://docs.flutter.dev/ui/accessibility-and-localization/internationalization)
+-
+Localization: [flutter_localizations](https://docs.flutter.dev/ui/accessibility-and-localization/internationalization)
 
 ### and Boilerplate code for:
 
@@ -37,19 +38,15 @@ flutter pub run build_runner build --delete-conflicting-outputs
 ### Set up firebase
 
 - Tạo dự án Firebase mới, thay file config firebase tương ứng
-- Vào Release & Monitor -> Remote config -> Copy nội dung như sau vào file json để import các parameters cần thiết (thêm các key tương tự nếu cần)
+- Vào Release & Monitor -> Remote config -> Copy nội dung như sau vào file json để import các
+  parameters cần thiết (thêm các key tương tự nếu cần)
+
 ```json
 {
   "parameters": {
-    "forceUpdate": {
+    "multipleLoadIntroAd": {
       "defaultValue": {
         "value": "true"
-      },
-      "valueType": "BOOLEAN"
-    },
-    "showDefaultRating": {
-      "defaultValue": {
-        "value": "false"
       },
       "valueType": "BOOLEAN"
     },
@@ -59,18 +56,79 @@ flutter pub run build_runner build --delete-conflicting-outputs
       },
       "valueType": "STRING"
     },
+    "android_show": {
+      "defaultValue": {
+        "value": "false"
+      },
+      "valueType": "BOOLEAN"
+    },
+    "forceUpdate": {
+      "defaultValue": {
+        "value": "true"
+      },
+      "valueType": "BOOLEAN"
+    },
     "ios_show": {
       "defaultValue": {
         "value": "true"
       },
       "valueType": "BOOLEAN"
+    }
+  },
+  "version": {
+    "versionNumber": "1",
+    "updateTime": "2023-12-21T04:02:15.896021Z",
+    "updateUser": {
+      "email": "soncm@vtn-global.com"
     },
-    "android_show": {
-      "defaultValue": {
-        "value": "true"
-      },
-      "valueType": "BOOLEAN"
+    "updateOrigin": "CONSOLE",
+    "updateType": "INCREMENTAL_UPDATE"
+  },
+  "parameterGroups": {
+    "ios": {
+      "parameters": {
+        "ios_interSplash": {
+          "defaultValue": {
+            "value": "true"
+          },
+          "valueType": "BOOLEAN"
+        },
+        "ios_showCollapsibleBanner": {
+          "defaultValue": {
+            "value": "true"
+          },
+          "valueType": "BOOLEAN"
+        },
+        "ios_showSkipIntroButton": {
+          "defaultValue": {
+            "value": "true"
+          },
+          "valueType": "BOOLEAN"
+        }
+      }
     },
+    "android": {
+      "parameters": {
+        "android_interSplash": {
+          "defaultValue": {
+            "value": "true"
+          },
+          "valueType": "BOOLEAN"
+        },
+        "android_showCollapsibleBanner": {
+          "defaultValue": {
+            "value": "false"
+          },
+          "valueType": "BOOLEAN"
+        },
+        "android_showSkipIntroButton": {
+          "defaultValue": {
+            "value": "true"
+          },
+          "valueType": "BOOLEAN"
+        }
+      }
+    }
   }
 }
 ```
