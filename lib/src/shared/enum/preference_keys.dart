@@ -3,5 +3,6 @@ enum PreferenceKeys {
   permissionAllow,
   currentLanguageCode,
   rateApp,
-  isStarted
+  isStarted,
+  isFirstLaunch,
 }

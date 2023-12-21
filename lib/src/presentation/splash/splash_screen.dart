@@ -17,7 +17,6 @@ import 'package:upgrader/upgrader.dart';
 import '../../../app/cubit/language_cubit.dart';
 import '../../../flavors.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
-import '../../../module/admob/enum/ad_remote_key.dart';
 import '../../../module/admob/model/ad_unit_id/ad_unit_id_model.dart';
 import '../../../module/admob/utils/inter_ad_util.dart';
 import '../../config/di/di.dart';
@@ -92,8 +91,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void initAdOpen() {
-    final bool isOpenAppAd =
-        RemoteConfigManager.instance.isShowAd(AdRemoteKeys.app_open_on_resume);
+    //check show ad using Remote Config
+    const bool isOpenAppAd = true;
     //set up ad open
     if (isOpenAppAd) {
       EasyAds.instance.appLifecycleReactor?.setOnSplashScreen(false);

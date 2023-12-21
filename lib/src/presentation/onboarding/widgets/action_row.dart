@@ -4,15 +4,17 @@ class ActionRow extends StatefulWidget {
   const ActionRow({
     super.key,
     required PageController pageController,
+    required this.onStartedTap,
   }) : _pageController = pageController;
 
   final PageController _pageController;
+  final VoidCallback onStartedTap;
 
   @override
   State<ActionRow> createState() => _ActionRowState();
 }
 
-class _ActionRowState extends State<ActionRow> with AdsMixin {
+class _ActionRowState extends State<ActionRow> {
   @override
   Widget build(BuildContext context) {
     final int currentIndex = context.watch<ValueCubit<int>>().state;
@@ -31,7 +33,7 @@ class _ActionRowState extends State<ActionRow> with AdsMixin {
             if (currentIndex < 2) {
               _pressNextButton(currentIndex);
             } else {
-              _done();
+              widget.onStartedTap();
             }
           },
           child: Text(
@@ -56,13 +58,6 @@ class _ActionRowState extends State<ActionRow> with AdsMixin {
           curve: Curves.easeIn,
         );
       }
-    }
-  }
-
-  Future<void> _done() async {
-    await SharedPreferencesManager.saveIsStarted(false);
-    if (mounted) {
-      context.replaceRoute(const PermissionRoute());
     }
   }
 }

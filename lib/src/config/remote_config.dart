@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -20,8 +18,6 @@ class RemoteConfigManager {
       RemoteConfigManager._privateConstructor();
   final FirebaseRemoteConfig _remoteConfig = FirebaseRemoteConfig.instance;
   final List<ConfigItem> _items = [];
-
-  bool _showDefaultRating = false;
   bool willShowAd = true;
 
   Future<void> initConfig() async {
@@ -49,19 +45,16 @@ class RemoteConfigManager {
     final offVersion = _remoteConfig.getString(RemoteKeys.adOffVersion.name);
 
     willShowAd = offVersion != version;
-    if (Platform.isIOS) {
-      _showDefaultRating = offVersion == version;
-    }
   }
 
   Future<void> _fetchConfig([bool refresh = false]) async {
     try {
-      if (!refresh) {
-        await _remoteConfig.fetchAndActivate();
-      }
+      await _remoteConfig.fetchAndActivate();
       _getConfigValue();
     } catch (_) {
-      _fetchConfig(true);
+      if (!refresh) {
+        _fetchConfig(true);
+      }
     }
   }
 
@@ -78,7 +71,7 @@ class RemoteConfigManager {
   void _getConfigValue() {
     _items.clear();
     for (final AdRemoteKeys key in AdRemoteKeys.values) {
-      final bool value = _remoteConfig.getBool(key.keyName);
+      final bool value = _remoteConfig.getBool(key.platformKey);
       _items.add(ConfigItem(value, key));
     }
   }
@@ -87,7 +80,6 @@ class RemoteConfigManager {
     return _remoteConfig.getBool(RemoteKeys.forceUpdate.name);
   }
 
-  bool shouldShowDefaultRating() {
-    return _showDefaultRating;
-  }
+  bool isShowSkipIntroButton() =>
+      _remoteConfig.getBool(RemoteKeys.showSkipIntroButton.platformKey);
 }

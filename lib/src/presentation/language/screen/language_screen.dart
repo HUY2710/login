@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../app/cubit/language_cubit.dart';
 import '../../../config/navigation/app_router.dart';
+import '../../../data/local/shared_preferences_manager.dart';
 import '../../../gen/colors.gen.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/language.dart';
@@ -12,7 +13,10 @@ import '../../../shared/extension/context_extension.dart';
 
 @RoutePage()
 class LanguageScreen extends StatefulWidget {
-  const LanguageScreen({super.key, this.isFirst,});
+  const LanguageScreen({
+    super.key,
+    this.isFirst,
+  });
 
   final bool? isFirst;
 
@@ -31,9 +35,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
           toolbarHeight: 80.h,
           leading: (widget.isFirst == null || widget.isFirst == false)
               ? IconButton(
-            onPressed: () => context.popRoute(),
-            icon: const Icon(Icons.arrow_back_ios_new_outlined),
-          )
+                  onPressed: () => context.popRoute(),
+                  icon: const Icon(Icons.arrow_back_ios_new_outlined),
+                )
               : null,
           title: Text(
             context.l10n.language,
@@ -43,7 +47,10 @@ class _LanguageScreenState extends State<LanguageScreen> {
           ),
           actions: [_buildAcceptButton()],
         ),
-        body: SafeArea(child: _BodyWidget(widget.isFirst,)),
+        body: SafeArea(
+            child: _BodyWidget(
+          widget.isFirst,
+        )),
       ),
     );
   }
@@ -51,13 +58,16 @@ class _LanguageScreenState extends State<LanguageScreen> {
   Builder _buildAcceptButton() {
     return Builder(builder: (context) {
       return IconButton(
-        onPressed: () {
+        onPressed: () async {
           final Language selectedLanguage =
               context.read<ValueCubit<Language>>().state;
           if (widget.isFirst == null || widget.isFirst == false) {
             context.popRoute();
           } else {
-            context.replaceRoute(OnBoardingRoute(language: selectedLanguage));
+            await SharedPreferencesManager.saveIsFirstLaunch(false);
+            if (mounted) {
+              context.replaceRoute(OnBoardingRoute(language: selectedLanguage));
+            }
           }
         },
         icon: Icon(
@@ -91,9 +101,10 @@ class _BodyWidgetState extends State<_BodyWidget> {
                 itemBuilder: (BuildContext context1, int index) {
                   final Language item = Language.values[index];
                   return _buildItemLanguage(
-                      context: context,
-                      language: item,
-                      selectedValue: state,);
+                    context: context,
+                    language: item,
+                    selectedValue: state,
+                  );
                 },
               );
             },

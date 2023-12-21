@@ -8,7 +8,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../../app/cubit/native_ad_status_cubit.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
-import '../../../module/admob/mixin/ads_mixin.dart';
 import '../../../module/admob/widget/ads/large_native_ad.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
@@ -29,15 +28,9 @@ class PermissionScreen extends StatefulWidget {
   State<PermissionScreen> createState() => _PermissionScreenState();
 }
 
-class _PermissionScreenState extends State<PermissionScreen> with AdsMixin {
+class _PermissionScreenState extends State<PermissionScreen> {
   AppAdIdManager get adManager => getIt<AppAdIdManager>();
   bool isVisibleAd = false;
-
-  @override
-  void initState() {
-    // isVisibleAd = checkVisibleStatus(AdRemoteKeys.native_permission);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
