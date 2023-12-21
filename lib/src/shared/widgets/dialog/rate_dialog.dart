@@ -140,9 +140,11 @@ class _RatingDialogState extends State<RatingDialog> {
             ),
             11.verticalSpace,
             TextButton(
-              onPressed: () {
-                exitApp();
-                context.popRoute();
+              onPressed: () async {
+                await context.popRoute();
+                if (Global.instance.isExitApp) {
+                  exitApp();
+                }
               },
               child: Text(
                 'Exit',
@@ -160,13 +162,12 @@ class _RatingDialogState extends State<RatingDialog> {
   }
 
   void exitApp() {
-    if (Global.instance.isExitApp) {
-      if (Platform.isAndroid) {
-        SystemNavigator.pop();
-      } else if (Platform.isIOS) {
-        exit(0);
-      }
+    if (Platform.isAndroid) {
+      SystemNavigator.pop();
+    } else if (Platform.isIOS) {
+      exit(0);
     }
+
   }
 
   Future<void> showThanksDialog() async {
@@ -175,9 +176,11 @@ class _RatingDialogState extends State<RatingDialog> {
       builder: (context) {
         Timer(
           const Duration(seconds: 1),
-          () {
-            exitApp();
-            context.popRoute();
+          ()  async {
+            await context.popRoute();
+            if (Global.instance.isExitApp) {
+              exitApp();
+            }
           },
         );
         return RateSuccessDialog(context);
@@ -196,8 +199,10 @@ class _RatingDialogState extends State<RatingDialog> {
       await showThanksDialog();
     } else {
       if (context.mounted) {
-        exitApp();
         await context.popRoute();
+        if (Global.instance.isExitApp) {
+          exitApp();
+        }
       }
     }
   }
