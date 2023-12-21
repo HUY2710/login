@@ -126,13 +126,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> onInitializedConfig() async {
     // TODO(son): Bỏ comment khi gắn ad
-    if (RemoteConfigManager.instance.globalShowAd()) {
-      final result = await showSplashInter();
-
-      if (!result) {
-        initAdOpen();
-      }
-    }
+    // if (RemoteConfigManager.instance.globalShowAd()) {
+    //   final result = await showSplashInter();
+    //
+    //   if (!result) {
+    //     initAdOpen();
+    //   }
+    // }
     await setInitScreen();
   }
 
