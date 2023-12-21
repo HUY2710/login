@@ -31,7 +31,7 @@ class AppConfig with SystemUiMixin {
   }
 
   Future<HydratedStorage> _initHydrateBlocStorage() async {
-    final Directory tempDir = await getTemporaryDirectory();
+    final Directory tempDir = await getApplicationDocumentsDirectory();
     return HydratedBloc.storage =
         await HydratedStorage.build(storageDirectory: tempDir);
   }
