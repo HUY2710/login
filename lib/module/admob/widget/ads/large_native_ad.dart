@@ -30,24 +30,15 @@ class LargeNativeAd extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(top: 5),
         color: Colors.white,
-        child: unitIdHigh != null
-            ? EasyNativeAdHigh(
-                factoryId: factoryId,
-                adId: unitId,
-                adIdHigh: unitIdHigh!,
-                height: 270,
-                loadingWidget: LargeAdLoading(
-                  buttonPosition: buttonPosition,
-                ),
-              )
-            : EasyNativeAd(
-                factoryId: factoryId,
-                adId: unitId,
-                height: 260,
-                loadingWidget: LargeAdLoading(
-                  buttonPosition: buttonPosition,
-                ),
-              ),
+        child: EasyNativeAd(
+          factoryId: factoryId,
+          adId: unitId,
+          highId: unitIdHigh,
+          height: 270,
+          loadingWidget: LargeAdLoading(
+            buttonPosition: buttonPosition,
+          ),
+        ),
       ),
     );
   }
