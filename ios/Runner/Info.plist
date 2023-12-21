@@ -64,20 +64,23 @@
     <string>CLIENT-TOKEN</string>
     <key>FacebookDisplayName</key>
     <string>$(BUNDLE_NAME)</string>
-    <!-- Advertising -->
+  <!-- Advertising -->
   <key>NSAdvertisingAttributionReportEndpoint</key>
   <string>https://postbacks-app.com</string>
   <key>SKAdNetworkItems</key>
   <array>
     <dict>
+      <!--  Google LLC  -->
       <key>SKAdNetworkIdentifier</key>
       <string>cstr6suwn9.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Aarki, Inc.  -->
       <key>SKAdNetworkIdentifier</key>
       <string>4fzdc2evr5.skadnetwork</string>
     </dict>
     <dict>
+      <!--  AdColony, Inc.  -->
       <key>SKAdNetworkIdentifier</key>
       <string>4pfyvq9l8r.skadnetwork</string>
     </dict>
@@ -86,18 +89,22 @@
       <string>2fnua5tdw4.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Adikteev SA  -->
       <key>SKAdNetworkIdentifier</key>
       <string>ydx93a7ass.skadnetwork</string>
     </dict>
     <dict>
+      <!--  REVX TECHNOLOGY PRIVATE LIMITED  -->
       <key>SKAdNetworkIdentifier</key>
       <string>5a6flpkh64.skadnetwork</string>
     </dict>
     <dict>
+     <!--  APS   -->
       <key>SKAdNetworkIdentifier</key>
       <string>p78axxw29g.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Appier Inc.   -->
       <key>SKAdNetworkIdentifier</key>
       <string>v72qych5uu.skadnetwork</string>
     </dict>
@@ -110,26 +117,32 @@
       <string>cp8zw746q7.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Centro Inc.  -->
       <key>SKAdNetworkIdentifier</key>
       <string>3sh42y64q3.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Beeswax  -->
       <key>SKAdNetworkIdentifier</key>
       <string>c6k4g5qg8m.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Bidease inc  -->
       <key>SKAdNetworkIdentifier</key>
       <string>s39g8k73mm.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Biga Bid Media Ltd  -->
       <key>SKAdNetworkIdentifier</key>
       <string>3qy4746246.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Chartboost, Inc.  -->
       <key>SKAdNetworkIdentifier</key>
       <string>f38h382jlk.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Criteo Corp  -->
       <key>SKAdNetworkIdentifier</key>
       <string>hs6bdukanm.skadnetwork</string>
     </dict>
@@ -138,18 +151,22 @@
       <string>v4nxqhlyqp.skadnetwork</string>
     </dict>
     <dict>
+      <!--  mkhoj Solutions Private Limited  -->
       <key>SKAdNetworkIdentifier</key>
       <string>wzmmz9fp6w.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Jampp LTD  -->
       <key>SKAdNetworkIdentifier</key>
       <string>yclnxrl5pm.skadnetwork</string>
     </dict>
     <dict>
+      <!--  LifeStreet Corporation  -->
       <key>SKAdNetworkIdentifier</key>
       <string>t38b2kh725.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Liftoff Mobile, Inc.  -->
       <key>SKAdNetworkIdentifier</key>
       <string>7ug5zh24hu.skadnetwork</string>
     </dict>
@@ -170,22 +187,31 @@
       <string>n6fk4nfna4.skadnetwork</string>
     </dict>
     <dict>
+      <!--  meta  -->
       <key>SKAdNetworkIdentifier</key>
       <string>v9wttpbfk9.skadnetwork</string>
     </dict>
     <dict>
+      <!--  meta  -->
       <key>SKAdNetworkIdentifier</key>
       <string>n38lu8286q.skadnetwork</string>
+    </dict>
+    <dict>
+      <!--  Digital Turbine  -->
+      <key>SKAdNetworkIdentifier</key>
+      <string>9g2aggbj52.skadnetwork</string>
     </dict>
     <dict>
       <key>SKAdNetworkIdentifier</key>
       <string>47vhws6wlr.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Mintegral  -->
       <key>SKAdNetworkIdentifier</key>
       <string>kbd757ywx3.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Moloco, Inc  -->
       <key>SKAdNetworkIdentifier</key>
       <string>9t245vhmpl.skadnetwork</string>
     </dict>
@@ -194,18 +220,22 @@
       <string>eh6m2bh4zr.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Opera Software Ireland Ltd. (“Opera”)  -->
       <key>SKAdNetworkIdentifier</key>
       <string>a2p9lx4jpn.skadnetwork</string>
     </dict>
     <dict>
+      <!--  BYTEMOD PTE. LTD-global  -->
       <key>SKAdNetworkIdentifier</key>
       <string>22mmun2rn5.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Realtime Technologies GmbH  -->
       <key>SKAdNetworkIdentifier</key>
       <string>4468km3ulz.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Remerge GmbH  -->
       <key>SKAdNetworkIdentifier</key>
       <string>2u9pt9hc89.skadnetwork</string>
     </dict>
@@ -218,6 +248,7 @@
       <string>klf5c3l5u5.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Smadex SL  -->
       <key>SKAdNetworkIdentifier</key>
       <string>ppxm28t8ap.skadnetwork</string>
     </dict>
@@ -234,14 +265,17 @@
       <string>pwa73g5rt2.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Triapodi Ltd.  -->
       <key>SKAdNetworkIdentifier</key>
       <string>mlmmfzh3r3.skadnetwork</string>
     </dict>
     <dict>
+      <!--  UNICORN Inc.  -->
       <key>SKAdNetworkIdentifier</key>
       <string>578prtvx9j.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Unity Technologies  -->
       <key>SKAdNetworkIdentifier</key>
       <string>4dzt52r2t5.skadnetwork</string>
     </dict>
@@ -254,10 +288,12 @@
       <string>8c4e2ghe7u.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Yandex Europe AG  -->
       <key>SKAdNetworkIdentifier</key>
       <string>zq492l623r.skadnetwork</string>
     </dict>
     <dict>
+      <!--  YouAppi Inc  -->
       <key>SKAdNetworkIdentifier</key>
       <string>3rd42ekr43.skadnetwork</string>
     </dict>
@@ -267,6 +303,7 @@
     </dict>
     <!-- applovin -->
     <dict>
+      <!--  BYTEMOD PTE. LTD-CN  -->
       <key>SKAdNetworkIdentifier</key>
       <string>238da6jt44.skadnetwork</string>
     </dict>
@@ -627,6 +664,7 @@
       <string>wg4vff78zm.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Clearpier Inc.  -->
       <key>SKAdNetworkIdentifier</key>
       <string>x44k69ngh6.skadnetwork</string>
     </dict>
@@ -651,11 +689,11 @@
       <string>y45688jllp.skadnetwork</string>
     </dict>
     <dict>
+      <!--  Maiden Marketing Pvt Ltd.   -->
       <key>SKAdNetworkIdentifier</key>
       <string>zmvfpc5aq8.skadnetwork</string>
     </dict>
     <!-- mintegral (all duplicate)-->
   </array>
   </dict>
-  
 </plist>
