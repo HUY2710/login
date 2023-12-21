@@ -5,8 +5,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_base/src/shared/widgets/dialog/rate_success_dialog.dart';
-import 'package:flutter_base/src/shared/widgets/dialog/rating_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -20,6 +18,8 @@ import '../../../global/global.dart';
 import '../../constants/app_constants.dart';
 import '../../extension/context_extension.dart';
 import '../../helpers/logger_utils.dart';
+import 'rate_success_dialog.dart';
+import 'rating_bar.dart';
 
 Future<void> showRatingDialog({bool fromSetting = false}) async {
   final appContext = getIt<AppRouter>().navigatorKey.currentContext!;
@@ -30,8 +30,7 @@ Future<void> showRatingDialog({bool fromSetting = false}) async {
 
   EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
   final InAppReview inAppReview = InAppReview.instance;
-  if (RemoteConfigManager.instance.shouldShowDefaultRating() &&
-      Platform.isIOS) {
+  if (!RemoteConfigManager.instance.willShowAd && Platform.isIOS) {
     if (await inAppReview.isAvailable()) {
       return inAppReview.requestReview();
     } else if (fromSetting) {
