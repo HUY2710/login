@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,11 +33,26 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final PageController _pageController = PageController();
-  bool visibleAd = false;
+  bool visibleAd = true;
   ValueNotifier<bool> showSkipButton = ValueNotifier(false);
+  late final controller1 = NativeAdController(
+    adId: getIt<AppAdIdManager>().adUnitId.native,
+    factoryId: getIt<AppAdIdManager>().bottomLargeNativeFactory,
+  );
+  late final controller2 = NativeAdController(
+    adId: getIt<AppAdIdManager>().adUnitId.native,
+    factoryId: getIt<AppAdIdManager>().bottomLargeNativeFactory,
+  );
+  late final controller3 = NativeAdController(
+    adId: getIt<AppAdIdManager>().adUnitId.native,
+    factoryId: getIt<AppAdIdManager>().bottomLargeNativeFactory,
+  );
 
   @override
   void initState() {
+    controller1.load();
+    controller2.load();
+    controller3.load();
     context.read<LanguageCubit>().update(widget.language);
     checkShowSkipButton();
     super.initState();
@@ -68,7 +84,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       create: (context) => ValueCubit<int>(0),
       child: Scaffold(
         backgroundColor: Colors.white,
-        bottomNavigationBar: _buildAd(),
+        bottomNavigationBar: BlocBuilder<ValueCubit<int>, int>(
+          builder: (context, state) {
+            return switch (state) {
+              0 => _buildAd(controller1),
+              1 => _buildAd(controller2),
+              _ => _buildAd(controller3),
+            };
+          },
+        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -115,19 +139,22 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
-  Widget _buildAd() {
+  Widget _buildAd(NativeAdController controller) {
     if (!visibleAd) {
       return const SizedBox(
         height: 272,
       );
     }
     return LargeNativeAd(
-      unitId: getIt<AppAdIdManager>().adUnitId.native,
+      controller: controller,
     );
   }
 
   @override
   void dispose() {
+    controller1.dispose();
+    controller2.dispose();
+    controller3.dispose();
     _pageController.dispose();
     super.dispose();
   }

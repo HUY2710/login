@@ -9,14 +9,16 @@ import '../loading/large_ad_loading.dart';
 class LargeNativeAd extends StatelessWidget {
   const LargeNativeAd({
     super.key,
-    required this.unitId,
-    this.buttonPosition = AdButtonPosition.bottom,
+    this.unitId,
+    this.buttonPosition,
     this.unitIdHigh,
+    this.controller,
   });
 
-  final String unitId;
+  final String? unitId;
   final String? unitIdHigh;
-  final AdButtonPosition buttonPosition;
+  final AdButtonPosition? buttonPosition;
+  final NativeAdController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class LargeNativeAd extends StatelessWidget {
       AdButtonPosition.top => getIt<AppAdIdManager>().topLargeNativeFactory,
       AdButtonPosition.bottom =>
         getIt<AppAdIdManager>().bottomLargeNativeFactory,
+      _ => null
     };
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
@@ -35,6 +38,7 @@ class LargeNativeAd extends StatelessWidget {
           adId: unitId,
           highId: unitIdHigh,
           height: 270,
+          controller: controller,
           loadingWidget: LargeAdLoading(
             buttonPosition: buttonPosition,
           ),

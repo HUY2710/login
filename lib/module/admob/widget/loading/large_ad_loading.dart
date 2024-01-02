@@ -8,10 +8,10 @@ import '../../enum/ad_button_position.dart';
 class LargeAdLoading extends StatelessWidget {
   const LargeAdLoading({
     super.key,
-    this.buttonPosition = AdButtonPosition.bottom,
+    this.buttonPosition,
   });
 
-  final AdButtonPosition buttonPosition;
+  final AdButtonPosition? buttonPosition;
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +67,13 @@ class LargeAdLoading extends StatelessWidget {
               width: 0.7.sw,
               height: 120,
             ),
-            if (buttonPosition == AdButtonPosition.bottom)
+            if (buttonPosition == AdButtonPosition.bottom &&
+                buttonPosition == null)
               const SizedBox(
                 height: 5,
               ),
-            if (buttonPosition == AdButtonPosition.bottom)
+            if (buttonPosition == AdButtonPosition.bottom &&
+                buttonPosition == null)
               MyPlaceholder(
                 width: 1.sw,
                 height: 48,
