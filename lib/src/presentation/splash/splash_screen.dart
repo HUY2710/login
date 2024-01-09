@@ -47,17 +47,19 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _init() async {
+    // TODO(son): Bỏ comment khi gắn ad
     if (!kDebugMode) {
       initCrashlytics();
     }
 
     initDebugger();
     await loadEnv();
+    await Future.wait([
+      RemoteConfigManager.instance.initConfig(),
+      // initAppsflyer(),
+      // AppLovinMAX.initialize(EnvParams.appLovinKey),
+    ]);
     await RemoteConfigManager.instance.initConfig();
-
-    // TODO(son): Bỏ comment khi gắn ad
-    // await initAppsflyer();
-    // await AppLovinMAX.initialize(EnvParams.appLovinKey);
     await loadAdUnitId();
     await configureAd();
 
@@ -79,9 +81,14 @@ class _SplashScreenState extends State<SplashScreen> {
         },
         onFailed: () {
           completer.complete(false);
+          initAdOpen();
         },
         onNoInternet: () {
           completer.complete(false);
+          initAdOpen();
+        },
+        adDismissed: () {
+          initAdOpen();
         },
       );
     } else {
@@ -126,12 +133,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> onInitializedConfig() async {
     // TODO(son): Bỏ comment khi gắn ad
-    // if (RemoteConfigManager.instance.globalShowAd()) {
-    //   final result = await showSplashInter();
-    //
-    //   if (!result) {
-    //     initAdOpen();
-    //   }
+    // if (RemoteConfigManager.instance.isShowAd(AdRemoteKeys.interSplash)) {
+    //   await showSplashInter();
     // }
     await setInitScreen();
   }

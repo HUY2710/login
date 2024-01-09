@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../shared/helpers/logger_utils.dart';
 import '../../shared/mixin/system_ui_mixin.dart';
 
-class MainRouteObserver extends AutoRouterObserver with SystemUiMixin {
+class MainRouteObserver extends AutoRouteObserver with SystemUiMixin {
   @override
   void didPush(Route route, Route? previousRoute) {
     hideNavigationBar();
@@ -12,6 +12,7 @@ class MainRouteObserver extends AutoRouterObserver with SystemUiMixin {
       'Did Push',
       error: 'from ${previousRoute?.settings.name} to ${route.settings.name}',
     );
+    super.didPush(route, previousRoute);
   }
 
   @override
@@ -20,6 +21,7 @@ class MainRouteObserver extends AutoRouterObserver with SystemUiMixin {
       'Init',
       error: route.name,
     );
+    super.didInitTabRoute(route, previousRoute);
   }
 
   @override
@@ -29,15 +31,18 @@ class MainRouteObserver extends AutoRouterObserver with SystemUiMixin {
       'Change tab',
       error: 'from ${previousRoute.name} to ${route.name}',
     );
+    super.didChangeTabRoute(route, previousRoute);
   }
 
   @override
   void didReplace({Route? newRoute, Route? oldRoute}) {
     hideNavigationBar();
+    super.didReplace();
   }
 
   @override
   void didPop(Route route, Route? previousRoute) {
     hideNavigationBar();
+    super.didPop(route, previousRoute);
   }
 }
