@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../app/cubit/language_cubit.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
+import '../../../module/admob/enum/ad_remote_key.dart';
 import '../../../module/admob/widget/ads/large_native_ad.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
@@ -146,7 +147,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       );
     }
     return LargeNativeAd(
-      controller: controller,
+      unitId: getIt<AppAdIdManager>().adUnitId.native,
+      remoteKey: AdRemoteKeys.show,
+      maintainSize: true,
     );
   }
 

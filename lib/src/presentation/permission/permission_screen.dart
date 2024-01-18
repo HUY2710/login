@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../../app/cubit/native_ad_status_cubit.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
+import '../../../module/admob/enum/ad_remote_key.dart';
 import '../../../module/admob/widget/ads/large_native_ad.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
@@ -54,6 +55,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
         bottomSheet: isVisibleAd
             ? LargeNativeAd(
                 unitId: adManager.adUnitId.native,
+                remoteKey: AdRemoteKeys.show,
               )
             : null,
       ),
