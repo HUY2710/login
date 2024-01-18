@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "623485307642",
+    "project_id": "vtn-base",
+    "storage_bucket": "vtn-base.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623485307642:android:39dd7617beee65ea23d743",
+        "android_client_info": {
+          "package_name": "com.vtn.global.base.flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyo_uynAW-v1lIBxChB_A4YzOpnXxKM2I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
