@@ -24,7 +24,7 @@ class GroupsManager {
             .set({'idGroup': generateIdGroup});
       }
     }).catchError((error) {
-      LoggerUtils.logError('Failed to add user: $error');
+      LoggerUtils.logError('Failed to add group: $error');
     });
   }
 }

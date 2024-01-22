@@ -35,6 +35,7 @@ import '../../global/global.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/enum/preference_keys.dart';
 import '../../shared/extension/context_extension.dart';
+import '../../shared/extension/int_extension.dart';
 import '../../shared/helpers/env_params.dart';
 import 'update_dialog.dart';
 
@@ -260,15 +261,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<StoreUser?> addNewUser({
     StoreUser? storeUser,
   }) async {
-    final String newCode = const Uuid().v1(
-      config: V1Options(
-        DateTime.now().millisecondsSinceEpoch,
-        5678,
-        0x1234,
-        [0x01, 0x23, 0x45, 0x67, 0x89, 0xab],
-        null,
-      ),
-    );
+    final String newCode = 24.randomString();
     int battery = 0;
     try {
       battery = await Battery().batteryLevel;

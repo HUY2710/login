@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../data/models/store_group/store_group.dart';
 import '../../../../data/remote/firestore_client.dart';
+import '../../../../global/global.dart';
 import '../../../../shared/extension/int_extension.dart';
 
 class BottomSheetCreateGroup extends StatefulWidget {
@@ -56,13 +57,16 @@ class _BottomSheetCreateGroupState extends State<BottomSheetCreateGroup> {
                   onPressed: () async {
                     try {
                       //apply cubit after
-                      if (groupNameController.text.isNotEmpty) {
+                      if (groupNameController.text.isNotEmpty &&
+                          Global.instance.user != null) {
                         //create group;
                         final newGroup = StoreGroup(
                           code: 6.randomString(),
                           groupName: groupNameController.text,
                           iconGroup: '',
+                          members: {Global.instance.user!.code: true},
                         );
+
                         await FirestoreClient.instance.createGroup(newGroup);
                         if (context.mounted) {
                           context.popRoute();

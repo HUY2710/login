@@ -10,19 +10,9 @@ class StoreGroup with _$StoreGroup {
     required String code, //code invite user join group
     required String groupName,
     required String iconGroup,
-    List<MembersGroup>? members,
+    Map<String, dynamic>? members,
   }) = _StoreGroup;
 
   factory StoreGroup.fromJson(Map<String, dynamic> json) =>
       _$StoreGroupFromJson(json);
-}
-
-@freezed
-class MembersGroup with _$MembersGroup {
-  const factory MembersGroup({
-    Map<String, dynamic>? isAdmin,
-  }) = _MembersGroup;
-
-  factory MembersGroup.fromJson(Map<String, dynamic> json) =>
-      _$MembersGroupFromJson(json);
 }
