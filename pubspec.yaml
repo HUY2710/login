@@ -39,7 +39,8 @@ dependencies:
   shimmer: ^3.0.0
   easy_ads_flutter:
     git:
-      url: https://bitbucket.org/innofyapp/flutter_ads.git
+      # url: https://bitbucket.org/innofyapp/flutter_ads.git
+        url: https://KyLQ@bitbucket.org/innofyapp/flutter_ads.git
   device_info_plus: ^9.0.3
   hydrated_bloc: ^9.1.2
   path_provider: ^2.1.1
@@ -48,6 +49,9 @@ dependencies:
   permission_handler: ^11.0.1
   in_app_review: ^2.0.8
   lottie: ^2.7.0
+  google_maps_flutter: ^2.5.3
+  location: ^5.0.3
+  battery_plus: ^5.0.2
 
 dev_dependencies:
   flutter_test:

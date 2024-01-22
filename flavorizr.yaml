@@ -1,7 +1,7 @@
 flavors:
   dev:
     app:
-      name: "VTN Base Flutter Dev"
+      name: "Location Sharing Dev"
 
     android:
       applicationId: "com.vtn.global.base.flutter"

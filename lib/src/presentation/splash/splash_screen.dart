@@ -155,6 +155,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> setInitScreen() async {
+    AutoRouter.of(context).replace(const HomeRoute());
+    return;
     final bool isFirstLaunch =
         await SharedPreferencesManager.getIsFirstLaunch();
     if (mounted) {

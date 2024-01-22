@@ -11,7 +11,7 @@ class F {
   static String get title {
     switch (appFlavor) {
       case Flavor.dev:
-        return 'VTN Base Flutter Dev';
+        return 'Location Sharing Dev';
       case Flavor.prod:
         return 'Example';
       default:
