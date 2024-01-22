@@ -68,9 +68,17 @@ class GroupBar extends StatelessWidget {
                               await context.popRoute();
                               if (context.mounted) {
                                 await showModalBottomSheet(
+                                    isScrollControlled: true,
                                     context: context,
                                     builder: (context) {
-                                      return const BottomSheetCreateGroup();
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom,
+                                        ),
+                                        child: const BottomSheetCreateGroup(),
+                                      );
                                     });
                               }
                             },

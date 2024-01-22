@@ -5,4 +5,6 @@ extension ContextExtension on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
 
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
+  InputDecorationTheme get inputDecoration =>
+      Theme.of(this).inputDecorationTheme;
 }
