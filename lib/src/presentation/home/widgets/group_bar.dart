@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../shared/widgets/containers/border_container.dart';
 import '../../../shared/widgets/containers/linear_container.dart';
+import 'bottom_sheet/create_group_bottom_sheet.dart';
 
 class GroupBar extends StatelessWidget {
   const GroupBar({super.key});
@@ -61,17 +63,29 @@ class GroupBar extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: LinearContainer(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 14.h,
-                              ),
-                              child: Text(
-                                'New Group',
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
+                          child: GestureDetector(
+                            onTap: () async {
+                              await context.popRoute();
+                              if (context.mounted) {
+                                await showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) {
+                                      return const BottomSheetCreateGroup();
+                                    });
+                              }
+                            },
+                            child: LinearContainer(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 14.h,
+                                ),
+                                child: Text(
+                                  'New Group',
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
