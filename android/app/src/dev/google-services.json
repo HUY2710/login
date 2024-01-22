@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "623485307642",
-    "project_id": "vtn-base",
-    "storage_bucket": "vtn-base.appspot.com"
+    "project_number": "204561008176",
+    "project_id": "cs-dev-34127",
+    "storage_bucket": "cs-dev-34127.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:623485307642:android:39dd7617beee65ea23d743",
+        "mobilesdk_app_id": "1:204561008176:android:e268d202f371e41b670ff5",
         "android_client_info": {
-          "package_name": "com.vtn.global.base.flutter"
+          "package_name": "com.tinhvu.cycle.sharing.dev"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCyo_uynAW-v1lIBxChB_A4YzOpnXxKM2I"
+          "current_key": "AIzaSyAnbiCHk_PXPcPZDZl2Epubu0dPpHoR8qE"
         }
       ],
       "services": {

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:battery_plus/battery_plus.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -13,6 +14,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:uuid/data.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../app/cubit/language_cubit.dart';
 import '../../../flavors.dart';
@@ -24,9 +27,13 @@ import '../../config/navigation/app_router.dart';
 import '../../config/observer/bloc_observer.dart';
 import '../../config/remote_config.dart';
 import '../../data/local/shared_preferences_manager.dart';
+import '../../data/models/store_user/store_user.dart';
+import '../../data/remote/firestore_client.dart';
 import '../../gen/assets.gen.dart';
 import '../../gen/colors.gen.dart';
+import '../../global/global.dart';
 import '../../shared/constants/app_constants.dart';
+import '../../shared/enum/preference_keys.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/env_params.dart';
 import 'update_dialog.dart';
@@ -155,6 +162,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> setInitScreen() async {
+    await getMe();
     AutoRouter.of(context).replace(const HomeRoute());
     return;
     final bool isFirstLaunch =
@@ -233,6 +241,50 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       await dotenv.load(fileName: '.env.dev', mergeWith: generalKey);
     }
+  }
+
+  //check user
+  Future<void> getMe() async {
+    final String? userCode =
+        await SharedPreferencesManager.getString(PreferenceKeys.userCode.name);
+
+    StoreUser? storeUser;
+    if (userCode == null) {
+      storeUser = await addNewUser(storeUser: storeUser);
+    } else {
+      storeUser = await FirestoreClient.instance.getUser(userCode);
+    }
+    Global.instance.user = storeUser;
+  }
+
+  Future<StoreUser?> addNewUser({
+    StoreUser? storeUser,
+  }) async {
+    final String newCode = const Uuid().v1(
+      config: V1Options(
+        DateTime.now().millisecondsSinceEpoch,
+        5678,
+        0x1234,
+        [0x01, 0x23, 0x45, 0x67, 0x89, 0xab],
+        null,
+      ),
+    );
+    int battery = 0;
+    try {
+      battery = await Battery().batteryLevel;
+    } catch (e) {
+      battery = 100;
+    }
+    storeUser = StoreUser(
+      code: newCode,
+      userName: '',
+      batteryLevel: battery,
+    );
+    await FirestoreClient.instance.createUser(storeUser).then((value) async {
+      await SharedPreferencesManager.setString(
+          PreferenceKeys.userCode.name, newCode);
+    });
+    return storeUser;
   }
 
   @override

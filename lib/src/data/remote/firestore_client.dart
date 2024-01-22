@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../models/store_user/store_user.dart';
+import 'current_user_store.dart';
+
 class FirestoreConstant {
   static const String users = 'users';
 }
@@ -10,4 +13,13 @@ class FirestoreClient {
   static final FirestoreClient instance = FirestoreClient._privateConstructor();
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  //add new user
+  Future<void> createUser(StoreUser user) async {
+    await CurrentUserManager.createUser(user);
+  }
+
+  Future<StoreUser?> getUser(String userCode) async {
+    return CurrentUserManager.getUser(userCode);
+  }
 }

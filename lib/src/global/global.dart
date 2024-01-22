@@ -1,3 +1,5 @@
+import '../data/models/store_user/store_user.dart';
+
 class Global {
   Global._privateConstructor();
 
@@ -6,4 +8,5 @@ class Global {
   String temporaryPath = '';
   int androidSdkVersion = 0;
   bool isExitApp = false;
+  StoreUser? user;
 }

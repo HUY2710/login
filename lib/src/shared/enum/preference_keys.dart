@@ -5,4 +5,6 @@ enum PreferenceKeys {
   rateApp,
   isStarted,
   isFirstLaunch,
+  mapType,
+  userCode
 }

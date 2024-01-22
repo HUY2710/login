@@ -4,6 +4,16 @@ import '../../shared/enum/preference_keys.dart';
 
 class SharedPreferencesManager {
   const SharedPreferencesManager._();
+  static Future<SharedPreferences> get _preference =>
+      SharedPreferences.getInstance();
+
+  static Future<String?> getString(String key) async {
+    return (await _preference).getString(key);
+  }
+
+  static Future<bool> setString(String key, String value) async {
+    return (await _preference).setString(key, value);
+  }
 
   static Future<void> saveIsFirstLaunch(bool status) async {
     (await SharedPreferences.getInstance())

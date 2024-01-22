@@ -52,6 +52,7 @@ dependencies:
   google_maps_flutter: ^2.5.3
   location: ^5.0.3
   battery_plus: ^5.0.2
+  uuid: ^4.2.2
 
 dev_dependencies:
   flutter_test:

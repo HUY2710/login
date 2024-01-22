@@ -4,7 +4,7 @@ flavors:
       name: "Location Sharing Dev"
 
     android:
-      applicationId: "com.vtn.global.base.flutter"
+      applicationId: "com.tinhvu.cycle.sharing.dev"
       icon: "assets/images/logo/rounded_logo.png"
       firebase:
         config: "android/app/src/dev/google-services.json"
