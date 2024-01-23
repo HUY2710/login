@@ -5,10 +5,6 @@ import '../models/store_user/store_user.dart';
 import 'current_user_store.dart';
 import 'group_manager.dart';
 
-class FirestoreConstant {
-  static const String users = 'users';
-}
-
 class FirestoreClient {
   FirestoreClient._privateConstructor();
 
@@ -30,4 +26,9 @@ class FirestoreClient {
   Future<void> createGroup(StoreGroup newGroup) async {
     await GroupsManager.createGroup(newGroup);
   }
+
+  //listen member group
+  // Stream<QuerySnapshot<Map<String, dynamic>>> fetchTrackingMemberStream() {
+  //   return GroupsManager.fetchTrackingMemberStream();
+  // }
 }

@@ -11,6 +11,11 @@ class StoreGroup with _$StoreGroup {
     required String groupName,
     required String iconGroup,
     Map<String, dynamic>? members,
+    @JsonKey(
+      includeFromJson: false,
+      includeToJson: false,
+    )
+    idGroup,
   }) = _StoreGroup;
 
   factory StoreGroup.fromJson(Map<String, dynamic> json) =>

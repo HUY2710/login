@@ -8,17 +8,20 @@ class BorderContainer extends StatelessWidget {
     this.radius,
     this.alignment,
     this.colorBorder,
+    this.colorBackGround,
   });
 
   final Widget child;
   final double? radius;
   final Alignment? alignment;
   final Color? colorBorder;
+  final Color? colorBackGround;
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: alignment ?? Alignment.center,
       decoration: BoxDecoration(
+        color: colorBackGround,
         border: Border.all(
           color: colorBorder ?? const Color(0xff7B3EFF),
         ),

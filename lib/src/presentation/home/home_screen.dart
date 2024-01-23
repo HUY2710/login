@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'screens/map_screen.dart';
+import '../map/map_screen.dart';
 import 'widgets/bottom_bar.dart';
 import 'widgets/float_right_app_bar.dart';
 import 'widgets/group_bar.dart';

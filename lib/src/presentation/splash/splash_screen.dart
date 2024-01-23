@@ -269,10 +269,10 @@ class _SplashScreenState extends State<SplashScreen> {
       battery = 100;
     }
     storeUser = StoreUser(
-      code: newCode,
-      userName: '',
-      batteryLevel: battery,
-    );
+        code: newCode,
+        userName: 'LiLi',
+        batteryLevel: battery,
+        avatarUrl: Assets.images.avatars.avatar1.path);
     await FirestoreClient.instance.createUser(storeUser).then((value) async {
       await SharedPreferencesManager.setString(
           PreferenceKeys.userCode.name, newCode);

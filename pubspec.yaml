@@ -79,8 +79,8 @@ flutter:
     - assets/images/logo/
     - assets/images/onboarding/
     - assets/images/languages/
-
-
+    - assets/images/avatars/
+    - assets/images/markers/
     - assets/ad_unit_id/dev/
     - assets/ad_unit_id/prod/
     - .env
