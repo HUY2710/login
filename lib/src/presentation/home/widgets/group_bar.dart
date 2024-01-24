@@ -4,7 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../shared/widgets/containers/border_container.dart';
 import '../../../shared/widgets/containers/linear_container.dart';
+import '../../../shared/widgets/custom_inkwell.dart';
 import 'bottom_sheet/create_group_bottom_sheet.dart';
+import 'group_item.dart';
+import 'modal_bottom/join_group/join_group.dart';
 
 class GroupBar extends StatelessWidget {
   const GroupBar({super.key});
@@ -43,15 +46,17 @@ class GroupBar extends StatelessWidget {
 
   void showDialogGroup(BuildContext context) {
     showDialog(
-        barrierColor: Colors.white.withOpacity(0.1),
+        barrierColor: Colors.black.withOpacity(0.4),
         context: context,
         builder: (context) {
           return AlertDialog(
+            alignment: const Alignment(0, -0.7),
             contentPadding: EdgeInsets.zero,
             insetPadding: EdgeInsets.zero,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.r),
             ),
+            elevation: 0.0,
             content: SizedBox(
               width: MediaQuery.of(context).size.width - 32.w,
               child: Padding(
@@ -59,7 +64,7 @@ class GroupBar extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    50.verticalSpace,
+                    // 50.verticalSpace,
                     Row(
                       children: [
                         Expanded(
@@ -101,17 +106,29 @@ class GroupBar extends StatelessWidget {
                         ),
                         16.horizontalSpace,
                         Expanded(
-                          child: BorderContainer(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 14.h,
-                              ),
-                              child: Text(
-                                'Join Group',
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w700,
-                                  color: const Color(0xff8E52FF),
+                          child: CustomInkWell(
+                            onTap: () async {
+                              await context.popRoute();
+                              if (context.mounted) {
+                                showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) =>
+                                        const JoinGroupWidget());
+                              }
+                            },
+                            child: BorderContainer(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 14.h,
+                                ),
+                                child: Text(
+                                  'Join Group',
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: const Color(0xff8E52FF),
+                                  ),
                                 ),
                               ),
                             ),
@@ -119,7 +136,20 @@ class GroupBar extends StatelessWidget {
                         ),
                       ],
                     ),
-                    50.verticalSpace,
+                    20.verticalSpace,
+                    SizedBox(
+                      height: 1.sh * 0.26,
+                      child: ListView.separated(
+                        itemCount: 3,
+                        separatorBuilder: (context, index) => const Divider(
+                          color: Color(0xffEAEAEA),
+                          thickness: 1,
+                        ),
+                        itemBuilder: (context, index) {
+                          return GroupItem(isAdmin: index == 0, members: 5);
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),

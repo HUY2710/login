@@ -29,6 +29,9 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   GoogleMapController? _googleMapController;
+import '../../../gen/gens.dart';
+import 'modal_bottom/members/widgets/modal_edit.dart';
+import 'modal_bottom/members/widgets/modal_show.dart';
 
   @override
   void initState() {
@@ -48,92 +51,56 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            BorderContainer(
-              colorBackGround: Colors.white,
-              colorBorder: Colors.transparent,
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 20.w),
-                child: BlocBuilder<SelectUserCubit, StoreUser?>(
-                  bloc: getIt<SelectUserCubit>(),
-                  builder: (context, state) {
-                    if (state != null) {
-                      return SvgPicture.asset(
-                        Assets.icons.icGps.path,
-                        height: 20.r,
-                        width: 20.r,
-                      );
-                    }
-                    return Text(
-                      'ME',
-                      style: TextStyle(
-                        color: const Color(0xff343434),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.sp,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-        8.verticalSpace,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buildItem(Assets.icons.icPeople.path),
-            23.horizontalSpace,
-            GestureDetector(
-              onTap: () {
-                //nếu selectUserCubit == null thì mặc định là ME
-                //nếu có thì move đến vị trí của user đó
-                final isMe = getIt<SelectUserCubit>().state;
-                if (isMe == null) {
-                  _goToDetailLocation();
-                } else {
-                  //xử lí location của member
-                }
-              },
-              child: BlocBuilder<SelectUserCubit, StoreUser?>(
-                bloc: getIt<SelectUserCubit>(),
-                builder: (context, state) {
-                  if (state != null && state.avatarUrl != null) {
-                    return _buildAvatar(state.avatarUrl!);
-                  }
-                  return _buildAvatar(Global.instance.user!.avatarUrl!);
-                },
-              ),
-            ),
-            23.horizontalSpace,
-            buildItem(Assets.icons.icMessage.path)
-          ],
-        ),
+        buildItem(Assets.icons.icPeople.path, context),
+        23.horizontalSpace,
+        //avatar
+        23.horizontalSpace,
+        buildItem(Assets.icons.icMessage.path, context),
       ],
     );
   }
 
-  Widget buildItem(String path, {bool? avatar}) {
-    return Container(
-      height: 48.r,
-      width: 48.r,
-      padding: EdgeInsets.all(14.r),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(15.r)),
-        gradient: const LinearGradient(colors: [
-          Color(0xffB67DFF),
-          Color(0xff7B3EFF),
-        ]),
-      ),
-      child: SvgPicture.asset(
-        path,
-        height: 22.r,
-        width: 22.r,
+  Widget buildItem(String path, BuildContext context, {bool? avatar}) {
+    final value = ValueNotifier<int>(0);
+    return InkWell(
+      onTap: () {
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return StatefulBuilder(builder: (context, _) {
+                return ValueListenableBuilder(
+                    valueListenable: value,
+                    builder: (context, val, child) {
+                      return AnimatedSwitcher(
+                          duration: const Duration(
+                            microseconds: 700,
+                          ),
+                          child: (val == 0)
+                              ? ModalShowMember(value: value)
+                              : ModalEditMember(value: value));
+                    });
+              });
+            });
+      },
+      child: Container(
+        height: 48.r,
+        width: 48.r,
+        padding: EdgeInsets.all(14.r),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15.r)),
+          gradient: const LinearGradient(colors: [
+            Color(0xffB67DFF),
+            Color(0xff7B3EFF),
+          ]),
+        ),
+        child: SvgPicture.asset(
+          path,
+          height: 22.r,
+          width: 22.r,
+        ),
       ),
     );
   }

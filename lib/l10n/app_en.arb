@@ -1,5 +1,30 @@
 {
   "app_title": "Flutter Base",
   "language": "Language",
-  "thisActionCanContainAds": "This action can contain ads"
+  "thisActionCanContainAds": "This action can contain ads",
+  "people": "People",
+  "edit": "Edit",
+  "addMember": "Add Member",
+  "done": "Done",
+  "cancel": "Cancel",
+  "removeMember": "Remove Member",
+  "removeMemberContent": "Are you sure to the remove this member from your group?",
+  "delete": "Delete",
+  "done": "Done",
+  "today": "Today",
+  "inviteCode": "Invite Code",
+  "inviteCodeContent": "Share this invite cote with people you want to add to the group.",
+  "inviteCodeSub": "Your invitation code is valid within 24 hours.",
+  "shareCode": "Share Code",
+  "newGroup": "New Group",
+  "joinGroup": "Join Group",
+  "joinTheGroup": "Join The Group",
+  "joinGroupContent": "Ask the group creator for their code",
+  "joinGroupSub": "Enter the invitation code to join the circle",
+  "admin": "Admin",
+  "leaveGroup": "Leave Group",
+  "leaveGroupContent": "Are you sure to leave group?",
+  "removeGroup": "Remove Group",
+  "removeGroupContent": "You’re currently the group owner. Are you sure to delete it permanantly?"
+
 }
