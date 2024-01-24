@@ -9,6 +9,7 @@ import 'package:injectable/injectable.dart';
 import '../../../../config/navigation/app_router.dart';
 import '../../../../global/global.dart';
 import '../../../../services/location_service.dart';
+import '../../../../shared/helpers/map_helper.dart';
 part 'location_listen_cubit.freezed.dart';
 part 'location_listen_state.dart';
 
@@ -19,7 +20,6 @@ class LocationListenCubit extends Cubit<LocationListenState> {
   final LocationService locationService;
   final AppRouter appRouter;
 
-  BitmapDescriptor? marker;
   StreamSubscription<LatLng>? _locationSubscription;
 
   Future<void> listenLocation() async {
@@ -28,8 +28,15 @@ class LocationListenCubit extends Cubit<LocationListenState> {
     emit(LocationListenState.success(latLng));
     _locationSubscription =
         locationService.getLocationStream().listen((LatLng latLng) async {
-      Global.instance.location = latLng;
-      emit(LocationListenState.success(latLng));
+      final bool shouldUpdate = MapHelper.checkoutRadius(
+        Global.instance.location,
+        latLng,
+        0.03,
+      );
+      if (shouldUpdate) {
+        Global.instance.location = latLng;
+        emit(LocationListenState.success(latLng));
+      }
     })
           ..onError((err) {
             emit(LocationListenState.failed(err.toString()));

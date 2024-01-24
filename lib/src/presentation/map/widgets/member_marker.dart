@@ -78,6 +78,7 @@ class _BuildMarkerState extends State<BuildMarker> {
             Assets.images.markers.circleDot.path,
             width: 36.r,
             height: 36.r,
+            gaplessPlayback: true,
           ),
         ],
       ),
@@ -87,10 +88,8 @@ class _BuildMarkerState extends State<BuildMarker> {
   Stack _buildMarker(Color color, int battery) {
     return Stack(
       children: [
-        Assets.images.markers.markerBg.image(
-          width: 150.r,
-          color: Colors.white,
-        ),
+        Assets.images.markers.markerBg
+            .image(width: 150.r, gaplessPlayback: true),
 
         Positioned(
           child: _buildAvatar(),
@@ -103,6 +102,7 @@ class _BuildMarkerState extends State<BuildMarker> {
             Assets.images.markers.car.path,
             height: 60.r,
             width: 60.r,
+            gaplessPlayback: true,
           ),
         ),
       ],
@@ -114,11 +114,13 @@ class _BuildMarkerState extends State<BuildMarker> {
     return Container(
       width: 150.r,
       height: 150.r,
+      color: Colors.transparent,
       padding: const EdgeInsets.all(12).r,
       child: ClipOval(
         child: Image.asset(
           Assets.images.avatars.avatar1.path,
           alignment: Alignment.topCenter,
+          gaplessPlayback: true,
         ),
       ),
     );

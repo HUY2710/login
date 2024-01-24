@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../shared/constants/map_style.dart';
+import '../../../map/cubit/location_listen/location_listen_cubit.dart';
 
 class CustomMap extends StatefulWidget {
   const CustomMap({
@@ -12,10 +13,12 @@ class CustomMap extends StatefulWidget {
     required this.defaultLocation,
     this.marker,
     required this.mapController,
+    required this.locationListenState,
   });
 
   final MapType mapType;
   final LatLng defaultLocation;
+  final LocationListenState locationListenState;
   final BitmapDescriptor? marker;
   final Completer<GoogleMapController> mapController;
 
@@ -35,7 +38,10 @@ class _CustomMapState extends State<CustomMap> {
       markers: <Marker>{
         Marker(
           markerId: const MarkerId('You'),
-          position: widget.defaultLocation,
+          position: widget.locationListenState.maybeWhen(
+            orElse: () => widget.defaultLocation,
+            success: (LatLng latLng) => latLng,
+          ),
           icon: widget.marker ?? BitmapDescriptor.defaultMarker,
         ),
       },
@@ -53,7 +59,7 @@ class _CustomMapState extends State<CustomMap> {
       zoomControlsEnabled: false,
       onCameraIdle: () async {},
       compassEnabled: false,
-      mapType: widget.mapType,
+      mapType: MapType.hybrid ?? widget.mapType,
     );
   }
 

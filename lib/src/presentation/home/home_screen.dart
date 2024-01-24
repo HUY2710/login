@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../map/map_screen.dart';
 import 'widgets/bottom_bar.dart';
-import 'widgets/float_right_app_bar.dart';
+import '../map/widgets/float_right_app_bar.dart';
 import 'widgets/group_bar.dart';
 
 @RoutePage()
@@ -24,12 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           const MapScreen(),
-          Positioned(
-            top: ScreenUtil().statusBarHeight,
-            right: 16.w,
-            bottom: 0,
-            child: const FloatRightAppBar(),
-          ),
           Positioned(
             top: ScreenUtil().statusBarHeight,
             left: 16.w,

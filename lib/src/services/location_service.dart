@@ -54,4 +54,13 @@ class LocationService {
     return location.onLocationChanged.map((LocationData event) =>
         LatLng(event.latitude ?? 0, event.longitude ?? 0));
   }
+
+  //lắng nghe vị trí user khi app background
+  Stream<LatLng> getLocationStreamOnBackground() {
+    final Location location = Location();
+    location.enableBackgroundMode();
+    location.changeSettings(interval: 5000, distanceFilter: 10);
+    return location.onLocationChanged.map((LocationData event) =>
+        LatLng(event.latitude ?? 0, event.longitude ?? 0));
+  }
 }

@@ -5,18 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../config/di/di.dart';
 import '../../global/global.dart';
-import '../../services/location_service.dart';
+import '../../services/my_background_service.dart';
 import '../../shared/helpers/capture_widget_helper.dart';
+import '../../shared/mixin/permission_mixin.dart';
 import '../home/widgets/bottom_bar.dart';
 import '../home/widgets/maps/custom_map.dart';
 import 'cubit/location_listen/location_listen_cubit.dart';
 import 'cubit/map_type_cubit.dart';
 import 'cubit/tracking_members/tracking_member_cubit.dart';
+import 'widgets/float_right_app_bar.dart';
 import 'widgets/member_marker.dart';
-import 'widgets/member_marker_list.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -25,7 +27,7 @@ class MapScreen extends StatefulWidget {
   State<MapScreen> createState() => MapScreenState();
 }
 
-class MapScreenState extends State<MapScreen> {
+class MapScreenState extends State<MapScreen> with PermissionMixin {
   LatLng _defaultLocation = const LatLng(0, 0);
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
@@ -38,17 +40,51 @@ class MapScreenState extends State<MapScreen> {
 
   //all-cubit
   final LocationListenCubit _locationListenCubit = getIt<LocationListenCubit>();
+
+  bool _isInit = false;
+
   @override
   void initState() {
-    getLocationDemo();
+    _initStart();
+    _defaultLocation = Global.instance.location;
+    getLocalLocation();
     super.initState();
   }
 
-  Future<void> getLocationDemo() async {
-    final latLog = await getIt<LocationService>().getCurrentLocation();
-    setState(() {
-      _defaultLocation = latLog;
-    });
+  void getLocalLocation() {
+    if (Global.instance.location != const LatLng(0, 0)) {
+      _defaultLocation = LatLng(
+        Global.instance.location.latitude,
+        Global.instance.location.longitude,
+      );
+      _moveToCurrentLocation(_defaultLocation);
+    }
+  }
+
+  Future<void> _initStart() async {
+    final bool statusLocation =
+        await checkPermissionLocation(); // check permission location
+    if (!statusLocation) {
+      final requestLocation =
+          await requestPermissionLocation(); //request permission location
+      if (requestLocation) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+          _init();
+        });
+      }
+    } else {
+      //exist permission
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+        _init();
+      });
+    }
+  }
+
+  Future<void> _init() async {
+    if (!_isInit) {
+      _listenLocation();
+      _isInit = true;
+    }
   }
 
   Future<void> _moveToCurrentLocation(LatLng latLng) async {
@@ -59,12 +95,24 @@ class MapScreenState extends State<MapScreen> {
   }
 
   //listen location in foreground
-  // Future<void> _listenLocation() async {
-  //   final locationStatus = await _permissionManager.requestLocationPermission();
-  //   if (locationStatus) {
-  //     _locationListenCubit.listenLocation();
-  //   }
-  // }
+  Future<void> _listenLocation() async {
+    final locationStatus = await requestPermissionLocation();
+    if (locationStatus) {
+      _locationListenCubit.listenLocation();
+      final requestBackground = await Permission.locationAlways.request();
+      if (requestBackground.isGranted) {
+        _listenBackGroundMode();
+      }
+    }
+  }
+
+  //kiểm tra xem user có cấp quyền chạy ở background hay không
+  Future<void> _listenBackGroundMode() async {
+    final always = await Permission.locationAlways.status.isGranted;
+    if (always) {
+      getIt<MyBackgroundService>().initialize();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +127,6 @@ class MapScreenState extends State<MapScreen> {
                 callBack: () async {
                   final Uint8List? bytes =
                       await CaptureWidgetHelp.widgetToBytes(myKey);
-
                   if (bytes != null) {
                     setState(() {
                       marker = BitmapDescriptor.fromBytes(
@@ -93,15 +140,19 @@ class MapScreenState extends State<MapScreen> {
               ),
             ),
           ),
+          Positioned.fill(
+            child: Container(color: Colors.red),
+          ),
           BlocConsumer<LocationListenCubit, LocationListenState>(
             bloc: _locationListenCubit,
             listener: _listenLocationCubit,
-            builder: (context, state) {
+            builder: (context, locationListenState) {
               return BlocBuilder<MapTypeCubit, MapType>(
                 bloc: _mapTypeCubit,
                 builder: (context, MapType mapTypeState) {
                   return CustomMap(
                     defaultLocation: _defaultLocation,
+                    locationListenState: locationListenState,
                     mapController: _mapController,
                     mapType: mapTypeState,
                     marker: marker,
@@ -111,10 +162,20 @@ class MapScreenState extends State<MapScreen> {
             },
           ),
           Positioned(
+            top: ScreenUtil().statusBarHeight,
+            right: 16.w,
+            bottom: 0,
+            child: FloatRightAppBar(
+              mapController: _mapController,
+              locationListenCubit: _locationListenCubit,
+            ),
+          ),
+          Positioned(
             bottom: 55.h,
             left: 0,
             right: 0,
             child: BottomBar(
+              locationListenCubit: _locationListenCubit,
               mapController: _mapController,
             ),
           )

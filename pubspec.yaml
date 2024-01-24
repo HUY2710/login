@@ -54,6 +54,7 @@ dependencies:
   battery_plus: ^5.0.2
   uuid: ^4.2.2
   activity_recognition_flutter: ^5.0.0
+  google_maps_flutter_android: ^2.6.2
 
 dev_dependencies:
   flutter_test:

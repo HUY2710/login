@@ -10,13 +10,18 @@ import '../../../config/di/di.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
-import '../../../services/location_service.dart';
 import '../../../shared/widgets/containers/border_container.dart';
+import '../../map/cubit/location_listen/location_listen_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
 
 class BottomBar extends StatefulWidget {
-  const BottomBar({super.key, required this.mapController});
+  const BottomBar({
+    super.key,
+    required this.mapController,
+    required this.locationListenCubit,
+  });
   final Completer<GoogleMapController> mapController;
+  final LocationListenCubit locationListenCubit;
 
   @override
   State<BottomBar> createState() => _BottomBarState();
@@ -57,6 +62,13 @@ class _BottomBarState extends State<BottomBar> {
                 child: BlocBuilder<SelectUserCubit, StoreUser?>(
                   bloc: getIt<SelectUserCubit>(),
                   builder: (context, state) {
+                    if (state != null) {
+                      return SvgPicture.asset(
+                        Assets.icons.icGps.path,
+                        height: 20.r,
+                        width: 20.r,
+                      );
+                    }
                     return Text(
                       'ME',
                       style: TextStyle(
@@ -77,20 +89,26 @@ class _BottomBarState extends State<BottomBar> {
           children: [
             buildItem(Assets.icons.icPeople.path),
             23.horizontalSpace,
-            BlocBuilder<SelectUserCubit, StoreUser?>(
-              bloc: getIt<SelectUserCubit>(),
-              builder: (context, state) {
-                if (state != null && state.avatarUrl != null) {
-                  return GestureDetector(
-                    onTap: _goToDetailLocation,
-                    child: _buildAvatar(state.avatarUrl!),
-                  );
+            GestureDetector(
+              onTap: () {
+                //nếu selectUserCubit == null thì mặc định là ME
+                //nếu có thì move đến vị trí của user đó
+                final isMe = getIt<SelectUserCubit>().state;
+                if (isMe == null) {
+                  _goToDetailLocation();
+                } else {
+                  //xử lí location của member
                 }
-                return GestureDetector(
-                  onTap: _goToDetailLocation,
-                  child: _buildAvatar(Global.instance.user!.avatarUrl!),
-                );
               },
+              child: BlocBuilder<SelectUserCubit, StoreUser?>(
+                bloc: getIt<SelectUserCubit>(),
+                builder: (context, state) {
+                  if (state != null && state.avatarUrl != null) {
+                    return _buildAvatar(state.avatarUrl!);
+                  }
+                  return _buildAvatar(Global.instance.user!.avatarUrl!);
+                },
+              ),
             ),
             23.horizontalSpace,
             buildItem(Assets.icons.icMessage.path)

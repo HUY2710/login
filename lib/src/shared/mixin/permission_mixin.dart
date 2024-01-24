@@ -67,4 +67,39 @@ mixin PermissionMixin {
     }
     return status;
   }
+
+  Future<bool> checkPermissionLocation() async {
+    final PermissionStatus locationStatus =
+        await Permission.locationWhenInUse.status;
+    return locationStatus.isGranted;
+  }
+
+  Future<bool> requestPermissionLocation() async {
+    final status = await Permission.locationWhenInUse.request();
+    return status.isGranted;
+  }
+
+  Future<bool> checkPermissionCamera() async {
+    final PermissionStatus cameraStatus = await Permission.camera.status;
+    return cameraStatus.isGranted;
+  }
+
+  Future<bool> requestPermissionCamera() async {
+    final status = await Permission.camera.request();
+    return status.isGranted;
+  }
+
+  Future<bool> checkPermissionGallery() async {
+    final PermissionStatus galleryStatus = await Permission.photos.status;
+    bool requestSuccess = galleryStatus.isGranted;
+    if (!requestSuccess) {
+      requestSuccess = await requestPermissionGallery();
+    }
+    return requestSuccess;
+  }
+
+  Future<bool> requestPermissionGallery() async {
+    final status = await Permission.photos.request();
+    return status.isGranted;
+  }
 }
