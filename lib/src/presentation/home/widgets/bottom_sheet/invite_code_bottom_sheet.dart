@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,7 +45,9 @@ class InviteGroupWidget extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                context.popRoute();
+              },
               child: GradientText(
                 context.l10n.done,
                 style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),

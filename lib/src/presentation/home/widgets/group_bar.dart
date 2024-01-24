@@ -1,10 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../config/di/di.dart';
+import '../../../data/models/store_group/store_group.dart';
+import '../../../gen/assets.gen.dart';
+import '../../../gen/colors.gen.dart';
 import '../../../shared/widgets/containers/border_container.dart';
 import '../../../shared/widgets/containers/linear_container.dart';
 import '../../../shared/widgets/custom_inkwell.dart';
+import '../../map/cubit/select_group_cubit.dart';
 import 'bottom_sheet/create_group_bottom_sheet.dart';
 import 'group_item.dart';
 import 'modal_bottom/join_group/join_group.dart';
@@ -24,21 +30,33 @@ class GroupBar extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(40.r)),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(
-              radius: 14.r,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child: const Text(
-                'My Planet',
-                style: TextStyle(color: Color(0xff8E52FF)),
-              ),
-            ),
-            const Icon(Icons.keyboard_arrow_down_rounded)
-          ],
+        child: BlocBuilder<SelectGroupCubit, StoreGroup?>(
+          bloc: getIt<SelectGroupCubit>(),
+          builder: (context, state) {
+            return Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircleAvatar(
+                  backgroundColor: MyColors.primary,
+                  backgroundImage: AssetImage(state == null
+                      ? Assets.images.avatars.avatar1.path
+                      : state.avatarGroup),
+                  radius: 20.r,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  child: Text(
+                    state == null ? 'New Group' : state.groupName,
+                    style: const TextStyle(color: Color(0xff8E52FF)),
+                  ),
+                ),
+                const Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: MyColors.primary,
+                )
+              ],
+            );
+          },
         ),
       ),
     );

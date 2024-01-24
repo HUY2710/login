@@ -13,7 +13,7 @@ import '../../services/my_background_service.dart';
 import '../../shared/helpers/capture_widget_helper.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../home/widgets/bottom_bar.dart';
-import '../home/widgets/maps/custom_map.dart';
+import 'widgets/custom_map.dart';
 import 'cubit/location_listen/location_listen_cubit.dart';
 import 'cubit/map_type_cubit.dart';
 import 'cubit/tracking_members/tracking_member_cubit.dart';
@@ -141,7 +141,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
             ),
           ),
           Positioned.fill(
-            child: Container(color: Colors.red),
+            child: Container(color: Colors.white),
           ),
           BlocConsumer<LocationListenCubit, LocationListenState>(
             bloc: _locationListenCubit,
@@ -162,7 +162,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
             },
           ),
           Positioned(
-            top: ScreenUtil().statusBarHeight,
+            top: ScreenUtil().statusBarHeight + 20.h,
             right: 16.w,
             bottom: 0,
             child: FloatRightAppBar(

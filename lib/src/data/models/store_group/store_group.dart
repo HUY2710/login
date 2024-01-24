@@ -10,6 +10,7 @@ class StoreGroup with _$StoreGroup {
     required String code, //code invite user join group
     required String groupName,
     required String iconGroup,
+    required String avatarGroup,
     Map<String, dynamic>? members,
     @JsonKey(
       includeFromJson: false,

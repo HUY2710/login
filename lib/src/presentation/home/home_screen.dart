@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           const MapScreen(),
           Positioned(
-            top: ScreenUtil().statusBarHeight,
+            top: ScreenUtil().statusBarHeight + 20.h,
             left: 16.w,
             child: const GroupBar(),
           ),

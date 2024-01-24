@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../../../shared/constants/map_style.dart';
-import '../../../map/cubit/location_listen/location_listen_cubit.dart';
+import '../../../shared/constants/map_style.dart';
+import '../cubit/location_listen/location_listen_cubit.dart';
 
 class CustomMap extends StatefulWidget {
   const CustomMap({
@@ -59,7 +59,7 @@ class _CustomMapState extends State<CustomMap> {
       zoomControlsEnabled: false,
       onCameraIdle: () async {},
       compassEnabled: false,
-      mapType: MapType.hybrid ?? widget.mapType,
+      mapType: widget.mapType,
     );
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../data/models/store_group/store_group.dart';
 import '../../../../data/remote/firestore_client.dart';
+import '../../../../gen/assets.gen.dart';
 import '../../../../global/global.dart';
 import '../../../../shared/extension/int_extension.dart';
 import 'invite_code_bottom_sheet.dart';
@@ -81,6 +82,7 @@ class _BottomSheetCreateGroupState extends State<BottomSheetCreateGroup> {
                         idGroup: 24.randomString(),
                         groupName: groupNameController.text,
                         iconGroup: '',
+                        avatarGroup: Assets.images.avatars.avatar10.path,
                         members: {Global.instance.user!.code: true},
                       );
 
