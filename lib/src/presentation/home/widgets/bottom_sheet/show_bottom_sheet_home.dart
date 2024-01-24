@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Future<void> showBottomTypeOfHome({
+Future<void> showBottomSheetTypeOfHome({
   required BuildContext context,
   required Widget child,
   bool? isScrollControlled,

@@ -28,7 +28,7 @@ class MemberWidget extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(15.r),
             child: Image.asset(
-              'assets/images/avatars/avatar_1.png',
+              Assets.images.avatars.avatar1.path,
               width: 40.r,
               height: 40.r,
             ),
@@ -40,7 +40,7 @@ class MemberWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'Lily',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
@@ -51,7 +51,7 @@ class MemberWidget extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 8),
                         decoration: BoxDecoration(
-                            color: Color(0xffEADDFF),
+                            color: const Color(0xffEADDFF),
                             borderRadius: BorderRadius.circular(10.r)),
                         child: Text(
                           context.l10n.admin,

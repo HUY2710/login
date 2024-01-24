@@ -6,6 +6,8 @@ import '../../../../data/models/store_group/store_group.dart';
 import '../../../../data/remote/firestore_client.dart';
 import '../../../../global/global.dart';
 import '../../../../shared/extension/int_extension.dart';
+import 'invite_code_bottom_sheet.dart';
+import 'show_bottom_sheet_home.dart';
 
 class BottomSheetCreateGroup extends StatefulWidget {
   const BottomSheetCreateGroup({
@@ -84,7 +86,14 @@ class _BottomSheetCreateGroupState extends State<BottomSheetCreateGroup> {
 
                       await FirestoreClient.instance.createGroup(newGroup);
                       if (context.mounted) {
-                        context.popRoute();
+                        context.popRoute().then(
+                              (value) => showBottomSheetTypeOfHome(
+                                context: context,
+                                child: InviteGroupWidget(
+                                  code: newGroup.code,
+                                ),
+                              ),
+                            );
                       }
                     }
                   } catch (e) {

@@ -13,6 +13,8 @@ import '../../../global/global.dart';
 import '../../../shared/widgets/containers/border_container.dart';
 import '../../map/cubit/location_listen/location_listen_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
+import 'modal_bottom/members/widgets/modal_edit.dart';
+import 'modal_bottom/members/widgets/modal_show.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({
@@ -29,9 +31,6 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   GoogleMapController? _googleMapController;
-import '../../../gen/gens.dart';
-import 'modal_bottom/members/widgets/modal_edit.dart';
-import 'modal_bottom/members/widgets/modal_show.dart';
 
   @override
   void initState() {
@@ -51,14 +50,73 @@ import 'modal_bottom/members/widgets/modal_show.dart';
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        buildItem(Assets.icons.icPeople.path, context),
-        23.horizontalSpace,
-        //avatar
-        23.horizontalSpace,
-        buildItem(Assets.icons.icMessage.path, context),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            BorderContainer(
+              colorBackGround: Colors.white,
+              colorBorder: Colors.transparent,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 20.w),
+                child: BlocBuilder<SelectUserCubit, StoreUser?>(
+                  bloc: getIt<SelectUserCubit>(),
+                  builder: (context, state) {
+                    if (state != null) {
+                      return SvgPicture.asset(
+                        Assets.icons.icGps.path,
+                        height: 20.r,
+                        width: 20.r,
+                      );
+                    }
+                    return Text(
+                      'ME',
+                      style: TextStyle(
+                        color: const Color(0xff343434),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16.sp,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        8.verticalSpace,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            buildItem(Assets.icons.icPeople.path, context),
+            23.horizontalSpace,
+            //avatar
+            GestureDetector(
+              onTap: () {
+                //nếu selectUserCubit == null thì mặc định là ME
+                //nếu có thì move đến vị trí của user đó
+                final isMe = getIt<SelectUserCubit>().state;
+                if (isMe == null) {
+                  _goToDetailLocation();
+                } else {
+                  //xử lí location của member
+                }
+              },
+              child: BlocBuilder<SelectUserCubit, StoreUser?>(
+                bloc: getIt<SelectUserCubit>(),
+                builder: (context, state) {
+                  if (state != null && state.avatarUrl != null) {
+                    return _buildAvatar(state.avatarUrl!);
+                  }
+                  return _buildAvatar(Global.instance.user!.avatarUrl!);
+                },
+              ),
+            ),
+            23.horizontalSpace,
+            buildItem(Assets.icons.icMessage.path, context),
+          ],
+        ),
       ],
     );
   }

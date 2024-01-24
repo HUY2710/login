@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../gen/colors.gen.dart';
 import '../../../gen/gens.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/custom_inkwell.dart';
@@ -22,7 +21,7 @@ class GroupItem extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor: MyColors.primary,
-            backgroundImage: AssetImage('assets/images/avatars/avatar_1.png'),
+            backgroundImage: AssetImage(Assets.images.avatars.avatar1.path),
             radius: 20.r,
           ),
           12.w.horizontalSpace,

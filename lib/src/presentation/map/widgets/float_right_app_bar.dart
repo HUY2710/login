@@ -12,8 +12,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
+import '../../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import '../cubit/location_listen/location_listen_cubit.dart';
-import 'bottom_sheet_map.dart';
 import 'map_type_selector.dart';
 
 class FloatRightAppBar extends StatefulWidget {
@@ -57,7 +57,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
         16.verticalSpace,
         buildItem(
           () async {
-            await showBottomTypeOfHome(
+            await showBottomSheetTypeOfHome(
               context: context,
               child: const MapTypeSelector(),
             );
