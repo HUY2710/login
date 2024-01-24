@@ -3,4 +3,12 @@
         name="primary"
         type="material">#673AB7
     </color>
+    <color
+        name="secondPrimary"
+        type="material">#EADDFF
+    </color>
+    <color
+        name="black34"
+        type="material">#343434 
+    </color>
 </resources>

@@ -1,9 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../gen/assets.gen.dart';
+import '../../../shared/helpers/gradient_background.dart';
+import '../../../shared/widgets/custom_inkwell.dart';
 
 class HeaderModal extends StatelessWidget {
   const HeaderModal(
@@ -30,23 +30,13 @@ class HeaderModal extends StatelessWidget {
               color: const Color(0xff343434),
               fontWeight: FontWeight.w500),
         ),
-        InkWell(
-          onTap: () {
-            print('asdassdasasdasdasdas');
-            onTap();
-          },
+        CustomInkWell(
+          onTap: () => onTap(),
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 10.r),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(99.r),
-              gradient: const LinearGradient(
-                colors: [Color(0xFFB67DFF), Color(0xFF7B3EFF)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: [0.0, 1.0],
-                transform: GradientRotation(274 * (pi / 180)),
-              ),
-            ),
+                borderRadius: BorderRadius.circular(99.r),
+                gradient: gradienBackground),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

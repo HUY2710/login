@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../gen/gens.dart';
-import '../../../../../shared/extension/context_extension.dart';
-import '../../header_modall.dart';
+import '../../../../../../gen/gens.dart';
+import '../../../../../../shared/extension/context_extension.dart';
+import '../../../../../../shared/widgets/gradient_text.dart';
+import '../../../header_modall.dart';
+import '../../invite_group/invite_group.dart';
 import '../show_member.dart';
 
 class ModalShowMember extends StatelessWidget {
@@ -23,7 +25,7 @@ class ModalShowMember extends StatelessWidget {
             children: [
               Container(
                 margin: EdgeInsets.only(top: 8.h, bottom: 12.h),
-                width: 40,
+                width: 40.w,
                 height: 4.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(3.r),
@@ -43,7 +45,13 @@ class ModalShowMember extends StatelessWidget {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return InviteGroupWidget();
+                          });
+                    },
                     icon: const Icon(Icons.add),
                     style: ButtonStyle(
                       backgroundColor:
@@ -63,15 +71,16 @@ class ModalShowMember extends StatelessWidget {
                     ),
                   ),
                   12.w.horizontalSpace,
-                  Text(
+                  GradientText(
                     context.l10n.addMember,
                     style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                        color: MyColors.primary),
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                     ),
                   )
                 ],
               ),
+              10.verticalSpace,
               Expanded(
                 child: ListView.builder(
                     itemCount: 4,

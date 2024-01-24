@@ -3,9 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../gen/assets.gen.dart';
-import '../../../../gen/gens.dart';
-import '../../../../shared/extension/context_extension.dart';
+import '../../../../../gen/gens.dart';
+import '../../../../../shared/extension/context_extension.dart';
 
 class MemberWidget extends StatelessWidget {
   const MemberWidget({

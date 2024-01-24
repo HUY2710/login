@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../gen/gens.dart';
-import 'modal_bottom/widgets/modal_edit.dart';
-import 'modal_bottom/widgets/modal_show.dart';
+import 'modal_bottom/members/widgets/modal_edit.dart';
+import 'modal_bottom/members/widgets/modal_show.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({super.key});
@@ -35,15 +35,12 @@ class BottomBar extends StatelessWidget {
                     valueListenable: value,
                     builder: (context, val, child) {
                       return AnimatedSwitcher(
-                          child: (val == 0)
-                              ? ModalShowMember(value: value)
-                              : ModalEditMember(value: value),
-                          // crossFadeState: (val == 0)
-                          //     ? CrossFadeState.showFirst
-                          //     : CrossFadeState.showSecond,
                           duration: const Duration(
                             microseconds: 700,
-                          ));
+                          ),
+                          child: (val == 0)
+                              ? ModalShowMember(value: value)
+                              : ModalEditMember(value: value));
                     });
               });
             });

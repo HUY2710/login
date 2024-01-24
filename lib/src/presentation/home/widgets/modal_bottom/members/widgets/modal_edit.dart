@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../shared/extension/context_extension.dart';
-import '../../header_modall.dart';
+import '../../../../../../shared/extension/context_extension.dart';
+import '../../../header_modall.dart';
 import '../show_member.dart';
 
 class ModalEditMember extends StatelessWidget {
