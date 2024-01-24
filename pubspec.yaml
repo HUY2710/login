@@ -53,6 +53,7 @@ dependencies:
   location: ^5.0.3
   battery_plus: ^5.0.2
   uuid: ^4.2.2
+  activity_recognition_flutter: ^5.0.0
 
 dev_dependencies:
   flutter_test:

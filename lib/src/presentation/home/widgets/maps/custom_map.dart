@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../../../data/models/store_user/store_user.dart';
+import '../../../../shared/constants/map_style.dart';
 
 class CustomMap extends StatefulWidget {
   const CustomMap({
@@ -24,8 +24,6 @@ class CustomMap extends StatefulWidget {
 }
 
 class _CustomMapState extends State<CustomMap> {
-  late LatLng _currentLocation = widget.defaultLocation;
-
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
@@ -40,10 +38,6 @@ class _CustomMapState extends State<CustomMap> {
           position: widget.defaultLocation,
           icon: widget.marker ?? BitmapDescriptor.defaultMarker,
         ),
-        // Marker(
-        //   markerId: const MarkerId('You'),
-        //   position: widget.defaultLocation,
-        // ),
       },
       circles: <Circle>{
         Circle(
@@ -57,9 +51,6 @@ class _CustomMapState extends State<CustomMap> {
         )
       },
       zoomControlsEnabled: false,
-      onCameraMove: (CameraPosition position) {
-        _currentLocation = position.target;
-      },
       onCameraIdle: () async {},
       compassEnabled: false,
       mapType: widget.mapType,
@@ -67,6 +58,7 @@ class _CustomMapState extends State<CustomMap> {
   }
 
   void _onMapCreated(GoogleMapController controller) {
-    // widget.mapController.complete(controller);
+    widget.mapController.complete(controller);
+    controller.setMapStyle(mapStyle);
   }
 }

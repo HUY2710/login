@@ -13,42 +13,49 @@ class BatteryBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12).r,
-      child: Container(
-        height: 40.r,
-        width: 120.r,
-        decoration: BoxDecoration(
-          color: Colors.grey,
-          border: Border.all(
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          height: 20.r,
+          width: 20.r,
+          decoration: BoxDecoration(
             color: color,
-            width: 3,
+            shape: BoxShape.circle,
           ),
         ),
-        child: Stack(
-          children: [
-            FractionallySizedBox(
+        10.horizontalSpace,
+        Container(
+          width: 50.h,
+          height: 30.w,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            border: Border.all(width: 5, color: const Color(0xffBCB8FF)),
+          ),
+          padding: EdgeInsets.all(2.r),
+          child: SizedBox(
+            child: FractionallySizedBox(
               widthFactor: batteryLevel / 100,
               alignment: Alignment.centerLeft,
               child: Container(
-                color: color,
-              ),
-            ),
-            Positioned.fill(
-              child: Align(
-                child: Text(
-                  '$batteryLevel%',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.blueGrey,
-                  ),
+                decoration: BoxDecoration(
+                  color: const Color(0xff343434),
+                  borderRadius: BorderRadius.all(Radius.circular(2.r)),
                 ),
               ),
             ),
-          ],
+          ),
         ),
-      ),
+        10.horizontalSpace,
+        Text(
+          '$batteryLevel%',
+          style: TextStyle(
+            color: const Color(0xff343434),
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w600,
+          ),
+        )
+      ],
     );
   }
 }

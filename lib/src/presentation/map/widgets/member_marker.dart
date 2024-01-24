@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
+import '../../../shared/widgets/containers/border_container.dart';
 import '../models/member_maker_data.dart';
 import 'battery_bar.dart';
 
@@ -44,67 +45,41 @@ class _BuildMarkerState extends State<BuildMarker> {
 
   @override
   Widget build(BuildContext context) {
-    Color color = Colors.green;
+    Color color = const Color(0xff19E04B);
     final int battery = widget.member.batteryLevel ?? 100;
 
-    if (battery <= 20 && battery > 10) {
-      color = Colors.black;
-    } else if (battery <= 10) {
+    if (battery <= 20) {
       color = Colors.red;
     }
 
     return RepaintBoundary(
       key: widget.keyCap,
-      child: Container(
-        height: 250.r,
-        color: Colors.red,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Positioned(
-            //   child: ConstrainedBox(
-            //     constraints: BoxConstraints(
-            //       minWidth: 120.r,
-            //     ),
-            //     child: Container(
-            //       margin: REdgeInsets.all(10),
-            //       padding:
-            //           const EdgeInsets.symmetric(horizontal: 10, vertical: 5).r,
-            //       decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.circular(16).r,
-            //         color: Colors.white,
-            //         boxShadow: [
-            //           BoxShadow(
-            //             color: Colors.black26,
-            //             spreadRadius: 1,
-            //             blurRadius: 5.r,
-            //           ),
-            //         ],
-            //       ),
-            //       child: Text(
-            //         'NAME',
-            //         textAlign: TextAlign.center,
-            //         style: TextStyle(fontSize: 20.sp),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            Positioned.fill(
-              top: 60.r,
-              child: Align(
-                child: _buildMarker(color, battery),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // if (widget.member.code != Global.instance.user?.code)
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(20.r)),
+              border: Border.all(
+                width: 4,
+                color: const Color(0xffB67DFF),
               ),
             ),
-            Positioned(
-              bottom: 0,
-              child: Align(
-                child: Image.asset(
-                  Assets.images.markers.circleDot.path,
-                ),
-              ),
-            )
-          ],
-        ),
+            padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+            child: BatteryBar(
+                batteryLevel: widget.member.batteryLevel ?? 100, color: color),
+          ),
+          8.verticalSpace,
+          _buildMarker(color, battery),
+          8.verticalSpace,
+          Image.asset(
+            Assets.images.markers.circleDot.path,
+            width: 36.r,
+            height: 36.r,
+          ),
+        ],
       ),
     );
   }
@@ -112,16 +87,23 @@ class _BuildMarkerState extends State<BuildMarker> {
   Stack _buildMarker(Color color, int battery) {
     return Stack(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 50).r,
-          child: Assets.images.markers.markerBg.image(
-            width: 120.r,
-            color: Colors.white,
-          ),
+        Assets.images.markers.markerBg.image(
+          width: 150.r,
+          color: Colors.white,
         ),
+
         Positioned(
-          height: 120.r,
           child: _buildAvatar(),
+        ),
+        //demo
+        Positioned(
+          left: 0,
+          bottom: 0,
+          child: Image.asset(
+            Assets.images.markers.car.path,
+            height: 60.r,
+            width: 60.r,
+          ),
         ),
       ],
     );
@@ -130,8 +112,8 @@ class _BuildMarkerState extends State<BuildMarker> {
   Widget _buildAvatar() {
     _generateMarker();
     return Container(
-      width: 120.r,
-      height: 120.r,
+      width: 150.r,
+      height: 150.r,
       padding: const EdgeInsets.all(12).r,
       child: ClipOval(
         child: Image.asset(

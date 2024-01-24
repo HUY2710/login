@@ -1,17 +1,45 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/di/di.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
+import '../../../services/location_service.dart';
 import '../../../shared/widgets/containers/border_container.dart';
 import '../../map/cubit/select_user_cubit.dart';
 
-class BottomBar extends StatelessWidget {
-  const BottomBar({super.key});
+class BottomBar extends StatefulWidget {
+  const BottomBar({super.key, required this.mapController});
+  final Completer<GoogleMapController> mapController;
+
+  @override
+  State<BottomBar> createState() => _BottomBarState();
+}
+
+class _BottomBarState extends State<BottomBar> {
+  GoogleMapController? _googleMapController;
+
+  @override
+  void initState() {
+    widget.mapController.future.then((value) => _googleMapController = value);
+    super.initState();
+  }
+
+  Future<void> _goToDetailLocation() async {
+    //test
+    final CameraPosition newPosition = CameraPosition(
+      target: Global.instance.location,
+      zoom: 16,
+    );
+    _googleMapController
+        ?.animateCamera(CameraUpdate.newCameraPosition(newPosition));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +68,7 @@ class BottomBar extends StatelessWidget {
                   },
                 ),
               ),
-            )
+            ),
           ],
         ),
         8.verticalSpace,
@@ -53,9 +81,15 @@ class BottomBar extends StatelessWidget {
               bloc: getIt<SelectUserCubit>(),
               builder: (context, state) {
                 if (state != null && state.avatarUrl != null) {
-                  return _buildAvatar(state.avatarUrl!);
+                  return GestureDetector(
+                    onTap: _goToDetailLocation,
+                    child: _buildAvatar(state.avatarUrl!),
+                  );
                 }
-                return _buildAvatar(Global.instance.user!.avatarUrl!);
+                return GestureDetector(
+                  onTap: _goToDetailLocation,
+                  child: _buildAvatar(Global.instance.user!.avatarUrl!),
+                );
               },
             ),
             23.horizontalSpace,

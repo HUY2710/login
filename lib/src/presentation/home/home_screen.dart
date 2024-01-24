@@ -35,12 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
             left: 16.w,
             child: const GroupBar(),
           ),
-          Positioned(
-            bottom: 55.h,
-            left: 0,
-            right: 0,
-            child: const BottomBar(),
-          )
         ],
       ),
     );
