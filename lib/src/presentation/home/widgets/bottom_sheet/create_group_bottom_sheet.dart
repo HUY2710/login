@@ -130,9 +130,6 @@ class _BottomSheetCreateGroupState extends State<BottomSheetCreateGroup> {
                       ),
                     ]),
               ),
-              Container(
-                color: Colors.red,
-              ),
             ],
           ),
           28.verticalSpace,

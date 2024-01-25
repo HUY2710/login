@@ -96,13 +96,10 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
 
   //listen location in foreground
   Future<void> _listenLocation() async {
-    final locationStatus = await requestPermissionLocation();
-    if (locationStatus) {
-      _locationListenCubit.listenLocation();
-      final requestBackground = await Permission.locationAlways.request();
-      if (requestBackground.isGranted) {
-        _listenBackGroundMode();
-      }
+    _locationListenCubit.listenLocation();
+    final requestBackground = await Permission.locationAlways.request();
+    if (requestBackground.isGranted) {
+      _listenBackGroundMode();
     }
   }
 

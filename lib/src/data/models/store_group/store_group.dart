@@ -22,3 +22,13 @@ class StoreGroup with _$StoreGroup {
   factory StoreGroup.fromJson(Map<String, dynamic> json) =>
       _$StoreGroupFromJson(json);
 }
+
+@freezed
+class MyIdGroup with _$MyIdGroup {
+  const factory MyIdGroup({
+    required String idGroup, //code invite user join group
+  }) = _MyIdGroup;
+
+  factory MyIdGroup.fromJson(Map<String, dynamic> json) =>
+      _$MyIdGroupFromJson(json);
+}

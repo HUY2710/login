@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:uuid/data.dart';
 import 'package:uuid/uuid.dart';
@@ -256,6 +257,10 @@ class _SplashScreenState extends State<SplashScreen> {
       storeUser = await FirestoreClient.instance.getUser(userCode);
     }
     Global.instance.user = storeUser;
+    final location = await FirestoreClient.instance.getLocation();
+    if (location != null) {
+      Global.instance.location = LatLng(location.lat, location.lng);
+    }
   }
 
   Future<StoreUser?> addNewUser({

@@ -6,6 +6,7 @@ class CollectionStoreConstant {
   static const String groups = 'groups';
   static const String myGroups = 'myGroups'; // my groups
   static const String locations = 'locations';
+  static const String locationsCheckIn = 'locationsCheckIns';
 }
 
 class CollectionStore {
@@ -22,4 +23,8 @@ class CollectionStore {
 
   static CollectionReference<Map<String, dynamic>> locations =
       FirebaseFirestore.instance.collection(CollectionStoreConstant.locations);
+
+  static CollectionReference<Map<String, dynamic>> locationCheckIns =
+      FirebaseFirestore.instance
+          .collection(CollectionStoreConstant.locationsCheckIn);
 }

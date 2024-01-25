@@ -11,6 +11,7 @@ class StoreLocation with _$StoreLocation {
     required double lat,
     required double lng,
     required DateTime updatedAt,
+    @JsonKey(includeToJson: false, includeFromJson: false) idUser,
   }) = _StoreLocation;
 
   factory StoreLocation.fromJson(Map<String, dynamic> json) =>

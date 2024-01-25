@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => LanguageCubit(),
+          create: (context) => getIt<LanguageCubit>(),
         ),
         BlocProvider(
           create: (context) => NativeAdStatusCubit(),
