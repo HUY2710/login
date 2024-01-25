@@ -45,7 +45,7 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
               Map.from(existGroup.members ?? {});
           mapMembers[Global.instance.user!.code] = false;
           final resultAdd = await client
-              .addMemberToGroup(existGroup.idGroup, {'members': mapMembers});
+              .addMemberToGroup(existGroup.idGroup!, {'members': mapMembers});
           if (resultAdd) {
             emit(CodeValidationState.valid(existGroup));
           }
