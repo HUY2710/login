@@ -9,6 +9,7 @@ import '../../../gen/assets.gen.dart';
 import '../../../gen/colors.gen.dart';
 import '../../../shared/widgets/containers/border_container.dart';
 import '../../../shared/widgets/containers/linear_container.dart';
+import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../../shared/widgets/custom_inkwell.dart';
 import '../../map/cubit/select_group_cubit.dart';
 import 'bottom_sheet/create_group_bottom_sheet.dart';
@@ -24,12 +25,8 @@ class GroupBar extends StatelessWidget {
       onTap: () {
         showDialogGroup(context);
       },
-      child: Container(
+      child: ShadowContainer(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(40.r)),
-        ),
         child: BlocBuilder<SelectGroupCubit, StoreGroup?>(
           bloc: getIt<SelectGroupCubit>(),
           builder: (context, state) {
@@ -41,13 +38,16 @@ class GroupBar extends StatelessWidget {
                   backgroundImage: AssetImage(state == null
                       ? Assets.images.avatars.avatar1.path
                       : state.avatarGroup),
-                  radius: 20.r,
+                  radius: 14.r,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12.w),
                   child: Text(
                     state == null ? 'New Group' : state.groupName,
-                    style: const TextStyle(color: Color(0xff8E52FF)),
+                    style: TextStyle(
+                        color: const Color(0xff8E52FF),
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
                 const Icon(

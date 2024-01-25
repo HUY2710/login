@@ -6,7 +6,9 @@ import '../../../shared/cubit/value_cubit.dart';
 
 @singleton
 class MapTypeCubit extends ValueCubit<MapType> with HydratedMixin {
-  MapTypeCubit() : super(MapType.hybrid);
+  MapTypeCubit() : super(MapType.normal) {
+    hydrate();
+  }
 
   @override
   MapType? fromJson(Map<String, dynamic> json) {
@@ -15,7 +17,7 @@ class MapTypeCubit extends ValueCubit<MapType> with HydratedMixin {
         return element;
       }
     }
-    return MapType.hybrid;
+    return MapType.normal;
   }
 
   @override

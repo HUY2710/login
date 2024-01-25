@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/navigation/app_router.dart';
+import '../../gen/assets.gen.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
 import '../../shared/widgets/dialog/rate_dialog.dart';
@@ -61,6 +62,11 @@ class _SettingScreenState extends State<SettingScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           SizedBox(height: 32.h),
+          Container(
+            color: Colors.green,
+            child: Assets.images.markers.markerBg
+                .image(width: 150.r, gaplessPlayback: true),
+          ),
           ItemSetting(
             text: 'context.l10n.language',
             icon: 'Assets.icons.settings.icLanguage.path',

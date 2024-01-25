@@ -11,6 +11,7 @@ import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/widgets/containers/border_container.dart';
+import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../map/cubit/location_listen/location_listen_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
 import 'modal_bottom/members/widgets/modal_edit.dart';
@@ -56,31 +57,28 @@ class _BottomBarState extends State<BottomBar> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            BorderContainer(
-              colorBackGround: Colors.white,
-              colorBorder: Colors.transparent,
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 20.w),
-                child: BlocBuilder<SelectUserCubit, StoreUser?>(
-                  bloc: getIt<SelectUserCubit>(),
-                  builder: (context, state) {
-                    if (state != null) {
-                      return SvgPicture.asset(
-                        Assets.icons.icGps.path,
-                        height: 20.r,
-                        width: 20.r,
-                      );
-                    }
-                    return Text(
-                      'ME',
-                      style: TextStyle(
-                        color: const Color(0xff343434),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.sp,
-                      ),
+            ShadowContainer(
+              padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 20.w),
+              blurRadius: 18,
+              child: BlocBuilder<SelectUserCubit, StoreUser?>(
+                bloc: getIt<SelectUserCubit>(),
+                builder: (context, state) {
+                  if (state != null) {
+                    return SvgPicture.asset(
+                      Assets.icons.icGps.path,
+                      height: 20.r,
+                      width: 20.r,
                     );
-                  },
-                ),
+                  }
+                  return Text(
+                    'ME',
+                    style: TextStyle(
+                      color: const Color(0xff343434),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16.sp,
+                    ),
+                  );
+                },
               ),
             ),
           ],
@@ -164,30 +162,32 @@ class _BottomBarState extends State<BottomBar> {
   }
 
   Widget _buildAvatar(String pathAvatar) {
-    return Container(
-      height: 72.r,
-      width: 72.r,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.white,
-          width: 2.5,
+    return ShadowContainer(
+      child: Container(
+        height: 72.r,
+        width: 72.r,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.white,
+            width: 2.5,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(25.r),
+          ),
         ),
-        borderRadius: BorderRadius.all(
-          Radius.circular(25.r),
+        foregroundDecoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.white,
+            width: 2.5,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(25.r),
+          ),
         ),
-      ),
-      foregroundDecoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.white,
-          width: 2.5,
+        clipBehavior: Clip.antiAlias,
+        child: Image.asset(
+          pathAvatar,
         ),
-        borderRadius: BorderRadius.all(
-          Radius.circular(25.r),
-        ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Image.asset(
-        pathAvatar,
       ),
     );
   }

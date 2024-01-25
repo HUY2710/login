@@ -21,7 +21,7 @@ class BuildMarker extends StatefulWidget {
     required this.keyCap,
   });
 
-  final int index;
+  final int? index;
   final StoreUser member;
   final StreamController<MemberMarkerData>? streamController;
   final VoidCallback? callBack;
@@ -44,6 +44,12 @@ class _BuildMarkerState extends State<BuildMarker> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _generateMarker());
+  }
+
+  @override
   Widget build(BuildContext context) {
     Color color = const Color(0xff19E04B);
     final int battery = widget.member.batteryLevel ?? 100;
@@ -62,10 +68,6 @@ class _BuildMarkerState extends State<BuildMarker> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(20.r)),
-              border: Border.all(
-                width: 4,
-                color: const Color(0xffB67DFF),
-              ),
             ),
             padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
             child: BatteryBar(
@@ -91,9 +93,7 @@ class _BuildMarkerState extends State<BuildMarker> {
         Assets.images.markers.markerBg
             .image(width: 150.r, gaplessPlayback: true),
 
-        Positioned(
-          child: _buildAvatar(),
-        ),
+        _buildAvatar(),
         //demo
         Positioned(
           left: 0,
@@ -110,17 +110,14 @@ class _BuildMarkerState extends State<BuildMarker> {
   }
 
   Widget _buildAvatar() {
-    _generateMarker();
     return Container(
       width: 150.r,
       height: 150.r,
-      color: Colors.transparent,
       padding: const EdgeInsets.all(12).r,
       child: ClipOval(
         child: Image.asset(
           Assets.images.avatars.avatar1.path,
           alignment: Alignment.topCenter,
-          gaplessPlayback: true,
         ),
       ),
     );

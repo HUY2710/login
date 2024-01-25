@@ -162,7 +162,9 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
             },
           ),
           Positioned(
-            top: ScreenUtil().statusBarHeight + 20.h,
+            top: ScreenUtil().statusBarHeight == 0
+                ? 20.h
+                : ScreenUtil().statusBarHeight,
             right: 16.w,
             bottom: 0,
             child: FloatRightAppBar(
