@@ -94,4 +94,54 @@ class GroupsManager {
     debugPrint('info groups:$infoListGroup');
     return infoListGroup;
   }
+
+  //kiểm tra xem có group nào tồn tại với mã code đó hay không
+  static Future<StoreGroup?> isExistGroup(String passCode) async {
+    final result = await CollectionStore.groups
+        .where('code', isEqualTo: passCode)
+        .limit(1)
+        .get();
+    if (result.docs.isNotEmpty) {
+      // Lấy document đầu tiên từ QuerySnapshot
+      final QueryDocumentSnapshot<Map<String, dynamic>> document =
+          result.docs.first;
+
+      // Lấy dữ liệu từ Firestore và chuyển đổi thành đối tượng StoreGroup
+      StoreGroup storeGroup = StoreGroup.fromJson(document.data());
+      // Lấy documentId
+      final String documentId = document.id;
+
+      //set id cho local
+      storeGroup = storeGroup.copyWith(idGroup: documentId);
+      return storeGroup;
+    }
+    return null;
+  }
+
+  //Add idUser into members of group
+  static Future<bool> addNewMemberToGroup(
+      String idGroup, Map<String, dynamic> newMap) async {
+    final resultAddMember =
+        await CollectionStore.groups.doc(idGroup).update(newMap).then((value) {
+      final status = addToMyGroup(idGroup);
+      return status;
+    }).catchError((error) {
+      return false;
+    });
+    return resultAddMember;
+  }
+
+  //sau khi join thành công thì add idGroup đó vào myGroups
+  static Future<bool> addToMyGroup(String idGroup) async {
+    final status = await CollectionStore.users
+        .doc(Global.instance.user!.code)
+        .collection(CollectionStoreConstant.myGroups)
+        .doc(idGroup)
+        .set(
+          MyIdGroup(idGroup: idGroup).toJson(),
+        )
+        .then((value) => true)
+        .catchError((error) => false);
+    return status;
+  }
 }

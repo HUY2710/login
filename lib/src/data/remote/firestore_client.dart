@@ -36,6 +36,19 @@ class FirestoreClient {
     return result;
   }
 
+  //kiểm tra sự tồn tại của group
+  Future<StoreGroup?> isExistGroup(String passCode) async {
+    final group = await GroupsManager.isExistGroup(passCode);
+    return group;
+  }
+
+  //Add member to group
+  Future<bool> addMemberToGroup(
+      String idGroup, Map<String, dynamic> newMap) async {
+    final result = await GroupsManager.addNewMemberToGroup(idGroup, newMap);
+    return result;
+  }
+
   //listen member group
   // Stream<QuerySnapshot<Map<String, dynamic>>> fetchTrackingMemberStream() {
   //   return GroupsManager.fetchTrackingMemberStream();

@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import '../../../../../config/di/di.dart';
 import '../../../../../gen/colors.gen.dart';
 import '../../../../../shared/extension/context_extension.dart';
 import '../../../../../shared/widgets/my_drag.dart';
+import 'cubit/code_validation_cubit.dart';
 
-class JoinGroupWidget extends StatelessWidget {
+class JoinGroupWidget extends StatefulWidget {
   const JoinGroupWidget({super.key});
 
+  @override
+  State<JoinGroupWidget> createState() => _JoinGroupWidgetState();
+}
+
+class _JoinGroupWidgetState extends State<JoinGroupWidget> {
+  final CodeValidationCubit codeValidCubit = getIt<CodeValidationCubit>();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -118,8 +128,11 @@ class JoinGroupWidget extends StatelessWidget {
                     blurRadius: 10,
                   )
                 ],
-                onCompleted: (v) {
+                onCompleted: (code) async {
                   debugPrint('Completed');
+                  EasyLoading.show();
+                  await codeValidCubit.submit(code, context);
+                  EasyLoading.dismiss();
                 },
                 // onTap: () {
                 //   print("Pressed");
@@ -138,6 +151,23 @@ class JoinGroupWidget extends StatelessWidget {
                 },
               ),
             ),
+            BlocBuilder<CodeValidationCubit, CodeValidationState>(
+              bloc: codeValidCubit,
+              builder: (context, state) {
+                return state.maybeWhen(
+                  orElse: () => SizedBox(height: 30.h),
+                  inValid: (error) {
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20.h),
+                      child: Text(error,
+                          style: const TextStyle(
+                            color: Colors.red,
+                          )),
+                    );
+                  },
+                );
+              },
+            )
           ],
         ),
       ),

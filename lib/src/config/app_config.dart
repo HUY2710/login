@@ -4,9 +4,11 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../gen/colors.gen.dart';
 import '../global/global.dart';
 import '../shared/mixin/system_ui_mixin.dart';
 import 'di/di.dart';
@@ -26,6 +28,13 @@ class AppConfig with SystemUiMixin {
       _initHydrateBlocStorage(),
       _initGlobalData(),
     ]);
+    EasyLoading.instance
+      ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+      ..maskType = EasyLoadingMaskType.custom
+      ..maskColor = Colors.transparent
+      ..animationDuration = const Duration(milliseconds: 50)
+      ..userInteractions = false
+      ..dismissOnTap = false;
     configureDependencies();
     await _settingSystemUI();
   }
