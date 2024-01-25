@@ -78,7 +78,7 @@ class _BottomSheetCreateGroupState extends State<BottomSheetCreateGroup> {
                         Global.instance.user != null) {
                       //create group;
                       final newGroup = StoreGroup(
-                        code: 6.randomString(),
+                        code: 6.randomUpperCaseString(),
                         idGroup: 24.randomString(),
                         groupName: groupNameController.text,
                         iconGroup: '',

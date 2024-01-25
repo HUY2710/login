@@ -35,6 +35,37 @@ class GroupsManager {
     });
   }
 
+  //delete group
+  static Future<bool> deleteGroup(StoreGroup group) async {
+    //xóa group
+    final resultDeleteGroup = await CollectionStore.groups
+        .doc(group.idGroup)
+        .delete()
+        .then((value) => true)
+        .catchError((error) => false);
+    return resultDeleteGroup;
+    //xóa idGroup trong myGroups
+  }
+
+  //delete idGroup in myGroup Collection
+  static Future<void> deleteIdGroupOfMyGroup(StoreGroup group) async {
+    if (group.members != null &&
+        group.members!.isNotEmpty &&
+        group.idGroup != null) {
+      final List<String> listIdUser =
+          group.members!.keys.map((key) => key).toList();
+      listIdUser.map((idUser) async {
+        await CollectionStore.users
+            .doc(idUser)
+            .collection(CollectionStoreConstant.myGroups)
+            .doc(group.idGroup)
+            .delete()
+            .then((value) => true)
+            .catchError((error) => false);
+      });
+    }
+  }
+
   //snapshot data for each member in group
   static Stream<QuerySnapshot<Map<String, dynamic>>> fetchTrackingMemberStream(
       List<String> memberCode) {

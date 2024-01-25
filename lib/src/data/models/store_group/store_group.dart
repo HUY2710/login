@@ -16,7 +16,7 @@ class StoreGroup with _$StoreGroup {
       includeFromJson: false,
       includeToJson: false,
     )
-    idGroup,
+    String? idGroup,
   }) = _StoreGroup;
 
   factory StoreGroup.fromJson(Map<String, dynamic> json) =>

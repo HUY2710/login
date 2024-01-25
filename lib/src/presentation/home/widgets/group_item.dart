@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,16 +12,20 @@ import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/custom_inkwell.dart';
 import '../../../shared/widgets/gradient_text.dart';
 import '../../map/cubit/select_group_cubit.dart';
+import '../cubit/my_list_group_cubit.dart';
+import 'dialog/group_dialog.dart';
 
 class GroupItem extends StatelessWidget {
   const GroupItem({
     super.key,
     required this.members,
     required this.itemGroup,
+    required this.myGroupCubit,
   });
 
   final int members;
   final StoreGroup itemGroup;
+  final MyListGroupCubit myGroupCubit;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -92,7 +97,24 @@ class GroupItem extends StatelessWidget {
                     ),
                     10.horizontalSpace,
                     CustomInkWell(
-                      onTap: () {},
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => GroupDialog(
+                            title: 'Remove Group',
+                            subTitle:
+                                'You’re currently the group owner. Are you sure to delete it permanantly?',
+                            confirmTap: () async {
+                              //delete group
+                              myGroupCubit.deleteGroup(itemGroup).then((value) {
+                                getIt<SelectGroupCubit>().update(null);
+                                context.popRoute();
+                              });
+                            },
+                            confirmText: 'Delete',
+                          ),
+                        );
+                      },
                       child: Assets.icons.icTrash.svg(width: 20.r),
                     )
                   ],

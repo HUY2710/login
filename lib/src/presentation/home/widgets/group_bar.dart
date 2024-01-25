@@ -73,6 +73,7 @@ class GroupBar extends StatelessWidget {
   void showDialogGroup(
     BuildContext context,
   ) {
+    final MyListGroupCubit myListGroupCubit = getIt<MyListGroupCubit>();
     showDialog(
       barrierColor: Colors.black.withOpacity(0.4),
       context: context,
@@ -167,7 +168,7 @@ class GroupBar extends StatelessWidget {
                   StatefulBuilder(
                     builder: (context, setState) =>
                         BlocBuilder<MyListGroupCubit, MyListGroupState>(
-                      bloc: getIt<MyListGroupCubit>()..fetchMyGroups(),
+                      bloc: myListGroupCubit..fetchMyGroups(),
                       builder: (context, state) {
                         return state.maybeWhen(
                           orElse: () => SizedBox(
@@ -182,7 +183,11 @@ class GroupBar extends StatelessWidget {
                           success: (groups) {
                             debugPrint('value:$groups');
                             if (groups.isEmpty) {
-                              return const Text("Don't have any groups");
+                              return SizedBox(
+                                height: 1.sh * 0.26,
+                                child: const Center(
+                                    child: Text("Don't have any groups")),
+                              );
                             }
                             return SizedBox(
                               height: 1.sh * 0.26,
@@ -200,6 +205,7 @@ class GroupBar extends StatelessWidget {
                                           .update(groups[index]);
                                     },
                                     child: GroupItem(
+                                      myGroupCubit: myListGroupCubit,
                                       members:
                                           groups[index].members?.length ?? 1,
                                       itemGroup: groups[index],

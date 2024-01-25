@@ -11,4 +11,9 @@
         name="black34"
         type="material">#343434 
     </color>
+
+      <color
+        name="color6C6C6C"
+        type="material">#6C6C6C 
+    </color>
 </resources>

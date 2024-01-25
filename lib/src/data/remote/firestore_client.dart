@@ -49,6 +49,17 @@ class FirestoreClient {
     return result;
   }
 
+  //xóa group
+  Future<bool> deleteGroup(StoreGroup group) async {
+    final result = await GroupsManager.deleteGroup(group);
+    await deleteIdGroupInMyGroup(group);
+    return result;
+  }
+
+  Future<void> deleteIdGroupInMyGroup(StoreGroup group) async {
+    await GroupsManager.deleteIdGroupOfMyGroup(group);
+  }
+
   //listen member group
   // Stream<QuerySnapshot<Map<String, dynamic>>> fetchTrackingMemberStream() {
   //   return GroupsManager.fetchTrackingMemberStream();
