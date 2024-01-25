@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../../config/di/di.dart';
@@ -151,18 +153,31 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                 },
               ),
             ),
-            BlocBuilder<CodeValidationCubit, CodeValidationState>(
+            BlocConsumer<CodeValidationCubit, CodeValidationState>(
               bloc: codeValidCubit,
+              listener: (context, state) {
+                state.maybeWhen(
+                    orElse: () {},
+                    valid: (group) {
+                      Fluttertoast.showToast(msg: 'Join group success');
+                      context.popRoute();
+                    });
+              },
               builder: (context, state) {
-                return state.maybeWhen(
-                  orElse: () => SizedBox(height: 30.h),
-                  inValid: (error) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.h),
-                      child: Text(error,
-                          style: const TextStyle(
-                            color: Colors.red,
-                          )),
+                return BlocBuilder<CodeValidationCubit, CodeValidationState>(
+                  bloc: codeValidCubit,
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      orElse: () => SizedBox(height: 30.h),
+                      inValid: (error) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: 20.h),
+                          child: Text(error,
+                              style: const TextStyle(
+                                color: Colors.red,
+                              )),
+                        );
+                      },
                     );
                   },
                 );
