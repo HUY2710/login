@@ -13,7 +13,7 @@ class SelectGroupCubit extends ValueCubit<StoreGroup?> with HydratedMixin {
   @override
   StoreGroup? fromJson(Map<String, dynamic> json) {
     if (json['currentGroup'] != null) {
-      return json['currentGroup'];
+      return StoreGroup.fromJson(json['currentGroup']);
     }
     return null;
   }

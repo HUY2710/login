@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../config/di/di.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../gen/gens.dart';
 import '../../../global/global.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/custom_inkwell.dart';
 import '../../../shared/widgets/gradient_text.dart';
+import '../../map/cubit/select_group_cubit.dart';
 
 class GroupItem extends StatelessWidget {
   const GroupItem({
@@ -36,7 +39,7 @@ class GroupItem extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Expanded(
+                    Flexible(
                       child: Text(
                         itemGroup.groupName,
                         maxLines: 2,
@@ -74,24 +77,36 @@ class GroupItem extends StatelessWidget {
               ],
             ),
           ),
-          if (isAdmin(itemGroup)) ...[
-            CustomInkWell(
-              onTap: () {},
-              child: GradientSvg(Assets.icons.icEdit.svg(width: 20.r)),
-            ),
-            5.w.horizontalSpace,
-            CustomInkWell(
-              onTap: () {},
-              child: Assets.icons.icTrash.svg(width: 20.r),
-            )
-          ] else
-            Align(
-              alignment: Alignment.centerRight,
-              child: CustomInkWell(
-                onTap: () {},
-                child: GradientSvg(Assets.icons.icLoggout.svg(width: 20.r)),
-              ),
-            )
+          BlocBuilder<SelectGroupCubit, StoreGroup?>(
+            bloc: getIt<SelectGroupCubit>(),
+            builder: (context, state) {
+              if (state != null &&
+                  isAdmin(itemGroup) &&
+                  state.idGroup == itemGroup.idGroup) {
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CustomInkWell(
+                      onTap: () {},
+                      child: GradientSvg(Assets.icons.icEdit.svg(width: 20.r)),
+                    ),
+                    10.horizontalSpace,
+                    CustomInkWell(
+                      onTap: () {},
+                      child: Assets.icons.icTrash.svg(width: 20.r),
+                    )
+                  ],
+                );
+              }
+              return Align(
+                alignment: Alignment.centerRight,
+                child: CustomInkWell(
+                  onTap: () {},
+                  child: GradientSvg(Assets.icons.icLoggout.svg(width: 20.r)),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

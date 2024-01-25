@@ -86,8 +86,11 @@ class GroupsManager {
     final snapshot = await CollectionStore.groups
         .where(FieldPath.documentId, whereIn: idsCondition)
         .get();
-    final List<StoreGroup> infoListGroup =
-        snapshot.docs.map((e) => StoreGroup.fromJson(e.data())).toList();
+    final List<StoreGroup> infoListGroup = snapshot.docs.map((e) {
+      final String documentId = e.id;
+      final group = StoreGroup.fromJson(e.data());
+      return group.copyWith(idGroup: documentId);
+    }).toList();
     debugPrint('info groups:$infoListGroup');
     return infoListGroup;
   }
