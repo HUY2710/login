@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../app/cubit/language_cubit.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
-import '../../../gen/assets.gen.dart';
 import '../../../gen/colors.gen.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/language.dart';

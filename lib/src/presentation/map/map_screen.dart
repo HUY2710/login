@@ -13,10 +13,10 @@ import '../../services/my_background_service.dart';
 import '../../shared/helpers/capture_widget_helper.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../home/widgets/bottom_bar.dart';
-import 'widgets/custom_map.dart';
 import 'cubit/location_listen/location_listen_cubit.dart';
 import 'cubit/map_type_cubit.dart';
 import 'cubit/tracking_members/tracking_member_cubit.dart';
+import 'widgets/custom_map.dart';
 import 'widgets/float_right_app_bar.dart';
 import 'widgets/member_marker.dart';
 

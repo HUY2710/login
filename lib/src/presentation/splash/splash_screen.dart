@@ -15,8 +15,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:upgrader/upgrader.dart';
-import 'package:uuid/data.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../app/cubit/language_cubit.dart';
 import '../../../flavors.dart';

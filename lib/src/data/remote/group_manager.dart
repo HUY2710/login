@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../config/di/di.dart';
 import '../../global/global.dart';
-import '../../presentation/map/cubit/select_group_cubit.dart';
 import '../../shared/extension/int_extension.dart';
 import '../../shared/utils/logger_utils.dart';
 import '../models/store_group/store_group.dart';
