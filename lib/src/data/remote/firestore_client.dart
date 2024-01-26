@@ -60,6 +60,11 @@ class FirestoreClient {
     await GroupsManager.deleteIdGroupOfMyGroup(group);
   }
 
+  Stream<DocumentSnapshot<Map<String, dynamic>>> listenRealtimeToMembersChanges(
+      String documentId) {
+    return GroupsManager.listenToMembersChanges(documentId);
+  }
+
   //listen member group
   // Stream<QuerySnapshot<Map<String, dynamic>>> fetchTrackingMemberStream() {
   //   return GroupsManager.fetchTrackingMemberStream();

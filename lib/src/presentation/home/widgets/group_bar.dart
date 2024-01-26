@@ -201,8 +201,13 @@ class GroupBar extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
                                     onTap: () {
-                                      getIt<SelectGroupCubit>()
-                                          .update(groups[index]);
+                                      if (groups[index].idGroup !=
+                                          getIt<SelectGroupCubit>()
+                                              .state
+                                              ?.idGroup) {
+                                        getIt<SelectGroupCubit>()
+                                            .update(groups[index]);
+                                      }
                                     },
                                     child: GroupItem(
                                       myGroupCubit: myListGroupCubit,

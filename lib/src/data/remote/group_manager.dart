@@ -175,4 +175,13 @@ class GroupsManager {
         .catchError((error) => false);
     return status;
   }
+
+  //lắng nghe sự thay đổi dữ liệu trong group
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> listenToMembersChanges(
+      String documentId) {
+    return CollectionStore.groups
+        .doc(documentId)
+        .snapshots()
+        .where((event) => false);
+  }
 }
