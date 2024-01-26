@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../config/di/di.dart';
+import '../../../../../../data/models/store_group/store_group.dart';
 import '../../../../../../gen/gens.dart';
 import '../../../../../../shared/extension/context_extension.dart';
 import '../../../../../../shared/widgets/gradient_text.dart';
+import '../../../../../map/cubit/select_group_cubit.dart';
+import '../../invite_code.dart';
 import '../../../header_modall.dart';
-import '../../invite_group/invite_group.dart';
 import '../show_member.dart';
 
 class ModalShowMember extends StatelessWidget {
@@ -13,6 +17,7 @@ class ModalShowMember extends StatelessWidget {
   final ValueNotifier value;
   @override
   Widget build(BuildContext context) {
+    final currentGroupCubit = getIt<SelectGroupCubit>();
     return SizedBox(
       height: 1.sh * 0.46,
       child: ClipRRect(
@@ -49,7 +54,9 @@ class ModalShowMember extends StatelessWidget {
                       showModalBottomSheet(
                           context: context,
                           builder: (context) {
-                            return InviteGroupWidget();
+                            return InviteCode(
+                              code: currentGroupCubit.state?.passCode ?? '',
+                            );
                           });
                     },
                     icon: const Icon(Icons.add),
@@ -76,19 +83,28 @@ class ModalShowMember extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
-                     ),
+                    ),
                   )
                 ],
               ),
               10.verticalSpace,
-              Expanded(
-                child: ListView.builder(
-                    itemCount: 4,
-                    itemBuilder: (context, index) {
-                      return MemberWidget(
-                        isAdmin: index == 0 ? true : false,
-                      );
-                    }),
+              BlocBuilder<SelectGroupCubit, StoreGroup?>(
+                bloc: currentGroupCubit,
+                builder: (context, state) {
+                  if (state?.storeMembers != null &&
+                      state!.storeMembers!.isNotEmpty) {
+                    return Expanded(
+                      child: ListView.builder(
+                          itemCount: state.storeMembers!.length,
+                          itemBuilder: (context, index) {
+                            return MemberWidget(
+                              isAdmin: index == 0 ? true : false,
+                            );
+                          }),
+                    );
+                  }
+                  return const Text('No found other member in Group');
+                },
               )
             ],
           ),

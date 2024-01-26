@@ -7,19 +7,22 @@ import '../../../../data/remote/firestore_client.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../global/global.dart';
 import '../../../../shared/extension/int_extension.dart';
-import 'invite_code_bottom_sheet.dart';
+import 'invite_code.dart';
 import 'show_bottom_sheet_home.dart';
 
-class BottomSheetCreateGroup extends StatefulWidget {
-  const BottomSheetCreateGroup({
+class CreateEditGroup extends StatefulWidget {
+  const CreateEditGroup({
     super.key,
+    this.detailGroup,
+    this.isEdit,
   });
-
+  final StoreGroup? detailGroup;
+  final bool? isEdit;
   @override
-  State<BottomSheetCreateGroup> createState() => _BottomSheetCreateGroupState();
+  State<CreateEditGroup> createState() => _CreateEditGroupState();
 }
 
-class _BottomSheetCreateGroupState extends State<BottomSheetCreateGroup> {
+class _CreateEditGroupState extends State<CreateEditGroup> {
   TextEditingController groupNameController = TextEditingController(text: '');
   @override
   Widget build(BuildContext context) {
@@ -90,7 +93,7 @@ class _BottomSheetCreateGroupState extends State<BottomSheetCreateGroup> {
                         context.popRoute().then(
                               (value) => showBottomSheetTypeOfHome(
                                 context: context,
-                                child: InviteGroupWidget(
+                                child: InviteCode(
                                   code: newGroup.passCode,
                                 ),
                               ),

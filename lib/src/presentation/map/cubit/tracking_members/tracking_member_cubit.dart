@@ -8,6 +8,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../config/di/di.dart';
 import '../../../../data/models/store_group/store_group.dart';
+import '../../../../data/models/store_member/store_member.dart';
 import '../../../../data/models/store_user/store_user.dart';
 import '../../../../data/remote/firestore_client.dart';
 import '../../models/member_maker_data.dart';
@@ -25,8 +26,7 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
   //Danh sách các thành viên trong group
   final List<StoreUser> _trackingListMember = <StoreUser>[];
 
-  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>?
-      _groupSubscription;
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _groupSubscription;
 
   //listen to generate marker for each member
   StreamSubscription<MemberMarkerData>? _markerSubscription;
@@ -38,15 +38,22 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
   StreamSubscription<StoreGroup>? _groupCurrentSubscription;
 
   Future<void> initTrackingMember() async {
-    //hiện tại đang chọn 1 nhóm để xem
+    //khi mà user chọn group => thì tiến hành lắng nghe realtime danh sách member trong group
     if (currentGroupCubit.state != null) {
       emit(const TrackingMemberState.loading());
       _groupSubscription = _fireStoreClient
           .listenRealtimeToMembersChanges(currentGroupCubit.state!.idGroup!)
-          .listen((DocumentSnapshot<Map<String, dynamic>> event) {
-        debugPrint('event:$event');
-        final dataGroup = event.data()!;
-        debugPrint('dataGroup:$dataGroup');
+          .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
+        for (final change in snapshot.docChanges) {
+          if (change.type == DocumentChangeType.added) {
+            StoreMember member = StoreMember.fromJson(change.doc.data()!);
+            member = member.copyWith(idUser: change.doc.id);
+            // _trackingListMember.add(member);
+          }
+        }
+        if (_trackingListMember.isEmpty) {
+          emit(const TrackingMemberState.success([]));
+        }
       });
     } else {
       //nếu user ko chọn nhóm nào thì ko xử lí gì cả

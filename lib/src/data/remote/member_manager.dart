@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../shared/utils/logger_utils.dart';
@@ -7,9 +8,12 @@ import 'collection_store.dart';
 class MemberManager {
   MemberManager._();
 
-  static Future<void> addNewMember(StoreMember newMember) async {
-    CollectionStore.members
-        .doc(newMember.idGroup) //idGroup để nhận biết member của group nào
+  static Future<void> addNewMember(
+      String idGroup, StoreMember newMember) async {
+    CollectionStore.groups
+        .doc(idGroup)
+        .collection(CollectionStoreConstant.members)
+        .doc(newMember.idUser)
         .set(newMember.toJson())
         .then((value) {
       return value;
@@ -18,18 +22,22 @@ class MemberManager {
     });
   }
 
-  static Future<StoreMember?> getListMember(String idGroup) async {
-    final snapShot = await CollectionStore.members
-        .doc(idGroup) //idGroup để nhận biết member của group nào
+  //can update lai
+  static Future<List<StoreMember>?> getListMemberOfGroup(String idGroup) async {
+    final snapShot = await CollectionStore.groups
+        .doc(idGroup)
+        .collection(CollectionStoreConstant.members)
         .get();
-    final data = snapShot.data();
-    if (data != null) {
-      StoreMember members = StoreMember.fromJson(data);
-      members = members.copyWith(idGroup: idGroup);
+    final data = snapShot.docs;
 
-      return members;
-    }
-    return null;
+    final List<StoreMember> listMember =
+        data.map((QueryDocumentSnapshot<Map<String, dynamic>> e) {
+      StoreMember member = StoreMember.fromJson(e.data());
+      member = member.copyWith(idUser: e.id);
+      return member;
+    }).toList();
+
+    return listMember;
   }
 
   //delete group

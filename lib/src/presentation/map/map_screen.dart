@@ -189,6 +189,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
             child: BottomBar(
               locationListenCubit: _locationListenCubit,
               mapController: _mapController,
+              trackingMemberCubit: _trackingMemberCubit,
             ),
           )
         ],

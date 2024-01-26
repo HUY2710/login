@@ -46,7 +46,7 @@ class _BuildMarkerState extends State<BuildMarker> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _generateMarker());
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
   }
 
   @override
@@ -88,6 +88,7 @@ class _BuildMarkerState extends State<BuildMarker> {
   }
 
   Stack _buildMarker(Color color, int battery) {
+    _generateMarker();
     return Stack(
       children: [
         Assets.images.markers.markerBg

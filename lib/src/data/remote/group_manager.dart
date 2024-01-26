@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../config/di/di.dart';
 import '../../global/global.dart';
-import '../../presentation/map/cubit/select_group_cubit.dart';
-import '../../shared/extension/int_extension.dart';
 import '../../shared/utils/logger_utils.dart';
 import '../models/store_group/store_group.dart';
 import '../models/store_member/store_member.dart';
@@ -30,9 +27,10 @@ class GroupsManager {
               MyIdGroup(idGroup: newGroup.idGroup!).toJson(),
             );
         await MemberManager.addNewMember(
+          newGroup.idGroup!,
           StoreMember(
-            members: {Global.instance.user!.code: true},
-            idGroup: newGroup.idGroup,
+            idUser: Global.instance.user!.code,
+            isAdmin: true,
           ),
         );
       }
@@ -127,7 +125,8 @@ class GroupsManager {
         await Future.wait(snapshot.docs.map((e) async {
       final String documentId = e.id;
       final group = StoreGroup.fromJson(e.data());
-      final memberOfGroup = await MemberManager.getListMember(documentId);
+      final memberOfGroup =
+          await MemberManager.getListMemberOfGroup(documentId);
       return group.copyWith(idGroup: documentId, storeMembers: memberOfGroup);
     }).toList());
 
@@ -185,12 +184,12 @@ class GroupsManager {
     return status;
   }
 
-  //lắng nghe sự thay đổi dữ liệu trong group
-  static Stream<DocumentSnapshot<Map<String, dynamic>>> listenToMembersChanges(
-      String documentId) {
+  // Lắng nghe sự thay đổi trong danh sách thành viên của nhóm để theo dõi sự kiện thoát nhóm hoặc xóa thành viên.
+  static Stream<QuerySnapshot<Map<String, dynamic>>>
+      listenToGroupMembersChanges(String groupId) {
     return CollectionStore.groups
-        .doc(documentId)
-        .snapshots()
-        .where((event) => false);
+        .doc(groupId)
+        .collection(CollectionStoreConstant.members)
+        .snapshots();
   }
 }

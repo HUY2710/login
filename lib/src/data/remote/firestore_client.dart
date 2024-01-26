@@ -47,20 +47,16 @@ class FirestoreClient {
 
   //kiểm tra xem bạn đã là thành viên của group chưa
   Future<bool> isExistMemberGroup(String idGroup) async {
-    final snapShot = await firestore
-        .collection(CollectionStoreConstant.members)
+    final docRef = firestore
+        .collection(CollectionStoreConstant.groups)
         .doc(idGroup)
-        .get();
+        .collection(CollectionStoreConstant.members)
+        .doc(Global.instance.user!.code);
 
-    final data = snapShot.data();
+    final docSnapshot = await docRef.get();
 
-    if (data != null) {
-      final members = StoreMember(members: data, idGroup: idGroup);
-      final isExistMemberGroup =
-          members.members.containsKey(Global.instance.user!.code);
-      return isExistMemberGroup;
-    }
-    return false;
+    // Kiểm tra xem tài liệu có tồn tại hay không
+    return docSnapshot.exists;
   }
 
   //Add member to group
@@ -85,9 +81,9 @@ class FirestoreClient {
     await GroupsManager.deleteIdGroupOfMyGroup(group);
   }
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> listenRealtimeToMembersChanges(
-      String documentId) {
-    return GroupsManager.listenToMembersChanges(documentId);
+  Stream<QuerySnapshot<Map<String, dynamic>>> listenRealtimeToMembersChanges(
+      String idGroup) {
+    return GroupsManager.listenToGroupMembersChanges(idGroup);
   }
 
   //listen member group

@@ -8,7 +8,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../gen/colors.gen.dart';
 import '../global/global.dart';
 import '../shared/mixin/system_ui_mixin.dart';
 import 'di/di.dart';

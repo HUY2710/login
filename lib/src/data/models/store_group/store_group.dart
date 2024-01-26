@@ -13,16 +13,16 @@ class StoreGroup with _$StoreGroup {
     required String groupName,
     required String avatarGroup,
     required int countMembers,
-    @JsonKey(
-      includeFromJson: false,
-      includeToJson: false,
-    )
+    // @JsonKey(
+    //   includeFromJson: true,
+    //   includeToJson: false,
+    // )
     String? idGroup,
     @JsonKey(
       includeFromJson: false,
       includeToJson: false,
     )
-    StoreMember? storeMembers,
+    List<StoreMember>? storeMembers,
   }) = _StoreGroup;
 
   factory StoreGroup.fromJson(Map<String, dynamic> json) =>

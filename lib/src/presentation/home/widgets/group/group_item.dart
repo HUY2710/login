@@ -1,20 +1,20 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../config/di/di.dart';
-import '../../../data/models/store_group/store_group.dart';
-import '../../../gen/gens.dart';
-import '../../../global/global.dart';
-import '../../../shared/extension/context_extension.dart';
-import '../../../shared/widgets/custom_inkwell.dart';
-import '../../../shared/widgets/dialog/error_dialog.dart';
-import '../../../shared/widgets/gradient_text.dart';
-import '../../map/cubit/select_group_cubit.dart';
-import '../cubit/my_list_group_cubit.dart';
-import 'dialog/group_dialog.dart';
+import '../../../../config/di/di.dart';
+import '../../../../data/models/store_group/store_group.dart';
+import '../../../../gen/gens.dart';
+import '../../../../global/global.dart';
+import '../../../../shared/extension/context_extension.dart';
+import '../../../../shared/widgets/custom_inkwell.dart';
+import '../../../../shared/widgets/gradient_text.dart';
+import '../../../map/cubit/select_group_cubit.dart';
+import '../../cubit/my_list_group/my_list_group_cubit.dart';
+import '../dialog/group_dialog.dart';
 
 class GroupItem extends StatelessWidget {
   const GroupItem({
@@ -86,6 +86,9 @@ class GroupItem extends StatelessWidget {
           BlocBuilder<SelectGroupCubit, StoreGroup?>(
             bloc: getIt<SelectGroupCubit>(),
             builder: (context, state) {
+              debugPrint('${state?.idGroup}');
+              debugPrint('${itemGroup.idGroup}');
+              debugPrint('${state?.idGroup == itemGroup.idGroup}');
               if (state != null &&
                   isAdmin(itemGroup) &&
                   state.idGroup == itemGroup.idGroup) {
@@ -107,8 +110,10 @@ class GroupItem extends StatelessWidget {
                                 'You’re currently the group owner. Are you sure to delete it permanantly?',
                             confirmTap: () async {
                               //delete group
+                              EasyLoading.show();
                               myGroupCubit.deleteGroup(itemGroup).then((value) {
                                 getIt<SelectGroupCubit>().update(null);
+                                EasyLoading.dismiss();
                                 context.popRoute();
                               });
                             },
@@ -140,9 +145,11 @@ class GroupItem extends StatelessWidget {
 
   bool isAdmin(StoreGroup itemGroup) {
     if (itemGroup.storeMembers != null && Global.instance.user != null) {
-      if (itemGroup.storeMembers!.members
-              .containsKey(Global.instance.user!.code) &&
-          itemGroup.storeMembers!.members[Global.instance.user!.code] == true) {
+      if (itemGroup.storeMembers!
+          .firstWhere(
+            (element) => element.idUser == Global.instance.user!.code,
+          )
+          .isAdmin) {
         return true;
       }
       return false;
