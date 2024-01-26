@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../../../data/models/store_group/store_group.dart';
+import '../../../../../../data/models/store_member/store_member.dart';
 import '../../../../../../data/remote/firestore_client.dart';
 import '../../../../../../global/global.dart';
 
@@ -32,22 +33,23 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
         //kiểm tra xem trong members của group đó đã tồn tại mình hay chưa
 
         final isMemberGroup =
-            existGroup.members?.containsKey(Global.instance.user!.code);
-        if (isMemberGroup != null && isMemberGroup) {
-          emit(
-            const CodeValidationState.inValid(
-                'Bạn đã là thành viên của nhóm rồi'),
-          );
+            await client.isExistMemberGroup(existGroup.idGroup!);
+
+        if (isMemberGroup) {
+          emit(const CodeValidationState.inValid(
+              'Bạn đã là thành viên của nhóm rồi'));
         } else {
           //trường hợp không phải là thành viên thì tiến hành add vào group.
 
-          final Map<String, dynamic> mapMembers =
-              Map.from(existGroup.members ?? {});
-          mapMembers[Global.instance.user!.code] = false;
-          final resultAdd = await client
-              .addMemberToGroup(existGroup.idGroup!, {'members': mapMembers});
-          if (resultAdd) {
-            emit(CodeValidationState.valid(existGroup));
+          final StoreMember? mapMembers = existGroup.storeMembers;
+          if (mapMembers != null) {
+            final tempMap = Map.from(mapMembers.members);
+            tempMap[Global.instance.user!.code] = false;
+            final resultAdd = await client
+                .addMemberToGroup(existGroup.idGroup!, {'members': mapMembers});
+            if (resultAdd) {
+              emit(CodeValidationState.valid(existGroup));
+            }
           }
         }
       }

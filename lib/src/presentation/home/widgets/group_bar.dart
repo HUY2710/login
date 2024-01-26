@@ -211,8 +211,7 @@ class GroupBar extends StatelessWidget {
                                     },
                                     child: GroupItem(
                                       myGroupCubit: myListGroupCubit,
-                                      members:
-                                          groups[index].members?.length ?? 1,
+                                      members: groups[index].countMembers,
                                       itemGroup: groups[index],
                                     ),
                                   );

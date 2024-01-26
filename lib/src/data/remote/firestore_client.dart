@@ -3,10 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../global/global.dart';
 import '../models/store_group/store_group.dart';
 import '../models/store_location/store_location.dart';
+import '../models/store_member/store_member.dart';
 import '../models/store_user/store_user.dart';
+import 'collection_store.dart';
 import 'current_user_store.dart';
 import 'group_manager.dart';
 import 'location_manager.dart';
+import 'member_manager.dart';
 
 class FirestoreClient {
   FirestoreClient._privateConstructor();
@@ -25,7 +28,7 @@ class FirestoreClient {
   }
 
   //manager group
-  //add new user
+
   Future<void> createGroup(StoreGroup newGroup) async {
     await GroupsManager.createGroup(newGroup);
   }
@@ -42,6 +45,24 @@ class FirestoreClient {
     return group;
   }
 
+  //kiểm tra xem bạn đã là thành viên của group chưa
+  Future<bool> isExistMemberGroup(String idGroup) async {
+    final snapShot = await firestore
+        .collection(CollectionStoreConstant.members)
+        .doc(idGroup)
+        .get();
+
+    final data = snapShot.data();
+
+    if (data != null) {
+      final members = StoreMember(members: data, idGroup: idGroup);
+      final isExistMemberGroup =
+          members.members.containsKey(Global.instance.user!.code);
+      return isExistMemberGroup;
+    }
+    return false;
+  }
+
   //Add member to group
   Future<bool> addMemberToGroup(
       String idGroup, Map<String, dynamic> newMap) async {
@@ -51,8 +72,12 @@ class FirestoreClient {
 
   //xóa group
   Future<bool> deleteGroup(StoreGroup group) async {
+    //đầu tiên là xóa group
     final result = await GroupsManager.deleteGroup(group);
+    //tiếp theo là xóa idGroup trong myGroup
     await deleteIdGroupInMyGroup(group);
+    //tiếp theo là xóa toàn bộ member
+    await MemberManager.deleteMemberDocument(group.idGroup!);
     return result;
   }
 

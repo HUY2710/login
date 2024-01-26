@@ -10,6 +10,7 @@ import '../../../gen/gens.dart';
 import '../../../global/global.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/custom_inkwell.dart';
+import '../../../shared/widgets/dialog/error_dialog.dart';
 import '../../../shared/widgets/gradient_text.dart';
 import '../../map/cubit/select_group_cubit.dart';
 import '../cubit/my_list_group_cubit.dart';
@@ -97,7 +98,7 @@ class GroupItem extends StatelessWidget {
                     ),
                     10.horizontalSpace,
                     CustomInkWell(
-                      onTap: () {
+                      onTap: () async {
                         showDialog(
                           context: context,
                           builder: (context) => GroupDialog(
@@ -120,13 +121,16 @@ class GroupItem extends StatelessWidget {
                   ],
                 );
               }
-              return Align(
-                alignment: Alignment.centerRight,
-                child: CustomInkWell(
-                  onTap: () {},
-                  child: GradientSvg(Assets.icons.icLoggout.svg(width: 20.r)),
-                ),
-              );
+              if (!isAdmin(itemGroup)) {
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: CustomInkWell(
+                    onTap: () {},
+                    child: GradientSvg(Assets.icons.icLoggout.svg(width: 20.r)),
+                  ),
+                );
+              }
+              return const SizedBox();
             },
           ),
         ],
@@ -135,9 +139,10 @@ class GroupItem extends StatelessWidget {
   }
 
   bool isAdmin(StoreGroup itemGroup) {
-    if (itemGroup.members != null && Global.instance.user != null) {
-      if (itemGroup.members!.containsKey(Global.instance.user!.code) &&
-          itemGroup.members![Global.instance.user!.code] == true) {
+    if (itemGroup.storeMembers != null && Global.instance.user != null) {
+      if (itemGroup.storeMembers!.members
+              .containsKey(Global.instance.user!.code) &&
+          itemGroup.storeMembers!.members[Global.instance.user!.code] == true) {
         return true;
       }
       return false;

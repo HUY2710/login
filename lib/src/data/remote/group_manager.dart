@@ -7,28 +7,34 @@ import '../../presentation/map/cubit/select_group_cubit.dart';
 import '../../shared/extension/int_extension.dart';
 import '../../shared/utils/logger_utils.dart';
 import '../models/store_group/store_group.dart';
+import '../models/store_member/store_member.dart';
 import 'collection_store.dart';
+import 'member_manager.dart';
 
 class GroupsManager {
   GroupsManager._();
 
   static Future<void> createGroup(StoreGroup newGroup) async {
-    final generateIdGroup = 20.randomString(); //Id of document group
-
     //create new document depend above code
     CollectionStore.groups
-        .doc(generateIdGroup)
+        .doc(newGroup.idGroup)
         .set(newGroup.copyWith().toJson())
-        .then((value) {
+        .then((value) async {
       //if success => add Id document into Collection groups of User
       if (Global.instance.user != null) {
-        CollectionStore.users
+        await CollectionStore.users
             .doc(Global.instance.user!.code)
             .collection(CollectionStoreConstant.myGroups)
-            .doc(generateIdGroup)
+            .doc(newGroup.idGroup)
             .set(
-              MyIdGroup(idGroup: generateIdGroup).toJson(),
+              MyIdGroup(idGroup: newGroup.idGroup!).toJson(),
             );
+        await MemberManager.addNewMember(
+          StoreMember(
+            members: {Global.instance.user!.code: true},
+            idGroup: newGroup.idGroup,
+          ),
+        );
       }
     }).catchError((error) {
       LoggerUtils.logError('Failed to add group: $error');
@@ -49,21 +55,21 @@ class GroupsManager {
 
   //delete idGroup in myGroup Collection
   static Future<void> deleteIdGroupOfMyGroup(StoreGroup group) async {
-    if (group.members != null &&
-        group.members!.isNotEmpty &&
-        group.idGroup != null) {
-      final List<String> listIdUser =
-          group.members!.keys.map((key) => key).toList();
-      listIdUser.map((idUser) async {
-        await CollectionStore.users
-            .doc(idUser)
-            .collection(CollectionStoreConstant.myGroups)
-            .doc(group.idGroup)
-            .delete()
-            .then((value) => true)
-            .catchError((error) => false);
-      });
-    }
+    // if (group.members != null &&
+    //     group.members!.isNotEmpty &&
+    //     group.idGroup != null) {
+    //   final List<String> listIdUser =
+    //       group.members!.keys.map((key) => key).toList();
+    //   listIdUser.map((idUser) async {
+    //     await CollectionStore.users
+    //         .doc(idUser)
+    //         .collection(CollectionStoreConstant.myGroups)
+    //         .doc(group.idGroup)
+    //         .delete()
+    //         .then((value) => true)
+    //         .catchError((error) => false);
+    //   });
+    // }
   }
 
   //snapshot data for each member in group
@@ -100,7 +106,6 @@ class GroupsManager {
     if (snapShotGroups.docs.isNotEmpty) {
       final List<MyIdGroup> myListIdGroup =
           snapShotGroups.docs.map((e) => MyIdGroup.fromJson(e.data())).toList();
-      debugPrint('myListIdGroup:$myListIdGroup');
 
       //SAU KHI LẤY ĐƯỢC TẤT CẢ ID GROUP MÀ MÌNH JOIN
       //GET INFO GROUP
@@ -117,11 +122,15 @@ class GroupsManager {
     final snapshot = await CollectionStore.groups
         .where(FieldPath.documentId, whereIn: idsCondition)
         .get();
-    final List<StoreGroup> infoListGroup = snapshot.docs.map((e) {
+
+    final List<StoreGroup> infoListGroup =
+        await Future.wait(snapshot.docs.map((e) async {
       final String documentId = e.id;
       final group = StoreGroup.fromJson(e.data());
-      return group.copyWith(idGroup: documentId);
-    }).toList();
+      final memberOfGroup = await MemberManager.getListMember(documentId);
+      return group.copyWith(idGroup: documentId, storeMembers: memberOfGroup);
+    }).toList());
+
     debugPrint('info groups:$infoListGroup');
     return infoListGroup;
   }

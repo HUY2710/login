@@ -8,9 +8,9 @@ part 'store_user.g.dart';
 class StoreUser with _$StoreUser {
   const factory StoreUser({
     required String code,
-    String? avatarUrl,
-    String? userName,
-    int? batteryLevel,
+    required String avatarUrl,
+    required String userName,
+    required int batteryLevel,
     @JsonKey(
       includeFromJson: false,
       includeToJson: false,

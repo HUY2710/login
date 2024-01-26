@@ -42,7 +42,7 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
     if (currentGroupCubit.state != null) {
       emit(const TrackingMemberState.loading());
       _groupSubscription = _fireStoreClient
-          .listenRealtimeToMembersChanges(currentGroupCubit.state!.idGroup)
+          .listenRealtimeToMembersChanges(currentGroupCubit.state!.idGroup!)
           .listen((DocumentSnapshot<Map<String, dynamic>> event) {
         debugPrint('event:$event');
         final dataGroup = event.data()!;

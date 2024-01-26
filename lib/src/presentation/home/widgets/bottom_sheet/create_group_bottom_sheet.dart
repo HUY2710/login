@@ -78,12 +78,11 @@ class _BottomSheetCreateGroupState extends State<BottomSheetCreateGroup> {
                         Global.instance.user != null) {
                       //create group;
                       final newGroup = StoreGroup(
-                        code: 6.randomUpperCaseString(),
+                        passCode: 6.randomUpperCaseString(),
                         idGroup: 24.randomString(),
                         groupName: groupNameController.text,
-                        iconGroup: '',
                         avatarGroup: Assets.images.avatars.avatar10.path,
-                        members: {Global.instance.user!.code: true},
+                        countMembers: 1,
                       );
 
                       await FirestoreClient.instance.createGroup(newGroup);
@@ -92,7 +91,7 @@ class _BottomSheetCreateGroupState extends State<BottomSheetCreateGroup> {
                               (value) => showBottomSheetTypeOfHome(
                                 context: context,
                                 child: InviteGroupWidget(
-                                  code: newGroup.code,
+                                  code: newGroup.passCode,
                                 ),
                               ),
                             );

@@ -4,6 +4,8 @@ class CollectionStoreConstant {
   CollectionStoreConstant._();
   static const String users = 'users';
   static const String groups = 'groups';
+  static const String members = 'members';
+
   static const String myGroups = 'myGroups'; // my groups
   static const String locations = 'locations';
   static const String locationsCheckIn = 'locationsCheckIns';
@@ -17,6 +19,10 @@ class CollectionStore {
 
   static CollectionReference<Map<String, dynamic>> groups =
       FirebaseFirestore.instance.collection(CollectionStoreConstant.groups);
+
+  //collection to listen realtime user join/out group
+  static CollectionReference<Map<String, dynamic>> members =
+      FirebaseFirestore.instance.collection(CollectionStoreConstant.members);
 
   static CollectionReference<Map<String, dynamic>> myGroups =
       FirebaseFirestore.instance.collection(CollectionStoreConstant.myGroups);
