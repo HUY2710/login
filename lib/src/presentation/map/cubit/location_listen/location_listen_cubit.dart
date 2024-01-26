@@ -1,8 +1,5 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,6 +12,7 @@ import '../../../../data/remote/firestore_client.dart';
 import '../../../../global/global.dart';
 import '../../../../services/location_service.dart';
 import '../../../../shared/helpers/map_helper.dart';
+
 part 'location_listen_cubit.freezed.dart';
 part 'location_listen_state.dart';
 

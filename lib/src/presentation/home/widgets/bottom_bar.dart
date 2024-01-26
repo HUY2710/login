@@ -10,7 +10,6 @@ import '../../../config/di/di.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
-import '../../../shared/widgets/containers/border_container.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../map/cubit/location_listen/location_listen_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
