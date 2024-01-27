@@ -60,7 +60,12 @@ class RemoteConfigManager {
 
   bool globalShowAd() {
     return willShowAd &&
-        _items.firstWhere((ConfigItem e) => e.key == AdRemoteKeys.show).value;
+        _items
+            .firstWhere(
+              (ConfigItem e) => e.key == AdRemoteKeys.show,
+              orElse: () => ConfigItem(false, AdRemoteKeys.show),
+            )
+            .value;
   }
 
   bool isShowAd(AdRemoteKeys key) {

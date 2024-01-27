@@ -58,7 +58,7 @@ class LocationListenCubit extends Cubit<LocationListenState> {
           'lat': latLng.latitude,
           'lng': latLng.longitude,
           'address': address,
-          'updatedAt': DateTime.now(),
+          'updatedAt': DateTime.now().toIso8601String(),
         });
       }
     }

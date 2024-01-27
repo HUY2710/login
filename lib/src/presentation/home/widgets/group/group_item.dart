@@ -14,6 +14,8 @@ import '../../../../shared/widgets/custom_inkwell.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../map/cubit/select_group_cubit.dart';
 import '../../cubit/my_list_group/my_list_group_cubit.dart';
+import '../bottom_sheet/create_edit_group.dart';
+import '../bottom_sheet/show_bottom_sheet_home.dart';
 import '../dialog/group_dialog.dart';
 
 class GroupItem extends StatelessWidget {
@@ -96,7 +98,24 @@ class GroupItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CustomInkWell(
-                      onTap: () {},
+                      onTap: () {
+                        context.popRoute().then(
+                              (value) => showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) => Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom,
+                                  ),
+                                  child: CreateEditGroup(
+                                    detailGroup: itemGroup,
+                                  ),
+                                ),
+                              ),
+                            );
+                      },
                       child: GradientSvg(Assets.icons.icEdit.svg(width: 20.r)),
                     ),
                     10.horizontalSpace,

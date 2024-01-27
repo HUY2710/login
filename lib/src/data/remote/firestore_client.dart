@@ -33,6 +33,14 @@ class FirestoreClient {
     await GroupsManager.createGroup(newGroup);
   }
 
+  //update group
+  Future<void> updateGroup({
+    required String idGroup,
+    required Map<String, dynamic> mapFields,
+  }) async {
+    await GroupsManager.updateGroup(idGroup: idGroup, fields: mapFields);
+  }
+
   //get my list group
   Future<List<StoreGroup>?> getMyGroups() async {
     final result = await GroupsManager.getMyListGroup();

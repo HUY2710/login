@@ -39,6 +39,19 @@ class GroupsManager {
     });
   }
 
+  static Future<void> updateGroup({
+    required String idGroup,
+    required Map<String, dynamic> fields,
+  }) async {
+    await CollectionStore.groups
+        .doc(idGroup)
+        .update(fields)
+        .catchError((error) {
+      LoggerUtils.logError('Failed to update location: $error');
+      throw Exception(error);
+    });
+  }
+
   //delete group
   static Future<bool> deleteGroup(StoreGroup group) async {
     //xóa group
