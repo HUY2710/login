@@ -45,20 +45,24 @@ class _MemberMarkerListState extends State<MemberMarkerList> {
         return state.maybeWhen(
           orElse: () => const SizedBox(),
           initial: () {
-            _streamController.close();
+            // _streamController.close();
             return const SizedBox();
           },
           success: (List<StoreUser> users) {
-            return Stack(
-              children: users.map((StoreUser member) {
-                return BuildMarker(
-                  key: UniqueKey(),
-                  streamController: _streamController,
-                  member: member,
-                  index: users.indexOf(member),
-                );
-              }).toList(),
-            );
+            debugPrint('listUser:${users.length}');
+            if (users.isNotEmpty) {
+              return Stack(
+                children: users.map((StoreUser member) {
+                  return BuildMarker(
+                    key: UniqueKey(),
+                    streamController: _streamController,
+                    member: member,
+                    index: users.indexOf(member),
+                  );
+                }).toList(),
+              );
+            }
+            return const SizedBox();
           },
         );
       },

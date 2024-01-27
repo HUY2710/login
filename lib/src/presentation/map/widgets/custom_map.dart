@@ -82,8 +82,10 @@ class _CustomMapState extends State<CustomMap> {
     final double lng = e.location?.lng ?? 0;
     return Marker(
       anchor: const Offset(0.5, 0.72),
-      position: const LatLng(21.036676939648178, 105.76078109581717) ??
-          LatLng(lat, lng),
+      position: e.code == 'GMT364YInKvqMEfYkvwHaaFn'
+          ? const LatLng(21.03883726587732, 105.76304368421088)
+          : const LatLng(21.036676939648178, 105.76078109581717) ??
+              LatLng(lat, lng),
       markerId: MarkerId(e.code),
       icon: e.marker != null
           ? BitmapDescriptor.fromBytes(

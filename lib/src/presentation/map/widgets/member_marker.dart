@@ -11,7 +11,7 @@ import 'battery_bar.dart';
 class BuildMarker extends StatefulWidget {
   const BuildMarker({
     super.key,
-    required this.index,
+    this.index,
     this.streamController,
     required this.member,
     this.callBack,

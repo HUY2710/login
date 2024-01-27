@@ -8,10 +8,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../config/di/di.dart';
-import '../../../../data/models/store_group/store_group.dart';
 import '../../../../data/models/store_member/store_member.dart';
 import '../../../../data/models/store_user/store_user.dart';
 import '../../../../data/remote/firestore_client.dart';
+import '../../../../global/global.dart';
 import '../../../../shared/helpers/capture_widget_helper.dart';
 import '../../models/member_maker_data.dart';
 import '../select_group_cubit.dart';
@@ -25,8 +25,9 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
 
   //object firebase
   final FirestoreClient _fireStoreClient = FirestoreClient.instance;
+
   //Danh sách các thành viên trong group
-  final List<StoreUser> _trackingListMember = <StoreUser>[];
+  List<StoreUser> _trackingListMember = <StoreUser>[];
 
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _groupSubscription;
 
@@ -37,6 +38,8 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
   final SelectGroupCubit currentGroupCubit = getIt<SelectGroupCubit>();
 
   Future<void> initTrackingMember() async {
+    _trackingListMember = [];
+    debugPrint('_trackingListMember:$_trackingListMember');
     //khi mà user chọn group => thì tiến hành lắng nghe realtime danh sách member trong group
     if (currentGroupCubit.state != null) {
       emit(const TrackingMemberState.loading());
@@ -66,12 +69,16 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
           //sau khi lấy được thông tin user thì tiến hành query đến location của user đó
 
           // Thực hiện các xử lý khác với infoUser...
-          if (infoUser != null) {
+          if (infoUser != null && infoUser.code != Global.instance.user?.code) {
             _trackingListMember.add(infoUser);
           }
         }
       }
-      emit(TrackingMemberState.success([..._trackingListMember]));
+      if (_trackingListMember.isEmpty) {
+        emit(const TrackingMemberState.success([]));
+      } else {
+        emit(TrackingMemberState.success([..._trackingListMember]));
+      }
     } else {
       emit(const TrackingMemberState.initial());
     }

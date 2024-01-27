@@ -39,8 +39,6 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
   GoogleMapController? _controller;
   BitmapDescriptor? marker;
   final _trackingMemberCubit = getIt<TrackingMemberCubit>();
-  final GlobalKey<State<StatefulWidget>> myKey =
-      GlobalKey<State<StatefulWidget>>();
 
   //all-cubit
   final LocationListenCubit _locationListenCubit = getIt<LocationListenCubit>();
@@ -53,6 +51,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
     _defaultLocation = Global.instance.location;
     getLocalLocation();
     super.initState();
+    _trackingMemberCubit.initTrackingMember();
   }
 
   void getLocalLocation() {
@@ -115,53 +114,43 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
     }
   }
 
+  final GlobalKey _repaintKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
+          // Positioned.fill(
+          //   key: const ValueKey(1),
+          //   child: Align(
+          //     child: BuildMarker(
+          //       member: Global.instance.user!,
+          //       callBack: () async {
+          //         WidgetsBinding.instance.addPostFrameCallback((_) async {
+          //           final Uint8List? bytes =
+          //               await CaptureWidgetHelp.widgetToBytes(_repaintKey);
+          //           if (bytes != null) {
+          //             setState(() {
+          //               marker = BitmapDescriptor.fromBytes(
+          //                 bytes,
+          //                 size: const Size.fromWidth(30),
+          //               );
+          //             });
+          //           }
+          //         });
+          //       },
+          //       keyCap: _repaintKey,
+          //     ),
+          //   ),
+          // ),
           Positioned.fill(
             child: Align(
-              child: BuildMarker(
-                index: 0,
-                member: Global.instance.user!,
-                callBack: () async {
-                  final Uint8List? bytes =
-                      await CaptureWidgetHelp.widgetToBytes(myKey);
-                  if (bytes != null) {
-                    setState(() {
-                      marker = BitmapDescriptor.fromBytes(
-                        bytes,
-                        size: const Size.fromWidth(30),
-                      );
-                    });
-                  }
-                },
-                keyCap: myKey,
+              child: MemberMarkerList(
+                key: ValueKey(getIt<SelectGroupCubit>().state),
+                trackingMemberCubit: _trackingMemberCubit,
               ),
             ),
-          ),
-          BlocBuilder<TrackingMemberCubit, TrackingMemberState>(
-            buildWhen: (previous, current) => previous != current,
-            bloc: _trackingMemberCubit,
-            builder: (context, state) {
-              return state.maybeWhen(
-                orElse: () {
-                  return const SizedBox();
-                },
-                initial: () => const SizedBox(),
-                success: (members) {
-                  debugPrint('===============================:$members');
-                  return Positioned.fill(
-                    child: Align(
-                      child: MemberMarkerList(
-                        trackingMemberCubit: _trackingMemberCubit,
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
           ),
           Positioned.fill(
             child: Container(color: Colors.white),
@@ -172,7 +161,8 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
             builder: (context, locationListenState) {
               return BlocConsumer<SelectGroupCubit, StoreGroup?>(
                 bloc: getIt<SelectGroupCubit>(),
-                listenWhen: (previous, current) => previous != current,
+                listenWhen: (previous, current) =>
+                    previous != current || current != null,
                 listener: (context, state) {
                   //thoát nhóm hoặc chưa chọn nhóm
                   if (state == null) {
