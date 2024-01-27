@@ -9,19 +9,8 @@ class MessageModel with _$MessageModel {
   const factory MessageModel({
     required String content,
     required String senderId,
-    @TimeStampConverter() required Timestamp sentAt,
+    required String sentAt,
   }) = _MessageModel;
   factory MessageModel.fromJson(Map<String, Object?> json) =>
       _$MessageModelFromJson(json);
-}
-
-class TimeStampConverter implements JsonConverter<Timestamp, Timestamp> {
-  const TimeStampConverter();
-  @override
-  Timestamp fromJson(Timestamp timestamp) {
-    return timestamp;
-  }
-
-  @override
-  Timestamp toJson(Timestamp timestamp) => timestamp;
 }
