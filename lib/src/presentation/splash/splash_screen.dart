@@ -250,6 +250,8 @@ class _SplashScreenState extends State<SplashScreen> {
     final String? userCode =
         await SharedPreferencesManager.getString(PreferenceKeys.userCode.name);
 
+    ///TODO: USE TEST
+    // const String? userCode = 'EfpgcYmWJRqmMHSHpxTfIU32';
     StoreUser? storeUser;
     if (userCode == null) {
       storeUser = await addNewUser(storeUser: storeUser);

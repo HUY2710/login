@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/di/di.dart';
+import '../../../config/navigation/app_router.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
@@ -125,23 +127,24 @@ class _BottomBarState extends State<BottomBar> {
     final value = ValueNotifier<int>(0);
     return InkWell(
       onTap: () {
-        showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return StatefulBuilder(builder: (context, _) {
-                return ValueListenableBuilder(
-                    valueListenable: value,
-                    builder: (context, val, child) {
-                      return AnimatedSwitcher(
-                          duration: const Duration(
-                            microseconds: 700,
-                          ),
-                          child: (val == 0)
-                              ? ModalShowMember(value: value)
-                              : ModalEditMember(value: value));
-                    });
-              });
-            });
+        context.pushRoute(const ChatRoute());
+        // showModalBottomSheet(
+        //     context: context,
+        //     builder: (context) {
+        //       return StatefulBuilder(builder: (context, _) {
+        //         return ValueListenableBuilder(
+        //             valueListenable: value,
+        //             builder: (context, val, child) {
+        //               return AnimatedSwitcher(
+        //                   duration: const Duration(
+        //                     microseconds: 700,
+        //                   ),
+        //                   child: (val == 0)
+        //                       ? ModalShowMember(value: value)
+        //                       : ModalEditMember(value: value));
+        //             });
+        //       });
+        //     });
       },
       child: Container(
         height: 48.r,
