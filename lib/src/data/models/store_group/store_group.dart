@@ -18,10 +18,6 @@ class StoreGroup with _$StoreGroup {
     //   includeToJson: false,
     // )
     String? idGroup,
-    @JsonKey(
-      includeFromJson: false,
-      includeToJson: false,
-    )
     List<StoreMember>? storeMembers,
   }) = _StoreGroup;
 

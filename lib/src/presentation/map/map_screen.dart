@@ -22,6 +22,7 @@ import 'cubit/tracking_members/tracking_member_cubit.dart';
 import 'widgets/custom_map.dart';
 import 'widgets/float_right_app_bar.dart';
 import 'widgets/member_marker.dart';
+import 'widgets/member_marker_list.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -140,6 +141,28 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
               ),
             ),
           ),
+          BlocBuilder<TrackingMemberCubit, TrackingMemberState>(
+            buildWhen: (previous, current) => previous != current,
+            bloc: _trackingMemberCubit,
+            builder: (context, state) {
+              return state.maybeWhen(
+                orElse: () {
+                  return const SizedBox();
+                },
+                initial: () => const SizedBox(),
+                success: (members) {
+                  debugPrint('===============================:$members');
+                  return Positioned.fill(
+                    child: Align(
+                      child: MemberMarkerList(
+                        trackingMemberCubit: _trackingMemberCubit,
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
           Positioned.fill(
             child: Container(color: Colors.white),
           ),
@@ -151,7 +174,12 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
                 bloc: getIt<SelectGroupCubit>(),
                 listenWhen: (previous, current) => previous != current,
                 listener: (context, state) {
-                  if (state != null) {
+                  //thoát nhóm hoặc chưa chọn nhóm
+                  if (state == null) {
+                    _trackingMemberCubit.disposeGroupSubscription();
+                    _trackingMemberCubit.disposeMarkerSubscription();
+                    _trackingMemberCubit.resetData();
+                  } else {
                     _trackingMemberCubit.initTrackingMember();
                   }
                 },
