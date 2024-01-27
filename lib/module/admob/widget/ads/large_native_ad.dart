@@ -108,7 +108,7 @@ class _LargeNativeAdState extends State<LargeNativeAd> {
       child: EasyNativeAd(
         factoryId: factoryId,
         adId: widget.unitId,
-        highId: widget.unitIdHigh,
+        // highId: widget.unitIdHigh,
         height: height,
         controller: widget.controller,
         loadingWidget: const LargeAdLoading(),

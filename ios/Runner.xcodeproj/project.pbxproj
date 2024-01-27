@@ -410,7 +410,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
 		BD9909DAC65DCBD4685C7C2F /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -820,6 +820,7 @@
 			buildSettings = {
 				DEVELOPMENT_TEAM = 4J8WSCVQ98;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tinhvu.cycle-sharing.dev";
 				PRODUCT_NAME = Runner;
 			};
 			name = "Debug-dev";
