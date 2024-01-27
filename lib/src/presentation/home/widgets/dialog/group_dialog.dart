@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -75,7 +76,9 @@ class GroupDialog extends StatelessWidget {
           ),
           10.verticalSpace,
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              context.popRoute();
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

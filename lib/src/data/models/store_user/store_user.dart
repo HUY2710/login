@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../store_location/store_location.dart';
+
 part 'store_user.freezed.dart';
 part 'store_user.g.dart';
 
@@ -16,6 +18,8 @@ class StoreUser with _$StoreUser {
       includeToJson: false,
     )
     Uint8List? marker,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    StoreLocation? location,
   }) = _StoreUser;
 
   factory StoreUser.fromJson(Map<String, dynamic> json) =>
