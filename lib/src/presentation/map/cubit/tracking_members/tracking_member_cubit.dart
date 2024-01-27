@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../config/di/di.dart';
-import '../../../../data/models/store_group/store_group.dart';
 import '../../../../data/models/store_member/store_member.dart';
 import '../../../../data/models/store_user/store_user.dart';
 import '../../../../data/remote/firestore_client.dart';
+import '../../../../global/global.dart';
+import '../../../../shared/helpers/capture_widget_helper.dart';
 import '../../models/member_maker_data.dart';
 import '../select_group_cubit.dart';
 
@@ -23,8 +25,9 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
 
   //object firebase
   final FirestoreClient _fireStoreClient = FirestoreClient.instance;
+
   //Danh sách các thành viên trong group
-  final List<StoreUser> _trackingListMember = <StoreUser>[];
+  List<StoreUser> _trackingListMember = <StoreUser>[];
 
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _groupSubscription;
 
@@ -35,6 +38,8 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
   final SelectGroupCubit currentGroupCubit = getIt<SelectGroupCubit>();
 
   Future<void> initTrackingMember() async {
+    _trackingListMember = [];
+    debugPrint('_trackingListMember:$_trackingListMember');
     //khi mà user chọn group => thì tiến hành lắng nghe realtime danh sách member trong group
     if (currentGroupCubit.state != null) {
       emit(const TrackingMemberState.loading());
@@ -45,29 +50,56 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
       });
     } else {
       //nếu user ko chọn nhóm nào thì ko xử lí gì cả
-      emit(const TrackingMemberState.loading());
-      emit(const TrackingMemberState.success([]));
+      emit(const TrackingMemberState.initial());
+      // emit(const TrackingMemberState.success([]));
     }
   }
 
   Future<void> _processSnapshot(
       QuerySnapshot<Map<String, dynamic>> snapshot) async {
-    for (final change in snapshot.docChanges) {
-      if (change.type == DocumentChangeType.added) {
-        StoreMember member = StoreMember.fromJson(change.doc.data()!);
-        member = member.copyWith(idUser: change.doc.id);
+    if (currentGroupCubit.state != null) {
+      for (final change in snapshot.docChanges) {
+        //lắng nghe khi có member join group
+        if (change.type == DocumentChangeType.added) {
+          StoreMember member = StoreMember.fromJson(change.doc.data()!);
+          member = member.copyWith(idUser: change.doc.id);
 
-        final StoreUser? infoUser =
-            await _fireStoreClient.getUser(member.idUser!);
-        //sau khi lấy được thông tin user thì tiến hành query đến location của user đó
+          final StoreUser? infoUser =
+              await _fireStoreClient.getUser(member.idUser!);
+          //sau khi lấy được thông tin user thì tiến hành query đến location của user đó
 
-        // Thực hiện các xử lý khác với infoUser...
+          // Thực hiện các xử lý khác với infoUser...
+          if (infoUser != null && infoUser.code != Global.instance.user?.code) {
+            _trackingListMember.add(infoUser);
+          }
+        }
       }
+      if (_trackingListMember.isEmpty) {
+        emit(const TrackingMemberState.success([]));
+      } else {
+        emit(TrackingMemberState.success([..._trackingListMember]));
+      }
+    } else {
+      emit(const TrackingMemberState.initial());
     }
+  }
 
-    if (_trackingListMember.isEmpty) {
-      emit(const TrackingMemberState.success([]));
-    }
+  Future<void> generateUserMarker(
+      StreamController<MemberMarkerData> streamController) async {
+    _markerSubscription =
+        streamController.stream.listen((MemberMarkerData event) async {
+      if (currentGroupCubit.state != null) {
+        try {
+          final Uint8List? bytes =
+              await CaptureWidgetHelp.widgetToBytes(event.repaintKey);
+          final StoreUser user = _trackingListMember[event.index];
+          _trackingListMember[event.index] = user.copyWith(marker: bytes);
+          emit(TrackingMemberState.success([..._trackingListMember]));
+        } on Exception catch (e) {
+          debugPrint(e.toString());
+        }
+      }
+    });
   }
 
   //lắng nghe xem vị trí của user có thay đổi hay không
@@ -103,4 +135,26 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
   //     },
   //   );
   // }
+
+  void resetData() {
+    emit(const TrackingMemberState.initial());
+    state.mapOrNull(
+      initial: (value) {
+        debugPrint('value$value');
+      },
+      success: (value) {
+        debugPrint('success:${value.members}');
+      },
+    );
+  }
+
+  void disposeGroupSubscription() {
+    _groupSubscription?.cancel();
+  }
+
+  void disposeMarkerSubscription() {
+    if (_markerSubscription != null) {
+      _markerSubscription?.cancel();
+    }
+  }
 }

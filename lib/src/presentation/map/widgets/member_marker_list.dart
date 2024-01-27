@@ -26,8 +26,15 @@ class _MemberMarkerListState extends State<MemberMarkerList> {
 
   @override
   void initState() {
-    // widget.trackingMemberCubit.generateUserMarker(_streamController);
+    widget.trackingMemberCubit.generateUserMarker(_streamController);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _streamController.close();
+    super.dispose();
   }
 
   @override
@@ -37,18 +44,25 @@ class _MemberMarkerListState extends State<MemberMarkerList> {
       builder: (BuildContext context, TrackingMemberState state) {
         return state.maybeWhen(
           orElse: () => const SizedBox(),
+          initial: () {
+            // _streamController.close();
+            return const SizedBox();
+          },
           success: (List<StoreUser> users) {
-            return Stack(
-              children: users.map((StoreUser member) {
-                return BuildMarker(
-                  keyCap: GlobalKey(),
-                  key: UniqueKey(),
-                  streamController: _streamController,
-                  member: member,
-                  index: users.indexOf(member),
-                );
-              }).toList(),
-            );
+            debugPrint('listUser:${users.length}');
+            if (users.isNotEmpty) {
+              return Stack(
+                children: users.map((StoreUser member) {
+                  return BuildMarker(
+                    key: UniqueKey(),
+                    streamController: _streamController,
+                    member: member,
+                    index: users.indexOf(member),
+                  );
+                }).toList(),
+              );
+            }
+            return const SizedBox();
           },
         );
       },

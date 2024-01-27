@@ -11,18 +11,18 @@ import 'battery_bar.dart';
 class BuildMarker extends StatefulWidget {
   const BuildMarker({
     super.key,
-    required this.index,
+    this.index,
     this.streamController,
     required this.member,
     this.callBack,
-    required this.keyCap,
+    this.keyCap,
   });
 
   final int? index;
   final StoreUser member;
   final StreamController<MemberMarkerData>? streamController;
   final VoidCallback? callBack;
-  final GlobalKey keyCap;
+  final GlobalKey? keyCap;
   @override
   State<BuildMarker> createState() => _BuildMarkerState();
 }
@@ -31,13 +31,17 @@ class _BuildMarkerState extends State<BuildMarker> {
   final GlobalKey _repaintKey = GlobalKey();
 
   void _generateMarker() {
-    widget.callBack?.call();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // await Future.delayed(const Duration(milliseconds: 500));
-      // widget.streamController.add(
-      //   MemberMarkerData(index: widget.index, repaintKey: _repaintKey),
-      // );
-    });
+    if (widget.callBack != null) {
+      widget.callBack?.call();
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (widget.streamController != null && widget.index != null) {
+          widget.streamController?.add(
+            MemberMarkerData(index: widget.index!, repaintKey: _repaintKey),
+          );
+        }
+      });
+    }
   }
 
   @override
@@ -56,11 +60,10 @@ class _BuildMarkerState extends State<BuildMarker> {
     }
 
     return RepaintBoundary(
-      key: widget.keyCap,
+      key: widget.keyCap ?? _repaintKey,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // if (widget.member.code != Global.instance.user?.code)
           Container(
             decoration: BoxDecoration(
               color: Colors.white,

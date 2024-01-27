@@ -43,8 +43,11 @@ class _CustomMapState extends State<CustomMap> {
         //generate marker member
         ...widget.trackingMemberState.maybeWhen(
           orElse: () => <Marker>{},
-          success: (List<StoreUser> friends) {
-            return friends.map((StoreUser e) => _buildFriendMarker(e));
+          initial: () {
+            return <Marker>{};
+          },
+          success: (List<StoreUser> members) {
+            return members.map((StoreUser e) => _buildFriendMarker(e));
           },
         ),
         Marker(
@@ -79,7 +82,10 @@ class _CustomMapState extends State<CustomMap> {
     final double lng = e.location?.lng ?? 0;
     return Marker(
       anchor: const Offset(0.5, 0.72),
-      position: LatLng(lat, lng),
+      position: e.code == 'GMT364YInKvqMEfYkvwHaaFn'
+          ? const LatLng(21.03883726587732, 105.76304368421088)
+          : const LatLng(21.036676939648178, 105.76078109581717) ??
+              LatLng(lat, lng),
       markerId: MarkerId(e.code),
       icon: e.marker != null
           ? BitmapDescriptor.fromBytes(

@@ -22,6 +22,7 @@ import 'cubit/tracking_members/tracking_member_cubit.dart';
 import 'widgets/custom_map.dart';
 import 'widgets/float_right_app_bar.dart';
 import 'widgets/member_marker.dart';
+import 'widgets/member_marker_list.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -38,8 +39,6 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
   GoogleMapController? _controller;
   BitmapDescriptor? marker;
   final _trackingMemberCubit = getIt<TrackingMemberCubit>();
-  final GlobalKey<State<StatefulWidget>> myKey =
-      GlobalKey<State<StatefulWidget>>();
 
   //all-cubit
   final LocationListenCubit _locationListenCubit = getIt<LocationListenCubit>();
@@ -52,6 +51,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
     _defaultLocation = Global.instance.location;
     getLocalLocation();
     super.initState();
+    _trackingMemberCubit.initTrackingMember();
   }
 
   void getLocalLocation() {
@@ -114,29 +114,41 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
     }
   }
 
+  final GlobalKey _repaintKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
+          // Positioned.fill(
+          //   key: const ValueKey(1),
+          //   child: Align(
+          //     child: BuildMarker(
+          //       member: Global.instance.user!,
+          //       callBack: () async {
+          //         WidgetsBinding.instance.addPostFrameCallback((_) async {
+          //           final Uint8List? bytes =
+          //               await CaptureWidgetHelp.widgetToBytes(_repaintKey);
+          //           if (bytes != null) {
+          //             setState(() {
+          //               marker = BitmapDescriptor.fromBytes(
+          //                 bytes,
+          //                 size: const Size.fromWidth(30),
+          //               );
+          //             });
+          //           }
+          //         });
+          //       },
+          //       keyCap: _repaintKey,
+          //     ),
+          //   ),
+          // ),
           Positioned.fill(
             child: Align(
-              child: BuildMarker(
-                index: 0,
-                member: Global.instance.user!,
-                callBack: () async {
-                  final Uint8List? bytes =
-                      await CaptureWidgetHelp.widgetToBytes(myKey);
-                  if (bytes != null) {
-                    setState(() {
-                      marker = BitmapDescriptor.fromBytes(
-                        bytes,
-                        size: const Size.fromWidth(30),
-                      );
-                    });
-                  }
-                },
-                keyCap: myKey,
+              child: MemberMarkerList(
+                key: ValueKey(getIt<SelectGroupCubit>().state),
+                trackingMemberCubit: _trackingMemberCubit,
               ),
             ),
           ),
@@ -149,9 +161,15 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
             builder: (context, locationListenState) {
               return BlocConsumer<SelectGroupCubit, StoreGroup?>(
                 bloc: getIt<SelectGroupCubit>(),
-                listenWhen: (previous, current) => previous != current,
+                listenWhen: (previous, current) =>
+                    previous != current || current != null,
                 listener: (context, state) {
-                  if (state != null) {
+                  //thoát nhóm hoặc chưa chọn nhóm
+                  if (state == null) {
+                    _trackingMemberCubit.disposeGroupSubscription();
+                    _trackingMemberCubit.disposeMarkerSubscription();
+                    _trackingMemberCubit.resetData();
+                  } else {
                     _trackingMemberCubit.initTrackingMember();
                   }
                 },
