@@ -68,9 +68,8 @@ class FirestoreClient {
   }
 
   //Add member to group
-  Future<bool> addMemberToGroup(
-      String idGroup, Map<String, dynamic> newMap) async {
-    final result = await GroupsManager.addNewMemberToGroup(idGroup, newMap);
+  Future<bool> addMemberToGroup(String idGroup, StoreMember newMember) async {
+    final result = await GroupsManager.addNewMemberToGroup(idGroup, newMember);
     return result;
   }
 
@@ -83,6 +82,13 @@ class FirestoreClient {
     //tiếp theo là xóa toàn bộ member
     await MemberManager.deleteMemberDocument(group.idGroup!);
     return result;
+  }
+
+  //xóa user ra khỏi nhóm hoặc user tự thoát nhóm
+  Future<void> leaveGroup(String idGroup, String idUser) async {
+    await GroupsManager.leaveGroup(idGroup: idGroup, idUser: idUser);
+    await GroupsManager.removeIdGroupOfMyGroup(
+        idGroup: idGroup, idUser: idUser);
   }
 
   Future<void> deleteIdGroupInMyGroup(StoreGroup group) async {

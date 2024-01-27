@@ -34,9 +34,6 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
   // lấy thông tin hiện tại của group mà user chọn
   final SelectGroupCubit currentGroupCubit = getIt<SelectGroupCubit>();
 
-  //stream lắng nghe members trong group có tự động thoát nhóm hay là bị xóa khỏi nhóm hay không
-  StreamSubscription<StoreGroup>? _groupCurrentSubscription;
-
   Future<void> initTrackingMember() async {
     //khi mà user chọn group => thì tiến hành lắng nghe realtime danh sách member trong group
     if (currentGroupCubit.state != null) {
@@ -44,16 +41,7 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
       _groupSubscription = _fireStoreClient
           .listenRealtimeToMembersChanges(currentGroupCubit.state!.idGroup!)
           .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
-        for (final change in snapshot.docChanges) {
-          if (change.type == DocumentChangeType.added) {
-            StoreMember member = StoreMember.fromJson(change.doc.data()!);
-            member = member.copyWith(idUser: change.doc.id);
-            // _trackingListMember.add(member);
-          }
-        }
-        if (_trackingListMember.isEmpty) {
-          emit(const TrackingMemberState.success([]));
-        }
+        _processSnapshot(snapshot);
       });
     } else {
       //nếu user ko chọn nhóm nào thì ko xử lí gì cả
@@ -61,6 +49,41 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
       emit(const TrackingMemberState.success([]));
     }
   }
+
+  Future<void> _processSnapshot(
+      QuerySnapshot<Map<String, dynamic>> snapshot) async {
+    for (final change in snapshot.docChanges) {
+      if (change.type == DocumentChangeType.added) {
+        StoreMember member = StoreMember.fromJson(change.doc.data()!);
+        member = member.copyWith(idUser: change.doc.id);
+
+        final StoreUser? infoUser =
+            await _fireStoreClient.getUser(member.idUser!);
+        //sau khi lấy được thông tin user thì tiến hành query đến location của user đó
+
+        // Thực hiện các xử lý khác với infoUser...
+      }
+    }
+
+    if (_trackingListMember.isEmpty) {
+      emit(const TrackingMemberState.success([]));
+    }
+  }
+
+  //lắng nghe xem vị trí của user có thay đổi hay không
+  // StreamSubscription<DocumentSnapshot<Map<String, dynamic>?>>?
+  //     _listenLocationUserUpdate(String idUser) {
+  //   final subscription = friend.ref
+  //       ?.snapshots()
+  //       .listen((DocumentSnapshot<Map<String, dynamic>?> event) {
+  //     final StoreUser user = StoreUser.fromJson(event.data()!);
+  //     friend = friend.copyWith(user: user);
+
+  //     _isolateSendPort?.send(friend);
+  //   });
+  //   return subscription;
+  // }
+
   // Future<void> getListMembers() async {
   //   emit(const TrackingMemberState.loading());
   //   // await _initAndListenIsolate();

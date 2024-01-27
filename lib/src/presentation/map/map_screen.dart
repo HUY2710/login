@@ -156,15 +156,21 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
                   }
                 },
                 builder: (context, state) {
-                  return BlocBuilder<MapTypeCubit, MapType>(
-                    bloc: _mapTypeCubit,
-                    builder: (context, MapType mapTypeState) {
-                      return CustomMap(
-                        defaultLocation: _defaultLocation,
-                        locationListenState: locationListenState,
-                        mapController: _mapController,
-                        mapType: mapTypeState,
-                        marker: marker,
+                  return BlocBuilder<TrackingMemberCubit, TrackingMemberState>(
+                    bloc: _trackingMemberCubit,
+                    builder: (context, trackingMemberState) {
+                      return BlocBuilder<MapTypeCubit, MapType>(
+                        bloc: _mapTypeCubit,
+                        builder: (context, MapType mapTypeState) {
+                          return CustomMap(
+                            defaultLocation: _defaultLocation,
+                            locationListenState: locationListenState,
+                            mapController: _mapController,
+                            mapType: mapTypeState,
+                            marker: marker,
+                            trackingMemberState: trackingMemberState,
+                          );
+                        },
                       );
                     },
                   );

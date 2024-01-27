@@ -52,7 +52,7 @@ class GroupsManager {
     });
   }
 
-  //delete group
+  //Xóa nhóm (chỉ admin mới có quyền xóa nhóm)
   static Future<bool> deleteGroup(StoreGroup group) async {
     //xóa group
     final resultDeleteGroup = await CollectionStore.groups
@@ -64,7 +64,40 @@ class GroupsManager {
     //xóa idGroup trong myGroups
   }
 
-  //delete idGroup in myGroup Collection
+  //Admin xóa ra khỏi nhóm hoặc thành viên tự ý rời khỏi nhóm
+  static Future<void> leaveGroup(
+      {required String idGroup, required String idUser}) async {
+    //xóa user ra khỏi nhóm
+    await CollectionStore.groups
+        .doc(idGroup)
+        .collection(CollectionStoreConstant.members)
+        .doc(idUser)
+        .delete()
+        .then((_) {
+      LoggerUtils.logInfo('Leave group success');
+    }).catchError((error) {
+      LoggerUtils.logError('Failed to update location: $error');
+      throw Exception(error);
+    });
+  }
+
+  //xóa idGroup khỏi myGroup khi admin xóa thành viên hoặc user rời khỏi nhóm
+  static Future<void> removeIdGroupOfMyGroup(
+      {required String idGroup, required String idUser}) async {
+    await CollectionStore.users
+        .doc(idUser)
+        .collection(CollectionStoreConstant.myGroups)
+        .doc(idGroup)
+        .delete()
+        .then((_) {
+      LoggerUtils.logInfo('remove idGroup of MyGroup success');
+    }).catchError((error) {
+      LoggerUtils.logError('Failed to remove idGroup of MyGroup: $error');
+      throw Exception(error);
+    });
+  }
+
+  //xóa id của group đó ra khỏi list group của
   static Future<void> deleteIdGroupOfMyGroup(StoreGroup group) async {
     // if (group.members != null &&
     //     group.members!.isNotEmpty &&
@@ -151,7 +184,7 @@ class GroupsManager {
   //kiểm tra xem có group nào tồn tại với mã code đó hay không
   static Future<StoreGroup?> isExistGroup(String passCode) async {
     final result = await CollectionStore.groups
-        .where('code', isEqualTo: passCode)
+        .where('passCode', isEqualTo: passCode)
         .limit(1)
         .get();
     if (result.docs.isNotEmpty) {
@@ -173,9 +206,13 @@ class GroupsManager {
 
   //Add idUser into members of group
   static Future<bool> addNewMemberToGroup(
-      String idGroup, Map<String, dynamic> newMap) async {
-    final resultAddMember =
-        await CollectionStore.groups.doc(idGroup).update(newMap).then((value) {
+      String idGroup, StoreMember newMember) async {
+    final resultAddMember = await CollectionStore.groups
+        .doc(idGroup)
+        .collection(CollectionStoreConstant.members)
+        .doc(newMember.idUser)
+        .set(newMember.toJson())
+        .then((value) {
       final status = addToMyGroup(idGroup);
       return status;
     }).catchError((error) {

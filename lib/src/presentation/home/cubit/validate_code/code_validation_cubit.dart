@@ -39,18 +39,15 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
           emit(const CodeValidationState.inValid(
               'Bạn đã là thành viên của nhóm rồi'));
         } else {
-          //trường hợp không phải là thành viên thì tiến hành add vào group.
+          //trường hợp chưa phải là thành viên thì tiến hành add vào group.
 
-          // final StoreMember? mapMembers = existGroup.storeMembers;
-          // if (mapMembers != null) {
-          //   final tempMap = Map.from(mapMembers.members);
-          //   tempMap[Global.instance.user!.code] = false;
-          //   final resultAdd = await client
-          //       .addMemberToGroup(existGroup.idGroup!, {'members': mapMembers});
-          //   if (resultAdd) {
-          //     emit(CodeValidationState.valid(existGroup));
-          //   }
-          // }
+          final StoreMember newMember =
+              StoreMember(isAdmin: false, idUser: Global.instance.user?.code);
+          final resultAdd =
+              await client.addMemberToGroup(existGroup.idGroup!, newMember);
+          if (resultAdd) {
+            emit(CodeValidationState.valid(existGroup));
+          }
         }
       }
     } catch (e) {
