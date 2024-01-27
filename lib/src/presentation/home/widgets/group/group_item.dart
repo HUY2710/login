@@ -1,19 +1,22 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../config/di/di.dart';
-import '../../../data/models/store_group/store_group.dart';
-import '../../../gen/gens.dart';
-import '../../../global/global.dart';
-import '../../../shared/extension/context_extension.dart';
-import '../../../shared/widgets/custom_inkwell.dart';
-import '../../../shared/widgets/gradient_text.dart';
-import '../../map/cubit/select_group_cubit.dart';
-import '../cubit/my_list_group_cubit.dart';
-import 'dialog/group_dialog.dart';
+import '../../../../config/di/di.dart';
+import '../../../../data/models/store_group/store_group.dart';
+import '../../../../gen/gens.dart';
+import '../../../../global/global.dart';
+import '../../../../shared/extension/context_extension.dart';
+import '../../../../shared/widgets/custom_inkwell.dart';
+import '../../../../shared/widgets/gradient_text.dart';
+import '../../../map/cubit/select_group_cubit.dart';
+import '../../cubit/my_list_group/my_list_group_cubit.dart';
+import '../bottom_sheet/create_edit_group.dart';
+import '../bottom_sheet/show_bottom_sheet_home.dart';
+import '../dialog/group_dialog.dart';
 
 class GroupItem extends StatelessWidget {
   const GroupItem({
@@ -85,6 +88,9 @@ class GroupItem extends StatelessWidget {
           BlocBuilder<SelectGroupCubit, StoreGroup?>(
             bloc: getIt<SelectGroupCubit>(),
             builder: (context, state) {
+              debugPrint('${state?.idGroup}');
+              debugPrint('${itemGroup.idGroup}');
+              debugPrint('${state?.idGroup == itemGroup.idGroup}');
               if (state != null &&
                   isAdmin(itemGroup) &&
                   state.idGroup == itemGroup.idGroup) {
@@ -92,12 +98,29 @@ class GroupItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CustomInkWell(
-                      onTap: () {},
+                      onTap: () {
+                        context.popRoute().then(
+                              (value) => showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) => Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom,
+                                  ),
+                                  child: CreateEditGroup(
+                                    detailGroup: itemGroup,
+                                  ),
+                                ),
+                              ),
+                            );
+                      },
                       child: GradientSvg(Assets.icons.icEdit.svg(width: 20.r)),
                     ),
                     10.horizontalSpace,
                     CustomInkWell(
-                      onTap: () {
+                      onTap: () async {
                         showDialog(
                           context: context,
                           builder: (context) => GroupDialog(
@@ -106,8 +129,10 @@ class GroupItem extends StatelessWidget {
                                 'You’re currently the group owner. Are you sure to delete it permanantly?',
                             confirmTap: () async {
                               //delete group
+                              EasyLoading.show();
                               myGroupCubit.deleteGroup(itemGroup).then((value) {
                                 getIt<SelectGroupCubit>().update(null);
+                                EasyLoading.dismiss();
                                 context.popRoute();
                               });
                             },
@@ -120,13 +145,16 @@ class GroupItem extends StatelessWidget {
                   ],
                 );
               }
-              return Align(
-                alignment: Alignment.centerRight,
-                child: CustomInkWell(
-                  onTap: () {},
-                  child: GradientSvg(Assets.icons.icLoggout.svg(width: 20.r)),
-                ),
-              );
+              if (!isAdmin(itemGroup)) {
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: CustomInkWell(
+                    onTap: () {},
+                    child: GradientSvg(Assets.icons.icLoggout.svg(width: 20.r)),
+                  ),
+                );
+              }
+              return const SizedBox();
             },
           ),
         ],
@@ -135,9 +163,12 @@ class GroupItem extends StatelessWidget {
   }
 
   bool isAdmin(StoreGroup itemGroup) {
-    if (itemGroup.members != null && Global.instance.user != null) {
-      if (itemGroup.members!.containsKey(Global.instance.user!.code) &&
-          itemGroup.members![Global.instance.user!.code] == true) {
+    if (itemGroup.storeMembers != null && Global.instance.user != null) {
+      if (itemGroup.storeMembers!
+          .firstWhere(
+            (element) => element.idUser == Global.instance.user!.code,
+          )
+          .isAdmin) {
         return true;
       }
       return false;

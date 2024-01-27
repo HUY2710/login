@@ -4,9 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../config/di/di.dart';
-import '../../../data/models/store_group/store_group.dart';
-import '../../../data/remote/firestore_client.dart';
+import '../../../../data/models/store_group/store_group.dart';
+import '../../../../data/remote/firestore_client.dart';
 
 part 'my_list_group_state.dart';
 part 'my_list_group_cubit.freezed.dart';

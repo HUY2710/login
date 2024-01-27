@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../store_member/store_member.dart';
+
 part 'store_group.freezed.dart';
 part 'store_group.g.dart';
 
@@ -7,16 +9,20 @@ part 'store_group.g.dart';
 @freezed
 class StoreGroup with _$StoreGroup {
   const factory StoreGroup({
-    required String code, //code invite user join group
+    required String passCode, //code invite user join group
     required String groupName,
-    required String iconGroup,
     required String avatarGroup,
-    Map<String, dynamic>? members,
+    required int countMembers,
+    // @JsonKey(
+    //   includeFromJson: true,
+    //   includeToJson: false,
+    // )
+    String? idGroup,
     @JsonKey(
       includeFromJson: false,
       includeToJson: false,
     )
-    String? idGroup,
+    List<StoreMember>? storeMembers,
   }) = _StoreGroup;
 
   factory StoreGroup.fromJson(Map<String, dynamic> json) =>

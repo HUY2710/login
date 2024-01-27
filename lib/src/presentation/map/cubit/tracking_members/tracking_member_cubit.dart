@@ -1,13 +1,18 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../config/di/di.dart';
+import '../../../../data/models/store_group/store_group.dart';
+import '../../../../data/models/store_member/store_member.dart';
 import '../../../../data/models/store_user/store_user.dart';
 import '../../../../data/remote/firestore_client.dart';
 import '../../models/member_maker_data.dart';
+import '../select_group_cubit.dart';
 
 part 'tracking_member_cubit.freezed.dart';
 part 'tracking_member_state.dart';
@@ -21,11 +26,41 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
   //Danh sách các thành viên trong group
   final List<StoreUser> _trackingListMember = <StoreUser>[];
 
-  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _memberSubscription;
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _groupSubscription;
 
   //listen to generate marker for each member
   StreamSubscription<MemberMarkerData>? _markerSubscription;
 
+  // lấy thông tin hiện tại của group mà user chọn
+  final SelectGroupCubit currentGroupCubit = getIt<SelectGroupCubit>();
+
+  //stream lắng nghe members trong group có tự động thoát nhóm hay là bị xóa khỏi nhóm hay không
+  StreamSubscription<StoreGroup>? _groupCurrentSubscription;
+
+  Future<void> initTrackingMember() async {
+    //khi mà user chọn group => thì tiến hành lắng nghe realtime danh sách member trong group
+    if (currentGroupCubit.state != null) {
+      emit(const TrackingMemberState.loading());
+      _groupSubscription = _fireStoreClient
+          .listenRealtimeToMembersChanges(currentGroupCubit.state!.idGroup!)
+          .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
+        for (final change in snapshot.docChanges) {
+          if (change.type == DocumentChangeType.added) {
+            StoreMember member = StoreMember.fromJson(change.doc.data()!);
+            member = member.copyWith(idUser: change.doc.id);
+            // _trackingListMember.add(member);
+          }
+        }
+        if (_trackingListMember.isEmpty) {
+          emit(const TrackingMemberState.success([]));
+        }
+      });
+    } else {
+      //nếu user ko chọn nhóm nào thì ko xử lí gì cả
+      emit(const TrackingMemberState.loading());
+      emit(const TrackingMemberState.success([]));
+    }
+  }
   // Future<void> getListMembers() async {
   //   emit(const TrackingMemberState.loading());
   //   // await _initAndListenIsolate();

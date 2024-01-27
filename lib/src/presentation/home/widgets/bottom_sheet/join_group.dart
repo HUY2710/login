@@ -6,11 +6,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../../../../config/di/di.dart';
-import '../../../../../gen/colors.gen.dart';
-import '../../../../../shared/extension/context_extension.dart';
-import '../../../../../shared/widgets/my_drag.dart';
-import 'cubit/code_validation_cubit.dart';
+import '../../../../config/di/di.dart';
+import '../../../../gen/colors.gen.dart';
+import '../../../../shared/extension/context_extension.dart';
+import '../../../../shared/widgets/my_drag.dart';
+import '../../cubit/validate_code/code_validation_cubit.dart';
 
 class JoinGroupWidget extends StatefulWidget {
   const JoinGroupWidget({super.key});

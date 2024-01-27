@@ -2,34 +2,53 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../global/global.dart';
-import '../../shared/extension/int_extension.dart';
 import '../../shared/utils/logger_utils.dart';
 import '../models/store_group/store_group.dart';
+import '../models/store_member/store_member.dart';
 import 'collection_store.dart';
+import 'member_manager.dart';
 
 class GroupsManager {
   GroupsManager._();
 
   static Future<void> createGroup(StoreGroup newGroup) async {
-    final generateIdGroup = 20.randomString(); //Id of document group
-
     //create new document depend above code
     CollectionStore.groups
-        .doc(generateIdGroup)
+        .doc(newGroup.idGroup)
         .set(newGroup.copyWith().toJson())
-        .then((value) {
+        .then((value) async {
       //if success => add Id document into Collection groups of User
       if (Global.instance.user != null) {
-        CollectionStore.users
+        await CollectionStore.users
             .doc(Global.instance.user!.code)
             .collection(CollectionStoreConstant.myGroups)
-            .doc(generateIdGroup)
+            .doc(newGroup.idGroup)
             .set(
-              MyIdGroup(idGroup: generateIdGroup).toJson(),
+              MyIdGroup(idGroup: newGroup.idGroup!).toJson(),
             );
+        await MemberManager.addNewMember(
+          newGroup.idGroup!,
+          StoreMember(
+            idUser: Global.instance.user!.code,
+            isAdmin: true,
+          ),
+        );
       }
     }).catchError((error) {
       LoggerUtils.logError('Failed to add group: $error');
+    });
+  }
+
+  static Future<void> updateGroup({
+    required String idGroup,
+    required Map<String, dynamic> fields,
+  }) async {
+    await CollectionStore.groups
+        .doc(idGroup)
+        .update(fields)
+        .catchError((error) {
+      LoggerUtils.logError('Failed to update location: $error');
+      throw Exception(error);
     });
   }
 
@@ -47,21 +66,21 @@ class GroupsManager {
 
   //delete idGroup in myGroup Collection
   static Future<void> deleteIdGroupOfMyGroup(StoreGroup group) async {
-    if (group.members != null &&
-        group.members!.isNotEmpty &&
-        group.idGroup != null) {
-      final List<String> listIdUser =
-          group.members!.keys.map((key) => key).toList();
-      listIdUser.map((idUser) async {
-        await CollectionStore.users
-            .doc(idUser)
-            .collection(CollectionStoreConstant.myGroups)
-            .doc(group.idGroup)
-            .delete()
-            .then((value) => true)
-            .catchError((error) => false);
-      });
-    }
+    // if (group.members != null &&
+    //     group.members!.isNotEmpty &&
+    //     group.idGroup != null) {
+    //   final List<String> listIdUser =
+    //       group.members!.keys.map((key) => key).toList();
+    //   listIdUser.map((idUser) async {
+    //     await CollectionStore.users
+    //         .doc(idUser)
+    //         .collection(CollectionStoreConstant.myGroups)
+    //         .doc(group.idGroup)
+    //         .delete()
+    //         .then((value) => true)
+    //         .catchError((error) => false);
+    //   });
+    // }
   }
 
   //snapshot data for each member in group
@@ -115,11 +134,16 @@ class GroupsManager {
     final snapshot = await CollectionStore.groups
         .where(FieldPath.documentId, whereIn: idsCondition)
         .get();
-    final List<StoreGroup> infoListGroup = snapshot.docs.map((e) {
+
+    final List<StoreGroup> infoListGroup =
+        await Future.wait(snapshot.docs.map((e) async {
       final String documentId = e.id;
       final group = StoreGroup.fromJson(e.data());
-      return group.copyWith(idGroup: documentId);
-    }).toList();
+      final memberOfGroup =
+          await MemberManager.getListMemberOfGroup(documentId);
+      return group.copyWith(idGroup: documentId, storeMembers: memberOfGroup);
+    }).toList());
+
     debugPrint('info groups:$infoListGroup');
     return infoListGroup;
   }
@@ -172,5 +196,14 @@ class GroupsManager {
         .then((value) => true)
         .catchError((error) => false);
     return status;
+  }
+
+  // Lắng nghe sự thay đổi trong danh sách thành viên của nhóm để theo dõi sự kiện thoát nhóm hoặc xóa thành viên.
+  static Stream<QuerySnapshot<Map<String, dynamic>>>
+      listenToGroupMembersChanges(String groupId) {
+    return CollectionStore.groups
+        .doc(groupId)
+        .collection(CollectionStoreConstant.members)
+        .snapshots();
   }
 }

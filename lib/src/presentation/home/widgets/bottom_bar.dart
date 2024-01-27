@@ -13,18 +13,20 @@ import '../../../global/global.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../map/cubit/location_listen/location_listen_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
-import 'modal_bottom/members/widgets/modal_edit.dart';
-import 'modal_bottom/members/widgets/modal_show.dart';
+import '../../map/cubit/tracking_members/tracking_member_cubit.dart';
+import 'bottom_sheet/members/widgets/modal_edit.dart';
+import 'bottom_sheet/members/widgets/modal_show.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({
     super.key,
     required this.mapController,
     required this.locationListenCubit,
+    required this.trackingMemberCubit,
   });
   final Completer<GoogleMapController> mapController;
   final LocationListenCubit locationListenCubit;
-
+  final TrackingMemberCubit trackingMemberCubit;
   @override
   State<BottomBar> createState() => _BottomBarState();
 }
@@ -103,10 +105,10 @@ class _BottomBarState extends State<BottomBar> {
               child: BlocBuilder<SelectUserCubit, StoreUser?>(
                 bloc: getIt<SelectUserCubit>(),
                 builder: (context, state) {
-                  if (state != null && state.avatarUrl != null) {
-                    return _buildAvatar(state.avatarUrl!);
+                  if (state != null) {
+                    return _buildAvatar(state.avatarUrl);
                   }
-                  return _buildAvatar(Global.instance.user!.avatarUrl!);
+                  return _buildAvatar(Global.instance.user!.avatarUrl);
                 },
               ),
             ),

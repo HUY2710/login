@@ -39,16 +39,16 @@ class ModalEditMember extends StatelessWidget {
                 },
               ),
               16.h.verticalSpace,
-              Expanded(
-                child: ListView.builder(
-                    itemCount: 4,
-                    itemBuilder: (context, index) {
-                      return MemberWidget(
-                        isAdmin: index == 0 ? true : false,
-                        isEdit: true,
-                      );
-                    }),
-              )
+              // Expanded(
+              //   child: ListView.builder(
+              //       itemCount: 4,
+              //       itemBuilder: (context, index) {
+              //         return MemberWidget(
+              //           isAdmin: index == 0 ? true : false,
+              //           isEdit: true,
+              //         );
+              //       }),
+              // )
             ],
           ),
         ),

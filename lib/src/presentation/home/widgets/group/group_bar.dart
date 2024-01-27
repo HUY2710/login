@@ -4,20 +4,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../../../config/di/di.dart';
-import '../../../data/models/store_group/store_group.dart';
-import '../../../gen/assets.gen.dart';
-import '../../../gen/colors.gen.dart';
-import '../../../shared/extension/context_extension.dart';
-import '../../../shared/widgets/containers/border_container.dart';
-import '../../../shared/widgets/containers/linear_container.dart';
-import '../../../shared/widgets/containers/shadow_container.dart';
-import '../../../shared/widgets/custom_inkwell.dart';
-import '../../map/cubit/select_group_cubit.dart';
-import '../cubit/my_list_group_cubit.dart';
-import 'bottom_sheet/create_group_bottom_sheet.dart';
+import '../../../../config/di/di.dart';
+import '../../../../data/models/store_group/store_group.dart';
+import '../../../../gen/assets.gen.dart';
+import '../../../../gen/colors.gen.dart';
+import '../../../../shared/extension/context_extension.dart';
+import '../../../../shared/widgets/containers/border_container.dart';
+import '../../../../shared/widgets/containers/linear_container.dart';
+import '../../../../shared/widgets/containers/shadow_container.dart';
+import '../../../../shared/widgets/custom_inkwell.dart';
+import '../../../map/cubit/select_group_cubit.dart';
+import '../../cubit/my_list_group/my_list_group_cubit.dart';
+import '../bottom_sheet/create_edit_group.dart';
+import '../bottom_sheet/join_group.dart';
 import 'group_item.dart';
-import 'modal_bottom/join_group/join_group.dart';
 
 class GroupBar extends StatelessWidget {
   const GroupBar({super.key});
@@ -110,7 +110,7 @@ class GroupBar extends StatelessWidget {
                                             .viewInsets
                                             .bottom,
                                       ),
-                                      child: const BottomSheetCreateGroup(),
+                                      child: const CreateEditGroup(),
                                     );
                                   });
                             }
@@ -201,13 +201,17 @@ class GroupBar extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
                                     onTap: () {
-                                      getIt<SelectGroupCubit>()
-                                          .update(groups[index]);
+                                      if (groups[index].idGroup !=
+                                          getIt<SelectGroupCubit>()
+                                              .state
+                                              ?.idGroup) {
+                                        getIt<SelectGroupCubit>()
+                                            .update(groups[index]);
+                                      }
                                     },
                                     child: GroupItem(
                                       myGroupCubit: myListGroupCubit,
-                                      members:
-                                          groups[index].members?.length ?? 1,
+                                      members: groups[index].countMembers,
                                       itemGroup: groups[index],
                                     ),
                                   );

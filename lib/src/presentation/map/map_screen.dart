@@ -8,11 +8,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../config/di/di.dart';
+import '../../data/models/store_group/store_group.dart';
 import '../../global/global.dart';
 import '../../services/my_background_service.dart';
 import '../../shared/helpers/capture_widget_helper.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../home/widgets/bottom_bar.dart';
+import 'cubit/select_group_cubit.dart';
+import 'widgets/custom_map.dart';
 import 'cubit/location_listen/location_listen_cubit.dart';
 import 'cubit/map_type_cubit.dart';
 import 'cubit/tracking_members/tracking_member_cubit.dart';
@@ -144,15 +147,26 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
             bloc: _locationListenCubit,
             listener: _listenLocationCubit,
             builder: (context, locationListenState) {
-              return BlocBuilder<MapTypeCubit, MapType>(
-                bloc: _mapTypeCubit,
-                builder: (context, MapType mapTypeState) {
-                  return CustomMap(
-                    defaultLocation: _defaultLocation,
-                    locationListenState: locationListenState,
-                    mapController: _mapController,
-                    mapType: mapTypeState,
-                    marker: marker,
+              return BlocConsumer<SelectGroupCubit, StoreGroup?>(
+                bloc: getIt<SelectGroupCubit>(),
+                listenWhen: (previous, current) => previous != current,
+                listener: (context, state) {
+                  if (state != null) {
+                    _trackingMemberCubit.initTrackingMember();
+                  }
+                },
+                builder: (context, state) {
+                  return BlocBuilder<MapTypeCubit, MapType>(
+                    bloc: _mapTypeCubit,
+                    builder: (context, MapType mapTypeState) {
+                      return CustomMap(
+                        defaultLocation: _defaultLocation,
+                        locationListenState: locationListenState,
+                        mapController: _mapController,
+                        mapType: mapTypeState,
+                        marker: marker,
+                      );
+                    },
                   );
                 },
               );
@@ -176,6 +190,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
             child: BottomBar(
               locationListenCubit: _locationListenCubit,
               mapController: _mapController,
+              trackingMemberCubit: _trackingMemberCubit,
             ),
           )
         ],
