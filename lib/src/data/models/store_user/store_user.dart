@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -13,13 +15,11 @@ class StoreUser with _$StoreUser {
     required String avatarUrl,
     required String userName,
     required int batteryLevel,
-    @JsonKey(
-      includeFromJson: false,
-      includeToJson: false,
-    )
-    Uint8List? marker,
+    @JsonKey(includeFromJson: false, includeToJson: false) Uint8List? marker,
     @JsonKey(includeFromJson: false, includeToJson: false)
     StoreLocation? location,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    StreamSubscription? subscriptionLocation,
   }) = _StoreUser;
 
   factory StoreUser.fromJson(Map<String, dynamic> json) =>

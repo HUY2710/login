@@ -33,6 +33,19 @@ class FirestoreClient {
     await GroupsManager.createGroup(newGroup);
   }
 
+  //kiểm tra xem mình còn trong group đó hay không
+  Future<bool> isInGroup(String idGroup) async {
+    try {
+      final result = await GroupsManager.isInGroup(idGroup);
+      if (result.exists && result.data() != null) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
   //update group
   Future<void> updateGroup({
     required String idGroup,
@@ -115,9 +128,18 @@ class FirestoreClient {
     return LocationManager.getLocation();
   }
 
+  Future<StoreLocation?> getUserLocation(String idUser) {
+    return LocationManager.getUserLocation(idUser);
+  }
+
   Future<void> updateLocation(
     Map<String, dynamic> fields,
   ) async {
     await LocationManager.updateLocation(fields);
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> listenLocationUser(
+      String idUser) {
+    return LocationManager.listenLocationUserChange(idUser);
   }
 }
