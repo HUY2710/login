@@ -115,9 +115,18 @@ class FirestoreClient {
     return LocationManager.getLocation();
   }
 
+  Future<StoreLocation?> getUserLocation(String idUser) {
+    return LocationManager.getUserLocation(idUser);
+  }
+
   Future<void> updateLocation(
     Map<String, dynamic> fields,
   ) async {
     await LocationManager.updateLocation(fields);
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> listenLocationUser(
+      String idUser) {
+    return LocationManager.listenLocationUserChange(idUser);
   }
 }
