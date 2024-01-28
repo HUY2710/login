@@ -39,6 +39,16 @@ class GroupsManager {
     });
   }
 
+  //kiểm tra xem mình còn trong group đó hay không ()
+  static Future<DocumentSnapshot<Map<String, dynamic>>> isInGroup(
+      String idGroup) async {
+    return CollectionStore.users
+        .doc(Global.instance.user!.code)
+        .collection(CollectionStoreConstant.myGroups)
+        .doc(idGroup)
+        .get();
+  }
+
   static Future<void> updateGroup({
     required String idGroup,
     required Map<String, dynamic> fields,

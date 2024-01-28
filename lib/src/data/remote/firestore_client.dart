@@ -33,6 +33,19 @@ class FirestoreClient {
     await GroupsManager.createGroup(newGroup);
   }
 
+  //kiểm tra xem mình còn trong group đó hay không
+  Future<bool> isInGroup(String idGroup) async {
+    try {
+      final result = await GroupsManager.isInGroup(idGroup);
+      if (result.exists && result.data() != null) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
   //update group
   Future<void> updateGroup({
     required String idGroup,
