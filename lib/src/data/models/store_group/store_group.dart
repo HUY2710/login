@@ -9,6 +9,7 @@ part 'store_group.g.dart';
 //save history user check in location
 @freezed
 class StoreGroup with _$StoreGroup {
+  @JsonSerializable(explicitToJson: true)
   const factory StoreGroup({
     required String passCode, //code invite user join group
     required String groupName,

@@ -1,18 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../data/models/store_chat_group/store_chat_group.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../data/remote/collection_store.dart';
 import '../../../data/remote/group_manager.dart';
 import '../../../shared/helpers/logger_utils.dart';
 
-class ChatSercive {
-  ChatSercive._privateConstructor();
+class ChatService {
+  ChatService._privateConstructor();
 
-  static final ChatSercive instance = ChatSercive._privateConstructor();
+  static final ChatService instance = ChatService._privateConstructor();
 
-  Future<dynamic> getMyGroupChat() async {
-    final List<ChatGroupModel> result = [];
+  Future<List<StoreChatGroup>> getMyGroupChat() async {
+    final List<StoreChatGroup> result = [];
     try {
       final List<StoreGroup> listGroup =
           await GroupsManager.getMyListGroup() ?? [];
@@ -22,34 +23,26 @@ class ChatSercive {
         }
         return '';
       }).toList();
-      logger.d(listIdUser);
-      final snapshot = await CollectionStore.users
+      final userSnapshot = await CollectionStore.users
           .where(FieldPath.documentId, whereIn: listIdUser)
           .get();
-      final List<StoreGroup> userList = snapshot.docs.map((e) {
-        logger.e(e.data());
-        return StoreGroup.fromJson(e.data());
-      }).toList();
+      final listStoreUser = userSnapshot.docs
+          .map((user) => StoreUser.fromJson(user.data()))
+          .toList();
+      for (var i = 0; i < listGroup.length; i++) {
+        for (var j = 0; j < listStoreUser.length; j++) {
+          StoreChatGroup storeChatGroup =
+              StoreChatGroup.fromJson(listGroup[i].toJson());
 
-      // late StoreUser user;
-      // if (listGroup != null) {
-      //   listGroup.forEach((group) {
-      //     if (group.lastMessage != null) {
-      //       CollectionStore.users
-      //           .where('code', isEqualTo: group.lastMessage!.senderId)
-      //           .get();
-
-      //       user = StoreUser.fromJson();
-      //     }
-      //   });
-      // }
-    } catch (e) {}
+          storeChatGroup = storeChatGroup.copyWith(
+              storeUser: StoreUser.fromJson(listStoreUser[j].toJson()));
+          result.add(storeChatGroup);
+        }
+      }
+      return result;
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
   }
-}
-
-class ChatGroupModel {
-  ChatGroupModel({required this.group, required this.user});
-
-  final StoreGroup group;
-  final StoreUser user;
 }

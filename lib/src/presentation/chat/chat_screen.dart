@@ -1,13 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
-import '../../data/models/store_group/store_group.dart';
-import '../../data/remote/group_manager.dart';
 import '../../gen/gens.dart';
-import '../../shared/helpers/gradient_background.dart';
 import '../../shared/helpers/logger_utils.dart';
 import '../../shared/widgets/containers/linear_container.dart';
 import '../../shared/widgets/custom_inkwell.dart';
@@ -46,17 +43,17 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             TextField(
               decoration: InputDecoration(
-                  fillColor: Color(0xffEFEFEF),
+                  fillColor: const Color(0xffEFEFEF),
                   filled: true,
                   hintText: 'Search',
                   hintStyle: TextStyle(
-                    color: Color(0xff928989),
+                    color: const Color(0xff928989),
                     fontSize: 16.sp,
                   ),
                   prefixIcon: Icon(
                     Icons.search,
                     size: 24.r,
-                    color: Color(0xff928989),
+                    color: const Color(0xff928989),
                   ),
                   border: OutlineInputBorder(
                       borderSide: BorderSide.none,
@@ -73,17 +70,40 @@ class _ChatScreenState extends State<ChatScreen> {
                   fontWeight: FontWeight.w500),
             ),
             10.h.verticalSpace,
-            GroupItem(),
-            FutureBuilder(
-                future: ChatSercive.instance.getMyGroupChat(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    // logger.d(snapshot.data?.first.lastMessage?.content);
-                    // return Text(snapshot.data!.length.toString());
-                    return Text('Done');
-                  }
-                  return CircularProgressIndicator();
-                }),
+            Expanded(
+              child: FutureBuilder(
+                  future: ChatService.instance.getMyGroupChat(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      // logger.d(snapshot.data?.first.lastMessage?.content);
+                      // return Text(snapshot.data!.length.toString());
+                      if (snapshot.data!.isEmpty) {
+                      } else {
+                        return ListView.separated(
+                            itemBuilder: (context, index) {
+                              final groupItem = snapshot.data![index];
+                              return GroupItem(
+                                userName: groupItem.storeUser!.userName,
+                                message: groupItem.lastMessage == null
+                                    ? '${groupItem.storeUser!.userName} created group'
+                                    : groupItem.lastMessage!.content,
+                                time: groupItem.lastMessage!.sentAt,
+                                avatar: groupItem.avatarGroup,
+                                groupName: groupItem.groupName,
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return const Divider(
+                                thickness: 1,
+                                color: Color(0xffEAEAEA),
+                              );
+                            },
+                            itemCount: snapshot.data!.length);
+                      }
+                    }
+                    return const Center(child: CircularProgressIndicator());
+                  }),
+            ),
           ],
         ),
       ),
@@ -94,19 +114,24 @@ class _ChatScreenState extends State<ChatScreen> {
 class GroupItem extends StatelessWidget {
   const GroupItem({
     super.key,
+    required this.userName,
+    required this.message,
+    required this.time,
+    required this.avatar,
+    required this.groupName,
   });
 
-  final String userName = 'Sera';
-  final String message =
-      'Actually I wanted to check with you about your online about your ';
-
+  final String userName;
+  final String message;
+  final String time;
+  final String avatar;
+  final String groupName;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 60.h,
       width: double.infinity,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
             width: 52,
@@ -123,7 +148,7 @@ class GroupItem extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(99),
-                  child: Image.asset('assets/images/avatars/avatar10.png')),
+                  child: Image.asset(avatar)),
             ),
           ),
           20.horizontalSpace,
@@ -135,7 +160,7 @@ class GroupItem extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'My Planet',
+                      groupName,
                       style: TextStyle(
                           color: MyColors.black34,
                           fontSize: 16.sp,
@@ -166,7 +191,7 @@ class GroupItem extends StatelessWidget {
           ),
           8.horizontalSpace,
           Text(
-            'Jan 16, 2023',
+            formatDateTime(DateTime.parse(time)),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
@@ -177,5 +202,32 @@ class GroupItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String formatDateTime(DateTime input) {
+    final DateTime now = DateTime.now();
+    logger.i(input.isAfter(now));
+    if (input.isAfter(now) && input.isBefore(now.add(Duration(days: 1)))) {
+      // If input is within the current day, display hour and minute
+      return '${input.hour}:${input.minute}';
+    } else if (input.weekday >= 1 && input.weekday <= 7) {
+      // If input represents a day of the week, display the weekday
+      return input.weekday == 1
+          ? 'Sun'
+          : input.weekday == 2
+              ? 'Mon'
+              : input.weekday == 3
+                  ? 'Tues'
+                  : input.weekday == 4
+                      ? 'Wed'
+                      : input.weekday == 5
+                          ? 'Thu'
+                          : input.weekday == 6
+                              ? 'Fri'
+                              : 'Sat';
+    } else {
+      // Otherwise, display in month, day, year format
+      return DateFormat('MMM d, yyyy').format(input);
+    }
   }
 }
