@@ -9,7 +9,6 @@ import 'package:location/location.dart';
 
 import '../../app/cubit/language_cubit.dart';
 import '../config/di/di.dart';
-import '../data/models/store_location/store_location.dart';
 import '../data/remote/firestore_client.dart';
 import '../global/global.dart';
 

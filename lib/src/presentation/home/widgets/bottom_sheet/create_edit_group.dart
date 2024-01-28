@@ -12,6 +12,7 @@ import '../../../../gen/assets.gen.dart';
 import '../../../../gen/gens.dart';
 import '../../../../global/global.dart';
 import '../../../../shared/extension/int_extension.dart';
+import '../../../../shared/helpers/valid_helper.dart';
 import '../../../../shared/widgets/containers/shadow_container.dart';
 import '../../../../shared/widgets/custom_circle_avatar.dart';
 import '../../../../shared/widgets/my_drag.dart';
@@ -33,6 +34,11 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
   final TextEditingController groupNameController = TextEditingController();
   StoreGroup? tempGroup;
   Future<void> _tapDone() async {
+    if (groupNameController.text.isNotEmpty &&
+        ValidHelper.containsSpecialCharacters(groupNameController.text)) {
+      Fluttertoast.showToast(msg: 'Vui lòng không chứa kí tự đặc biệt');
+      return;
+    }
     //nếu detailGroup !=null => edit group
     if (tempGroup != null) {
       updateGroup().then((value) => context.popRoute());
@@ -42,10 +48,12 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
       //apply cubit after
       if (groupNameController.text.isNotEmpty && Global.instance.user != null) {
         //create group;
+        final validName =
+            ValidHelper.removeExtraSpaces(groupNameController.text);
         final newGroup = StoreGroup(
           passCode: 6.randomUpperCaseString(),
           idGroup: 24.randomString(),
-          groupName: groupNameController.text,
+          groupName: validName,
           avatarGroup: Assets.images.avatars.avatar10.path,
           countMembers: 1,
         );
@@ -69,19 +77,18 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
 
   Future<void> updateGroup() async {
     try {
+      final name = ValidHelper.removeExtraSpaces(groupNameController.text);
       EasyLoading.show();
       await FirestoreClient.instance.updateGroup(
         idGroup: tempGroup!.idGroup!,
-        mapFields: {'groupName': groupNameController.text},
+        mapFields: {'groupName': name},
       );
       EasyLoading.dismiss();
       Fluttertoast.showToast(msg: 'Update Group Success!');
 
       //sau khi update thành công thì tiến hành cập nhật lại group ở local
       getIt<SelectGroupCubit>().update(
-        getIt<SelectGroupCubit>()
-            .state
-            ?.copyWith(groupName: groupNameController.text),
+        getIt<SelectGroupCubit>().state?.copyWith(groupName: name),
       );
     } catch (error) {
       Fluttertoast.showToast(msg: '$error');
@@ -141,7 +148,9 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: GestureDetector(
-                        onTap: _tapDone,
+                        onTap: groupNameController.text.isNotEmpty
+                            ? _tapDone
+                            : () {},
                         child: Text(
                           'Done',
                           style: TextStyle(
@@ -204,6 +213,11 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
           20.verticalSpace,
           TextFormField(
             controller: groupNameController,
+            onChanged: (value) {
+              setState(() {
+                groupNameController.text = value;
+              });
+            },
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(

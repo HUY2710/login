@@ -15,8 +15,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:upgrader/upgrader.dart';
-import 'package:uuid/data.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../app/cubit/language_cubit.dart';
 import '../../../flavors.dart';
@@ -38,6 +36,7 @@ import '../../shared/enum/preference_keys.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/extension/int_extension.dart';
 import '../../shared/helpers/env_params.dart';
+import '../map/cubit/select_group_cubit.dart';
 import 'update_dialog.dart';
 
 @RoutePage()
@@ -165,6 +164,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> setInitScreen() async {
     await getMe();
+    await checkInGroup();
     AutoRouter.of(context).replace(const HomeRoute());
     return;
     final bool isFirstLaunch =
@@ -262,6 +262,23 @@ class _SplashScreenState extends State<SplashScreen> {
     final location = await FirestoreClient.instance.getLocation();
     if (location != null) {
       Global.instance.location = LatLng(location.lat, location.lng);
+    }
+  }
+
+  //kiểm tra xem mình còn trong group hay không
+  Future<void> checkInGroup() async {
+    //nếu mình đã ở trong nhóm và sau 1 time mở lại app thì check xem còn là member trong group đó hay không
+    if (getIt<SelectGroupCubit>().state != null) {
+      try {
+        final result = await FirestoreClient.instance
+            .isInGroup(getIt<SelectGroupCubit>().state!.idGroup!);
+        //nếu không còn ở trong group thì nên reset lại data local của group
+        if (!result) {
+          getIt<SelectGroupCubit>().update(null);
+        }
+      } catch (error) {
+        //xử lí lỗi
+      }
     }
   }
 

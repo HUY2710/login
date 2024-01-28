@@ -43,4 +43,20 @@ class LocationManager {
     LoggerUtils.logInfo('Fetch location: $locations');
     return locations;
   }
+
+  static Stream<DocumentSnapshot<Map<String, dynamic>>>
+      listenLocationUserChange(String idUser) {
+    return CollectionStore.locations.doc(idUser).snapshots();
+  }
+
+  static Future<StoreLocation?> getUserLocation(String idUser) async {
+    final DocumentSnapshot<Map<String, dynamic>> docLocation =
+        await CollectionStore.locations.doc(idUser).get();
+    if (docLocation.data() == null) {
+      return null;
+    }
+    final StoreLocation locations = StoreLocation.fromJson(docLocation.data()!);
+    LoggerUtils.logInfo('Fetch location: $locations');
+    return locations;
+  }
 }

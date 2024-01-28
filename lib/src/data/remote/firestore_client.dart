@@ -33,6 +33,19 @@ class FirestoreClient {
     await GroupsManager.createGroup(newGroup);
   }
 
+  //kiểm tra xem mình còn trong group đó hay không
+  Future<bool> isInGroup(String idGroup) async {
+    try {
+      final result = await GroupsManager.isInGroup(idGroup);
+      if (result.exists && result.data() != null) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
   //update group
   Future<void> updateGroup({
     required String idGroup,
@@ -68,9 +81,8 @@ class FirestoreClient {
   }
 
   //Add member to group
-  Future<bool> addMemberToGroup(
-      String idGroup, Map<String, dynamic> newMap) async {
-    final result = await GroupsManager.addNewMemberToGroup(idGroup, newMap);
+  Future<bool> addMemberToGroup(String idGroup, StoreMember newMember) async {
+    final result = await GroupsManager.addNewMemberToGroup(idGroup, newMember);
     return result;
   }
 
@@ -83,6 +95,13 @@ class FirestoreClient {
     //tiếp theo là xóa toàn bộ member
     await MemberManager.deleteMemberDocument(group.idGroup!);
     return result;
+  }
+
+  //xóa user ra khỏi nhóm hoặc user tự thoát nhóm
+  Future<void> leaveGroup(String idGroup, String idUser) async {
+    await GroupsManager.leaveGroup(idGroup: idGroup, idUser: idUser);
+    await GroupsManager.removeIdGroupOfMyGroup(
+        idGroup: idGroup, idUser: idUser);
   }
 
   Future<void> deleteIdGroupInMyGroup(StoreGroup group) async {
@@ -109,9 +128,18 @@ class FirestoreClient {
     return LocationManager.getLocation();
   }
 
+  Future<StoreLocation?> getUserLocation(String idUser) {
+    return LocationManager.getUserLocation(idUser);
+  }
+
   Future<void> updateLocation(
     Map<String, dynamic> fields,
   ) async {
     await LocationManager.updateLocation(fields);
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> listenLocationUser(
+      String idUser) {
+    return LocationManager.listenLocationUserChange(idUser);
   }
 }

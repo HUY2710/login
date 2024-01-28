@@ -27,13 +27,14 @@ class _MapTypeSelectorState extends State<MapTypeSelector> {
       type: MapType.normal,
     ),
     MapItem(
-        asset: Assets.images.mapTypes.street.path,
-        title: 'Street',
-        type: MapType.terrain),
-    MapItem(
       asset: Assets.images.mapTypes.satellite.path,
       title: 'Satellite',
       type: MapType.satellite,
+    ),
+    MapItem(
+      asset: Assets.images.mapTypes.traffic.path,
+      title: 'Traffic',
+      type: MapType.terrain,
     ),
   ];
 
@@ -64,23 +65,26 @@ class _MapTypeSelectorState extends State<MapTypeSelector> {
                   ),
                   GestureDetector(
                     onTap: () => context.popRoute(),
-                    child: Text(
-                      'Close',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                        color: context.colorScheme.primary,
-                      ),
-                    ),
+                    child: Assets.icons.icClose.svg(height: 24.h),
                   ),
                 ],
               ),
-              16.verticalSpace,
-              _buildItem(0, state),
               24.verticalSpace,
-              _buildItem(1, state),
-              24.verticalSpace,
-              _buildItem(2, state),
+              SizedBox(
+                height: 110.h,
+                width: double.infinity,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  children: [
+                    _buildItem(0, state),
+                    24.horizontalSpace,
+                    _buildItem(1, state),
+                    24.horizontalSpace,
+                    _buildItem(2, state),
+                  ],
+                ),
+              ),
               31.verticalSpace
             ],
           );
@@ -94,37 +98,39 @@ class _MapTypeSelectorState extends State<MapTypeSelector> {
       onTap: () {
         _mapTypeCubit.update(mapTypes[index].type);
       },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+      child: Column(
         children: [
           Container(
+            height: 72.h,
+            width: 140.w,
             decoration: BoxDecoration(
               border: Border.all(
                 color: state == mapTypes[index].type
                     ? context.colorScheme.primary
                     : Colors.transparent,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(15.r)),
+              borderRadius: BorderRadius.all(
+                Radius.circular(15.r),
+              ),
             ),
-            child: Image.asset(
-              mapTypes[index].asset,
-              width: 40.r,
-              height: 40.r,
-              fit: BoxFit.fill,
-            ),
-          ),
-          12.horizontalSpace,
-          Expanded(
-            child: Text(
-              mapTypes[index].title,
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
-                color: MyColors.black34,
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(15.r),
+              ),
+              child: Image.asset(
+                mapTypes[index].asset,
+                fit: BoxFit.cover,
               ),
             ),
           ),
-          if (state == mapTypes[index].type) const Icon(Icons.check)
+          8.verticalSpace,
+          Text(
+            mapTypes[index].title,
+            style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          )
         ],
       ),
     );
