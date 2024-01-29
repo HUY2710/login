@@ -9,7 +9,6 @@ import '../../../module/admob/app_ad_id_manager.dart';
 import '../../../module/admob/enum/ad_remote_key.dart';
 import '../../../module/admob/widget/ads/large_native_ad.dart';
 import '../../config/di/di.dart';
-import '../../config/navigation/app_router.dart';
 import '../../config/remote_config.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/assets.gen.dart';
@@ -72,9 +71,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         await SharedPreferencesManager.getIsPermissionAllow();
     if (mounted) {
       if (!isPermissionAllow) {
-        context.replaceRoute(const PermissionRoute());
+        // context.replaceRoute(const PermissionRoute());
       } else {
-        context.replaceRoute(const HomeRoute());
+        // context.replaceRoute(const HomeRoute());
       }
     }
   }
