@@ -13,3 +13,5 @@ class MessageModel with _$MessageModel {
   factory MessageModel.fromJson(Map<String, Object?> json) =>
       _$MessageModelFromJson(json);
 }
+
+class MessageType {}

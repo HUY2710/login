@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../presentation/chat/chat_screen.dart';
+import '../../presentation/chat/services/chat_detail_screen.dart';
 import '../../presentation/home/home_screen.dart';
 import '../../presentation/language/screen/language_screen.dart';
 import '../../presentation/onboarding/onboarding_screen.dart';
@@ -27,7 +28,8 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: PermissionRoute.page),
         AutoRoute(page: HomeRoute.page),
         AutoRoute(page: SettingRoute.page),
-        AutoRoute(page: ChatRoute.page)
+        AutoRoute(page: ChatRoute.page),
+        AutoRoute(page: ChatDetailRoute.page)
       ];
 
   AutoRoute routeWithFadeTransition(

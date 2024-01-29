@@ -25,6 +25,8 @@
   "leaveGroup": "Leave Group",
   "leaveGroupContent": "Are you sure to leave group?",
   "removeGroup": "Remove Group",
-  "removeGroupContent": "You’re currently the group owner. Are you sure to delete it permanantly?"
-
+  "removeGroupContent": "You’re currently the group owner. Are you sure to delete it permanantly?",
+  "chatGroupEmptyTitle": "Add members to send messages",
+  "chatGroupEmptySub": "At least one more person is needed \nto start a chat",
+  "addNewMember": "Add a new members"
 }

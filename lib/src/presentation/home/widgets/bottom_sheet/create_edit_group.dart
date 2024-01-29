@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../config/di/di.dart';
 import '../../../../data/models/store_group/store_group.dart';
+import '../../../../data/models/store_message/store_message.dart';
 import '../../../../data/remote/firestore_client.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/gens.dart';
@@ -51,12 +52,15 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
         final validName =
             ValidHelper.removeExtraSpaces(groupNameController.text);
         final newGroup = StoreGroup(
-          passCode: 6.randomUpperCaseString(),
-          idGroup: 24.randomString(),
-          groupName: validName,
-          avatarGroup: Assets.images.avatars.avatar10.path,
-          countMembers: 1,
-        );
+            passCode: 6.randomUpperCaseString(),
+            idGroup: 24.randomString(),
+            groupName: validName,
+            avatarGroup: Assets.images.avatars.avatar10.path,
+            countMembers: 1,
+            lastMessage: MessageModel(
+                content: '',
+                senderId: Global.instance.user!.code,
+                sentAt: DateTime.now().toString()));
 
         await FirestoreClient.instance.createGroup(newGroup);
         if (context.mounted) {
