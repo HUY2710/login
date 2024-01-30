@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of '../onboarding_screen.dart';
 
 class ActionRow extends StatefulWidget {
@@ -32,7 +33,7 @@ class _ActionRowState extends State<ActionRow> {
             ),
           ),
           28.verticalSpace,
-          GestureDetector(
+          AppButton(
             onTap: () {
               if (currentIndex < 2) {
                 _pressNextButton(currentIndex);
@@ -40,37 +41,6 @@ class _ActionRowState extends State<ActionRow> {
                 widget.onStartedTap();
               }
             },
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 16.h),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFFB67DFF),
-                    Color(0xFF7B3EFF),
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(15.r),
-              ),
-              child: Stack(
-                children: [
-                  Align(
-                    child: Text(
-                      'Continue',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16.sp,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 16.w,
-                    child: Assets.icons.icForward.svg(height: 24.h),
-                  )
-                ],
-              ),
-            ),
           ),
         ],
       ),

@@ -11,6 +11,7 @@ import '../../gen/assets.gen.dart';
 import '../../shared/cubit/value_cubit.dart';
 import '../../shared/enum/language.dart';
 import '../../shared/extension/context_extension.dart';
+import 'widgets/app_button.dart';
 import 'widgets/indicator.dart';
 import 'widgets/page_widget.dart';
 
@@ -52,7 +53,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         await SharedPreferencesManager.getIsPermissionAllow();
     if (mounted) {
       if (!isPermissionAllow) {
-        context.replaceRoute(const PermissionRoute());
+        context.replaceRoute(const OnboardingCreateNameRoute());
       } else {
         context.replaceRoute(const HomeRoute());
       }

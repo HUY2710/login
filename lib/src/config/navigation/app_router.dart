@@ -5,6 +5,8 @@ import 'package:injectable/injectable.dart';
 import '../../presentation/home/home_screen.dart';
 import '../../presentation/language/screen/language_screen.dart';
 import '../../presentation/onboarding/onboarding_screen.dart';
+import '../../presentation/onboarding/screens/onboarding_create_avt_person_screen.dart';
+import '../../presentation/onboarding/screens/onboarding_create_name_screen.dart';
 import '../../presentation/permission/permission_screen.dart';
 import '../../presentation/setting/about_screen.dart';
 import '../../presentation/setting/setting_screen.dart';
@@ -23,6 +25,8 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: SplashRoute.page, initial: true),
         AutoRoute(page: LanguageRoute.page),
         AutoRoute(page: OnBoardingRoute.page),
+        AutoRoute(page: OnboardingCreateNameRoute.page),
+        AutoRoute(page: OnboardingCreateAvtPersonRoute.page),
         AutoRoute(page: PermissionRoute.page),
         AutoRoute(page: HomeRoute.page),
         AutoRoute(page: SettingRoute.page),
