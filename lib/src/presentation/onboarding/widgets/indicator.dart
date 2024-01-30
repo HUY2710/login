@@ -8,7 +8,15 @@ Widget indicator(BuildContext context, bool isActive) {
     width: isActive ? 24.r : 8.r,
     margin: EdgeInsets.only(right: 5.w),
     decoration: BoxDecoration(
-      color: Colors.red,
+      color: isActive ? null : const Color(0xFFEAEAEA),
+      gradient: isActive
+          ? const LinearGradient(
+              colors: [
+                Color(0xFF7B3EFF),
+                Color(0xFFB67DFF),
+              ],
+            )
+          : null,
       borderRadius: BorderRadius.circular(5.r),
     ),
   );

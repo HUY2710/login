@@ -18,18 +18,15 @@ class OnboardingCarousel extends StatelessWidget {
       children: <Widget>[
         ContentPageWidget(
           image: Assets.images.onboarding.onboarding1,
-          title: 'context.l10n.yourLocation',
-          description: 'context.l10n.subYourLocation',
+          title: context.l10n.onboarding_title_1,
         ),
         ContentPageWidget(
           image: Assets.images.onboarding.onboarding2,
-          title: 'context.l10n.locationOfFriends',
-          description: 'context.l10n.subLocationFriends',
+          title: context.l10n.onboarding_title_2,
         ),
         ContentPageWidget(
           image: Assets.images.onboarding.onboarding3,
-          title: 'context.l10n.seeTheirLocationHistory',
-          description: 'context.l10n.subSeeLocationHistory',
+          title: context.l10n.onboarding_title_3,
         ),
       ],
     );
