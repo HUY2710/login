@@ -9,9 +9,9 @@ class MessageModel with _$MessageModel {
     required String content,
     required String senderId,
     required String sentAt,
+    @JsonKey(includeToJson: false, includeFromJson: false) String? avatarUrl,
+    @JsonKey(includeToJson: false, includeFromJson: false) String? userName,
   }) = _MessageModel;
   factory MessageModel.fromJson(Map<String, Object?> json) =>
       _$MessageModelFromJson(json);
 }
-
-class MessageType {}

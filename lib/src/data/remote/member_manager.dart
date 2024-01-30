@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 import '../../shared/utils/logger_utils.dart';
 import '../models/store_member/store_member.dart';

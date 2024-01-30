@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../data/models/store_chat_group/store_chat_group.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_message/store_message.dart';
 import '../../../data/models/store_user/store_user.dart';
@@ -14,54 +13,111 @@ class ChatService {
 
   static final ChatService instance = ChatService._privateConstructor();
 
-  Future<List<StoreChatGroup>> getMyGroupChat() async {
-    final List<StoreChatGroup> result = [];
-    try {
-      final List<StoreGroup> listGroup =
-          await GroupsManager.getMyListGroup() ?? [];
-      final List<String> listIdUser = listGroup.map((e) {
-        if (e.lastMessage != null) {
-          return e.lastMessage!.senderId;
-        }
-        return Global.instance.user!.code;
-      }).toList();
-      final userSnapshot = await CollectionStore.users
-          .where(FieldPath.documentId, whereIn: listIdUser)
-          .get();
-      final listStoreUser = userSnapshot.docs
-          .map((user) => StoreUser.fromJson(user.data()))
-          .toList();
-      for (var i = 0; i < listGroup.length; i++) {
-        for (var j = 0; j < listStoreUser.length; j++) {
-          StoreChatGroup storeChatGroup =
-              StoreChatGroup.fromJson(listGroup[i].toJson());
+  Stream<QuerySnapshot<StoreGroup>> getMyGroupChat(
+      List<String> idsMyGroup, List<StoreUser> listStoreUser) {
+    // final List<StoreGroup> listGroup =
+    //     await GroupsManager.getMyListGroup() ?? [];
+    // final List<String> listIdUser = listGroup.map((e) {
+    //   return e.lastMessage!.senderId;
+    // }).toList();
+    // final userSnapshot = await CollectionStore.users
+    //     .where(FieldPath.documentId, whereIn: listIdUser)
+    //     .get();
+    // final listStoreUser = userSnapshot.docs
+    //     .map((user) => StoreUser.fromJson(user.data()))
+    //     .toList();
+    //     final
+    // for (var i = 0; i < listGroup.length; i++) {
+    //   for (var j = 0; j < listStoreUser.length; j++) {
+    //     StoreChatGroup storeChatGroup =
+    //         StoreChatGroup.fromJson(listGroup[i].toJson());
 
-          storeChatGroup = storeChatGroup.copyWith(
-              storeUser: StoreUser.fromJson(
-                listStoreUser[j].toJson(),
-              ),
-              storeMembers: listGroup[i].storeMembers);
-          result.add(storeChatGroup);
-        }
-      }
-      return result;
-    } catch (e) {
-      logger.e(e);
-      return [];
-    }
+    //     storeChatGroup = storeChatGroup.copyWith(
+    //         storeUser: listStoreUser[j].copyWith(),
+    //         storeMembers: listGroup[i].storeMembers);
+    //     result.add(storeChatGroup);
+    //   }
+    // }
+    // return result;
+
+    //// new
+
+    return CollectionStore.groups
+        .where(FieldPath.documentId, whereIn: idsMyGroup)
+        .withConverter(
+            fromFirestore: (snapshot, _) {
+              StoreGroup storeGroup = StoreGroup.fromJson(snapshot.data()!);
+              storeGroup = storeGroup.copyWith(
+                  storeUser: listStoreUser.firstWhere(
+                      (user) => user.code == storeGroup.lastMessage!.senderId));
+              return storeGroup;
+            },
+            toFirestore: (message, _) => message.toJson())
+        .snapshots();
   }
 
-  Stream<QuerySnapshot<MessageModel>> streamMessageGroup(String idGroup) {
-    final message = CollectionStore.chat
+  Future<List<String>?> getIdsMyGroup() async {
+    try {
+      final String code = Global.instance.user!.code;
+
+      //lấy ra toàn bộ id các group của mình
+      final snapShotGroups = await CollectionStore.users
+          .doc(code)
+          .collection(CollectionStoreConstant.myGroups)
+          .get();
+      if (snapShotGroups.docs.isNotEmpty) {
+        final List<MyIdGroup> myListIdGroup = snapShotGroups.docs
+            .map((e) => MyIdGroup.fromJson(e.data()))
+            .toList();
+
+        final List<String> idsCondition =
+            myListIdGroup.map((e) => e.idGroup).toList();
+        return idsCondition;
+      }
+    } catch (e) {
+      logger.e(e);
+    }
+    return null;
+  }
+
+  Future<List<String>> getListIdUserFromLastMessage() async {
+    final List<StoreGroup> listGroup =
+        await GroupsManager.getMyListGroup() ?? [];
+    final List<String> listIdUser = listGroup.map((e) {
+      return e.lastMessage!.senderId;
+    }).toList();
+    return listIdUser;
+  }
+
+  Future<List<StoreUser>> getUserFromListId(List<String> listIdUser) async {
+    final userSnapshot = await CollectionStore.users
+        .where(FieldPath.documentId, whereIn: listIdUser)
+        .get();
+    final listStoreUser = userSnapshot.docs
+        .map((user) => StoreUser.fromJson(user.data()))
+        .toList();
+    return listStoreUser;
+  }
+
+  Stream<QuerySnapshot<MessageModel>> streamMessageGroup(
+      String idGroup, List<StoreUser> listUser) {
+    return CollectionStore.chat
         .doc(idGroup)
         .collection(CollectionStoreConstant.messages)
         .orderBy('sentAt')
         .withConverter(
-            fromFirestore: (snapshot, _) =>
-                MessageModel.fromJson(snapshot.data()!),
+            fromFirestore: (snapshot, _) {
+              MessageModel message = MessageModel.fromJson(snapshot.data()!);
+              message = message.copyWith(
+                  avatarUrl: listUser
+                      .firstWhere((user) => user.code == message.senderId)
+                      .avatarUrl,
+                  userName: listUser
+                      .firstWhere((user) => user.code == message.senderId)
+                      .userName);
+              return message;
+            },
             toFirestore: (message, _) => message.toJson())
         .snapshots();
-
-    return message;
   }
 }

@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../config/navigation/app_router.dart';
-import '../../data/models/store_chat_group/store_chat_group.dart';
+import '../../data/models/store_user/store_user.dart';
 import '../../gen/gens.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/gradient_background.dart';
@@ -27,6 +27,21 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  late List<String> idsMyGroup = [];
+  late List<StoreUser> listStoreUser = [];
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      idsMyGroup = await ChatService.instance.getIdsMyGroup() ?? [];
+      final listIdUser =
+          await ChatService.instance.getListIdUserFromLastMessage();
+      listStoreUser = await ChatService.instance.getUserFromListId(listIdUser);
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -45,16 +60,15 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: FutureBuilder(
-              future: ChatService.instance.getMyGroupChat(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data!.isEmpty) {
-                    return const GroupChatEmpty();
-                  } else {
-                    context.read<GroupCubit>().update(snapshot.data!);
-                    return BlocBuilder<GroupCubit, List<StoreChatGroup>>(
-                      builder: (context, state) {
+          child: (idsMyGroup.isNotEmpty && listStoreUser.isNotEmpty)
+              ? StreamBuilder(
+                  stream: ChatService.instance
+                      .getMyGroupChat(idsMyGroup, listStoreUser),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data!.docs.isEmpty) {
+                        return const GroupChatEmpty();
+                      } else {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -91,7 +105,8 @@ class _ChatScreenState extends State<ChatScreen> {
                             Expanded(
                               child: ListView.separated(
                                   itemBuilder: (context, index) {
-                                    final groupItem = snapshot.data![index];
+                                    final groupItem =
+                                        snapshot.data!.docs[index].data();
                                     return GroupItem(
                                       userName: groupItem.storeUser!.userName,
                                       message: groupItem.lastMessage == null
@@ -100,6 +115,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       time: groupItem.lastMessage!.sentAt,
                                       avatar: groupItem.avatarGroup,
                                       groupName: groupItem.groupName,
+                                      idGroup: groupItem.idGroup ?? '',
                                     );
                                   },
                                   separatorBuilder: (context, index) {
@@ -108,16 +124,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                       color: Color(0xffEAEAEA),
                                     );
                                   },
-                                  itemCount: snapshot.data!.length),
+                                  itemCount: snapshot.data!.docs.length),
                             ),
                           ],
                         );
-                      },
-                    );
-                  }
-                }
-                return const Center(child: CircularProgressIndicator());
-              }),
+                      }
+                    }
+                    return const Center(child: CircularProgressIndicator());
+                  })
+              : const Center(child: CircularProgressIndicator()),
         ),
       ),
     );

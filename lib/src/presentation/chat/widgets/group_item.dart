@@ -1,20 +1,21 @@
 part of '../chat_screen.dart';
 
 class GroupItem extends StatelessWidget {
-  const GroupItem({
-    super.key,
-    required this.userName,
-    required this.message,
-    required this.time,
-    required this.avatar,
-    required this.groupName,
-  });
+  const GroupItem(
+      {super.key,
+      required this.userName,
+      required this.message,
+      required this.time,
+      required this.avatar,
+      required this.groupName,
+      required this.idGroup});
 
   final String userName;
   final String message;
   final String time;
   final String avatar;
   final String groupName;
+  final String idGroup;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -50,8 +51,7 @@ class GroupItem extends StatelessWidget {
             });
       },
       onTap: () {
-        context.pushRoute(
-            ChatDetailRoute(storeChatGroups: context.read<GroupCubit>().state));
+        context.pushRoute(ChatDetailRoute(idGroup: idGroup));
       },
       child: Container(
         color: Colors.transparent,

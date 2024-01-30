@@ -1,3 +1,43 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../../data/models/store_message/store_message.dart';
+import '../../../global/global.dart';
+
+class Utils {
+  Utils._();
+  static bool checkLastMessage(
+      {required String code, required bool isLastMessage}) {
+    final userCode = Global.instance.user!.code;
+    return userCode == code && isLastMessage;
+  }
+
+  static bool checkIsUser({required String code}) {
+    return Global.instance.user!.code == code;
+  }
+
+  static bool checkLastMessByUser(
+      int index, List<QueryDocumentSnapshot<MessageModel>> chats) {
+    return index < chats.length - 1 &&
+        chats[index].data().senderId == chats[index + 1].data().senderId &&
+        chats[index].data().senderId == chats.last.data().senderId;
+  }
+
+  static bool compareUserCode(String code1, String code2) {
+    return code1 == code2;
+  }
+
+  // static void findUserByCode(String code) {
+  //   final userSnapshot = CollectionStore.users
+  //       .where(FieldPath.documentId, isEqualTo: code)
+  //       .get();
+  //   final listStoreUser = userSnapshot.docs
+  //       .map((user) => StoreUser.fromJson(user.data()))
+  //       .toList();
+  //   return listStoreUser.firstWhere((user) => user.code == code);
+  // }
+}
+
+
 // import 'package:intl/intl.dart';
 
 // List<Object> calculateChatMessages(
@@ -173,21 +213,4 @@
 //   return [chatMessages, gallery];
 // }
 
-import '../../../global/global.dart';
 
-class Utils {
-  Utils._();
-  static bool checkLastMessage(
-      {required String code, required bool isLastMessage}) {
-    final userCode = Global.instance.user!.code;
-    return userCode == code && isLastMessage;
-  }
-
-  static bool checkIsUser({required String code}) {
-    return Global.instance.user!.code == code;
-  }
-
-  static bool compareUserCode(String code1, String code2) {
-    return code1 == code2;
-  }
-}
