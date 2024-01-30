@@ -15,7 +15,7 @@ class GroupsManager {
     //create new document depend above code
     CollectionStore.groups
         .doc(newGroup.idGroup)
-        .set(newGroup.copyWith().toJson())
+        .set(newGroup.toJson())
         .then((value) async {
       //if success => add Id document into Collection groups of User
       if (Global.instance.user != null) {
@@ -64,7 +64,10 @@ class GroupsManager {
 
   //Xóa nhóm (chỉ admin mới có quyền xóa nhóm)
   static Future<bool> deleteGroup(StoreGroup group) async {
+    //xóa collection members trước
+    await MemberManager.deleteMemberCollection(group.idGroup!);
     //xóa group
+    debugPrint('group:${group.idGroup}');
     final resultDeleteGroup = await CollectionStore.groups
         .doc(group.idGroup)
         .delete()
@@ -109,21 +112,27 @@ class GroupsManager {
 
   //xóa id của group đó ra khỏi list group của
   static Future<void> deleteIdGroupOfMyGroup(StoreGroup group) async {
-    // if (group.members != null &&
-    //     group.members!.isNotEmpty &&
-    //     group.idGroup != null) {
-    //   final List<String> listIdUser =
-    //       group.members!.keys.map((key) => key).toList();
-    //   listIdUser.map((idUser) async {
-    //     await CollectionStore.users
-    //         .doc(idUser)
-    //         .collection(CollectionStoreConstant.myGroups)
-    //         .doc(group.idGroup)
-    //         .delete()
-    //         .then((value) => true)
-    //         .catchError((error) => false);
-    //   });
-    // }
+    if (group.storeMembers != null &&
+        group.storeMembers!.isNotEmpty &&
+        group.idGroup != null) {
+      group.storeMembers?.map((StoreMember storeMember) async {
+        await CollectionStore.users
+            .doc(storeMember.idUser)
+            .collection(CollectionStoreConstant.myGroups)
+            .doc(group.idGroup)
+            .delete()
+            .then((value) => true)
+            .catchError((error) => false);
+      });
+      //xóa khỏi mygroup của mình
+      await CollectionStore.users
+          .doc(Global.instance.user!.code)
+          .collection(CollectionStoreConstant.myGroups)
+          .doc(group.idGroup)
+          .delete()
+          .then((value) => true)
+          .catchError((error) => false);
+    }
   }
 
   //snapshot data for each member in group

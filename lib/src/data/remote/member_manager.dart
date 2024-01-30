@@ -51,4 +51,22 @@ class MemberManager {
       throw Exception('Failed to delete member document: $error');
     }
   }
+
+  static Future<void> deleteMemberCollection(String idGroup) async {
+    // Lấy reference của collection "member" trong document user
+    final CollectionReference memberCollectionRef = CollectionStore.groups
+        .doc(idGroup)
+        .collection(CollectionStoreConstant.members);
+
+    // Lấy danh sách document trong collection "member"
+    final QuerySnapshot memberSnapshot = await memberCollectionRef.get();
+
+    // Xóa từng document trong collection
+    for (final QueryDocumentSnapshot memberDoc in memberSnapshot.docs) {
+      await memberDoc.reference.delete();
+    }
+
+    // Cuối cùng, xóa collection "member" khỏi document user
+    await memberCollectionRef.parent?.delete();
+  }
 }
