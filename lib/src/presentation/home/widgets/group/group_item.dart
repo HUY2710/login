@@ -9,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../../../../app/cubit/exception/exception_cubit.dart';
 import '../../../../config/di/di.dart';
 import '../../../../data/models/store_group/store_group.dart';
+import '../../../../data/models/store_member/store_member.dart';
 import '../../../../gen/gens.dart';
 import '../../../../global/global.dart';
 import '../../../../shared/extension/context_extension.dart';
@@ -237,6 +238,7 @@ class GroupItem extends StatelessWidget {
       if (itemGroup.storeMembers!
           .firstWhere(
             (element) => element.idUser == Global.instance.user!.code,
+            orElse: () => const StoreMember(isAdmin: false),
           )
           .isAdmin) {
         return true;

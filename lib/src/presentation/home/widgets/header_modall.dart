@@ -11,13 +11,14 @@ class HeaderModal extends StatelessWidget {
       required this.title,
       this.icon,
       required this.onTap,
-      required this.textIcon});
+      required this.textIcon,
+      required this.isAdmin});
 
   final String title;
   final SvgGenImage? icon;
   final Function onTap;
   final String textIcon;
-
+  final bool isAdmin;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -30,29 +31,33 @@ class HeaderModal extends StatelessWidget {
               color: const Color(0xff343434),
               fontWeight: FontWeight.w500),
         ),
-        CustomInkWell(
-          onTap: () => onTap(),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 10.r),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(99.r),
-                gradient: gradienBackground),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (icon == null) const SizedBox() else icon!.svg(width: 20.w),
-                8.horizontalSpace,
-                Text(
-                  textIcon,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w500),
-                ),
-              ],
+        if (isAdmin)
+          CustomInkWell(
+            onTap: () => onTap(),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 10.r),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(99.r),
+                  gradient: gradienBackground),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (icon == null)
+                    const SizedBox()
+                  else
+                    icon!.svg(width: 20.w),
+                  8.horizontalSpace,
+                  Text(
+                    textIcon,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
       ],
     );
   }

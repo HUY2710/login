@@ -214,6 +214,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
               locationListenCubit: _locationListenCubit,
               mapController: _mapController,
               trackingMemberCubit: _trackingMemberCubit,
+              moveToLocationUser: _moveToCurrentLocation,
             ),
           )
         ],
