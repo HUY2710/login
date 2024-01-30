@@ -56,7 +56,6 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
             idGroup: 24.randomString(),
             groupName: validName,
             avatarGroup: Assets.images.avatars.avatar10.path,
-            countMembers: 1,
             lastMessage: MessageModel(
                 content: '',
                 senderId: Global.instance.user!.code,

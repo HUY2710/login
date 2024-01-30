@@ -7,8 +7,10 @@ import 'package:intl/intl.dart';
 import '../../config/navigation/app_router.dart';
 import '../../data/models/store_user/store_user.dart';
 import '../../gen/gens.dart';
+import '../../global/global.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/gradient_background.dart';
+import '../../shared/helpers/logger_utils.dart';
 import '../../shared/widgets/containers/linear_container.dart';
 import '../../shared/widgets/custom_inkwell.dart';
 import '../../shared/widgets/my_drag.dart';
@@ -107,10 +109,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                   itemBuilder: (context, index) {
                                     final groupItem =
                                         snapshot.data!.docs[index].data();
+                                    logger.e(Global.instance.user!.code);
                                     return GroupItem(
                                       userName: groupItem.storeUser!.userName,
-                                      message: groupItem.lastMessage == null
-                                          ? '${groupItem.storeUser!.userName} created group'
+                                      message: (groupItem
+                                                  .lastMessage!.content ==
+                                              '')
+                                          ? '${groupItem.storeUser!.code == Global.instance.user!.code ? 'You' : groupItem.storeUser!.userName} created group'
                                           : groupItem.lastMessage!.content,
                                       time: groupItem.lastMessage!.sentAt,
                                       avatar: groupItem.avatarGroup,

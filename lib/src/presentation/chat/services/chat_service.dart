@@ -14,34 +14,9 @@ class ChatService {
   static final ChatService instance = ChatService._privateConstructor();
 
   Stream<QuerySnapshot<StoreGroup>> getMyGroupChat(
-      List<String> idsMyGroup, List<StoreUser> listStoreUser) {
-    // final List<StoreGroup> listGroup =
-    //     await GroupsManager.getMyListGroup() ?? [];
-    // final List<String> listIdUser = listGroup.map((e) {
-    //   return e.lastMessage!.senderId;
-    // }).toList();
-    // final userSnapshot = await CollectionStore.users
-    //     .where(FieldPath.documentId, whereIn: listIdUser)
-    //     .get();
-    // final listStoreUser = userSnapshot.docs
-    //     .map((user) => StoreUser.fromJson(user.data()))
-    //     .toList();
-    //     final
-    // for (var i = 0; i < listGroup.length; i++) {
-    //   for (var j = 0; j < listStoreUser.length; j++) {
-    //     StoreChatGroup storeChatGroup =
-    //         StoreChatGroup.fromJson(listGroup[i].toJson());
-
-    //     storeChatGroup = storeChatGroup.copyWith(
-    //         storeUser: listStoreUser[j].copyWith(),
-    //         storeMembers: listGroup[i].storeMembers);
-    //     result.add(storeChatGroup);
-    //   }
-    // }
-    // return result;
-
-    //// new
-
+    List<String> idsMyGroup,
+    List<StoreUser> listStoreUser,
+  ) {
     return CollectionStore.groups
         .where(FieldPath.documentId, whereIn: idsMyGroup)
         .withConverter(
@@ -81,22 +56,32 @@ class ChatService {
   }
 
   Future<List<String>> getListIdUserFromLastMessage() async {
-    final List<StoreGroup> listGroup =
-        await GroupsManager.getMyListGroup() ?? [];
-    final List<String> listIdUser = listGroup.map((e) {
-      return e.lastMessage!.senderId;
-    }).toList();
-    return listIdUser;
+    try {
+      final List<StoreGroup> listGroup =
+          await GroupsManager.getMyListGroup() ?? [];
+      final List<String> listIdUser = listGroup.map((e) {
+        return e.lastMessage!.senderId;
+      }).toList();
+      return listIdUser;
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
   }
 
   Future<List<StoreUser>> getUserFromListId(List<String> listIdUser) async {
-    final userSnapshot = await CollectionStore.users
-        .where(FieldPath.documentId, whereIn: listIdUser)
-        .get();
-    final listStoreUser = userSnapshot.docs
-        .map((user) => StoreUser.fromJson(user.data()))
-        .toList();
-    return listStoreUser;
+    try {
+      final userSnapshot = await CollectionStore.users
+          .where(FieldPath.documentId, whereIn: listIdUser)
+          .get();
+      final listStoreUser = userSnapshot.docs
+          .map((user) => StoreUser.fromJson(user.data()))
+          .toList();
+      return listStoreUser;
+    } catch (e) {
+      logger.e(e);
+      return [];
+    }
   }
 
   Stream<QuerySnapshot<MessageModel>> streamMessageGroup(

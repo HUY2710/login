@@ -28,6 +28,7 @@ class ChatDetailScreen extends StatefulWidget {
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
   List<StoreUser> listUser = [];
   final ScrollController _controller = ScrollController();
+  final TextEditingController textController = TextEditingController();
 
   @override
   void initState() {
@@ -69,25 +70,30 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: StreamBuilder(
                           stream: ChatService.instance.streamMessageGroup(
-                              '3pj9HcOMuVG5q0bDWgeOlzSt', listUser),
+                              'AXk8ES5pGz05fbRJJHJBqjvG', listUser),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              final chats = snapshot.data!.docs;
-                              return ListView.builder(
-                                  itemCount: chats.length,
-                                  controller: _controller,
-                                  itemBuilder: (context, index) {
-                                    return Utils.checkIsUser(
-                                            code: chats[index].data().senderId)
-                                        ? MessageTypeUser(
-                                            chats: chats,
-                                            index: index,
-                                          )
-                                        : MessageTypeGuess(
-                                            chats: chats,
-                                            index: index,
-                                          );
-                                  });
+                              if (snapshot.data!.docs.isEmpty) {
+                                return const MessageEmptyScreen();
+                              } else {
+                                final chats = snapshot.data!.docs;
+                                return ListView.builder(
+                                    itemCount: chats.length,
+                                    controller: _controller,
+                                    itemBuilder: (context, index) {
+                                      return Utils.checkIsUser(
+                                              code:
+                                                  chats[index].data().senderId)
+                                          ? MessageTypeUser(
+                                              chats: chats,
+                                              index: index,
+                                            )
+                                          : MessageTypeGuess(
+                                              chats: chats,
+                                              index: index,
+                                            );
+                                    });
+                              }
                             }
                             return const SizedBox();
                           }),
@@ -97,10 +103,9 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                   Container(
                     height: 88.h,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                        border: Border(
-                            top: BorderSide(
-                                width: 1, color: Color(0xffEAEAEA)))),
+                    decoration: const BoxDecoration(
+                        border:
+                            Border(top: BorderSide(color: Color(0xffEAEAEA)))),
                     child: Row(
                       children: [
                         GestureDetector(
@@ -126,6 +131,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                         12.w.horizontalSpace,
                         Expanded(
                             child: TextField(
+                          controller: textController,
                           decoration: InputDecoration(
                             hintText: 'Message',
                             hintStyle: TextStyle(
@@ -142,14 +148,14 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15.r),
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 width: 2,
                                 color: MyColors.secondPrimary,
                               ),
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(15.r),
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                 width: 2,
                                 color: MyColors.secondPrimary,
                               ),
@@ -196,6 +202,35 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             },
             icon: Icon(Icons.aspect_ratio)),
       ),
+    );
+  }
+}
+
+class MessageEmptyScreen extends StatelessWidget {
+  const MessageEmptyScreen({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          'assets/images/chat/chat_empty.png',
+          width: 200.w,
+          height: 165.h,
+        ),
+        Text(
+          'No messages here yet...',
+          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+        ),
+        Text(
+          'Send a message to start your \nconversation',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 13.sp, color: MyColors.black34),
+        ),
+      ],
     );
   }
 }
