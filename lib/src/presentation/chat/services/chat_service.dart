@@ -37,7 +37,10 @@ class ChatService {
               StoreChatGroup.fromJson(listGroup[i].toJson());
 
           storeChatGroup = storeChatGroup.copyWith(
-              storeUser: StoreUser.fromJson(listStoreUser[j].toJson()));
+              storeUser: StoreUser.fromJson(
+                listStoreUser[j].toJson(),
+              ),
+              storeMembers: listGroup[i].storeMembers);
           result.add(storeChatGroup);
         }
       }

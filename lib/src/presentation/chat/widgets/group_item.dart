@@ -50,7 +50,8 @@ class GroupItem extends StatelessWidget {
             });
       },
       onTap: () {
-        context.pushRoute(const ChatDetailRoute());
+        context.pushRoute(
+            ChatDetailRoute(storeChatGroups: context.read<GroupCubit>().state));
       },
       child: Container(
         color: Colors.transparent,

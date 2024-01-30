@@ -2,8 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../data/models/store_chat_group/store_chat_group.dart';
+import '../../presentation/chat/chat_detail_screen.dart';
 import '../../presentation/chat/chat_screen.dart';
-import '../../presentation/chat/services/chat_detail_screen.dart';
 import '../../presentation/home/home_screen.dart';
 import '../../presentation/language/screen/language_screen.dart';
 import '../../presentation/onboarding/onboarding_screen.dart';

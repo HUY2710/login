@@ -172,3 +172,22 @@
 
 //   return [chatMessages, gallery];
 // }
+
+import '../../../global/global.dart';
+
+class Utils {
+  Utils._();
+  static bool checkLastMessage(
+      {required String code, required bool isLastMessage}) {
+    final userCode = Global.instance.user!.code;
+    return userCode == code && isLastMessage;
+  }
+
+  static bool checkIsUser({required String code}) {
+    return Global.instance.user!.code == code;
+  }
+
+  static bool compareUserCode(String code1, String code2) {
+    return code1 == code2;
+  }
+}
