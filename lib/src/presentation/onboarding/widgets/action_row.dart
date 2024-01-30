@@ -18,34 +18,62 @@ class _ActionRowState extends State<ActionRow> {
   @override
   Widget build(BuildContext context) {
     final int currentIndex = context.watch<ValueCubit<int>>().state;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Row(
-          children: buildIndicator(
-            context,
-            3,
-            currentIndex,
-          ),
-        ),
-        TextButton(
-          onPressed: () {
-            if (currentIndex < 2) {
-              _pressNextButton(currentIndex);
-            } else {
-              widget.onStartedTap();
-            }
-          },
-          child: Text(
-            currentIndex > 1 ? 'Started' : 'Next',
-            style: TextStyle(
-              color: context.colorScheme.primary,
-              fontWeight: FontWeight.w500,
-              fontSize: 16.sp,
+    return Padding(
+      padding: EdgeInsets.only(bottom: 40.h, top: 15.h),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: buildIndicator(
+              context,
+              3,
+              currentIndex,
             ),
           ),
-        ),
-      ],
+          28.verticalSpace,
+          GestureDetector(
+            onTap: () {
+              if (currentIndex < 2) {
+                _pressNextButton(currentIndex);
+              } else {
+                widget.onStartedTap();
+              }
+            },
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFFB67DFF),
+                    Color(0xFF7B3EFF),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(15.r),
+              ),
+              child: Stack(
+                children: [
+                  Align(
+                    child: Text(
+                      'Continue',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 16.w,
+                    child: Assets.icons.icForward.svg(height: 24.h),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

@@ -1,14 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../app/cubit/language_cubit.dart';
-import '../../../module/admob/app_ad_id_manager.dart';
-import '../../../module/admob/enum/ad_remote_key.dart';
-import '../../../module/admob/widget/ads/large_native_ad.dart';
-import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../config/remote_config.dart';
 import '../../data/local/shared_preferences_manager.dart';
@@ -34,26 +29,11 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final PageController _pageController = PageController();
-  bool visibleAd = true;
+
   ValueNotifier<bool> showSkipButton = ValueNotifier(false);
-  late final controller1 = NativeAdController(
-    adId: getIt<AppAdIdManager>().adUnitId.native,
-    factoryId: getIt<AppAdIdManager>().bottomLargeNativeFactory,
-  );
-  late final controller2 = NativeAdController(
-    adId: getIt<AppAdIdManager>().adUnitId.native,
-    factoryId: getIt<AppAdIdManager>().bottomLargeNativeFactory,
-  );
-  late final controller3 = NativeAdController(
-    adId: getIt<AppAdIdManager>().adUnitId.native,
-    factoryId: getIt<AppAdIdManager>().bottomLargeNativeFactory,
-  );
 
   @override
   void initState() {
-    controller1.load();
-    controller2.load();
-    controller3.load();
     context.read<LanguageCubit>().update(widget.language);
     checkShowSkipButton();
     super.initState();
@@ -84,16 +64,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     return BlocProvider(
       create: (context) => ValueCubit<int>(0),
       child: Scaffold(
-        backgroundColor: Colors.white,
-        bottomNavigationBar: BlocBuilder<ValueCubit<int>, int>(
-          builder: (context, state) {
-            return switch (state) {
-              0 => _buildAd(controller1),
-              1 => _buildAd(controller2),
-              _ => _buildAd(controller3),
-            };
-          },
-        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -140,24 +110,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
-  Widget _buildAd(NativeAdController controller) {
-    if (!visibleAd) {
-      return const SizedBox(
-        height: 272,
-      );
-    }
-    return LargeNativeAd(
-      unitId: getIt<AppAdIdManager>().adUnitId.native,
-      remoteKey: AdRemoteKeys.show,
-      maintainSize: true,
-    );
-  }
-
   @override
   void dispose() {
-    controller1.dispose();
-    controller2.dispose();
-    controller3.dispose();
     _pageController.dispose();
     super.dispose();
   }
