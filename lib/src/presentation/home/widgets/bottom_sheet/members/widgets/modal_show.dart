@@ -46,9 +46,10 @@ class ModalShowMember extends StatelessWidget {
                 onTap: () {
                   value.value = 1;
                 },
-                isAdmin: currentGroupCubit.state!.storeMembers!.any((element) =>
-                    element.idUser == Global.instance.user!.code &&
-                    element.isAdmin),
+                isAdmin: currentGroupCubit.state != null &&
+                    currentGroupCubit.state!.storeMembers!.any((element) =>
+                        element.idUser == Global.instance.user!.code &&
+                        element.isAdmin),
               ),
               16.h.verticalSpace,
               GestureDetector(
