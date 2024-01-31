@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../config/navigation/app_router.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../shared/extension/context_extension.dart';
+import '../../../shared/widgets/custom_appbar.dart';
 import '../widgets/app_button.dart';
 
 @RoutePage()
@@ -79,43 +79,6 @@ class OnboardingCreateNameScreen extends StatelessWidget {
                   onTap: () {
                     context.pushRoute(const OnboardingCreateAvtPersonRoute());
                   },
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 56.h),
-      child: SizedBox(
-        height: 30.h,
-        child: Stack(
-          children: [
-            Assets.icons.icBack.svg(
-              height: 28.h,
-              colorFilter: ColorFilter.mode(
-                context.colorScheme.primary,
-                BlendMode.srcIn,
-              ),
-            ),
-            Align(
-              child: Text(
-                'Text',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20.sp,
-                  color: Colors.white,
                 ),
               ),
             ),
