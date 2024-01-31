@@ -2,8 +2,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../presentation/create/screens/create_avt_person_screen.dart';
+import '../../presentation/create/screens/create_group_avatar_screen.dart';
+import '../../presentation/create/screens/create_group_name_screen.dart';
 import '../../presentation/create/screens/create_name_screen.dart';
+import '../../presentation/create/screens/create_person_avatar_screen.dart';
 import '../../presentation/home/home_screen.dart';
 import '../../presentation/language/screen/language_screen.dart';
 import '../../presentation/onboarding/onboarding_screen.dart';
@@ -26,7 +28,9 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: LanguageRoute.page),
         AutoRoute(page: OnBoardingRoute.page),
         AutoRoute(page: CreateNameRoute.page),
-        AutoRoute(page: CreateAvtPersonRoute.page),
+        AutoRoute(page: CreatePersonAvatarRoute.page),
+        AutoRoute(page: CreateGroupNameRoute.page),
+        AutoRoute(page: CreatePersonAvatarRoute.page),
         AutoRoute(page: PermissionRoute.page),
         AutoRoute(page: HomeRoute.page),
         AutoRoute(page: SettingRoute.page),

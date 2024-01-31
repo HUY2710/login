@@ -8,8 +8,8 @@ import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
 
 @RoutePage()
-class CreateNameScreen extends StatelessWidget {
-  const CreateNameScreen({super.key});
+class CreateGroupNameScreen extends StatelessWidget {
+  const CreateGroupNameScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,19 +23,11 @@ class CreateNameScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Let’s get started',
+                    'Create or join groups with your loved ones and friends',
                     style: TextStyle(
                       color: const Color(0xFF343434),
                       fontWeight: FontWeight.w500,
                       fontSize: 20.sp,
-                    ),
-                  ),
-                  Text(
-                    'What’s your name?',
-                    style: TextStyle(
-                      color: const Color(0xFF343434),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 24.sp,
                     ),
                   ),
                   24.verticalSpace,

@@ -8,8 +8,8 @@ import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
 
 @RoutePage()
-class CreateAvtPersonScreen extends StatelessWidget {
-  const CreateAvtPersonScreen({super.key});
+class CreateGroupAvatarScreen extends StatelessWidget {
+  const CreateGroupAvatarScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
