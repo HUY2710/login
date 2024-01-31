@@ -24,6 +24,7 @@ class CreateGroupNameScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Create or join groups with your loved ones and friends',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: const Color(0xFF343434),
                       fontWeight: FontWeight.w500,
@@ -42,7 +43,7 @@ class CreateGroupNameScreen extends StatelessWidget {
                       },
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Your name',
+                        hintText: 'Group name',
                         hintStyle: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 20.sp,
@@ -63,18 +64,28 @@ class CreateGroupNameScreen extends StatelessWidget {
               ),
             ),
             const CustomAppBar(),
-            Padding(
-              padding: EdgeInsets.only(bottom: 36.h),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: AppButton(
-                  title: 'Continue',
-                  onTap: () {
-                    context.pushRoute(const CreatePersonAvatarRoute());
-                  },
-                  isShowIcon: true,
-                ),
-              ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(bottom: 36.h, right: 16.w, left: 16.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppButton(
+              title: 'Continue',
+              onTap: () {
+                context.pushRoute(const CreateGroupAvatarRoute());
+              },
+              isShowIcon: true,
+            ),
+            16.verticalSpace,
+            AppButton(
+              title: 'Join a group',
+              onTap: () {
+                //
+              },
+              isShowIcon: true,
             ),
           ],
         ),

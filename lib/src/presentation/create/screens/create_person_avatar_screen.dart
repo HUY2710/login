@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../config/navigation/app_router.dart';
 import '../../../shared/enum/gender_type.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
@@ -28,9 +29,9 @@ class CreatePersonAvatarScreen extends StatelessWidget {
         child: AppButton(
           title: 'Save',
           onTap: () {
-            //
+            context.pushRoute(const CreateGroupNameRoute());
           },
-          isEnable: false,
+          // isEnable: false,
           textSecondColor: const Color(0xFFB685FF),
         ),
       ),

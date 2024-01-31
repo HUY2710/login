@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../config/navigation/app_router.dart';
 import '../../../shared/enum/gender_type.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
@@ -28,9 +29,9 @@ class CreateGroupAvatarScreen extends StatelessWidget {
         child: AppButton(
           title: 'Save',
           onTap: () {
-            //
+            context.replaceRoute(const HomeRoute());
           },
-          isEnable: false,
+          // isEnable: false,
           textSecondColor: const Color(0xFFB685FF),
         ),
       ),
@@ -61,12 +62,6 @@ class _MainBodyState extends State<_MainBody> {
               ),
             ),
           ),
-          16.verticalSpace,
-          CustomSwitch(
-            onChanged: (value) {
-              //
-            },
-          ),
           24.verticalSpace,
           Text(
             'Choose your favorite avatar!',
@@ -85,6 +80,8 @@ class _MainBodyState extends State<_MainBody> {
             crossAxisSpacing: 32.w,
             mainAxisSpacing: 32.h,
             children: const [
+              CircleAvatar(),
+              CircleAvatar(),
               CircleAvatar(),
               CircleAvatar(),
               CircleAvatar(),

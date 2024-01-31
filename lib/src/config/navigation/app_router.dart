@@ -30,7 +30,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: CreateNameRoute.page),
         AutoRoute(page: CreatePersonAvatarRoute.page),
         AutoRoute(page: CreateGroupNameRoute.page),
-        AutoRoute(page: CreatePersonAvatarRoute.page),
+        AutoRoute(page: CreateGroupAvatarRoute.page),
         AutoRoute(page: PermissionRoute.page),
         AutoRoute(page: HomeRoute.page),
         AutoRoute(page: SettingRoute.page),
