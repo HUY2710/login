@@ -51,6 +51,18 @@ class _BuildMarkerState extends State<BuildMarker> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _generateMarker();
+  }
+
+  @override
+  void didUpdateWidget(BuildMarker oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _generateMarker();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Color color = const Color(0xff19E04B);
     final int battery = widget.member.batteryLevel ?? 100;
@@ -88,7 +100,7 @@ class _BuildMarkerState extends State<BuildMarker> {
   }
 
   Stack _buildMarker(Color color, int battery) {
-    _generateMarker();
+    // _generateMarker();
     return Stack(
       children: [
         Assets.images.markers.markerBg

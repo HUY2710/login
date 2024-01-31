@@ -23,10 +23,12 @@ class BottomBar extends StatefulWidget {
     required this.mapController,
     required this.locationListenCubit,
     required this.trackingMemberCubit,
+    required this.moveToLocationUser,
   });
   final Completer<GoogleMapController> mapController;
   final LocationListenCubit locationListenCubit;
   final TrackingMemberCubit trackingMemberCubit;
+  final void Function(LatLng) moveToLocationUser;
   @override
   State<BottomBar> createState() => _BottomBarState();
 }

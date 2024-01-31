@@ -12,12 +12,15 @@ class StoreGroup with _$StoreGroup {
     required String passCode, //code invite user join group
     required String groupName,
     required String avatarGroup,
-    required int countMembers,
     // @JsonKey(
     //   includeFromJson: true,
     //   includeToJson: false,
     // )
     String? idGroup,
+    @JsonKey(
+      includeFromJson: false,
+      includeToJson: false,
+    )
     List<StoreMember>? storeMembers,
   }) = _StoreGroup;
 
