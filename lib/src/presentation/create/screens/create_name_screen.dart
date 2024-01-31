@@ -5,11 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../shared/widgets/custom_appbar.dart';
-import '../widgets/app_button.dart';
+import '../../onboarding/widgets/app_button.dart';
 
 @RoutePage()
-class OnboardingCreateNameScreen extends StatelessWidget {
-  const OnboardingCreateNameScreen({super.key});
+class CreateNameScreen extends StatelessWidget {
+  const CreateNameScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +76,11 @@ class OnboardingCreateNameScreen extends StatelessWidget {
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: AppButton(
+                  title: 'Continue',
                   onTap: () {
-                    context.pushRoute(const OnboardingCreateAvtPersonRoute());
+                    context.pushRoute(const CreateAvtPersonRoute());
                   },
+                  isShowIcon: true,
                 ),
               ),
             ),

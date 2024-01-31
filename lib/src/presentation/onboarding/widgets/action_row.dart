@@ -34,6 +34,7 @@ class _ActionRowState extends State<ActionRow> {
           ),
           28.verticalSpace,
           AppButton(
+            title: 'Continue',
             onTap: () {
               if (currentIndex < 2) {
                 _pressNextButton(currentIndex);
@@ -41,6 +42,7 @@ class _ActionRowState extends State<ActionRow> {
                 widget.onStartedTap();
               }
             },
+            isShowIcon: true,
           ),
         ],
       ),
