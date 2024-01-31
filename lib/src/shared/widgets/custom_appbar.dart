@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 //implement
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -21,11 +22,16 @@ class CustomAppBar extends StatelessWidget {
         height: 30.h,
         child: Stack(
           children: [
-            Assets.icons.icBack.svg(
-              height: 28.h,
-              colorFilter: ColorFilter.mode(
-                context.colorScheme.primary,
-                BlendMode.srcIn,
+            GestureDetector(
+              onTap: () {
+                context.popRoute();
+              },
+              child: Assets.icons.icBack.svg(
+                height: 28.h,
+                colorFilter: ColorFilter.mode(
+                  context.colorScheme.primary,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
             if (title != null)
