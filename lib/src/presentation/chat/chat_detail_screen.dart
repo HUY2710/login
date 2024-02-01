@@ -7,9 +7,9 @@ import 'package:intl/intl.dart';
 
 import '../../data/models/store_message/store_message.dart';
 import '../../data/models/store_user/store_user.dart';
-import '../../data/remote/collection_store.dart';
 import '../../data/remote/member_manager.dart';
 import '../../gen/gens.dart';
+import '../../global/global.dart';
 import '../../shared/widgets/custom_inkwell.dart';
 import '../../shared/widgets/gradient_text.dart';
 import 'cubits/chat_cubit.dart';
@@ -27,7 +27,7 @@ class ChatDetailScreen extends StatefulWidget {
 
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
   List<StoreUser> listUser = [];
-  final ScrollController _controller = ScrollController();
+  late final ScrollController _controller = ScrollController();
   final TextEditingController textController = TextEditingController();
 
   @override
@@ -42,6 +42,21 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     });
 
     super.initState();
+  }
+
+  // @override
+  // void didChangeDependencies() {
+  //   if (_controller.hasClients) {
+  //     _controller.animateTo(_controller.position.maxScrollExtent,
+  //         duration: Duration(milliseconds: 300), curve: Curves.linear);
+  //   }
+  //   super.didChangeDependencies();
+  // }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -69,8 +84,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: StreamBuilder(
-                          stream: ChatService.instance.streamMessageGroup(
-                              'AXk8ES5pGz05fbRJJHJBqjvG', listUser),
+                          stream: ChatService.instance
+                              .streamMessageGroup(widget.idGroup, listUser),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               if (snapshot.data!.docs.isEmpty) {
@@ -189,18 +204,18 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 ],
               )
             : const Center(child: CircularProgressIndicator()),
-        floatingActionButton: IconButton(
-            onPressed: () async {
-              CollectionStore.chat
-                  .doc('3pj9HcOMuVG5q0bDWgeOlzSt')
-                  .collection(CollectionStoreConstant.messages)
-                  .add(MessageModel(
-                          content: '97',
-                          senderId: '6dwGCSnO91dGPuzqFfoqKcRK',
-                          sentAt: DateTime.now().toString())
-                      .toJson());
-            },
-            icon: Icon(Icons.aspect_ratio)),
+        // floatingActionButton: IconButton(
+        //     onPressed: () async {
+        //       CollectionStore.chat
+        //           .doc('AXk8ES5pGz05fbRJJHJBqjvG')
+        //           .collection(CollectionStoreConstant.messages)
+        //           .add(MessageModel(
+        //                   content: 'Mi chào lại tao',
+        //                   senderId: 'Joz7Rn8nBZh3sxnwKwaK1WTK',
+        //                   sentAt: DateTime.now().toString())
+        //               .toJson());
+        //     },
+        //     icon: Icon(Icons.aspect_ratio)),
       ),
     );
   }
@@ -275,23 +290,38 @@ class MessageTypeGuess extends StatelessWidget {
                       : Radius.circular(15.r),
                   bottomRight: Radius.circular(15.r)),
               color: const Color(0xffF7F5FA)),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
             children: [
-              Row(
+              Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        chats[index].data().userName!,
+                        style: TextStyle(
+                            color: const Color(0xff8E52FF),
+                            fontSize: 12.sp,
+                            letterSpacing: -0.15),
+                      ),
+                      40.horizontalSpace,
+                    ],
+                  ),
                   Text(
-                    chats[index].data().userName!,
+                    chats[index].data().content,
                     style: TextStyle(
-                        color: const Color(0xff8E52FF),
-                        fontSize: 12.sp,
+                        color: MyColors.black34,
+                        fontSize: 13.sp,
                         letterSpacing: -0.15),
                   ),
-                  if (!Utils.compareUserCode(chats[index - 1].data().senderId,
-                      chats[index].data().senderId))
-                    Text(
+                ],
+              ),
+              if (!Utils.compareUserCode(index, chats))
+                Positioned(
+                    right: 0,
+                    child: Text(
                       DateFormat('HH:mm').format(
                         DateTime.parse(chats[index].data().sentAt),
                       ),
@@ -299,16 +329,7 @@ class MessageTypeGuess extends StatelessWidget {
                           color: const Color(0xff6C6C6C),
                           fontSize: 12.sp,
                           letterSpacing: -0.15),
-                    )
-                ],
-              ),
-              Text(
-                chats[index].data().content,
-                style: TextStyle(
-                    color: MyColors.black34,
-                    fontSize: 13.sp,
-                    letterSpacing: -0.15),
-              ),
+                    ))
             ],
           ),
         ),
@@ -324,30 +345,39 @@ class MessageTypeUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          constraints: BoxConstraints(maxWidth: 1.sw * 0.7),
-          margin: EdgeInsets.symmetric(vertical: 2.h),
-          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15.r),
-                  topRight: Radius.circular(15.r),
-                  bottomLeft: Radius.circular(15.r),
-                  bottomRight: Utils.checkLastMessage(
-                          code: chats[index].data().senderId,
-                          isLastMessage: index == chats.length - 1)
-                      ? Radius.zero
-                      : Radius.circular(15.r)),
-              color: const Color(0xffB98EFF)),
-          child: Text(
-            chats[index].data().content,
-            style: TextStyle(
-                color: Colors.white, fontSize: 13.sp, letterSpacing: -0.4),
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              constraints: BoxConstraints(maxWidth: 1.sw * 0.7),
+              margin: EdgeInsets.symmetric(vertical: 2.h),
+              padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15.r),
+                      topRight: Radius.circular(15.r),
+                      bottomLeft: Radius.circular(15.r),
+                      bottomRight: Utils.checkLastMessage(
+                              code: chats[index].data().senderId,
+                              isLastMessage: index == chats.length - 1)
+                          ? Radius.zero
+                          : Radius.circular(15.r)),
+                  color: const Color(0xffB98EFF)),
+              child: Text(
+                chats[index].data().content,
+                style: TextStyle(
+                    color: Colors.white, fontSize: 13.sp, letterSpacing: -0.4),
+              ),
+            ),
+          ],
         ),
+        if (chats[index].data().senderId == Global.instance.user!.code &&
+            index == chats.length - 1)
+          Assets.icons.icSendSuccess.svg(width: 16.r),
       ],
     );
   }

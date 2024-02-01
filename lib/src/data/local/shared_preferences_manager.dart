@@ -47,4 +47,14 @@ class SharedPreferencesManager {
             .getBool(PreferenceKeys.permissionAllow.name) ??
         false;
   }
+
+  static Future<void> saveTimeSeenChat(String idGroup) async {
+    (await SharedPreferences.getInstance()).setString(
+        PreferenceKeys.timeSeenChat.name + idGroup, DateTime.now().toString());
+  }
+
+  static Future<String?> getTimeSeenChat(String idGroup) async {
+    return (await SharedPreferences.getInstance())
+        .getString(PreferenceKeys.timeSeenChat.name + idGroup);
+  }
 }

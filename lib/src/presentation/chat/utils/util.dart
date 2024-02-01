@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get_it/get_it.dart';
 
+import '../../../config/di/di.dart';
+import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_message/store_message.dart';
 import '../../../global/global.dart';
 
@@ -18,12 +21,27 @@ class Utils {
   static bool checkLastMessByUser(
       int index, List<QueryDocumentSnapshot<MessageModel>> chats) {
     return index < chats.length - 1 &&
-        chats[index].data().senderId == chats[index + 1].data().senderId &&
-        chats[index].data().senderId == chats.last.data().senderId;
+        chats[index].data().senderId == chats[index + 1].data().senderId;
+    // &&
+    // chats[index].data().senderId == chats.last.data().senderId;
   }
 
-  static bool compareUserCode(String code1, String code2) {
-    return code1 == code2;
+  static bool compareUserCode(
+      int index, List<QueryDocumentSnapshot<MessageModel>> chats) {
+    if (index == 0) {
+      return false;
+    }
+    return chats[index - 1].data().senderId == chats[index].data().senderId;
+  }
+
+  static Future<bool> checkSeen(String idGroup, String timeOfMessage) async {
+    final timeLastSeenString =
+        await SharedPreferencesManager.getTimeSeenChat(idGroup);
+    if (timeLastSeenString == null) {
+      return false;
+    }
+    final timeLastSeen = DateTime.parse(timeLastSeenString);
+    return timeLastSeen.isBefore(DateTime.parse(timeOfMessage));
   }
 
   // static void findUserByCode(String code) {

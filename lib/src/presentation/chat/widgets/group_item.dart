@@ -1,14 +1,16 @@
 part of '../chat_screen.dart';
 
-class GroupItem extends StatelessWidget {
-  const GroupItem(
-      {super.key,
-      required this.userName,
-      required this.message,
-      required this.time,
-      required this.avatar,
-      required this.groupName,
-      required this.idGroup});
+class GroupItem extends StatefulWidget {
+  const GroupItem({
+    super.key,
+    required this.userName,
+    required this.message,
+    required this.time,
+    required this.avatar,
+    required this.groupName,
+    required this.idGroup,
+    this.seen = true,
+  });
 
   final String userName;
   final String message;
@@ -16,6 +18,21 @@ class GroupItem extends StatelessWidget {
   final String avatar;
   final String groupName;
   final String idGroup;
+  final bool seen;
+
+  @override
+  State<GroupItem> createState() => _GroupItemState();
+}
+
+class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
+  // bool seen = false;
+  // @override
+  // void didPopNext() async {
+  //   seen = await Utils.checkSeen(widget.idGroup, widget.time);
+  //   // TODO: implement didPopNext
+  //   super.didPopNext();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -50,12 +67,15 @@ class GroupItem extends StatelessWidget {
               );
             });
       },
-      onTap: () {
-        context.pushRoute(ChatDetailRoute(idGroup: idGroup));
+      onTap: () async {
+        await SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
+        if (context.mounted) {
+          context.pushRoute(ChatDetailRoute(idGroup: widget.idGroup));
+        }
       },
       child: Container(
         color: Colors.transparent,
-        height: 60.h,
+        height: 65.h,
         width: double.infinity,
         child: Row(
           children: [
@@ -74,7 +94,7 @@ class GroupItem extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(99),
-                    child: Image.asset(avatar)),
+                    child: Image.asset(widget.avatar)),
               ),
             ),
             20.horizontalSpace,
@@ -86,23 +106,24 @@ class GroupItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        groupName,
+                        widget.groupName,
                         style: TextStyle(
                             color: MyColors.black34,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w500),
                       ),
                       6.horizontalSpace,
-                      const LinearContainer(
-                          child: SizedBox(
-                        width: 8,
-                        height: 8,
-                      ))
+                      if (widget.seen)
+                        const LinearContainer(
+                            child: SizedBox(
+                          width: 8,
+                          height: 8,
+                        ))
                     ],
                   ),
                   Expanded(
                     child: Text(
-                      '$userName: $message',
+                      '${widget.userName}: ${widget.message}',
                       style: TextStyle(
                           color: const Color(0xff6C6C6C),
                           fontSize: 13.sp,
@@ -117,7 +138,7 @@ class GroupItem extends StatelessWidget {
             ),
             8.horizontalSpace,
             Text(
-              formatDateTime(DateTime.parse(time)),
+              formatDateTime(DateTime.parse(widget.time)),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(

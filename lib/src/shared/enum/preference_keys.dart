@@ -6,5 +6,6 @@ enum PreferenceKeys {
   isStarted,
   isFirstLaunch,
   mapType,
-  userCode
+  userCode,
+  timeSeenChat
 }
