@@ -153,9 +153,11 @@ class GroupsManager {
     if (doc.data() == null) {
       return null;
     }
+
+    final String documentId = doc.id;
     final StoreGroup group = StoreGroup.fromJson(doc.data()!);
-    LoggerUtils.logInfo('Fetch User: ${Global.instance.user}');
-    return group;
+    final memberOfGroup = await MemberManager.getListMemberOfGroup(documentId);
+    return group.copyWith(idGroup: documentId, storeMembers: memberOfGroup);
   }
 
   static Future<List<StoreGroup>?> getMyListGroup() async {

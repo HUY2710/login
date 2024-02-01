@@ -47,6 +47,7 @@ class ModalShowMember extends StatelessWidget {
                   value.value = 1;
                 },
                 isAdmin: currentGroupCubit.state != null &&
+                    currentGroupCubit.state!.storeMembers != null &&
                     currentGroupCubit.state!.storeMembers!.any((element) =>
                         element.idUser == Global.instance.user!.code &&
                         element.isAdmin),
@@ -110,18 +111,32 @@ class ModalShowMember extends StatelessWidget {
                 builder: (context, state) {
                   if (state?.storeMembers != null &&
                       state!.storeMembers!.isNotEmpty) {
+                    debugPrint('${state.storeMembers}');
                     return Expanded(
                       child: ListView.builder(
                           itemCount: state.storeMembers!.length,
                           itemBuilder: (context, index) {
-                            return MemberWidget(
-                              isAdmin: state.storeMembers![index].isAdmin,
-                              idUser: state.storeMembers![index].idUser!,
-                            );
+                            debugPrint('${state.storeMembers![index].idUser}');
+                            debugPrint(Global.instance.user!.code);
+                            debugPrint(
+                                '${state.storeMembers![index].idUser == Global.instance.user!.code}');
+                            if (state.storeMembers![index].idUser !=
+                                Global.instance.user!.code) {
+                              return MemberWidget(
+                                  isAdmin: state.storeMembers![index].isAdmin,
+                                  idUser: state.storeMembers![index].idUser!,
+                                  // isEdit: value.value == 1,
+                                  //test
+                                  isEdit: true);
+                            }
+                            return null;
                           }),
                     );
                   }
-                  return const Text('No found other member in Group');
+                  return const Text(
+                    'No found other member in Group',
+                    style: TextStyle(color: Colors.black),
+                  );
                 },
               )
             ],
