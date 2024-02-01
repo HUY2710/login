@@ -4,12 +4,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../config/navigation/app_router.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../global/global.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
 
 @RoutePage()
-class CreateNameScreen extends StatelessWidget {
-  const CreateNameScreen({super.key});
+class CreateUsernameScreen extends StatelessWidget {
+  const CreateUsernameScreen({super.key});
+
+  void changedUsername(String username) {
+    Global.instance.user = Global.instance.user?.copyWith(
+      userName: username,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +53,7 @@ class CreateNameScreen extends StatelessWidget {
                     child: TextField(
                       textAlign: TextAlign.center,
                       onChanged: (value) {
-                        //
+                        changedUsername(value);
                       },
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -78,7 +85,7 @@ class CreateNameScreen extends StatelessWidget {
                 child: AppButton(
                   title: 'Continue',
                   onTap: () {
-                    context.pushRoute(const CreatePersonAvatarRoute());
+                    context.pushRoute(const CreateUserAvatarRoute());
                   },
                   isShowIcon: true,
                 ),

@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../config/navigation/app_router.dart';
-import '../../../gen/assets.gen.dart';
+import '../../../gen/gens.dart';
+import '../../../shared/enum/gender_type.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
+import '../widgets/gender_switch.dart';
 
 @RoutePage()
-class CreateGroupAvatarScreen extends StatelessWidget {
-  const CreateGroupAvatarScreen({super.key});
+class CreateUserAvatarScreen extends StatelessWidget {
+  const CreateUserAvatarScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class CreateGroupAvatarScreen extends StatelessWidget {
         child: AppButton(
           title: 'Save',
           onTap: () {
-            context.replaceRoute(const HomeRoute());
+            context.pushRoute(const CreateGroupNameRoute());
           },
           // isEnable: false,
           textSecondColor: const Color(0xFFB685FF),
@@ -47,26 +49,40 @@ class _MainBody extends StatefulWidget {
 }
 
 class _MainBodyState extends State<_MainBody> {
-  final groupAvatars = <AssetGenImage>[
+  final femaleAvatars = <AssetGenImage>[
     Assets.images.avatars.avatar1,
     Assets.images.avatars.avatar2,
     Assets.images.avatars.avatar3,
     Assets.images.avatars.avatar4,
     Assets.images.avatars.avatar5,
-    Assets.images.avatars.avatar6,
-    Assets.images.avatars.avatar7,
-    Assets.images.avatars.avatar8,
-    Assets.images.avatars.avatar9,
-    Assets.images.avatars.avatar10,
+  ];
+  final maleAvatars = <AssetGenImage>[
+    Assets.images.avatars.avatar11,
+    Assets.images.avatars.avatar12,
+    Assets.images.avatars.avatar13,
+    Assets.images.avatars.avatar14,
+    Assets.images.avatars.avatar15,
+    Assets.images.avatars.avatar16,
   ];
 
+  var currentGender = GenderType.male;
   AssetGenImage currentAvatar = Assets.images.avatars.avatar1;
   @override
   Widget build(BuildContext context) {
+    final currentImage =
+        currentGender == GenderType.male ? maleAvatars : femaleAvatars;
     return SingleChildScrollView(
       child: Column(
         children: [
           _buildAvatarPreview(),
+          16.verticalSpace,
+          GenderSwitch(
+            onChanged: (value) {
+              setState(() {
+                currentGender = value;
+              });
+            },
+          ),
           24.verticalSpace,
           Text(
             'Choose your favorite avatar!',
@@ -77,7 +93,7 @@ class _MainBodyState extends State<_MainBody> {
             ),
           ),
           16.verticalSpace,
-          _buildAvatarGridView(),
+          _buildAvatarGridView(currentImage),
         ],
       ),
     );
@@ -98,7 +114,7 @@ class _MainBodyState extends State<_MainBody> {
     );
   }
 
-  Widget _buildAvatarGridView() {
+  Widget _buildAvatarGridView(List<AssetGenImage> currentImage) {
     return GridView.builder(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       shrinkWrap: true,
@@ -112,15 +128,15 @@ class _MainBodyState extends State<_MainBody> {
         return GestureDetector(
           onTap: () {
             setState(() {
-              currentAvatar = groupAvatars[index];
+              currentAvatar = currentImage[index];
             });
           },
           child: CircleAvatar(
-            backgroundImage: groupAvatars[index].provider(),
+            backgroundImage: currentImage[index].provider(),
           ),
         );
       },
-      itemCount: groupAvatars.length,
+      itemCount: currentImage.length,
     );
   }
 }

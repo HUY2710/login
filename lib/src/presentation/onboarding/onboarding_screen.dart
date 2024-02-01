@@ -53,7 +53,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         await SharedPreferencesManager.getIsPermissionAllow();
     if (mounted) {
       if (!isPermissionAllow) {
-        context.replaceRoute(const CreateNameRoute());
+        context.replaceRoute(const CreateUsernameRoute());
       } else {
         context.replaceRoute(const HomeRoute());
       }

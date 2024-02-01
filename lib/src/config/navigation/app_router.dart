@@ -4,8 +4,8 @@ import 'package:injectable/injectable.dart';
 
 import '../../presentation/create/screens/create_group_avatar_screen.dart';
 import '../../presentation/create/screens/create_group_name_screen.dart';
-import '../../presentation/create/screens/create_name_screen.dart';
-import '../../presentation/create/screens/create_person_avatar_screen.dart';
+import '../../presentation/create/screens/create_user_avatar_screen.dart';
+import '../../presentation/create/screens/create_username_screen.dart';
 import '../../presentation/home/home_screen.dart';
 import '../../presentation/language/screen/language_screen.dart';
 import '../../presentation/onboarding/onboarding_screen.dart';
@@ -27,8 +27,8 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: SplashRoute.page, initial: true),
         AutoRoute(page: LanguageRoute.page),
         AutoRoute(page: OnBoardingRoute.page),
-        AutoRoute(page: CreateNameRoute.page),
-        AutoRoute(page: CreatePersonAvatarRoute.page),
+        AutoRoute(page: CreateUsernameRoute.page),
+        AutoRoute(page: CreateUserAvatarRoute.page),
         AutoRoute(page: CreateGroupNameRoute.page),
         AutoRoute(page: CreateGroupAvatarRoute.page),
         AutoRoute(page: PermissionRoute.page),

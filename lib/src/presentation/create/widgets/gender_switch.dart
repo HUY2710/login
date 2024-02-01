@@ -1,105 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../config/navigation/app_router.dart';
 import '../../../shared/enum/gender_type.dart';
-import '../../../shared/widgets/custom_appbar.dart';
-import '../../onboarding/widgets/app_button.dart';
 
-@RoutePage()
-class CreatePersonAvatarScreen extends StatelessWidget {
-  const CreatePersonAvatarScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          const _MainBody(),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: const CustomAppBar(title: 'Set avatar'),
-          ),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 36.h),
-        child: AppButton(
-          title: 'Save',
-          onTap: () {
-            context.pushRoute(const CreateGroupNameRoute());
-          },
-          // isEnable: false,
-          textSecondColor: const Color(0xFFB685FF),
-        ),
-      ),
-    );
-  }
-}
-
-class _MainBody extends StatefulWidget {
-  const _MainBody();
-
-  @override
-  State<_MainBody> createState() => _MainBodyState();
-}
-
-class _MainBodyState extends State<_MainBody> {
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            height: 250.h,
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20.r),
-                bottomRight: Radius.circular(20.r),
-              ),
-            ),
-          ),
-          16.verticalSpace,
-          CustomSwitch(
-            onChanged: (value) {
-              //
-            },
-          ),
-          24.verticalSpace,
-          Text(
-            'Choose your favorite avatar!',
-            style: TextStyle(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w400,
-              color: const Color(0xFF3A3A3C),
-            ),
-          ),
-          16.verticalSpace,
-          GridView.count(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            crossAxisCount: 3,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisSpacing: 32.w,
-            mainAxisSpacing: 32.h,
-            children: const [
-              CircleAvatar(),
-              CircleAvatar(),
-              CircleAvatar(),
-              CircleAvatar(),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class CustomSwitch extends StatefulWidget {
-  const CustomSwitch({
+class GenderSwitch extends StatefulWidget {
+  const GenderSwitch({
     super.key,
     required this.onChanged,
   });
@@ -107,10 +12,10 @@ class CustomSwitch extends StatefulWidget {
   final ValueChanged<GenderType> onChanged;
 
   @override
-  State<CustomSwitch> createState() => _CustomSwitchState();
+  State<GenderSwitch> createState() => _GenderSwitchState();
 }
 
-class _CustomSwitchState extends State<CustomSwitch> {
+class _GenderSwitchState extends State<GenderSwitch> {
   final ValueNotifier<GenderType> switchValue = ValueNotifier(GenderType.male);
 
   @override
@@ -159,6 +64,7 @@ class _CustomSwitchState extends State<CustomSwitch> {
                         selected: value,
                         onTap: (gender) {
                           switchValue.value = gender;
+                          widget.onChanged.call(gender);
                         },
                         height: constraints.maxHeight,
                       ),
@@ -167,6 +73,7 @@ class _CustomSwitchState extends State<CustomSwitch> {
                         selected: value,
                         onTap: (gender) {
                           switchValue.value = gender;
+                          widget.onChanged.call(gender);
                         },
                         height: constraints.maxHeight,
                       ),
@@ -191,9 +98,7 @@ class _CustomSwitchState extends State<CustomSwitch> {
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
-          setState(() {
-            onTap.call(type);
-          });
+          onTap.call(type);
         },
         child: SizedBox(
           height: height,
