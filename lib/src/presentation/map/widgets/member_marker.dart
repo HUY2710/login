@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../global/global.dart';
 import '../models/member_maker_data.dart';
 import 'battery_bar.dart';
 
@@ -76,15 +77,18 @@ class _BuildMarkerState extends State<BuildMarker> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20.r)),
+          //chỉ có ở những member khác
+          if (widget.member.code != Global.instance.user?.code)
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(20.r)),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+              child: BatteryBar(
+                  batteryLevel: widget.member.batteryLevel ?? 100,
+                  color: color),
             ),
-            padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
-            child: BatteryBar(
-                batteryLevel: widget.member.batteryLevel ?? 100, color: color),
-          ),
           8.verticalSpace,
           _buildMarker(color, battery),
           8.verticalSpace,

@@ -40,11 +40,11 @@ class MemberManager {
     return listMember;
   }
 
-  //delete group
+  //delete member group
   static Future<void> deleteMemberDocument(
       String documentIdMemberCollection) async {
     try {
-      // Xóa list member của group
+      // Xóa member của group
       await CollectionStore.members.doc(documentIdMemberCollection).delete();
     } catch (error) {
       // Nếu có lỗi

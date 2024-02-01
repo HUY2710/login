@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../config/di/di.dart';
 import '../../data/models/store_group/store_group.dart';
+import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
 import '../../services/my_background_service.dart';
 import '../../shared/helpers/capture_widget_helper.dart';
@@ -49,6 +50,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
     _initStart();
     _defaultLocation = Global.instance.location;
     getLocalLocation();
+    _getMyMarker();
     super.initState();
     _trackingMemberCubit.initTrackingMember();
   }
@@ -113,36 +115,24 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
     }
   }
 
-  final GlobalKey _repaintKey = GlobalKey();
+  Future<void> _getMyMarker() async {
+    final newMarker = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(
+        size: Size.fromRadius(5.r),
+        devicePixelRatio: ScreenUtil().pixelRatio,
+      ),
+      Assets.images.markers.circleDot.path,
+    );
+    setState(() {
+      marker = newMarker;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Positioned.fill(
-          //   key: const ValueKey(1),
-          //   child: Align(
-          //     child: BuildMarker(
-          //       member: Global.instance.user!,
-          //       callBack: () async {
-          //         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          //           final Uint8List? bytes =
-          //               await CaptureWidgetHelp.widgetToBytes(_repaintKey);
-          //           if (bytes != null) {
-          //             setState(() {
-          //               marker = BitmapDescriptor.fromBytes(
-          //                 bytes,
-          //                 size: const Size.fromWidth(30),
-          //               );
-          //             });
-          //           }
-          //         });
-          //       },
-          //       keyCap: _repaintKey,
-          //     ),
-          //   ),
-          // ),
           Positioned.fill(
             child: Align(
               child: MemberMarkerList(
