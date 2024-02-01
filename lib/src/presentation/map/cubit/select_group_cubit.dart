@@ -10,6 +10,11 @@ class SelectGroupCubit extends ValueCubit<StoreGroup?> with HydratedMixin {
     hydrate();
   }
 
+  void removeMember(String idUser) {
+    state?.storeMembers?.removeWhere((member) => member.idUser == idUser);
+    emit(state);
+  }
+
   @override
   StoreGroup? fromJson(Map<String, dynamic> json) {
     if (json['currentGroup'] != null) {
