@@ -33,6 +33,12 @@ class FirestoreClient {
     await GroupsManager.createGroup(newGroup);
   }
 
+  //get detail group
+  Future<StoreGroup?> getDetailGroup(String idGroup) async {
+    final group = await GroupsManager.getDetailGroup(idGroup);
+    return group;
+  }
+
   //kiểm tra xem mình còn trong group đó hay không
   Future<bool> isInGroup(String idGroup) async {
     try {
@@ -102,6 +108,7 @@ class FirestoreClient {
     await GroupsManager.leaveGroup(idGroup: idGroup, idUser: idUser);
     await GroupsManager.removeIdGroupOfMyGroup(
         idGroup: idGroup, idUser: idUser);
+    return;
   }
 
   Future<void> deleteIdGroupInMyGroup(StoreGroup group) async {

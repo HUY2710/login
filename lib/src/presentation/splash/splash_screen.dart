@@ -166,15 +166,15 @@ class _SplashScreenState extends State<SplashScreen> {
     await getMe();
     await checkInGroup();
 
-    // final bool isFirstLaunch =
-    //     await SharedPreferencesManager.getIsFirstLaunch();
+    final bool isFirstLaunch =
+        await SharedPreferencesManager.getIsFirstLaunch();
     if (mounted) {
-      // if (isFirstLaunch) {
-      //   AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
-      // } else {
+      if (isFirstLaunch) {
+        AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
+      } else {
       final language = context.read<LanguageCubit>().state;
       AutoRouter.of(context).replace(OnBoardingRoute(language: language));
-      // }
+      }
     }
   }
 
@@ -272,6 +272,11 @@ class _SplashScreenState extends State<SplashScreen> {
         //nếu không còn ở trong group thì nên reset lại data local của group
         if (!result) {
           getIt<SelectGroupCubit>().update(null);
+        } else {
+          //get lại data của group
+          final group = await FirestoreClient.instance
+              .getDetailGroup(getIt<SelectGroupCubit>().state!.idGroup!);
+          getIt<SelectGroupCubit>().update(group);
         }
       } catch (error) {
         //xử lí lỗi

@@ -36,6 +36,7 @@ class ModalEditMember extends StatelessWidget {
                   // final update = cubit.update(MemberMode.show);
                   value.value = 0;
                 },
+                isAdmin: false,
               ),
               16.h.verticalSpace,
               // Expanded(

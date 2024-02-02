@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,8 +9,10 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../config/di/di.dart';
 import '../../data/models/store_group/store_group.dart';
+import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
 import '../../services/my_background_service.dart';
+import '../../shared/helpers/capture_widget_helper.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../home/widgets/bottom_bar.dart';
 import 'cubit/location_listen/location_listen_cubit.dart';
@@ -18,6 +21,7 @@ import 'cubit/select_group_cubit.dart';
 import 'cubit/tracking_members/tracking_member_cubit.dart';
 import 'widgets/custom_map.dart';
 import 'widgets/float_right_app_bar.dart';
+import 'widgets/member_marker.dart';
 import 'widgets/member_marker_list.dart';
 
 class MapScreen extends StatefulWidget {
@@ -46,6 +50,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
     _initStart();
     _defaultLocation = Global.instance.location;
     getLocalLocation();
+    _getMyMarker();
     super.initState();
     _trackingMemberCubit.initTrackingMember();
   }
@@ -110,36 +115,24 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
     }
   }
 
-  final GlobalKey _repaintKey = GlobalKey();
+  Future<void> _getMyMarker() async {
+    final newMarker = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(
+        size: Size.fromRadius(5.r),
+        devicePixelRatio: ScreenUtil().pixelRatio,
+      ),
+      Assets.images.markers.circleDot.path,
+    );
+    setState(() {
+      marker = newMarker;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Positioned.fill(
-          //   key: const ValueKey(1),
-          //   child: Align(
-          //     child: BuildMarker(
-          //       member: Global.instance.user!,
-          //       callBack: () async {
-          //         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          //           final Uint8List? bytes =
-          //               await CaptureWidgetHelp.widgetToBytes(_repaintKey);
-          //           if (bytes != null) {
-          //             setState(() {
-          //               marker = BitmapDescriptor.fromBytes(
-          //                 bytes,
-          //                 size: const Size.fromWidth(30),
-          //               );
-          //             });
-          //           }
-          //         });
-          //       },
-          //       keyCap: _repaintKey,
-          //     ),
-          //   ),
-          // ),
           Positioned.fill(
             child: Align(
               child: MemberMarkerList(
@@ -211,6 +204,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
               locationListenCubit: _locationListenCubit,
               mapController: _mapController,
               trackingMemberCubit: _trackingMemberCubit,
+              moveToLocationUser: _moveToCurrentLocation,
             ),
           )
         ],

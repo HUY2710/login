@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/di/di.dart';
@@ -12,6 +13,7 @@ import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../map/cubit/location_listen/location_listen_cubit.dart';
+import '../../map/cubit/select_group_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
 import '../../map/cubit/tracking_members/tracking_member_cubit.dart';
 import 'bottom_sheet/members/widgets/modal_edit.dart';
@@ -23,10 +25,12 @@ class BottomBar extends StatefulWidget {
     required this.mapController,
     required this.locationListenCubit,
     required this.trackingMemberCubit,
+    required this.moveToLocationUser,
   });
   final Completer<GoogleMapController> mapController;
   final LocationListenCubit locationListenCubit;
   final TrackingMemberCubit trackingMemberCubit;
+  final void Function(LatLng) moveToLocationUser;
   @override
   State<BottomBar> createState() => _BottomBarState();
 }
@@ -124,23 +128,28 @@ class _BottomBarState extends State<BottomBar> {
     final value = ValueNotifier<int>(0);
     return InkWell(
       onTap: () {
-        showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return StatefulBuilder(builder: (context, _) {
-                return ValueListenableBuilder(
-                    valueListenable: value,
-                    builder: (context, val, child) {
-                      return AnimatedSwitcher(
-                          duration: const Duration(
-                            microseconds: 700,
-                          ),
-                          child: (val == 0)
-                              ? ModalShowMember(value: value)
-                              : ModalEditMember(value: value));
-                    });
+        //check xem có join group nào chưa
+        if (getIt<SelectGroupCubit>().state != null) {
+          showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return StatefulBuilder(builder: (context, _) {
+                  return ValueListenableBuilder(
+                      valueListenable: value,
+                      builder: (context, val, child) {
+                        return AnimatedSwitcher(
+                            duration: const Duration(
+                              microseconds: 700,
+                            ),
+                            child: (val == 0)
+                                ? ModalShowMember(value: value)
+                                : ModalEditMember(value: value));
+                      });
+                });
               });
-            });
+        } else {
+          Fluttertoast.showToast(msg: 'Please join group first');
+        }
       },
       child: Container(
         height: 48.r,

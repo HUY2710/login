@@ -55,7 +55,6 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
           idGroup: 24.randomString(),
           groupName: validName,
           avatarGroup: Assets.images.avatars.avatar10.path,
-          countMembers: 1,
         );
 
         await FirestoreClient.instance.createGroup(newGroup);

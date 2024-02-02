@@ -101,7 +101,7 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
             _trackingListMember.add(infoUser);
           }
         }
-        //lắng nghe khi có member join group
+        //lắng nghe khi có member rời hoặc bị xóa khỏi group
         if (change.type == DocumentChangeType.removed) {
           StoreMember member = StoreMember.fromJson(change.doc.data()!);
           member = member.copyWith(idUser: change.doc.id);
@@ -109,11 +109,20 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
               await _fireStoreClient.getUser(member.idUser!);
           //sau khi lấy được thông tin user thì tiến hành query đến location của user đó
 
-          // Thực hiện các xử lý khác với infoUser...
-          if (infoUser != null && infoUser.code != Global.instance.user?.code) {
-            _trackingListMember
-                .removeWhere((element) => element.code == infoUser.code);
+          //nếu id bằng với của mình thì có nghĩa là mình bị admin xóa ra khỏi nhóm
+          //thì lúc này reset lại data group và không còn tracking ai
+          if (infoUser != null && infoUser.code == Global.instance.user?.code) {
+            _trackingListMember = [];
+            getIt<SelectGroupCubit>().update(null); //reset group
             debugPrint('list:$_trackingListMember');
+          } else {
+            // xóa user đó ra khỏi list tracking...
+            if (infoUser != null &&
+                infoUser.code != Global.instance.user?.code) {
+              _trackingListMember
+                  .removeWhere((element) => element.code == infoUser.code);
+              debugPrint('list:$_trackingListMember');
+            }
           }
         }
       }
