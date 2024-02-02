@@ -11,6 +11,7 @@ import '../../data/models/store_group/store_group.dart';
 import '../../global/global.dart';
 import '../../services/my_background_service.dart';
 import '../../shared/mixin/permission_mixin.dart';
+import '../chat/cubits/group_cubit.dart';
 import '../home/widgets/bottom_bar.dart';
 import 'cubit/location_listen/location_listen_cubit.dart';
 import 'cubit/map_type_cubit.dart';
@@ -48,6 +49,14 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
     getLocalLocation();
     super.initState();
     _trackingMemberCubit.initTrackingMember();
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //   (_) async {
+    //     await getIt<GroupCubit>().initStreamUser();
+
+    //   },
+    // );
+    getIt<GroupCubit>().initStreamGroupChat();
+    // getIt<GroupCubit>().initStreamUser();
   }
 
   void getLocalLocation() {

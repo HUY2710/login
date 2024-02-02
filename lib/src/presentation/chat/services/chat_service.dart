@@ -115,9 +115,8 @@ class ChatService {
   }
 
   Stream<QuerySnapshot<MessageModel>> streamMessageGroup(
-      String idGroup, List<StoreUser> listUser) async* {
-    if (listUser.isEmpty) {}
-    yield* CollectionStore.chat
+      String idGroup, List<StoreUser> listUser) {
+    return CollectionStore.chat
         .doc(idGroup)
         .collection(CollectionStoreConstant.messages)
         .orderBy('sentAt')
@@ -134,6 +133,21 @@ class ChatService {
               return message;
             },
             toFirestore: (message, _) => message.toJson())
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getMyGroupChat2(
+      List<String> idsMyGroup) {
+    return CollectionStore.groups
+        .where(FieldPath.documentId, whereIn: idsMyGroup)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getUser2() {
+    final String code = Global.instance.user!.code;
+    return CollectionStore.users
+        .doc(code)
+        .collection(CollectionStoreConstant.myGroups)
         .snapshots();
   }
 }
