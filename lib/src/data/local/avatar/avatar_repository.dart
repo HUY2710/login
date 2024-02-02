@@ -92,4 +92,56 @@ final groupAvatarList = [
     avatarPath: Assets.images.avatars.groups.group1.path,
     previewAvatarPath: Assets.images.avatars.groups.group1.path,
   ),
+  AvatarModel(
+    avatarPath: Assets.images.avatars.groups.group2.path,
+    previewAvatarPath: Assets.images.avatars.groups.group2.path,
+  ),
+  AvatarModel(
+    avatarPath: Assets.images.avatars.groups.group3.path,
+    previewAvatarPath: Assets.images.avatars.groups.group3.path,
+  ),
+  AvatarModel(
+    avatarPath: Assets.images.avatars.groups.group4.path,
+    previewAvatarPath: Assets.images.avatars.groups.group4.path,
+  ),
+  AvatarModel(
+    avatarPath: Assets.images.avatars.groups.group5.path,
+    previewAvatarPath: Assets.images.avatars.groups.group5.path,
+  ),
+  AvatarModel(
+    avatarPath: Assets.images.avatars.groups.group6.path,
+    previewAvatarPath: Assets.images.avatars.groups.group6.path,
+  ),
+  AvatarModel(
+    avatarPath: Assets.images.avatars.groups.group7.path,
+    previewAvatarPath: Assets.images.avatars.groups.group7.path,
+  ),
+  AvatarModel(
+    avatarPath: Assets.images.avatars.groups.group8.path,
+    previewAvatarPath: Assets.images.avatars.groups.group8.path,
+  ),
+  AvatarModel(
+    avatarPath: Assets.images.avatars.groups.group9.path,
+    previewAvatarPath: Assets.images.avatars.groups.group9.path,
+  ),
+  AvatarModel(
+    avatarPath: Assets.images.avatars.groups.group10.path,
+    previewAvatarPath: Assets.images.avatars.groups.group10.path,
+  ),
+  AvatarModel(
+    avatarPath: Assets.images.avatars.groups.group11.path,
+    previewAvatarPath: Assets.images.avatars.groups.group11.path,
+  ),
+  AvatarModel(
+    avatarPath: Assets.images.avatars.groups.group12.path,
+    previewAvatarPath: Assets.images.avatars.groups.group12.path,
+  ),
+  AvatarModel(
+    avatarPath: Assets.images.avatars.groups.group13.path,
+    previewAvatarPath: Assets.images.avatars.groups.group13.path,
+  ),
+  AvatarModel(
+    avatarPath: Assets.images.avatars.groups.group14.path,
+    previewAvatarPath: Assets.images.avatars.groups.group14.path,
+  ),
 ];

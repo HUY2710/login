@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../config/navigation/app_router.dart';
+import '../../../data/local/avatar/avatar_repository.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
@@ -11,6 +12,10 @@ import '../../onboarding/widgets/app_button.dart';
 @RoutePage()
 class CreateGroupAvatarScreen extends StatelessWidget {
   const CreateGroupAvatarScreen({super.key});
+
+  void onSave(BuildContext context) {
+    context.replaceRoute(const HomeRoute());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,12 @@ class CreateGroupAvatarScreen extends StatelessWidget {
           const _MainBody(),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: const CustomAppBar(title: 'Set avatar'),
+            child: const CustomAppBar(
+              title: 'Avatar Group',
+              textColor: Color(
+                0xFF343434,
+              ),
+            ),
           ),
         ],
       ),
@@ -28,9 +38,7 @@ class CreateGroupAvatarScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 36.h),
         child: AppButton(
           title: 'Save',
-          onTap: () {
-            context.replaceRoute(const HomeRoute());
-          },
+          onTap: () => onSave(context),
           // isEnable: false,
           textSecondColor: const Color(0xFFB685FF),
         ),
@@ -47,27 +55,13 @@ class _MainBody extends StatefulWidget {
 }
 
 class _MainBodyState extends State<_MainBody> {
-  final groupAvatars = <AssetGenImage>[
-    Assets.images.avatars.avatar1,
-    Assets.images.avatars.avatar2,
-    Assets.images.avatars.avatar3,
-    Assets.images.avatars.avatar4,
-    Assets.images.avatars.avatar5,
-    Assets.images.avatars.avatar6,
-    Assets.images.avatars.avatar7,
-    Assets.images.avatars.avatar8,
-    Assets.images.avatars.avatar9,
-    Assets.images.avatars.avatar10,
-  ];
-
-  AssetGenImage currentAvatar = Assets.images.avatars.avatar1;
+  var currentAvatarSelected = 0;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          _buildAvatarPreview(),
-          24.verticalSpace,
+          100.verticalSpace,
           Text(
             'Choose your favorite avatar!',
             style: TextStyle(
@@ -83,44 +77,58 @@ class _MainBodyState extends State<_MainBody> {
     );
   }
 
-  Widget _buildAvatarPreview() {
-    return Container(
-      height: 250.h,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(20.r),
-          bottomRight: Radius.circular(20.r),
-        ),
-      ),
-      child: currentAvatar.image(
-        fit: BoxFit.fitWidth,
-      ),
-    );
-  }
-
   Widget _buildAvatarGridView() {
     return GridView.builder(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 32.w,
-        mainAxisSpacing: 32.h,
+        crossAxisCount: 4,
+        crossAxisSpacing: 24.w,
+        mainAxisSpacing: 24.h,
       ),
       itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              currentAvatar = groupAvatars[index];
-            });
-          },
-          child: CircleAvatar(
-            backgroundImage: groupAvatars[index].provider(),
-          ),
-        );
+        return _buildAvatarItem(index);
       },
-      itemCount: groupAvatars.length,
+      itemCount: groupAvatarList.length,
+    );
+  }
+
+  GestureDetector _buildAvatarItem(int index) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          currentAvatarSelected = index;
+        });
+      },
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            foregroundDecoration: BoxDecoration(
+              border: currentAvatarSelected == index
+                  ? Border.all(
+                      color: const Color(0xFF7B3EFF),
+                      width: 2.w,
+                    )
+                  : null,
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.r),
+              child: Image.asset(
+                groupAvatarList[index].avatarPath,
+              ),
+            ),
+          ),
+          if (currentAvatarSelected == index)
+            Positioned(
+              right: -6.h,
+              top: -6.h,
+              child: Assets.icons.icChecked.svg(height: 24.h),
+            ),
+        ],
+      ),
     );
   }
 }

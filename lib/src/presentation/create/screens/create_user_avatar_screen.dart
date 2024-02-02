@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../config/navigation/app_router.dart';
-import '../../../gen/gens.dart';
+import '../../../data/local/avatar/avatar_repository.dart';
+import '../../../data/models/avatar/avatar_model.dart';
 import '../../../shared/enum/gender_type.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
@@ -49,28 +50,12 @@ class _MainBody extends StatefulWidget {
 }
 
 class _MainBodyState extends State<_MainBody> {
-  final femaleAvatars = <AssetGenImage>[
-    Assets.images.avatars.avatar1,
-    Assets.images.avatars.avatar2,
-    Assets.images.avatars.avatar3,
-    Assets.images.avatars.avatar4,
-    Assets.images.avatars.avatar5,
-  ];
-  final maleAvatars = <AssetGenImage>[
-    Assets.images.avatars.avatar11,
-    Assets.images.avatars.avatar12,
-    Assets.images.avatars.avatar13,
-    Assets.images.avatars.avatar14,
-    Assets.images.avatars.avatar15,
-    Assets.images.avatars.avatar16,
-  ];
-
   var currentGender = GenderType.male;
-  AssetGenImage currentAvatar = Assets.images.avatars.avatar1;
+  var currentAvatar = maleAvatarList.first.previewAvatarPath;
   @override
   Widget build(BuildContext context) {
-    final currentImage =
-        currentGender == GenderType.male ? maleAvatars : femaleAvatars;
+    final currentList =
+        currentGender == GenderType.male ? maleAvatarList : femaleAvatarList;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -93,7 +78,7 @@ class _MainBodyState extends State<_MainBody> {
             ),
           ),
           16.verticalSpace,
-          _buildAvatarGridView(currentImage),
+          _buildAvatarGridView(currentList),
         ],
       ),
     );
@@ -101,20 +86,20 @@ class _MainBodyState extends State<_MainBody> {
 
   Widget _buildAvatarPreview() {
     return Container(
-      height: 250.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(20.r),
           bottomRight: Radius.circular(20.r),
         ),
       ),
-      child: currentAvatar.image(
-        fit: BoxFit.fitWidth,
+      child: Image.asset(
+        currentAvatar,
+        gaplessPlayback: true,
       ),
     );
   }
 
-  Widget _buildAvatarGridView(List<AssetGenImage> currentImage) {
+  Widget _buildAvatarGridView(List<AvatarModel> currentImage) {
     return GridView.builder(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       shrinkWrap: true,
@@ -128,11 +113,14 @@ class _MainBodyState extends State<_MainBody> {
         return GestureDetector(
           onTap: () {
             setState(() {
-              currentAvatar = currentImage[index];
+              currentAvatar = currentImage[index].previewAvatarPath;
             });
           },
           child: CircleAvatar(
-            backgroundImage: currentImage[index].provider(),
+            backgroundImage: Image.asset(
+              currentImage[index].avatarPath,
+              gaplessPlayback: true,
+            ).image,
           ),
         );
       },
