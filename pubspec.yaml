@@ -90,6 +90,7 @@ flutter:
     - assets/images/avatars/
     - assets/images/avatars/female/
     - assets/images/avatars/male/
+    - assets/images/avatars/groups/
     - assets/images/markers/
     - assets/images/map_types/
     - assets/ad_unit_id/dev/
