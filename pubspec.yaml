@@ -88,6 +88,8 @@ flutter:
     - assets/images/onboarding/
     - assets/images/languages/
     - assets/images/avatars/
+    - assets/images/avatars/female/
+    - assets/images/avatars/male/
     - assets/images/markers/
     - assets/images/map_types/
     - assets/ad_unit_id/dev/
