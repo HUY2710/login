@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../shared/extension/context_extension.dart';
 import '../../../header_modall.dart';
-import '../show_member.dart';
 
 class ModalEditMember extends StatelessWidget {
   const ModalEditMember({super.key, required this.value});
