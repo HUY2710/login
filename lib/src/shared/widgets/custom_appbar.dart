@@ -11,8 +11,12 @@ class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
     super.key,
     this.title,
+    this.style,
+    this.textColor,
   });
   final String? title;
+  final TextStyle? style;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +45,7 @@ class CustomAppBar extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 20.sp,
-                    color: Colors.white,
+                    color: textColor ?? Colors.white,
                   ),
                 ),
               ),
