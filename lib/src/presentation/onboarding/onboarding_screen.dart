@@ -11,6 +11,7 @@ import '../../gen/assets.gen.dart';
 import '../../shared/cubit/value_cubit.dart';
 import '../../shared/enum/language.dart';
 import '../../shared/extension/context_extension.dart';
+import 'widgets/app_button.dart';
 import 'widgets/indicator.dart';
 import 'widgets/page_widget.dart';
 
@@ -48,11 +49,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   Future<void> navigateToNextScreen() async {
     await SharedPreferencesManager.saveIsStarted(false);
-    final bool isPermissionAllow =
-        await SharedPreferencesManager.getIsPermissionAllow();
+
+    final isCreateInfoFirstTime =
+        await SharedPreferencesManager.getIsCreateInfoFistTime();
     if (mounted) {
-      if (!isPermissionAllow) {
-        context.replaceRoute(const PermissionRoute());
+      if (isCreateInfoFirstTime) {
+        context.replaceRoute(const CreateUsernameRoute());
       } else {
         context.replaceRoute(const HomeRoute());
       }

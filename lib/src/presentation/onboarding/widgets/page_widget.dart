@@ -39,8 +39,10 @@ class ContentPageWidget extends StatelessWidget {
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child:
-                      Assets.images.onboarding.onboardingBg.image(height: 35.h),
+                  child: Assets.images.onboarding.onboardingBg.image(
+                    height: 35.h,
+                    fit: BoxFit.fitHeight,
+                  ),
                 )
               ],
             ),
