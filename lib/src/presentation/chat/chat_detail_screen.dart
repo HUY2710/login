@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
+import '../../config/di/di.dart';
 import '../../data/models/store_message/store_message.dart';
 import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/member_manager.dart';
@@ -13,6 +14,7 @@ import '../../global/global.dart';
 import '../../shared/widgets/custom_inkwell.dart';
 import '../../shared/widgets/gradient_text.dart';
 import 'cubits/chat_cubit.dart';
+import 'cubits/group_cubit.dart';
 import 'services/chat_service.dart';
 import 'utils/util.dart';
 
@@ -27,7 +29,7 @@ class ChatDetailScreen extends StatefulWidget {
 
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
   List<StoreUser> listUser = [];
-  late final ScrollController _controller = ScrollController();
+  // late final ScrollController _controller;
   final TextEditingController textController = TextEditingController();
 
   @override
@@ -44,18 +46,17 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     super.initState();
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   if (_controller.hasClients) {
-  //     _controller.animateTo(_controller.position.maxScrollExtent,
-  //         duration: Duration(milliseconds: 300), curve: Curves.linear);
-  //   }
-  //   super.didChangeDependencies();
-  // }
+  @override
+  void didChangeDependencies() {
+    // _controller = ScrollController()
+    //   ..jumpTo(_controller.position.maxScrollExtent);
+    // _controller.jumpTo(_controller.position.maxScrollExtent);
+    super.didChangeDependencies();
+  }
 
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
   }
 
@@ -94,7 +95,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                                 final chats = snapshot.data!.docs;
                                 return ListView.builder(
                                     itemCount: chats.length,
-                                    controller: _controller,
+                                    // controller: _controller,
                                     itemBuilder: (context, index) {
                                       return Utils.checkIsUser(
                                               code:
@@ -179,7 +180,14 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                         )),
                         12.w.horizontalSpace,
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () async {
+                            if (textController.text.isNotEmpty) {
+                              getIt<GroupCubit>().sendMessage(
+                                  content: textController.text,
+                                  idGroup: widget.idGroup);
+                              textController.clear();
+                            }
+                          },
                           child: Container(
                             padding: EdgeInsets.all(10.r),
                             decoration: BoxDecoration(

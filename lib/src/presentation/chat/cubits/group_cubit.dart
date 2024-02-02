@@ -6,12 +6,11 @@ import 'package:injectable/injectable.dart';
 
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
-import '../../../data/remote/firestore_client.dart';
 import '../../../shared/helpers/logger_utils.dart';
 import '../services/chat_service.dart';
 import 'group_state.dart';
 
-@injectable
+@singleton
 class GroupCubit extends Cubit<GroupState> {
   GroupCubit() : super(const GroupState.initial());
 
@@ -25,13 +24,18 @@ class GroupCubit extends Cubit<GroupState> {
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _groupStream;
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _userStream;
 
-  // void updateIdMyGroup(List<String> value) {
-  //   idsMyGroup = value;
-  // }
+  Future<void> sendMessage(
+      {required String content, required String idGroup}) async {
+    await ChatService.instance.sendMessage(content: content, idGroup: idGroup);
+    emit(GroupState.success(myGroups));
+  }
+
+  void updateStatus() {
+    emit(GroupState.success(myGroups));
+  }
 
   Future<void> initStreamUser() async {
     _userStream = chatService.getUser2().listen((user) {
-      logger.i(user.docs.first.data());
       if (user.docs.isNotEmpty) {
         final List<MyIdGroup> myListIdGroup =
             user.docs.map((e) => MyIdGroup.fromJson(e.data())).toList();
@@ -42,21 +46,56 @@ class GroupCubit extends Cubit<GroupState> {
   }
 
   Future<void> initStreamGroupChat() async {
-    logger.e(idsMyGroup);
-    await initStreamUser();
-    if (idsMyGroup.isEmpty) {
-      emit(const GroupState.initial());
-    } else {
-      logger.e(idsMyGroup);
-      _groupStream = chatService
-          .getMyGroupChat2(idsMyGroup)
-          .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
-        if (snapshot.docs.isNotEmpty) {
-          for (final group in snapshot.docs) {}
-        } else {
-          emit(const GroupState.initial());
-        }
-      });
-    }
+    _userStream = ChatService.instance.getUser2().listen((userSnapshot) async {
+      if (userSnapshot.docs.isEmpty) {
+        emit(const GroupState.initial());
+      } else {
+        //get all my group of user
+        // lấy ra tất cả các id group trong myGroup collection user
+        final List<MyIdGroup> myListIdGroup =
+            userSnapshot.docs.map((e) => MyIdGroup.fromJson(e.data())).toList();
+        idsMyGroup = myListIdGroup.map((e) => e.idGroup).toList();
+        // get store user of user group
+        //lấy ra thông tin user từ các lasstMessage của group
+        final listIdUser =
+            await ChatService.instance.getListIdUserFromLastMessage();
+        listStoreUser = await chatService.getUserFromListId(listIdUser);
+        //lấy thông tin group
+        _groupStream = chatService
+            .getMyGroupChat2(idsMyGroup)
+            .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
+          if (snapshot.docs.isNotEmpty) {
+            for (final change in snapshot.docChanges) {
+              if (change.type == DocumentChangeType.added) {
+                emit(const GroupState.loading());
+                StoreGroup storeGroup = StoreGroup.fromJson(change.doc.data()!);
+                storeGroup = storeGroup.copyWith(
+                    storeUser: listStoreUser.firstWhere((storeUser) =>
+                        storeUser.code == storeGroup.lastMessage!.senderId));
+                myGroups.add(storeGroup);
+              }
+              if (change.type == DocumentChangeType.modified) {
+                emit(const GroupState.loading());
+                final index =
+                    myGroups.indexWhere((e) => e.idGroup == change.doc.id);
+                StoreGroup storeGroup = StoreGroup.fromJson(change.doc.data()!);
+                storeGroup = storeGroup.copyWith(
+                    storeUser: listStoreUser.firstWhere((storeUser) =>
+                        storeUser.code == storeGroup.lastMessage!.senderId));
+                myGroups[index] = storeGroup;
+                logger.i(storeGroup);
+              }
+            }
+            if (myGroups.isEmpty) {
+              emit(const GroupState.initial());
+            } else {
+              emit(GroupState.success(myGroups));
+            }
+          } else {
+            emit(const GroupState.initial());
+          }
+        });
+      }
+    });
   }
 }

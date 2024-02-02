@@ -69,25 +69,28 @@ class ChatService {
       }
     } catch (e) {
       logger.e(e);
+      return [];
     }
     return [];
   }
 
   Future<void> sendMessage(
-      {required MessageModel message, required String idGroup}) async {
+      {required String content, required String idGroup}) async {
     final user = Global.instance.user;
     if (user?.code == null) {
       throw 'User must have';
     } else {
+      final message = MessageModel(
+          content: content,
+          senderId: user?.code ?? '',
+          sentAt: DateTime.now().toString());
       try {
-        CollectionStore.chat
-            .doc('idGroup')
+        await CollectionStore.chat
+            .doc(idGroup)
             .collection(CollectionStoreConstant.messages)
-            .add(MessageModel(
-                    content: message.content,
-                    senderId: user?.code ?? '',
-                    sentAt: DateTime.now().toString())
-                .toJson());
+            .add(message.toJson());
+        await GroupsManager.updateGroup(
+            idGroup: idGroup, fields: {'lastMessage': message.toJson()});
       } catch (e) {
         logger.e(
           'Send Mess Err: $e',
@@ -116,24 +119,30 @@ class ChatService {
 
   Stream<QuerySnapshot<MessageModel>> streamMessageGroup(
       String idGroup, List<StoreUser> listUser) {
-    return CollectionStore.chat
-        .doc(idGroup)
-        .collection(CollectionStoreConstant.messages)
-        .orderBy('sentAt')
-        .withConverter(
-            fromFirestore: (snapshot, _) {
-              MessageModel message = MessageModel.fromJson(snapshot.data()!);
-              message = message.copyWith(
-                  avatarUrl: listUser
-                      .firstWhere((user) => user.code == message.senderId)
-                      .avatarUrl,
-                  userName: listUser
-                      .firstWhere((user) => user.code == message.senderId)
-                      .userName);
-              return message;
-            },
-            toFirestore: (message, _) => message.toJson())
-        .snapshots();
+    late Stream<QuerySnapshot<MessageModel>> result;
+    try {
+      result = CollectionStore.chat
+          .doc(idGroup)
+          .collection(CollectionStoreConstant.messages)
+          .orderBy('sentAt')
+          .withConverter(
+              fromFirestore: (snapshot, _) {
+                MessageModel message = MessageModel.fromJson(snapshot.data()!);
+                message = message.copyWith(
+                    avatarUrl: listUser
+                        .firstWhere((user) => user.code == message.senderId)
+                        .avatarUrl,
+                    userName: listUser
+                        .firstWhere((user) => user.code == message.senderId)
+                        .userName);
+                return message;
+              },
+              toFirestore: (message, _) => message.toJson())
+          .snapshots();
+    } catch (e) {
+      logger.e('ERRROE stream mess $e');
+    }
+    return result;
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getMyGroupChat2(

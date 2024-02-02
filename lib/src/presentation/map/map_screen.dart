@@ -55,8 +55,8 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
 
     //   },
     // );
+
     getIt<GroupCubit>().initStreamGroupChat();
-    // getIt<GroupCubit>().initStreamUser();
   }
 
   void getLocalLocation() {

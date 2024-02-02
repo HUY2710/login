@@ -16,8 +16,6 @@ import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../map/cubit/location_listen/location_listen_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
 import '../../map/cubit/tracking_members/tracking_member_cubit.dart';
-import 'bottom_sheet/members/widgets/modal_edit.dart';
-import 'bottom_sheet/members/widgets/modal_show.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({

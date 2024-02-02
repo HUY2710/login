@@ -252,7 +252,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     ///TODO: USE TEST
     // const String? userCode = 'b164BBAWm0QogJyv8ocBEGnA';
-    const String? userCode = 'JbupNK6MeCCjA8glRRs5DuVO';
+    const String? userCode = 'fPXUf0CQvagn4jjxYdJOsoHZ';
     StoreUser? storeUser;
     if (userCode == null) {
       storeUser = await addNewUser(storeUser: storeUser);
