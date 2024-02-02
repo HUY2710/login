@@ -47,4 +47,15 @@ class SharedPreferencesManager {
             .getBool(PreferenceKeys.permissionAllow.name) ??
         false;
   }
+
+  static Future<void> saveIsCreateInfoFistTime(bool status) async {
+    (await SharedPreferences.getInstance())
+        .setBool(PreferenceKeys.isCreateInfoFistTime.name, status);
+  }
+
+  static Future<bool> getIsCreateInfoFistTime() async {
+    return (await SharedPreferences.getInstance())
+            .getBool(PreferenceKeys.isCreateInfoFistTime.name) ??
+        true;
+  }
 }

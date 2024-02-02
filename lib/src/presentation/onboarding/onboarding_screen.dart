@@ -49,10 +49,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   Future<void> navigateToNextScreen() async {
     await SharedPreferencesManager.saveIsStarted(false);
-    final bool isPermissionAllow =
-        await SharedPreferencesManager.getIsPermissionAllow();
+
+    final isCreateInfoFirstTime =
+        await SharedPreferencesManager.getIsCreateInfoFistTime();
     if (mounted) {
-      if (!isPermissionAllow) {
+      if (isCreateInfoFirstTime) {
         context.replaceRoute(const CreateUsernameRoute());
       } else {
         context.replaceRoute(const HomeRoute());

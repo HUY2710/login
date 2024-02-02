@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/avatar/avatar_repository.dart';
+import '../../../data/local/shared_preferences_manager.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
@@ -13,8 +14,11 @@ import '../../onboarding/widgets/app_button.dart';
 class CreateGroupAvatarScreen extends StatelessWidget {
   const CreateGroupAvatarScreen({super.key});
 
-  void onSave(BuildContext context) {
-    context.replaceRoute(const HomeRoute());
+  Future<void> onSave(BuildContext context) async {
+    await SharedPreferencesManager.saveIsCreateInfoFistTime(false);
+    if (context.mounted) {
+      context.replaceRoute(const HomeRoute());
+    }
   }
 
   @override

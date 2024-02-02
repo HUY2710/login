@@ -1,5 +1,6 @@
 enum PreferenceKeys {
   isFistTime,
+  isCreateInfoFistTime,
   permissionAllow,
   currentLanguageCode,
   rateApp,
