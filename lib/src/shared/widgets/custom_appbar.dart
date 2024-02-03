@@ -13,17 +13,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.style,
     this.textColor,
-    this.colorLeading,
+    this.leadingColor,
+    this.padding,
   });
   final String? title;
   final TextStyle? style;
   final Color? textColor;
-  final Color? colorLeading;
+  final EdgeInsetsGeometry? padding;
+  final Color? leadingColor;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 56.h),
+      padding: padding ?? EdgeInsets.only(top: 56.h),
       child: SizedBox(
         height: 30.h,
         child: Stack(
@@ -35,7 +37,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Assets.icons.icBack.svg(
                 height: 28.h,
                 colorFilter: ColorFilter.mode(
-                  colorLeading ?? context.colorScheme.primary,
+                  leadingColor ?? context.colorScheme.primary,
                   BlendMode.srcIn,
                 ),
               ),
@@ -58,6 +60,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

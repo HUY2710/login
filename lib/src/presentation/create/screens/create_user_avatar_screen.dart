@@ -44,7 +44,7 @@ class CreateUserAvatarScreen extends StatelessWidget {
                     },
                   ),
                   const CustomAppBar(
-                      title: 'Set avatar', colorLeading: Colors.white)
+                      title: 'Set avatar', leadingColor: Colors.white)
                 ],
               ),
             ),

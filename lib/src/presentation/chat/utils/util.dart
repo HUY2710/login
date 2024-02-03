@@ -1,8 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get_it/get_it.dart';
 
-import '../../../config/di/di.dart';
-import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_message/store_message.dart';
 import '../../../global/global.dart';
 
