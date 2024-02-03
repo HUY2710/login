@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +11,6 @@ import '../../data/models/store_group/store_group.dart';
 import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
 import '../../services/my_background_service.dart';
-import '../../shared/helpers/capture_widget_helper.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../chat/cubits/group_cubit.dart';
 import '../home/widgets/bottom_bar.dart';
@@ -22,7 +20,6 @@ import 'cubit/select_group_cubit.dart';
 import 'cubit/tracking_members/tracking_member_cubit.dart';
 import 'widgets/custom_map.dart';
 import 'widgets/float_right_app_bar.dart';
-import 'widgets/member_marker.dart';
 import 'widgets/member_marker_list.dart';
 
 class MapScreen extends StatefulWidget {

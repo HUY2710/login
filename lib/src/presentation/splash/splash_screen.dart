@@ -172,8 +172,8 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isFirstLaunch) {
         AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
       } else {
-      final language = context.read<LanguageCubit>().state;
-      AutoRouter.of(context).replace(OnBoardingRoute(language: language));
+        final language = context.read<LanguageCubit>().state;
+        AutoRouter.of(context).replace(OnBoardingRoute(language: language));
       }
     }
   }
@@ -246,12 +246,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   //check user
   Future<void> getMe() async {
-    // final String? userCode =
-    //     await SharedPreferencesManager.getString(PreferenceKeys.userCode.name);
+    final String? userCode =
+        await SharedPreferencesManager.getString(PreferenceKeys.userCode.name);
 
-    ///TODO: USE TEST
-    // const String? userCode = 'b164BBAWm0QogJyv8ocBEGnA';
-    const String? userCode = 'fPXUf0CQvagn4jjxYdJOsoHZ';
     StoreUser? storeUser;
     if (userCode == null) {
       storeUser = await addNewUser(storeUser: storeUser);
@@ -299,7 +296,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     storeUser = StoreUser(
         code: newCode,
-        userName: 'LiLi',
+        userName: '',
         batteryLevel: battery,
         avatarUrl: Assets.images.avatars.avatar1.path);
     await FirestoreClient.instance.createUser(storeUser).then((value) async {
