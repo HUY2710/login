@@ -257,8 +257,9 @@ class _SettingScreenState extends State<SettingScreen> {
           Expanded(
             child: Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 28,
+                  backgroundImage: AssetImage(Global.instance.user!.avatarUrl),
                 ),
                 20.horizontalSpace,
                 Expanded(
