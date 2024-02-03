@@ -5,9 +5,33 @@ enum Language {
     languageName: 'English',
     languageCode: 'en',
   ),
+  spanish(
+    languageName: 'Spanish',
+    languageCode: 'es',
+  ),
   french(
     languageName: 'French',
     languageCode: 'fr',
+  ),
+  hindi(
+    languageName: 'Hindi',
+    languageCode: 'hi',
+  ),
+  portuguese(
+    languageName: 'Portuguese',
+    languageCode: 'pt',
+  ),
+  german(
+    languageName: 'German',
+    languageCode: 'de',
+  ),
+  indonesia(
+    languageName: 'Indonesia',
+    languageCode: 'id',
+  ),
+  korean(
+    languageName: 'Korean',
+    languageCode: 'ko',
   ),
   ;
 
@@ -29,6 +53,18 @@ extension LanguageExtension on Language {
         return Assets.images.languages.en.path;
       case Language.french:
         return Assets.images.languages.fr.path;
+      case Language.spanish:
+        return Assets.images.languages.es.path;
+      case Language.hindi:
+        return Assets.images.languages.hi.path;
+      case Language.portuguese:
+        return Assets.images.languages.pt.path;
+      case Language.german:
+        return Assets.images.languages.de.path;
+      case Language.indonesia:
+        return Assets.images.languages.id.path;
+      case Language.korean:
+        return Assets.images.languages.ko.path;
     }
   }
 }

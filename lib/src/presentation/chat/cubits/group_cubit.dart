@@ -7,7 +7,6 @@ import 'package:injectable/injectable.dart';
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
-import '../../../shared/helpers/logger_utils.dart';
 import '../services/chat_service.dart';
 import '../utils/util.dart';
 import 'group_state.dart';

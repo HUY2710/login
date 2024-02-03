@@ -129,7 +129,7 @@ class _MainBodyState extends State<_MainBody> {
             Positioned(
               right: -6.h,
               top: -6.h,
-              child: Assets.icons.icChecked.svg(height: 24.h),
+              child: Assets.icons.icRoundedChecked.svg(height: 24.h),
             ),
         ],
       ),

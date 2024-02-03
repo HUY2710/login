@@ -172,8 +172,8 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isFirstLaunch) {
         AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
       } else {
-      final language = context.read<LanguageCubit>().state;
-      AutoRouter.of(context).replace(OnBoardingRoute(language: language));
+        final language = context.read<LanguageCubit>().state;
+        AutoRouter.of(context).replace(OnBoardingRoute(language: language));
       }
     }
   }

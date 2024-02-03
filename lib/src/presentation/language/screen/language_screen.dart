@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../app/cubit/language_cubit.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
-import '../../../gen/colors.gen.dart';
+import '../../../gen/gens.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/language.dart';
 import '../../../shared/extension/context_extension.dart';
@@ -32,25 +32,44 @@ class _LanguageScreenState extends State<LanguageScreen> {
       create: (context) => ValueCubit<Language>(currentLanguage),
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 80.h,
+          toolbarHeight: 56.h,
           leading: (widget.isFirst == null || widget.isFirst == false)
-              ? IconButton(
-                  onPressed: () => context.popRoute(),
-                  icon: const Icon(Icons.arrow_back_ios_new_outlined),
+              ? Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      context.popRoute();
+                    },
+                    child: Assets.icons.icBack.svg(
+                      height: 28.h,
+                      colorFilter: ColorFilter.mode(
+                        context.colorScheme.primary,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ),
                 )
               : null,
           title: Text(
             context.l10n.language,
             style: TextStyle(
-              fontSize: 24.sp,
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w500,
+              color: const Color(0xFF343434),
             ),
           ),
-          actions: [_buildAcceptButton()],
+          centerTitle: true,
+          actions: (widget.isFirst == null || widget.isFirst == false)
+              ? []
+              : [_buildAcceptButton()],
         ),
         body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.h),
             child: _BodyWidget(
-          widget.isFirst,
-        )),
+              widget.isFirst,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -121,6 +140,7 @@ Widget _buildItemLanguage({
   required Language selectedValue,
 }) {
   final selectedLanguageCubit = context.read<ValueCubit<Language>>();
+  final isSelected = language == selectedValue;
   return GestureDetector(
     onTap: () => selectedLanguageCubit.update(language),
     child: Container(
@@ -128,22 +148,32 @@ Widget _buildItemLanguage({
         horizontal: 16.w,
         vertical: 4.h,
       ),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: MyColors.primary.shade100,
-        ),
-        borderRadius: BorderRadius.circular(15.r),
+        color: Colors.white,
+        border: isSelected
+            ? Border.all(
+                color: MyColors.primary,
+              )
+            : null,
+        borderRadius: BorderRadius.circular(20.r),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF9C747D).withOpacity(0.17),
+            offset: const Offset(0, 2),
+            blurRadius: 8,
+            spreadRadius: 2,
+          ),
+        ],
       ),
       child: Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16).w,
-            child: Image.asset(
-              language.flagPath,
-              width: 24.w,
-              height: 24.h,
-            ),
+          Image.asset(
+            language.flagPath,
+            width: 24.w,
+            height: 24.h,
           ),
+          12.horizontalSpace,
           Expanded(
             child: Text(
               language.languageName,
@@ -153,18 +183,7 @@ Widget _buildItemLanguage({
               ),
             ),
           ),
-          Radio<Language>(
-            value: language,
-            fillColor: MaterialStateProperty.resolveWith((states) {
-              if (states.contains(MaterialState.selected)) {
-                return context.colorScheme.primary;
-              }
-              return MyColors.primary.shade100;
-            }),
-            groupValue: selectedValue,
-            onChanged: (Language? value) =>
-                selectedLanguageCubit.update(language),
-          )
+          if (isSelected) Assets.icons.icChecked.svg(height: 24.h),
         ],
       ),
     ),
