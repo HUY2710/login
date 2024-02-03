@@ -23,8 +23,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  double get designWidth => 360; //default
-  double get designHeight => 800; //default
+  double get designWidth => 390; //default
+  double get designHeight => 844; //default
 
   @override
   Widget build(BuildContext context) {

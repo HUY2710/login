@@ -13,10 +13,12 @@ class CustomAppBar extends StatelessWidget {
     this.title,
     this.style,
     this.textColor,
+    this.colorLeading,
   });
   final String? title;
   final TextStyle? style;
   final Color? textColor;
+  final Color? colorLeading;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class CustomAppBar extends StatelessWidget {
               child: Assets.icons.icBack.svg(
                 height: 28.h,
                 colorFilter: ColorFilter.mode(
-                  context.colorScheme.primary,
+                  colorLeading ?? context.colorScheme.primary,
                   BlendMode.srcIn,
                 ),
               ),
