@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../config/di/di.dart';
 import '../../data/models/store_group/store_group.dart';
+import '../../data/models/store_user/store_user.dart';
 import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
 import '../../services/my_background_service.dart';
@@ -141,9 +142,30 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
         children: [
           Positioned.fill(
             child: Align(
-              child: MemberMarkerList(
-                key: ValueKey(getIt<SelectGroupCubit>().state),
-                trackingMemberCubit: _trackingMemberCubit,
+              child: BlocBuilder<TrackingMemberCubit, TrackingMemberState>(
+                bloc: _trackingMemberCubit,
+                builder: (context, state) {
+                  return state.maybeWhen(
+                    orElse: () => const SizedBox(),
+                    initial: () {
+                      return const SizedBox();
+                    },
+                    success: (List<StoreUser> users) {
+                      debugPrint('listUser:${users.length}');
+                      if (users.isNotEmpty) {
+                        return MemberMarkerList(
+                          key: ValueKey(getIt<SelectGroupCubit>().state),
+                          trackingMemberCubit: _trackingMemberCubit,
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  );
+                  // return MemberMarkerList(
+                  //   key: ValueKey(getIt<SelectGroupCubit>().state),
+                  //   trackingMemberCubit: _trackingMemberCubit,
+                  // );
+                },
               ),
             ),
           ),

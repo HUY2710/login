@@ -19,6 +19,8 @@ import '../widgets/gender_switch.dart';
 class CreateUserAvatarScreen extends StatelessWidget {
   CreateUserAvatarScreen({super.key});
   final ValueCubit<String> avatarCubit =
+      ValueCubit(maleAvatarList.first.avatarPath);
+  final ValueCubit<String> avatarBgCubit =
       ValueCubit(maleAvatarList.first.previewAvatarPath);
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class CreateUserAvatarScreen extends StatelessWidget {
               child: Stack(
                 children: [
                   BlocBuilder<ValueCubit<String>, String>(
-                    bloc: avatarCubit,
+                    bloc: avatarBgCubit,
                     builder: (context, state) {
                       return SizedBox(
                         height: MediaQuery.sizeOf(context).height * 0.34,
@@ -50,7 +52,7 @@ class CreateUserAvatarScreen extends StatelessWidget {
             ),
           ),
           SliverToBoxAdapter(
-            child: _MainBody(avatarCubit),
+            child: _MainBody(avatarCubit, avatarBgCubit),
           )
         ],
       ),
@@ -59,7 +61,7 @@ class CreateUserAvatarScreen extends StatelessWidget {
         child: AppButton(
           title: 'Save',
           onTap: () async {
-            Global.instance.user =
+            final avatar = Global.instance.user =
                 Global.instance.user?.copyWith(avatarUrl: avatarCubit.state);
             try {
               await FirestoreClient.instance.updateUser({
@@ -97,8 +99,9 @@ class CreateUserAvatarScreen extends StatelessWidget {
 }
 
 class _MainBody extends StatefulWidget {
-  const _MainBody(this.avatarCubit);
+  const _MainBody(this.avatarCubit, this.avatarBgCubit);
   final ValueCubit<String> avatarCubit;
+  final ValueCubit<String> avatarBgCubit;
   @override
   State<_MainBody> createState() => _MainBodyState();
 }
@@ -150,6 +153,7 @@ class _MainBodyState extends State<_MainBody> {
         return GestureDetector(
           onTap: () {
             widget.avatarCubit.update(currentImage[index].avatarPath);
+            widget.avatarBgCubit.update(currentImage[index].previewAvatarPath);
           },
           child: CircleAvatar(
             backgroundImage: Image.asset(
