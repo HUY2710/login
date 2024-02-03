@@ -40,7 +40,7 @@ class GroupBar extends StatelessWidget {
                 CircleAvatar(
                   backgroundColor: MyColors.primary,
                   backgroundImage: AssetImage(state == null
-                      ? Assets.images.avatars.avatar1.path
+                      ? Assets.images.avatars.groups.group1.path
                       : state.avatarGroup),
                   radius: 14.r,
                 ),

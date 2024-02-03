@@ -23,6 +23,12 @@ class FirestoreClient {
     await CurrentUserManager.createUser(user);
   }
 
+  Future<void> updateUser(
+    Map<String, dynamic> fields,
+  ) async {
+    await CurrentUserManager.updateUser(Global.instance.user!.code, fields);
+  }
+
   Future<StoreUser?> getUser(String userCode) async {
     return CurrentUserManager.getUser(userCode);
   }
