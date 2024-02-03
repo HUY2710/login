@@ -10,6 +10,7 @@
   "removeMember": "Remove Member",
   "removeMemberContent": "Are you sure to the remove this member from your group?",
   "delete": "Delete",
+  "done": "Done",
   "today": "Today",
   "inviteCode": "Invite Code",
   "inviteCodeContent": "Share this invite cote with people you want to add to the group.",
@@ -28,4 +29,8 @@
   "onboarding_title_1": "Track the location of loved ones all the time",
   "onboarding_title_2": "Daily history of locations visited",
   "onboarding_title_3": "Simplify location sharing with loved ones"
+  "removeGroupContent": "You’re currently the group owner. Are you sure to delete it permanantly?",
+  "chatGroupEmptyTitle": "Add members to send messages",
+  "chatGroupEmptySub": "At least one more person is needed \nto start a chat",
+  "addNewMember": "Add a new members"
 }

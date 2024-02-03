@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/di/di.dart';
+import '../../../config/navigation/app_router.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
@@ -16,8 +18,6 @@ import '../../map/cubit/location_listen/location_listen_cubit.dart';
 import '../../map/cubit/select_group_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
 import '../../map/cubit/tracking_members/tracking_member_cubit.dart';
-import 'bottom_sheet/members/widgets/modal_edit.dart';
-import 'bottom_sheet/members/widgets/modal_show.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({
