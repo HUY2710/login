@@ -34,9 +34,7 @@ class Utils {
     return chats[index - 1].data().senderId == chats[index].data().senderId;
   }
 
-  static Future<bool> checkSeen(String idGroup, String timeOfMessage) async {
-    final timeLastSeenString =
-        await SharedPreferencesManager.getTimeSeenChat(idGroup);
+  static bool checkSeen(String? timeLastSeenString, String timeOfMessage) {
     if (timeLastSeenString == null) {
       return false;
     }

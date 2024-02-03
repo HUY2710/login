@@ -9,7 +9,7 @@ class GroupItem extends StatefulWidget {
     required this.avatar,
     required this.groupName,
     required this.idGroup,
-    this.seen = true,
+    required this.seen,
   });
 
   final String userName;
@@ -27,8 +27,15 @@ class GroupItem extends StatefulWidget {
 class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
   // bool seen = false;
   // @override
-  // void didPopNext() async {
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  // }
+
+  // @override
+  // Future<void> didPopNext() async {
   //   seen = await Utils.checkSeen(widget.idGroup, widget.time);
+  //   setState(() {});
   //   // TODO: implement didPopNext
   //   super.didPopNext();
   // }
@@ -68,7 +75,6 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
             });
       },
       onTap: () async {
-        await SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
         if (context.mounted) {
           context.pushRoute(ChatDetailRoute(idGroup: widget.idGroup));
         }
@@ -182,7 +188,7 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
 
   String formatDateTime(DateTime input) {
     final DateTime now = DateTime.now();
-    if (input.isAfter(now) && input.isBefore(now.add(Duration(days: 1)))) {
+    if (isToday(input)) {
       return '${input.hour}:${input.minute}';
     } else if (input.weekday == now.weekday) {
       return input.weekday == 1
@@ -201,5 +207,11 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
     } else {
       return DateFormat('MMM d, yyyy').format(input);
     }
+  }
+
+  bool isToday(DateTime dateTime) {
+    final now = DateTime.now();
+    final dateFormat = DateFormat('yyyy-MM-dd');
+    return dateFormat.format(now) == dateFormat.format(dateTime);
   }
 }

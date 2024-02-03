@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../config/di/di.dart';
+import '../../data/local/shared_preferences_manager.dart';
 import '../../data/models/store_message/store_message.dart';
 import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/member_manager.dart';
@@ -71,7 +72,13 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
           leadingWidth: 30.w,
           leading: CustomInkWell(
               child: Assets.icons.iconBack.svg(width: 28.r),
-              onTap: () => context.popRoute()),
+              onTap: () async {
+                await SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
+                if (mounted) {
+                  context.popRoute().then((value) =>
+                      getIt<GroupCubit>().updateLastSeen(widget.idGroup));
+                }
+              }),
           centerTitle: true,
           title: Text(
             'Messages',

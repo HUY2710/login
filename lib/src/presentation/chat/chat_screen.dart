@@ -6,16 +6,17 @@ import 'package:intl/intl.dart';
 
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
-import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/gradient_background.dart';
+import '../../shared/helpers/logger_utils.dart';
 import '../../shared/widgets/containers/linear_container.dart';
 import '../../shared/widgets/custom_inkwell.dart';
 import '../../shared/widgets/my_drag.dart';
 import 'cubits/group_cubit.dart';
 import 'cubits/group_state.dart';
+import 'utils/util.dart';
 
 part 'widgets/chat_group_empty.dart';
 part 'widgets/group_item.dart';
@@ -48,13 +49,13 @@ class _ChatScreenState extends State<ChatScreen> {
           style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
         ),
       ),
-      body: BlocConsumer<GroupCubit, GroupState>(
+      body: BlocBuilder<GroupCubit, GroupState>(
         bloc: getIt<GroupCubit>(),
-        listener: (context, state) {
-          state.maybeWhen(
-            orElse: () {},
-          );
-        },
+        // listener: (context, state) {
+        //   state.maybeWhen(
+        //     orElse: () {},
+        //   );
+        // },
         builder: (context, state) {
           return state.maybeWhen(
               initial: () => const GroupChatEmpty(),
@@ -105,7 +106,6 @@ class _ChatScreenState extends State<ChatScreen> {
                           child: ListView.separated(
                               itemBuilder: (context, index) {
                                 final groupItem = groups[index];
-
                                 return GroupItem(
                                   userName: groupItem.storeUser!.userName,
                                   message: (groupItem.lastMessage!.content ==
@@ -116,7 +116,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   avatar: groupItem.avatarGroup,
                                   groupName: groupItem.groupName,
                                   idGroup: groupItem.idGroup ?? '',
-                                  // seen: seen,
+                                  seen: groupItem.seen ?? false,
                                 );
                               },
                               separatorBuilder: (context, index) {

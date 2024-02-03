@@ -26,6 +26,11 @@ class StoreGroup with _$StoreGroup {
       includeFromJson: false,
       includeToJson: false,
     )
+    bool? seen,
+    @JsonKey(
+      includeFromJson: false,
+      includeToJson: false,
+    )
     List<StoreMember>? storeMembers,
   }) = _StoreGroup;
 

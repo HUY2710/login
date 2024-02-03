@@ -4,10 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../shared/helpers/logger_utils.dart';
 import '../services/chat_service.dart';
+import '../utils/util.dart';
 import 'group_state.dart';
 
 @singleton
@@ -31,6 +33,15 @@ class GroupCubit extends Cubit<GroupState> {
   }
 
   void updateStatus() {
+    emit(GroupState.success(myGroups));
+  }
+
+  void updateLastSeen(String idGroup) {
+    emit(const GroupState.loading());
+    final index = myGroups.indexWhere((e) => e.idGroup == idGroup);
+    StoreGroup temp = myGroups[index];
+    temp = myGroups[index].copyWith(seen: false);
+    myGroups[index] = temp;
     emit(GroupState.success(myGroups));
   }
 
@@ -60,13 +71,31 @@ class GroupCubit extends Cubit<GroupState> {
         final listIdUser =
             await ChatService.instance.getListIdUserFromLastMessage();
         listStoreUser = await chatService.getUserFromListId(listIdUser);
+
         //lấy thông tin group
         _groupStream = chatService
             .getMyGroupChat2(idsMyGroup)
-            .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
+            .listen((QuerySnapshot<Map<String, dynamic>> snapshot) async {
           if (snapshot.docs.isNotEmpty) {
             for (final change in snapshot.docChanges) {
-              if (change.type == DocumentChangeType.added) {
+              if (change.type == DocumentChangeType.modified) {
+                emit(const GroupState.loading());
+                final index =
+                    myGroups.indexWhere((e) => e.idGroup == change.doc.id);
+
+                StoreGroup storeGroup = StoreGroup.fromJson(change.doc.data()!);
+                final timeLastSeenString =
+                    await SharedPreferencesManager.getTimeSeenChat(
+                        storeGroup.idGroup ?? '');
+                final seenTemp = Utils.checkSeen(
+                    timeLastSeenString, storeGroup.lastMessage!.sentAt);
+
+                storeGroup = storeGroup.copyWith(
+                    storeUser: listStoreUser.firstWhere((storeUser) =>
+                        storeUser.code == storeGroup.lastMessage!.senderId),
+                    seen: seenTemp);
+                myGroups[index] = storeGroup;
+              } else {
                 emit(const GroupState.loading());
                 StoreGroup storeGroup = StoreGroup.fromJson(change.doc.data()!);
                 storeGroup = storeGroup.copyWith(
@@ -74,18 +103,8 @@ class GroupCubit extends Cubit<GroupState> {
                         storeUser.code == storeGroup.lastMessage!.senderId));
                 myGroups.add(storeGroup);
               }
-              if (change.type == DocumentChangeType.modified) {
-                emit(const GroupState.loading());
-                final index =
-                    myGroups.indexWhere((e) => e.idGroup == change.doc.id);
-                StoreGroup storeGroup = StoreGroup.fromJson(change.doc.data()!);
-                storeGroup = storeGroup.copyWith(
-                    storeUser: listStoreUser.firstWhere((storeUser) =>
-                        storeUser.code == storeGroup.lastMessage!.senderId));
-                myGroups[index] = storeGroup;
-                logger.i(storeGroup);
-              }
             }
+            
             if (myGroups.isEmpty) {
               emit(const GroupState.initial());
             } else {
