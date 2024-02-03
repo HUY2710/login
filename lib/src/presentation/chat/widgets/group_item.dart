@@ -25,21 +25,6 @@ class GroupItem extends StatefulWidget {
 }
 
 class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
-  // bool seen = false;
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  // }
-
-  // @override
-  // Future<void> didPopNext() async {
-  //   seen = await Utils.checkSeen(widget.idGroup, widget.time);
-  //   setState(() {});
-  //   // TODO: implement didPopNext
-  //   super.didPopNext();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -79,14 +64,15 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
           context.pushRoute(ChatDetailRoute(idGroup: widget.idGroup));
         }
       },
-      child: Container(
-        color: Colors.transparent,
+      child: SizedBox(
+        // color: Colors.transparent,
         height: 65.h,
         width: double.infinity,
         child: Row(
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              width: 52,
+              width: 52.r,
               child: Badge(
                 label: Text(
                   '06',
@@ -95,20 +81,20 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
                       color: Colors.white,
                       fontWeight: FontWeight.w500),
                 ),
-                backgroundColor: MyColors.primary,
+                backgroundColor: Color(0xffB67DFF),
                 largeSize: 20,
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(99),
                     child: Image.asset(widget.avatar)),
               ),
             ),
-            20.horizontalSpace,
+            16.horizontalSpace, 
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
                 children: [
+                  4.verticalSpace,
                   Row(
                     children: [
                       Text(
@@ -127,17 +113,15 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
                         ))
                     ],
                   ),
-                  Expanded(
-                    child: Text(
-                      '${widget.userName}: ${widget.message}',
-                      style: TextStyle(
-                          color: const Color(0xff6C6C6C),
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w400),
-                      textAlign: TextAlign.start,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  Text(
+                    '${widget.userName}: ${widget.message}',
+                    style: TextStyle(
+                        color: const Color(0xff6C6C6C),
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w400),
+                    textAlign: TextAlign.start,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   )
                 ],
               ),

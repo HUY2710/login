@@ -51,10 +51,7 @@ class _CustomMapState extends State<CustomMap> {
         ),
         Marker(
           markerId: const MarkerId('You'),
-          position: widget.locationListenState.maybeWhen(
-            orElse: () => widget.defaultLocation,
-            success: (LatLng latLng) => latLng,
-          ),
+          
           icon: widget.marker ?? BitmapDescriptor.defaultMarker,
         ),
       },
