@@ -7,21 +7,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../gen/assets.gen.dart';
 import '../extension/context_extension.dart';
 
-class CustomAppBar extends StatelessWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     super.key,
     this.title,
     this.style,
     this.textColor,
+    this.padding,
   });
   final String? title;
   final TextStyle? style;
   final Color? textColor;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 56.h),
+      padding: padding ?? EdgeInsets.only(top: 56.h),
       child: SizedBox(
         height: 30.h,
         child: Stack(
@@ -54,4 +56,7 @@ class CustomAppBar extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

@@ -58,43 +58,45 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Setting')),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          SizedBox(height: 32.h),
-          Container(
-            color: Colors.green,
-            child: Assets.images.markers.markerBg
-                .image(width: 150.r, gaplessPlayback: true),
-          ),
-          ItemSetting(
-            text: 'context.l10n.language',
-            icon: 'Assets.icons.settings.icLanguage.path',
-            onTap: () => context.pushRoute(LanguageRoute()),
-          ),
-          Builder(builder: (context) {
-            return ItemSetting(
-              text: 'context.l10n.share',
-              icon: 'Assets.icons.settings.icShare.path',
-              onTap: () => shareApp(context),
-            );
-          }),
-          ItemSetting(
-            text: 'context.l10n.about',
-            icon: 'Assets.icons.settings.icAbout.path',
-            onTap: () => context.pushRoute(const AboutRoute()),
-          ),
-          ItemSetting(
-            text: 'context.l10n.rate',
-            icon: 'Assets.icons.settings.icRate.path',
-            onTap: () => showRatingDialog(fromSetting: true),
-          ),
-          ItemSetting(
-            text: 'context.l10n.privacyPolicy',
-            icon: 'Assets.icons.settings.icPrivacy.path',
-            onTap: _launchUrl,
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            SizedBox(height: 32.h),
+            Container(
+              color: Colors.green,
+              child: Assets.images.markers.markerBg
+                  .image(width: 150.r, gaplessPlayback: true),
+            ),
+            ItemSetting(
+              text: 'context.l10n.language',
+              icon: 'Assets.icons.settings.icLanguage.path',
+              onTap: () => context.pushRoute(LanguageRoute()),
+            ),
+            Builder(builder: (context) {
+              return ItemSetting(
+                text: 'context.l10n.share',
+                icon: 'Assets.icons.settings.icShare.path',
+                onTap: () => shareApp(context),
+              );
+            }),
+            ItemSetting(
+              text: 'context.l10n.about',
+              icon: 'Assets.icons.settings.icAbout.path',
+              onTap: () => context.pushRoute(const AboutRoute()),
+            ),
+            ItemSetting(
+              text: 'context.l10n.rate',
+              icon: 'Assets.icons.settings.icRate.path',
+              onTap: () => showRatingDialog(fromSetting: true),
+            ),
+            ItemSetting(
+              text: 'context.l10n.privacyPolicy',
+              icon: 'Assets.icons.settings.icPrivacy.path',
+              onTap: _launchUrl,
+            ),
+          ],
+        ),
       ),
     );
   }
