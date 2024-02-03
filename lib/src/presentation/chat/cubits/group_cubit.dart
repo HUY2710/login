@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
+import '../../../global/global.dart';
 import '../../../shared/helpers/logger_utils.dart';
 import '../services/chat_service.dart';
 import '../utils/util.dart';
@@ -71,7 +72,8 @@ class GroupCubit extends Cubit<GroupState> {
         final listIdUser =
             await ChatService.instance.getListIdUserFromLastMessage();
         listStoreUser = await chatService.getUserFromListId(listIdUser);
-
+        // clear gourp trước khi lắng nghe vì dữ liệu trả về có cả các group cũ
+        myGroups.clear();
         //lấy thông tin group
         _groupStream = chatService
             .getMyGroupChat2(idsMyGroup)
@@ -95,12 +97,21 @@ class GroupCubit extends Cubit<GroupState> {
                         storeUser.code == storeGroup.lastMessage!.senderId),
                     seen: seenTemp);
                 myGroups[index] = storeGroup;
-              } else {
+              }
+              if (change.type == DocumentChangeType.removed) {
+                emit(const GroupState.loading());
+                final index =
+                    myGroups.indexWhere((e) => e.idGroup == change.doc.id);
+                myGroups.removeAt(index);
+              }
+              if (change.type == DocumentChangeType.added) {
                 emit(const GroupState.loading());
                 StoreGroup storeGroup = StoreGroup.fromJson(change.doc.data()!);
                 storeGroup = storeGroup.copyWith(
-                    storeUser: listStoreUser.firstWhere((storeUser) =>
-                        storeUser.code == storeGroup.lastMessage!.senderId));
+                    storeUser: listStoreUser.firstWhere(
+                  (storeUser) =>
+                      storeUser.code == storeGroup.lastMessage!.senderId,
+                ));
                 myGroups.add(storeGroup);
               }
             }
