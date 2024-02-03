@@ -8,10 +8,12 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/navigation/app_router.dart';
-import '../../gen/assets.gen.dart';
+import '../../gen/gens.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
+import '../../shared/widgets/custom_appbar.dart';
 import '../../shared/widgets/dialog/rate_dialog.dart';
+import 'widgets/custom_item_setting.dart';
 import 'widgets/item_setting.dart';
 
 @RoutePage()
@@ -57,45 +59,72 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Setting')),
+      appBar: const CustomAppBar(title: 'Settings'),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            SizedBox(height: 32.h),
-            Container(
-              color: Colors.green,
-              child: Assets.images.markers.markerBg
-                  .image(width: 150.r, gaplessPlayback: true),
-            ),
-            ItemSetting(
-              text: 'context.l10n.language',
-              icon: 'Assets.icons.settings.icLanguage.path',
-              onTap: () => context.pushRoute(LanguageRoute()),
-            ),
-            Builder(builder: (context) {
-              return ItemSetting(
-                text: 'context.l10n.share',
-                icon: 'Assets.icons.settings.icShare.path',
-                onTap: () => shareApp(context),
-              );
-            }),
-            ItemSetting(
-              text: 'context.l10n.about',
-              icon: 'Assets.icons.settings.icAbout.path',
-              onTap: () => context.pushRoute(const AboutRoute()),
-            ),
-            ItemSetting(
-              text: 'context.l10n.rate',
-              icon: 'Assets.icons.settings.icRate.path',
-              onTap: () => showRatingDialog(fromSetting: true),
-            ),
-            ItemSetting(
-              text: 'context.l10n.privacyPolicy',
-              icon: 'Assets.icons.settings.icPrivacy.path',
-              onTap: _launchUrl,
-            ),
-          ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              CustomItemSetting(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const CircleAvatar(
+                            radius: 28,
+                          ),
+                          20.horizontalSpace,
+                          Expanded(
+                            child: Text(
+                              'Xunnthdo',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    16.horizontalSpace,
+                    Assets.icons.icEdit.svg(height: 28.h),
+                  ],
+                ),
+              ),
+              CustomItemSetting(
+                child: Container(),
+              ),
+              ItemSetting(
+                text: 'context.l10n.language',
+                icon: 'Assets.icons.settings.icLanguage.path',
+                onTap: () => context.pushRoute(LanguageRoute()),
+              ),
+              Builder(builder: (context) {
+                return ItemSetting(
+                  text: 'context.l10n.share',
+                  icon: 'Assets.icons.settings.icShare.path',
+                  onTap: () => shareApp(context),
+                );
+              }),
+              ItemSetting(
+                text: 'context.l10n.about',
+                icon: 'Assets.icons.settings.icAbout.path',
+                onTap: () => context.pushRoute(const AboutRoute()),
+              ),
+              ItemSetting(
+                text: 'context.l10n.rate',
+                icon: 'Assets.icons.settings.icRate.path',
+                onTap: () => showRatingDialog(fromSetting: true),
+              ),
+              ItemSetting(
+                text: 'context.l10n.privacyPolicy',
+                icon: 'Assets.icons.settings.icPrivacy.path',
+                onTap: _launchUrl,
+              ),
+            ],
+          ),
         ),
       ),
     );
