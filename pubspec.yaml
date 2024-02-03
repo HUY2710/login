@@ -40,8 +40,8 @@ dependencies:
   easy_ads_flutter:
     git:
       # url: https://bitbucket.org/innofyapp/flutter_ads.git
-        url: https://KyLQ@bitbucket.org/innofyapp/flutter_ads.git
-        # url: git@bitbucket.org:innofyapp/flutter_ads.git #Trung
+        # url: https://KyLQ@bitbucket.org/innofyapp/flutter_ads.git
+        url: git@bitbucket.org:innofyapp/flutter_ads.git #Trung
   device_info_plus: ^9.0.3
   hydrated_bloc: ^9.1.2
   path_provider: ^2.1.1
