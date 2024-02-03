@@ -19,7 +19,7 @@ enum Language {
   ),
   portuguese(
     languageName: 'Portuguese',
-    languageCode: 'pr',
+    languageCode: 'pt',
   ),
   german(
     languageName: 'German',
@@ -58,7 +58,7 @@ extension LanguageExtension on Language {
       case Language.hindi:
         return Assets.images.languages.hi.path;
       case Language.portuguese:
-        return Assets.images.languages.pr.path;
+        return Assets.images.languages.pt.path;
       case Language.german:
         return Assets.images.languages.de.path;
       case Language.indonesia:

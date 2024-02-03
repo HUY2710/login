@@ -58,7 +58,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
             ),
           ),
           centerTitle: true,
-          actions: [_buildAcceptButton()],
+          actions: (widget.isFirst == null || widget.isFirst == false)
+              ? []
+              : [_buildAcceptButton()],
         ),
         body: SafeArea(
           child: Padding(
