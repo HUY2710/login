@@ -70,7 +70,7 @@ class CreateUserAvatarScreen extends StatelessWidget {
               debugPrint('error:$error');
             }
             if (context.mounted) {
-              context.pushRoute(const CreateGroupNameRoute());
+              context.pushRoute(CreateGroupNameRoute());
             }
           },
           textSecondColor: const Color(0xFFB685FF),

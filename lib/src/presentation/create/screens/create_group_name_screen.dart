@@ -105,7 +105,7 @@ class CreateGroupNameScreen extends StatelessWidget {
                     );
 
                     debugPrint('GroupGlobal:${Global.instance.group}');
-                    context.pushRoute(const CreateGroupAvatarRoute());
+                    context.pushRoute(CreateGroupAvatarRoute());
                   },
                   isShowIcon: true,
                 );
