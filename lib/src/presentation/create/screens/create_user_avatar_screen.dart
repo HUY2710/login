@@ -7,6 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/avatar/avatar_repository.dart';
 import '../../../data/models/avatar/avatar_model.dart';
+import '../../../data/remote/firestore_client.dart';
+import '../../../global/global.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/gender_type.dart';
 import '../../../shared/widgets/custom_appbar.dart';
@@ -56,8 +58,20 @@ class CreateUserAvatarScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 36.h),
         child: AppButton(
           title: 'Save',
-          onTap: () {
-            context.pushRoute(const CreateGroupNameRoute());
+          onTap: () async {
+            Global.instance.user =
+                Global.instance.user?.copyWith(avatarUrl: avatarCubit.state);
+            try {
+              await FirestoreClient.instance.updateUser({
+                'userName': Global.instance.user?.userName,
+                'avatarUrl': Global.instance.user?.avatarUrl
+              });
+            } catch (error) {
+              debugPrint('error:$error');
+            }
+            if (context.mounted) {
+              context.pushRoute(const CreateGroupNameRoute());
+            }
           },
           textSecondColor: const Color(0xFFB685FF),
         ),
@@ -135,7 +149,7 @@ class _MainBodyState extends State<_MainBody> {
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
-            widget.avatarCubit.update(currentImage[index].previewAvatarPath);
+            widget.avatarCubit.update(currentImage[index].avatarPath);
           },
           child: CircleAvatar(
             backgroundImage: Image.asset(
