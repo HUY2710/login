@@ -13,12 +13,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.style,
     this.textColor,
+    this.leadingColor,
     this.padding,
   });
   final String? title;
   final TextStyle? style;
   final Color? textColor;
   final EdgeInsetsGeometry? padding;
+  final Color? leadingColor;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Assets.icons.icBack.svg(
                 height: 28.h,
                 colorFilter: ColorFilter.mode(
-                  context.colorScheme.primary,
+                  leadingColor ?? context.colorScheme.primary,
                   BlendMode.srcIn,
                 ),
               ),

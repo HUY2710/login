@@ -1,33 +1,39 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../config/navigation/app_router.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
-import '../../../shared/widgets/custom_appbar.dart';
+import '../../../shared/cubit/value_cubit.dart';
+import '../../../shared/helpers/valid_helper.dart';
 import '../../onboarding/widgets/app_button.dart';
 
 @RoutePage()
 class CreateUsernameScreen extends StatelessWidget {
-  const CreateUsernameScreen({super.key});
+  CreateUsernameScreen({super.key});
 
   void changedUsername(String username) {
     Global.instance.user = Global.instance.user?.copyWith(
-      userName: username,
+      userName: ValidHelper.removeExtraSpaces(username),
     );
   }
 
+  final TextEditingController userNameCtrl = TextEditingController(text: '');
+  final ValueCubit<String> userNameCubit = ValueCubit('');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child: Stack(
+        child: Column(
           children: [
-            Align(
+            Expanded(
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Let’s get started',
@@ -51,9 +57,26 @@ class CreateUsernameScreen extends StatelessWidget {
                   SizedBox(
                     width: 200.w,
                     child: TextField(
+                      controller: userNameCtrl,
                       textAlign: TextAlign.center,
+                      onEditingComplete: () {},
+                      onSubmitted: (value) {
+                        final validName =
+                            ValidHelper.containsSpecialCharacters(value);
+                        if (!validName) {
+                          userNameCubit.update(value);
+                        } else {
+                          Fluttertoast.showToast(msg: 'Not valid user name');
+                        }
+                      },
                       onChanged: (value) {
-                        changedUsername(value);
+                        final validName =
+                            ValidHelper.containsSpecialCharacters(value);
+                        if (!validName) {
+                          userNameCubit.update(value);
+                        } else {
+                          userNameCubit.update('');
+                        }
                       },
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -77,18 +100,21 @@ class CreateUsernameScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const CustomAppBar(),
             Padding(
-              padding: EdgeInsets.only(bottom: 36.h),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: AppButton(
-                  title: 'Continue',
-                  onTap: () {
-                    context.pushRoute(const CreateUserAvatarRoute());
-                  },
-                  isShowIcon: true,
-                ),
+              padding: EdgeInsets.symmetric(vertical: 36.h),
+              child: BlocBuilder<ValueCubit<String>, String>(
+                bloc: userNameCubit,
+                builder: (context, state) {
+                  return AppButton(
+                    title: 'Continue',
+                    isEnable: state.isNotEmpty,
+                    onTap: () {
+                      changedUsername(userNameCtrl.text);
+                      context.pushRoute(const CreateUserAvatarRoute());
+                    },
+                    isShowIcon: true,
+                  );
+                },
               ),
             ),
           ],
