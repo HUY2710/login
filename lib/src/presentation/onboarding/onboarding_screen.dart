@@ -54,7 +54,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         await SharedPreferencesManager.getIsCreateInfoFistTime();
     if (mounted) {
       if (isCreateInfoFirstTime) {
-        context.replaceRoute(const CreateUsernameRoute());
+        context.replaceRoute(CreateUsernameRoute());
       } else {
         context.replaceRoute(const HomeRoute());
       }

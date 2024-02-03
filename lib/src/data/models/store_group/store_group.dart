@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../store_member/store_member.dart';
+import '../store_message/store_message.dart';
+import '../store_user/store_user.dart';
 
 part 'store_group.freezed.dart';
 part 'store_group.g.dart';

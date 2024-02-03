@@ -110,7 +110,7 @@ class CreateUsernameScreen extends StatelessWidget {
                     isEnable: state.isNotEmpty,
                     onTap: () {
                       changedUsername(userNameCtrl.text);
-                      context.pushRoute(const CreateUserAvatarRoute());
+                      context.pushRoute(CreateUserAvatarRoute());
                     },
                     isShowIcon: true,
                   );

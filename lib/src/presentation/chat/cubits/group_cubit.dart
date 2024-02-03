@@ -104,7 +104,6 @@ class GroupCubit extends Cubit<GroupState> {
                 myGroups.add(storeGroup);
               }
             }
-            
             if (myGroups.isEmpty) {
               emit(const GroupState.initial());
             } else {

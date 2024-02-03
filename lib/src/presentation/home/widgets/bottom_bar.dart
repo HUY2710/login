@@ -18,6 +18,8 @@ import '../../map/cubit/location_listen/location_listen_cubit.dart';
 import '../../map/cubit/select_group_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
 import '../../map/cubit/tracking_members/tracking_member_cubit.dart';
+import 'bottom_sheet/members/widgets/modal_edit.dart';
+import 'bottom_sheet/members/widgets/modal_show.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({
@@ -92,7 +94,7 @@ class _BottomBarState extends State<BottomBar> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            buildItem(Assets.icons.icPeople.path, context),
+            buildItem(Assets.icons.icPeople.path, context, false),
             23.horizontalSpace,
             //avatar
             GestureDetector(
@@ -117,17 +119,22 @@ class _BottomBarState extends State<BottomBar> {
               ),
             ),
             23.horizontalSpace,
-            buildItem(Assets.icons.icMessage.path, context),
+            buildItem(Assets.icons.icMessage.path, context, true),
           ],
         ),
       ],
     );
   }
 
-  Widget buildItem(String path, BuildContext context, {bool? avatar}) {
+  Widget buildItem(String path, BuildContext context, bool isMessage,
+      {bool? avatar}) {
     final value = ValueNotifier<int>(0);
     return InkWell(
       onTap: () {
+        if (isMessage) {
+          context.pushRoute(const ChatRoute());
+          return;
+        }
         //check xem có join group nào chưa
         if (getIt<SelectGroupCubit>().state != null) {
           showModalBottomSheet(
