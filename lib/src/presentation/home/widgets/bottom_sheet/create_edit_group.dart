@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../config/di/di.dart';
 import '../../../../data/models/store_group/store_group.dart';
+import '../../../../data/models/store_message/store_message.dart';
 import '../../../../data/remote/firestore_client.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/gens.dart';
@@ -55,6 +56,11 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
           idGroup: 24.randomString(),
           groupName: validName,
           avatarGroup: Assets.images.avatars.avatar10.path,
+          lastMessage: MessageModel(
+            content: '',
+            senderId: Global.instance.user!.code,
+            sentAt: DateTime.now().toIso8601String(),
+          ),
         );
 
         await FirestoreClient.instance.createGroup(newGroup);

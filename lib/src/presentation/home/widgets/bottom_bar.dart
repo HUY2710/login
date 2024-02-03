@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/di/di.dart';
+import '../../../config/navigation/app_router.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
@@ -92,7 +94,7 @@ class _BottomBarState extends State<BottomBar> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            buildItem(Assets.icons.icPeople.path, context),
+            buildItem(Assets.icons.icPeople.path, context, false),
             23.horizontalSpace,
             //avatar
             GestureDetector(
@@ -117,17 +119,22 @@ class _BottomBarState extends State<BottomBar> {
               ),
             ),
             23.horizontalSpace,
-            buildItem(Assets.icons.icMessage.path, context),
+            buildItem(Assets.icons.icMessage.path, context, true),
           ],
         ),
       ],
     );
   }
 
-  Widget buildItem(String path, BuildContext context, {bool? avatar}) {
+  Widget buildItem(String path, BuildContext context, bool isMessage,
+      {bool? avatar}) {
     final value = ValueNotifier<int>(0);
     return InkWell(
       onTap: () {
+        if (isMessage) {
+          context.pushRoute(const ChatRoute());
+          return;
+        }
         //check xem có join group nào chưa
         if (getIt<SelectGroupCubit>().state != null) {
           showModalBottomSheet(
