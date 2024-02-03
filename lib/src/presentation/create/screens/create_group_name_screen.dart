@@ -115,7 +115,7 @@ class CreateGroupNameScreen extends StatelessWidget {
             AppButton(
               title: 'Join a group',
               onTap: () {
-                //
+                context.pushRoute(JoinGroupRoute());
               },
               isShowIcon: true,
             ),

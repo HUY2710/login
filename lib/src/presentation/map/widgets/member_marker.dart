@@ -104,7 +104,7 @@ class _BuildMarkerState extends State<BuildMarker> {
   }
 
   Stack _buildMarker(Color color, int battery) {
-    // _generateMarker();
+    _generateMarker();
     return Stack(
       children: [
         Assets.images.markers.markerBg

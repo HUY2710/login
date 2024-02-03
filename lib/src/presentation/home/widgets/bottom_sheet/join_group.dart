@@ -86,6 +86,7 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                     fontWeight: FontWeight.w600,
                     color: MyColors.black34),
                 length: 6,
+                textCapitalization: TextCapitalization.characters,
                 // obscureText: false,
                 // obscuringCharacter: '*',
                 // obscuringWidget: const FlutterLogo(

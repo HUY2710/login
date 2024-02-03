@@ -31,6 +31,16 @@ class _MemberMarkerListState extends State<MemberMarkerList> {
   }
 
   @override
+  void didUpdateWidget(covariant MemberMarkerList oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.key != widget.key) {
+      debugPrint('Khác');
+      widget.trackingMemberCubit.generateUserMarker(_streamController);
+    }
+  }
+
+  @override
   void dispose() {
     // TODO: implement dispose
     _streamController.close();

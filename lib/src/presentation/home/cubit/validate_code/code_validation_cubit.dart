@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../config/di/di.dart';
 import '../../../../data/models/store_group/store_group.dart';
 import '../../../../data/models/store_member/store_member.dart';
 import '../../../../data/remote/firestore_client.dart';
 import '../../../../global/global.dart';
+import '../../../map/cubit/select_group_cubit.dart';
 
 part 'code_validation_cubit.freezed.dart';
 part 'code_validation_state.dart';
@@ -46,6 +48,7 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
           final resultAdd =
               await client.addMemberToGroup(existGroup.idGroup!, newMember);
           if (resultAdd) {
+            getIt<SelectGroupCubit>().update(existGroup);
             emit(CodeValidationState.valid(existGroup));
           }
         }
