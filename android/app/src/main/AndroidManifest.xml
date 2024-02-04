@@ -37,6 +37,9 @@
       android:value="AIzaSyBFXmVTugyampjGtaI8ya7XYP2amraze7s" /> -->
     <meta-data android:name="com.google.android.geo.API_KEY"
       android:value="AIzaSyDMnJaXbadoqJ6_dOnKASsKyLNX8oymiPY" />
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_channel_id"
+        android:value="high_importance_channel" />
     <receiver
       android:name="dk.cachet.activity_recognition_flutter.ActivityRecognizedBroadcastReceiver" />
     <service

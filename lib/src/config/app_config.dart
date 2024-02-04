@@ -9,6 +9,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../global/global.dart';
+import '../services/firebase_message_service.dart';
 import '../shared/mixin/system_ui_mixin.dart';
 import 'di/di.dart';
 
@@ -27,6 +28,9 @@ class AppConfig with SystemUiMixin {
       _initHydrateBlocStorage(),
       _initGlobalData(),
     ]);
+    await FirebaseMessageService().startService();
+    FirebaseMessageService().listenBackgroundMessage();
+    await FirebaseMessageService().subscribeTopics(['group1']);
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.fadingCircle
       ..maskType = EasyLoadingMaskType.custom
