@@ -2,17 +2,20 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/navigation/app_router.dart';
-import '../../gen/assets.gen.dart';
+import '../../gen/gens.dart';
+import '../../global/global.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
+import '../../shared/widgets/custom_appbar.dart';
 import '../../shared/widgets/dialog/rate_dialog.dart';
-import 'widgets/item_setting.dart';
+import 'widgets/custom_item_setting.dart';
 
 @RoutePage()
 class SettingScreen extends StatefulWidget {
@@ -57,46 +60,223 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Setting')),
+      appBar: const CustomAppBar(title: 'Settings'),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            SizedBox(height: 32.h),
-            Container(
-              color: Colors.green,
-              child: Assets.images.markers.markerBg
-                  .image(width: 150.r, gaplessPlayback: true),
-            ),
-            ItemSetting(
-              text: 'context.l10n.language',
-              icon: 'Assets.icons.settings.icLanguage.path',
-              onTap: () => context.pushRoute(LanguageRoute()),
-            ),
-            Builder(builder: (context) {
-              return ItemSetting(
-                text: 'context.l10n.share',
-                icon: 'Assets.icons.settings.icShare.path',
-                onTap: () => shareApp(context),
-              );
-            }),
-            ItemSetting(
-              text: 'context.l10n.about',
-              icon: 'Assets.icons.settings.icAbout.path',
-              onTap: () => context.pushRoute(const AboutRoute()),
-            ),
-            ItemSetting(
-              text: 'context.l10n.rate',
-              icon: 'Assets.icons.settings.icRate.path',
-              onTap: () => showRatingDialog(fromSetting: true),
-            ),
-            ItemSetting(
-              text: 'context.l10n.privacyPolicy',
-              icon: 'Assets.icons.settings.icPrivacy.path',
-              onTap: _launchUrl,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              _buildUsernameEditSetting(),
+              24.verticalSpace,
+              _buildHideMyLocationSetting(),
+              16.verticalSpace,
+              _buildLanguageSetting(),
+              16.verticalSpace,
+              _buildExternalSetting(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildExternalSetting(BuildContext context) {
+    return CustomItemSetting(
+      padding: EdgeInsets.symmetric(
+        horizontal: 16.w,
+      ),
+      multiChild: Column(
+        children: [
+          _buildRateUsSetting(),
+          _buildDivider(),
+          _buildPrivacyPolicySetting(),
+          _buildDivider(),
+          _buildShareSetting(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShareSetting(BuildContext context) {
+    return Builder(builder: (context) {
+      return GestureDetector(
+        onTap: () => shareApp(context),
+        behavior: HitTestBehavior.translucent,
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 16.h),
+          child: Row(
+            children: [
+              Assets.icons.icShareLocationFill.svg(height: 24.h),
+              12.horizontalSpace,
+              Expanded(
+                child: Text(
+                  'Share',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  Widget _buildPrivacyPolicySetting() {
+    return GestureDetector(
+      onTap: _launchUrl,
+      behavior: HitTestBehavior.translucent,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 16.h),
+        child: Row(
+          children: [
+            Assets.icons.icPolicy.svg(height: 24.h),
+            12.horizontalSpace,
+            Expanded(
+              child: Text(
+                'Privacy policy',
+                style: TextStyle(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildRateUsSetting() {
+    return GestureDetector(
+      onTap: () => showRatingDialog(fromSetting: true),
+      behavior: HitTestBehavior.translucent,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 16.h),
+        child: Row(
+          children: [
+            Assets.icons.icRate.svg(height: 24.h),
+            12.horizontalSpace,
+            Expanded(
+              child: Text(
+                'Rate us',
+                style: TextStyle(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return const Divider(
+      height: 0.5,
+      color: Color(0xFFDEDEDE),
+    );
+  }
+
+  Widget _buildLanguageSetting() {
+    return CustomItemSetting(
+      onTap: () => context.pushRoute(LanguageRoute()),
+      child: Row(
+        children: [
+          Assets.icons.icLanguage.svg(height: 24.h),
+          12.horizontalSpace,
+          Expanded(
+            child: Text(
+              'Language',
+              style: TextStyle(
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          16.horizontalSpace,
+          Assets.icons.icNext.svg(height: 24.h),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHideMyLocationSetting() {
+    return Column(
+      children: [
+        CustomItemSetting(
+          child: Row(
+            children: [
+              Assets.icons.icHideLocation.svg(height: 24.h),
+              12.horizontalSpace,
+              Expanded(
+                child: Text(
+                  'Hide my location',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              16.horizontalSpace,
+              CupertinoSwitch(
+                activeColor: const Color(0xFF7B3EFF),
+                thumbColor: Colors.white,
+                trackColor: Colors.black12,
+                value: false,
+                onChanged: (value) => {
+                  // TODO: Implement to toggle hide location feature
+                },
+              ),
+            ],
+          ),
+        ),
+        4.verticalSpace,
+        Text(
+          'When you enable, your friends can’t see your Last Active Location.',
+          style: TextStyle(
+            fontSize: 11.sp,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUsernameEditSetting() {
+    return CustomItemSetting(
+      onTap: () {
+        // TODO: Implement for Edit username
+      },
+      child: Row(
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 28,
+                  backgroundImage: AssetImage(Global.instance.user!.avatarUrl),
+                ),
+                20.horizontalSpace,
+                Expanded(
+                  child: Text(
+                    Global.instance.user?.userName ?? 'User',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          16.horizontalSpace,
+          Assets.icons.icEdit.svg(height: 28.h),
+        ],
       ),
     );
   }

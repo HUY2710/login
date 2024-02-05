@@ -76,7 +76,6 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: PinCodeTextField(
-                textCapitalization: TextCapitalization.characters,
                 appContext: context,
                 pastedTextStyle: TextStyle(
                   color: Colors.green.shade600,
@@ -87,6 +86,13 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                     fontWeight: FontWeight.w600,
                     color: MyColors.black34),
                 length: 6,
+                textCapitalization: TextCapitalization.characters,
+                // obscureText: false,
+                // obscuringCharacter: '*',
+                // obscuringWidget: const FlutterLogo(
+                //   size: 24,
+                // ),
+
                 blinkWhenObscuring: true,
                 animationType: AnimationType.fade,
                 pinTheme: PinTheme(
