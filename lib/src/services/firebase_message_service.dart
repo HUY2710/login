@@ -18,13 +18,13 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 
 abstract class NotificationService {
   /// When send a message.
-  Future<void> sendChatNotification();
+  Future<void> sendChatNotification(String groupId, String groupName);
 
   /// When enter or left place.
-  Future<void> sendPlaceNotification();
+  Future<void> sendPlaceNotification(String groupId, bool enter, String placeName);
 
   /// When check in any location.
-  Future<void> sendCheckInNotification();
+  Future<void> sendCheckInNotification(String groupId, String address);
 }
 
 @singleton
@@ -113,26 +113,27 @@ class FirebaseMessageService implements NotificationService {
   }
 
   @override
-  Future<void> sendChatNotification() {
-    // TODO: implement sendChatNotification
-    throw UnimplementedError();
+  Future<void> sendChatNotification(String groupId, String groupName) async {
+    final message = 'Username has sent the message in $groupName';
+    await _sendMessage(groupId, 'Cycle Sharing', message);
   }
 
   @override
-  Future<void> sendPlaceNotification() {
-    // TODO: implement sendPlaceNotification
-    throw UnimplementedError();
+  Future<void> sendPlaceNotification(String groupId, bool enter, String placeName) async {
+    final message = 'Username has ${enter ? 'enter' : 'left'} the $placeName';
+    await _sendMessage(groupId, 'Cycle Sharing', message);
   }
 
   @override
-  Future<void> sendCheckInNotification() {
-    // TODO: implement sendCheckInNotification
-    throw UnimplementedError();
+  Future<void> sendCheckInNotification(String groupId, String address) async {
+    final message = 'Username has checkin at $address';
+    await _sendMessage(groupId, 'Cycle Sharing', message);
   }
 }
 
 extension FirebaseMessageServiceExt on FirebaseMessageService {
-  Future<void> _sendMessage(String topic, String title, String message, String dataId) async {
+  Future<void> _sendMessage(String topic, String title, String message,
+      {String? dataId}) async {
     final url = Uri.https('cs-dev.aicloud.vn', 'send-notification');
     final headers = {
       'Content-Type': 'application/json',
