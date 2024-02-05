@@ -20,6 +20,7 @@ import '../../map/cubit/select_user_cubit.dart';
 import '../../map/cubit/tracking_members/tracking_member_cubit.dart';
 import 'bottom_sheet/members/widgets/modal_edit.dart';
 import 'bottom_sheet/members/widgets/modal_show.dart';
+import 'bottom_sheet/show_bottom_sheet_home.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({
@@ -137,7 +138,7 @@ class _BottomBarState extends State<BottomBar> {
         }
         //check xem có join group nào chưa
         if (getIt<SelectGroupCubit>().state != null) {
-          showModalBottomSheet(
+          showAppModalBottomSheet(
               context: context,
               builder: (context) {
                 return StatefulBuilder(builder: (context, _) {

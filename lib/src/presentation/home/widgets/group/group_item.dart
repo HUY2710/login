@@ -18,6 +18,7 @@ import '../../../../shared/widgets/gradient_text.dart';
 import '../../../map/cubit/select_group_cubit.dart';
 import '../../cubit/my_list_group/my_list_group_cubit.dart';
 import '../bottom_sheet/create_edit_group.dart';
+import '../bottom_sheet/show_bottom_sheet_home.dart';
 import '../dialog/group_dialog.dart';
 
 class GroupItem extends StatelessWidget {
@@ -142,7 +143,7 @@ class GroupItem extends StatelessWidget {
                       CustomInkWell(
                         onTap: () {
                           context.popRoute().then(
-                                (value) => showModalBottomSheet(
+                                (value) => showAppModalBottomSheet(
                                   context: context,
                                   isScrollControlled: true,
                                   builder: (context) => Padding(

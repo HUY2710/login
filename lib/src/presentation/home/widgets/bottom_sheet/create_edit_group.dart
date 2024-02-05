@@ -231,6 +231,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
               ),
             ),
           ),
+          20.verticalSpace,
         ],
       ),
     );

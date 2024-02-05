@@ -11,6 +11,7 @@ import '../../../../../../shared/widgets/gradient_text.dart';
 import '../../../../../map/cubit/select_group_cubit.dart';
 import '../../../header_modall.dart';
 import '../../invite_code.dart';
+import '../../show_bottom_sheet_home.dart';
 import '../show_member.dart';
 
 class ModalShowMember extends StatelessWidget {
@@ -54,7 +55,7 @@ class ModalShowMember extends StatelessWidget {
               16.h.verticalSpace,
               GestureDetector(
                 onTap: () {
-                  showModalBottomSheet(
+                  showAppModalBottomSheet(
                       context: context,
                       builder: (context) {
                         return InviteCode(
@@ -66,7 +67,7 @@ class ModalShowMember extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: () {
-                        showModalBottomSheet(
+                        showAppModalBottomSheet(
                             context: context,
                             builder: (context) {
                               return InviteCode(
