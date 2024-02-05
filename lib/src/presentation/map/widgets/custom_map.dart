@@ -74,6 +74,7 @@ class _CustomMapState extends State<CustomMap> {
       onCameraIdle: () async {},
       compassEnabled: false,
       mapType: widget.mapType,
+      myLocationButtonEnabled: false,
     );
   }
 
