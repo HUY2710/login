@@ -6,7 +6,7 @@ import '../../../shared/cubit/value_cubit.dart';
 
 @singleton
 class MapTypeCubit extends ValueCubit<MapType> with HydratedMixin {
-  MapTypeCubit() : super(MapType.normal) {
+  MapTypeCubit() : super(MapType.terrain) {
     hydrate();
   }
 

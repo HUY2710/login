@@ -101,7 +101,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
   Future<void> _moveToCurrentLocation(LatLng latLng) async {
     _controller ??= await _mapController.future;
     _controller?.moveCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(target: latLng, zoom: 16),
+      CameraPosition(target: latLng, zoom: 14),
     ));
   }
 
