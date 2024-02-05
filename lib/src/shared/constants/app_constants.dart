@@ -6,4 +6,5 @@ class AppConstants {
   static const String appAndroidUrl = 'link';
 
   static const double containerBorder = 10.0;
+  static const double defaultCameraZoomLevel = 14;
 }

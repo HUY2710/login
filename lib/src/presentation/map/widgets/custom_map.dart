@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../data/models/store_user/store_user.dart';
+import '../../../shared/constants/app_constants.dart';
 import '../../../shared/constants/map_style.dart';
 import '../cubit/location_listen/location_listen_cubit.dart';
 import '../cubit/tracking_members/tracking_member_cubit.dart';
@@ -35,7 +36,7 @@ class _CustomMapState extends State<CustomMap> {
     return GoogleMap(
       initialCameraPosition: CameraPosition(
         target: widget.defaultLocation,
-        zoom: 16,
+        zoom: AppConstants.defaultCameraZoomLevel,
       ),
       onMapCreated: _onMapCreated,
       markers: <Marker>{

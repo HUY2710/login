@@ -12,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
+import '../../../shared/constants/app_constants.dart';
 import '../../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import '../cubit/location_listen/location_listen_cubit.dart';
 import 'map_type_selector.dart';
@@ -97,7 +98,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
     return state.maybeWhen(success: (latLng) {
       final CameraPosition newPosition = CameraPosition(
         target: latLng,
-        zoom: 16,
+        zoom: AppConstants.defaultCameraZoomLevel,
       );
       _googleMapController?.animateCamera(
         CameraUpdate.newCameraPosition(
@@ -112,7 +113,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
       );
       final CameraPosition newPosition = CameraPosition(
         target: newLatLong,
-        zoom: 16,
+        zoom: AppConstants.defaultCameraZoomLevel,
       );
       _googleMapController?.animateCamera(
         CameraUpdate.newCameraPosition(

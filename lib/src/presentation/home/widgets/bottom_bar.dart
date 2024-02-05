@@ -13,6 +13,7 @@ import '../../../config/navigation/app_router.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
+import '../../../shared/constants/app_constants.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../map/cubit/location_listen/location_listen_cubit.dart';
 import '../../map/cubit/select_group_cubit.dart';
@@ -51,7 +52,7 @@ class _BottomBarState extends State<BottomBar> {
     //test
     final CameraPosition newPosition = CameraPosition(
       target: Global.instance.location,
-      zoom: 16,
+      zoom: AppConstants.defaultCameraZoomLevel,
     );
     _googleMapController
         ?.animateCamera(CameraUpdate.newCameraPosition(newPosition));

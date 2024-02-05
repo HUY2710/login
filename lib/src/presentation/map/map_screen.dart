@@ -12,6 +12,7 @@ import '../../data/models/store_user/store_user.dart';
 import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
 import '../../services/my_background_service.dart';
+import '../../shared/constants/app_constants.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../chat/cubits/group_cubit.dart';
 import '../home/widgets/bottom_bar.dart';
@@ -101,7 +102,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
   Future<void> _moveToCurrentLocation(LatLng latLng) async {
     _controller ??= await _mapController.future;
     _controller?.moveCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(target: latLng, zoom: 14),
+      CameraPosition(target: latLng, zoom: AppConstants.defaultCameraZoomLevel),
     ));
   }
 
