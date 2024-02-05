@@ -1,10 +1,12 @@
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -14,8 +16,19 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   importance: Importance.max,
 );
 
+abstract class NotificationService {
+  /// When send a message.
+  Future<void> sendChatNotification();
+
+  /// When enter or left place.
+  Future<void> sendPlaceNotification();
+
+  /// When check in any location.
+  Future<void> sendCheckInNotification();
+}
+
 @singleton
-class FirebaseMessageService {
+class FirebaseMessageService implements NotificationService {
   FirebaseMessageService();
 
   FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin;
@@ -97,5 +110,43 @@ class FirebaseMessageService {
 
   Future<void> unSubscribeTopics(List<String> topics) async {
     await Future.wait(topics.map((e) => FirebaseMessaging.instance.unsubscribeFromTopic(e)).toList());
+  }
+
+  @override
+  Future<void> sendChatNotification() {
+    // TODO: implement sendChatNotification
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> sendPlaceNotification() {
+    // TODO: implement sendPlaceNotification
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> sendCheckInNotification() {
+    // TODO: implement sendCheckInNotification
+    throw UnimplementedError();
+  }
+}
+
+extension FirebaseMessageServiceExt on FirebaseMessageService {
+  Future<void> _sendMessage(String topic, String title, String message, String dataId) async {
+    final url = Uri.https('cs-dev.aicloud.vn', 'send-notification');
+    final headers = {
+      'Content-Type': 'application/json',
+    };
+    final params = {
+      'title': title,
+      'message': message,
+      'topic': topic,
+      'data': {
+        'key': dataId
+      }
+    };
+    final response = await http.post(url, headers: headers, body: json.encode(params));
+    debugPrint('Response status: ${response.statusCode}');
+    debugPrint('Response body: ${response.body}');
   }
 }
