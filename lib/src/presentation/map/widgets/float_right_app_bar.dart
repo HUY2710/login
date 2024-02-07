@@ -13,6 +13,7 @@ import '../../../config/navigation/app_router.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/constants/app_constants.dart';
+import '../../home/widgets/bottom_sheet/places/places_bottom_sheet.dart';
 import '../../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import '../cubit/location_listen/location_listen_cubit.dart';
 import 'map_type_selector.dart';
@@ -51,7 +52,8 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
           bloc: widget.locationListenCubit,
           builder: (context, state) {
             return buildItem(() {
-              _animateCurrentLocation(state);
+              showBottomSheetTypeOfHome(
+                  context: context, child: const PlacesBottomSheet());
             }, Assets.icons.icLocation.path);
           },
         ),

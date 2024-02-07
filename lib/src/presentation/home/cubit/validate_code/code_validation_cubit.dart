@@ -48,7 +48,11 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
           final resultAdd =
               await client.addMemberToGroup(existGroup.idGroup!, newMember);
           if (resultAdd) {
-            getIt<SelectGroupCubit>().update(existGroup);
+            final listMember =
+                await client.getListMemberOfGroup(existGroup.idGroup!);
+
+            getIt<SelectGroupCubit>()
+                .update(existGroup.copyWith(storeMembers: listMember));
             emit(CodeValidationState.valid(existGroup));
           }
         }

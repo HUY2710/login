@@ -12,7 +12,6 @@ import '../../../gen/gens.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../home/cubit/validate_code/code_validation_cubit.dart';
-import '../../home/home_screen.dart';
 
 @RoutePage()
 class JoinGroupScreen extends StatelessWidget {
@@ -43,15 +42,6 @@ class JoinGroupScreen extends StatelessWidget {
               SizedBox(
                 width: 24.r,
                 height: 24.r,
-              ),
-              60.verticalSpace,
-              Text(
-                context.l10n.joinGroupContent,
-                style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: -0.4,
-                    color: MyColors.black34),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -121,6 +111,15 @@ class JoinGroupScreen extends StatelessWidget {
                     return true;
                   },
                 ),
+              ),
+              20.verticalSpace,
+              Text(
+                context.l10n.joinGroupContent,
+                style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: -0.4,
+                    color: MyColors.black34),
               ),
               BlocConsumer<CodeValidationCubit, CodeValidationState>(
                 bloc: codeValidCubit,

@@ -32,6 +32,12 @@ class StoreGroup with _$StoreGroup {
       includeToJson: false,
     )
     List<StoreMember>? storeMembers,
+    @JsonKey(
+      includeFromJson: false,
+      includeToJson: false,
+    )
+    @Default(false)
+    bool? isEdit,
   }) = _StoreGroup;
 
   factory StoreGroup.fromJson(Map<String, dynamic> json) =>

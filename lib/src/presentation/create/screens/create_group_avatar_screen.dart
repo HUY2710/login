@@ -29,20 +29,14 @@ class CreateGroupAvatarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: const CustomAppBar(
-              title: 'Avatar Group',
-              textColor: Color(
-                0xFF343434,
-              ),
-            ),
-          ),
-          _MainBody(avatarGroupCubit),
-        ],
+      backgroundColor: Colors.white,
+      appBar: const CustomAppBar(
+        title: 'Avatar Group',
+        textColor: Color(
+          0xFF343434,
+        ),
       ),
+      body: _MainBody(avatarGroupCubit),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 36.h),
         child: BlocBuilder<ValueCubit<String>, String>(
@@ -68,7 +62,10 @@ class CreateGroupAvatarScreen extends StatelessWidget {
                     getIt<SelectGroupCubit>().update(Global.instance.group);
                     if (context.mounted) {
                       EasyLoading.dismiss();
-                      context.replaceRoute(const HomeRoute());
+                      context.pushRoute(
+                        ShareCodeGroupRoute(
+                            code: Global.instance.group!.passCode),
+                      );
                     }
                   } else {
                     debugPrint('empty');
@@ -100,7 +97,7 @@ class _MainBodyState extends State<_MainBody> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          100.verticalSpace,
+          24.verticalSpace,
           Text(
             'Choose your favorite avatar!',
             style: TextStyle(
@@ -162,12 +159,6 @@ class _MainBodyState extends State<_MainBody> {
                   ),
                 ),
               ),
-              if (avatarModel.avatarPath == state)
-                Positioned(
-                  right: -6.h,
-                  top: -6.h,
-                  child: Assets.icons.icChecked.svg(height: 24.h),
-                ),
             ],
           ),
         );

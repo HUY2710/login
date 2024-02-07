@@ -42,6 +42,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           if (title != null)
             Align(
+              alignment: Alignment.topCenter,
               child: Text(
                 title!,
                 style: TextStyle(
