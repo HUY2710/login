@@ -112,6 +112,7 @@ class ModalShowMember extends StatelessWidget {
                   if (state?.storeMembers != null &&
                       state!.storeMembers!.isNotEmpty) {
                     debugPrint('${state.storeMembers}');
+                    debugPrint('${state.storeMembers!.length}');
                     return Expanded(
                       child: ListView.builder(
                           itemCount: state.storeMembers!.length,
@@ -120,16 +121,23 @@ class ModalShowMember extends StatelessWidget {
                             debugPrint(Global.instance.user!.code);
                             debugPrint(
                                 '${state.storeMembers![index].idUser == Global.instance.user!.code}');
-                            if (state.storeMembers![index].idUser !=
-                                Global.instance.user!.code) {
+                            if (state.storeMembers![index].idUser ==
+                                Global.instance.user?.code) {
                               return MemberWidget(
-                                  isAdmin: state.storeMembers![index].isAdmin,
-                                  idUser: state.storeMembers![index].idUser!,
-                                  // isEdit: value.value == 1,
-                                  //test
-                                  isEdit: true);
+                                isAdmin: state.storeMembers![index].isAdmin,
+                                idUser: state.storeMembers![index].idUser!,
+                                // isEdit: value.value == 1,
+                                //test
+                                isEdit: true,
+                              );
                             }
-                            return null;
+                            return MemberWidget(
+                              isAdmin: state.storeMembers![index].isAdmin,
+                              idUser: state.storeMembers![index].idUser!,
+                              // isEdit: value.value == 1,
+                              //test
+                              isEdit: true,
+                            );
                           }),
                     );
                   }

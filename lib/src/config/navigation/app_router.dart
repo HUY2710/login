@@ -9,6 +9,7 @@ import '../../presentation/create/screens/create_group_name_screen.dart';
 import '../../presentation/create/screens/create_user_avatar_screen.dart';
 import '../../presentation/create/screens/create_username_screen.dart';
 import '../../presentation/create/screens/join_group_screen.dart';
+import '../../presentation/create/screens/share_code_group.dart';
 import '../../presentation/home/home_screen.dart';
 import '../../presentation/language/screen/language_screen.dart';
 import '../../presentation/onboarding/onboarding_screen.dart';
@@ -34,6 +35,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: CreateUserAvatarRoute.page),
         AutoRoute(page: CreateGroupNameRoute.page),
         AutoRoute(page: CreateGroupAvatarRoute.page),
+        AutoRoute(page: ShareCodeGroupRoute.page),
         AutoRoute(page: PermissionRoute.page),
         AutoRoute(page: HomeRoute.page),
         AutoRoute(page: SettingRoute.page),

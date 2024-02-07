@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,12 +13,14 @@ import '../../../../data/remote/firestore_client.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/gens.dart';
 import '../../../../global/global.dart';
+import '../../../../shared/cubit/value_cubit.dart';
 import '../../../../shared/extension/int_extension.dart';
 import '../../../../shared/helpers/valid_helper.dart';
 import '../../../../shared/widgets/containers/shadow_container.dart';
 import '../../../../shared/widgets/custom_circle_avatar.dart';
 import '../../../../shared/widgets/my_drag.dart';
 import '../../../map/cubit/select_group_cubit.dart';
+import '../dialog/avatar_dialog.dart';
 import 'invite_code.dart';
 import 'show_bottom_sheet_home.dart';
 
@@ -32,40 +35,44 @@ class CreateEditGroup extends StatefulWidget {
 }
 
 class _CreateEditGroupState extends State<CreateEditGroup> {
+  final ValueCubit<String> pathAvatarCubit = ValueCubit('');
   final TextEditingController groupNameController = TextEditingController();
   StoreGroup? tempGroup;
+
   Future<void> _tapDone() async {
     if (groupNameController.text.isNotEmpty &&
         ValidHelper.containsSpecialCharacters(groupNameController.text)) {
       Fluttertoast.showToast(msg: 'Vui lòng không chứa kí tự đặc biệt');
       return;
     }
-    //nếu detailGroup !=null => edit group
+
     if (tempGroup != null) {
-      updateGroup().then((value) => context.popRoute());
+      await updateGroup();
+      context.popRoute();
       return;
     }
-    try {
-      //apply cubit after
-      if (groupNameController.text.isNotEmpty && Global.instance.user != null) {
-        //create group;
-        final validName =
-            ValidHelper.removeExtraSpaces(groupNameController.text);
-        final newGroup = StoreGroup(
-          passCode: 6.randomUpperCaseString(),
-          idGroup: 24.randomString(),
-          groupName: validName,
-          avatarGroup: Assets.images.avatars.avatar10.path,
-          lastMessage: MessageModel(
-            content: '',
-            senderId: Global.instance.user!.code,
-            sentAt: DateTime.now().toIso8601String(),
-          ),
-        );
 
+    if (groupNameController.text.isNotEmpty && Global.instance.user != null) {
+      final validName = ValidHelper.removeExtraSpaces(groupNameController.text);
+      final newGroup = StoreGroup(
+        passCode: 6.randomUpperCaseString(),
+        idGroup: 24.randomString(),
+        groupName: validName,
+        avatarGroup: pathAvatarCubit.state.isNotEmpty
+            ? pathAvatarCubit.state
+            : Assets.images.avatars.avatar10.path,
+        lastMessage: MessageModel(
+          content: '',
+          senderId: Global.instance.user!.code,
+          sentAt: DateTime.now().toIso8601String(),
+        ),
+      );
+
+      try {
         await FirestoreClient.instance.createGroup(newGroup);
         if (context.mounted) {
-          context.popRoute().then(
+          getIt<SelectGroupCubit>().update(newGroup);
+          await context.popRoute().then(
                 (value) => showBottomSheetTypeOfHome(
                   context: context,
                   child: InviteCode(
@@ -74,9 +81,9 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
                 ),
               );
         }
+      } catch (e) {
+        debugPrint('error:$e');
       }
-    } catch (e) {
-      debugPrint('error:$e');
     }
   }
 
@@ -86,14 +93,18 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
       EasyLoading.show();
       await FirestoreClient.instance.updateGroup(
         idGroup: tempGroup!.idGroup!,
-        mapFields: {'groupName': name},
+        mapFields: {'groupName': name, 'avatarGroup': pathAvatarCubit.state},
       );
+
       EasyLoading.dismiss();
       Fluttertoast.showToast(msg: 'Update Group Success!');
 
       //sau khi update thành công thì tiến hành cập nhật lại group ở local
       getIt<SelectGroupCubit>().update(
-        getIt<SelectGroupCubit>().state?.copyWith(groupName: name),
+        getIt<SelectGroupCubit>().state?.copyWith(
+              groupName: name,
+              avatarGroup: pathAvatarCubit.state,
+            ),
       );
     } catch (error) {
       Fluttertoast.showToast(msg: '$error');
@@ -106,6 +117,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
     groupNameController.text = widget.detailGroup?.groupName ?? '';
     if (widget.detailGroup != null) {
       tempGroup = widget.detailGroup;
+      pathAvatarCubit.update(widget.detailGroup?.avatarGroup ?? '');
     }
   }
 
@@ -153,7 +165,8 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: GestureDetector(
-                        onTap: groupNameController.text.isNotEmpty
+                        onTap: groupNameController.text.isNotEmpty &&
+                                pathAvatarCubit.state != ''
                             ? _tapDone
                             : () {},
                         child: Text(
@@ -174,46 +187,73 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
             ],
           ),
           20.verticalSpace,
-          Stack(
-            children: [
-              if (widget.detailGroup != null)
-                CustomCircleAvatar(
-                  pathImageAssets: widget.detailGroup!.avatarGroup,
-                )
-              else
-                ShadowContainer(
-                  height: 84.r,
-                  width: 84.r,
-                  colorShadow: const Color(0xff42474C).withOpacity(0.15),
-                  child: Center(
+          GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AvatarDialog(
+                  title: 'Select Avatar',
+                  confirmText: 'Set',
+                  confirmTap: () {},
+                  avatarCubit: pathAvatarCubit,
+                ),
+              );
+            },
+            child: Stack(
+              children: [
+                BlocBuilder<ValueCubit<String>, String>(
+                  bloc: pathAvatarCubit,
+                  builder: (context, state) {
+                    if (state != '') {
+                      return ShadowContainer(
+                        height: 84.r,
+                        width: 84.r,
+                        colorShadow: const Color(0xff42474C).withOpacity(0.15),
+                        child: ClipOval(
+                          child: Image.asset(
+                            state,
+                            height: 84.r,
+                            width: 84.r,
+                          ),
+                        ),
+                      );
+                    }
+                    return ShadowContainer(
+                      height: 84.r,
+                      width: 84.r,
+                      colorShadow: const Color(0xff42474C).withOpacity(0.15),
+                      child: Center(
+                        child: SvgPicture.asset(
+                          Assets.icons.icPeople.path,
+                          width: 56.r,
+                          height: 56.r,
+                          colorFilter: const ColorFilter.mode(
+                            Color(0xffD5BBFF),
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: ShadowContainer(
+                    padding: EdgeInsets.all(6.r),
+                    width: 28.r,
+                    height: 28.r,
                     child: SvgPicture.asset(
-                      Assets.icons.icPeople.path,
-                      width: 56.r,
-                      height: 56.r,
+                      Assets.icons.icEdit.path,
                       colorFilter: const ColorFilter.mode(
-                        Color(0xffD5BBFF),
+                        Color(0xff7B3EFF),
                         BlendMode.srcIn,
                       ),
                     ),
                   ),
-                ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: ShadowContainer(
-                  padding: EdgeInsets.all(6.r),
-                  width: 28.r,
-                  height: 28.r,
-                  child: SvgPicture.asset(
-                    Assets.icons.icEdit.path,
-                    colorFilter: const ColorFilter.mode(
-                      Color(0xff7B3EFF),
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
           20.verticalSpace,
           TextFormField(

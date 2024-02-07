@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -12,6 +13,7 @@ import '../../../../../data/remote/firestore_client.dart';
 import '../../../../../gen/gens.dart';
 import '../../../../../shared/extension/context_extension.dart';
 import '../../../../map/cubit/select_group_cubit.dart';
+import '../../dialog/group_dialog.dart';
 
 class MemberWidget extends StatelessWidget {
   const MemberWidget({
@@ -28,15 +30,28 @@ class MemberWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         try {
-          if (isEdit) {
-            //xóa user ra khỏi nhóm,
-            EasyLoading.show();
-            await FirestoreClient.instance
-                .leaveGroup(getIt<SelectGroupCubit>().state!.idGroup!, idUser);
-            getIt<SelectGroupCubit>().removeMember(idUser);
-            //xóa user ra khỏi group local data
-            EasyLoading.dismiss();
-          }
+          showDialog(
+            context: context,
+            builder: (context) => GroupDialog(
+              title: 'Remove Member',
+              subTitle:
+                  'Are you sure to the remove this member from your group?',
+              confirmTap: () async {
+                if (isEdit) {
+                  //xóa user ra khỏi nhóm,
+                  context.popRoute();
+                  EasyLoading.show();
+                  await FirestoreClient.instance.leaveGroup(
+                      getIt<SelectGroupCubit>().state!.idGroup!, idUser);
+                  getIt<SelectGroupCubit>().removeMember(idUser);
+                  //xóa user ra khỏi group local data
+                  EasyLoading.dismiss();
+                }
+              },
+              confirmText: 'Delete',
+            ),
+          );
+          return;
         } catch (error) {}
       },
       child: Padding(

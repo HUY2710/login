@@ -78,6 +78,12 @@ class FirestoreClient {
     return group;
   }
 
+  //lay danh sach cac thanh vien trong group
+  Future<List<StoreMember>?> getListMemberOfGroup(String idGroup) async {
+    final result = await MemberManager.getListMemberOfGroup(idGroup);
+    return result;
+  }
+
   //kiểm tra xem bạn đã là thành viên của group chưa
   Future<bool> isExistMemberGroup(String idGroup) async {
     final docRef = firestore
