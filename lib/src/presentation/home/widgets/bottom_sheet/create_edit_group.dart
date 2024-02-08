@@ -18,7 +18,6 @@ import '../../../../shared/cubit/value_cubit.dart';
 import '../../../../shared/extension/int_extension.dart';
 import '../../../../shared/helpers/valid_helper.dart';
 import '../../../../shared/widgets/containers/shadow_container.dart';
-import '../../../../shared/widgets/custom_circle_avatar.dart';
 import '../../../../shared/widgets/my_drag.dart';
 import '../../../map/cubit/select_group_cubit.dart';
 import '../dialog/avatar_dialog.dart';
@@ -61,7 +60,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
           groupName: validName,
           avatarGroup: pathAvatarCubit.state.isNotEmpty
               ? pathAvatarCubit.state
-              : Assets.images.avatars.avatar10.path,
+              : Assets.images.avatars.groups.group1.path,
           lastMessage: MessageModel(
             content: '',
             senderId: Global.instance.user!.code,

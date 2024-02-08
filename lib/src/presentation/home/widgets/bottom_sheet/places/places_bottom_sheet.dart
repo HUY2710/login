@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../data/models/store_group/store_group.dart';
 import '../../../../../shared/cubit/value_cubit.dart';
 import '../../../../../shared/widgets/my_drag.dart';
+import '../show_bottom_sheet_home.dart';
+import 'add_places_bottom_sheet.dart';
 import 'widgets/item_place.dart';
 
 class PlacesBottomSheet extends StatefulWidget {
@@ -31,6 +33,14 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const MyDrag(),
+          TextButton(
+              onPressed: () {
+                showAppModalBottomSheet(
+                  context: context,
+                  builder: (context) => const AddPlaceBottomSheet(),
+                );
+              },
+              child: const Text('Add Place')),
           Row(
             children: [
               Expanded(
