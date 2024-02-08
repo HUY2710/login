@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../config/di/di.dart';
 import '../../../../data/models/store_group/store_group.dart';
+import '../../../../data/models/store_member/store_member.dart';
 import '../../../../data/models/store_message/store_message.dart';
 import '../../../../data/remote/firestore_client.dart';
 import '../../../../gen/assets.gen.dart';
@@ -55,18 +56,20 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
     if (groupNameController.text.isNotEmpty && Global.instance.user != null) {
       final validName = ValidHelper.removeExtraSpaces(groupNameController.text);
       final newGroup = StoreGroup(
-        passCode: 6.randomUpperCaseString(),
-        idGroup: 24.randomString(),
-        groupName: validName,
-        avatarGroup: pathAvatarCubit.state.isNotEmpty
-            ? pathAvatarCubit.state
-            : Assets.images.avatars.avatar10.path,
-        lastMessage: MessageModel(
-          content: '',
-          senderId: Global.instance.user!.code,
-          sentAt: DateTime.now().toIso8601String(),
-        ),
-      );
+          passCode: 6.randomUpperCaseString(),
+          idGroup: 24.randomString(),
+          groupName: validName,
+          avatarGroup: pathAvatarCubit.state.isNotEmpty
+              ? pathAvatarCubit.state
+              : Assets.images.avatars.avatar10.path,
+          lastMessage: MessageModel(
+            content: '',
+            senderId: Global.instance.user!.code,
+            sentAt: DateTime.now().toIso8601String(),
+          ),
+          storeMembers: [
+            StoreMember(isAdmin: true, idUser: Global.instance.user!.code)
+          ]);
 
       try {
         await FirestoreClient.instance.createGroup(newGroup);
