@@ -32,7 +32,6 @@ class _MemberMarkerListState extends State<MemberMarkerList> {
 
   @override
   void didUpdateWidget(covariant MemberMarkerList oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     if (oldWidget.key != widget.key) {
       debugPrint('Khác');

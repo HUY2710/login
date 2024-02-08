@@ -133,7 +133,7 @@ class _BuildMarkerState extends State<BuildMarker> {
       padding: const EdgeInsets.all(12).r,
       child: ClipOval(
         child: Image.asset(
-          Assets.images.avatars.avatar1.path,
+          widget.member.avatarUrl,
           alignment: Alignment.topCenter,
         ),
       ),

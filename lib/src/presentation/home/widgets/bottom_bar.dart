@@ -19,8 +19,7 @@ import '../../map/cubit/location_listen/location_listen_cubit.dart';
 import '../../map/cubit/select_group_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
 import '../../map/cubit/tracking_members/tracking_member_cubit.dart';
-import 'bottom_sheet/members/widgets/modal_edit.dart';
-import 'bottom_sheet/members/widgets/modal_show.dart';
+import 'bottom_sheet/members/members.dart';
 import 'bottom_sheet/show_bottom_sheet_home.dart';
 
 class BottomBar extends StatefulWidget {
@@ -146,13 +145,11 @@ class _BottomBarState extends State<BottomBar> {
                   return ValueListenableBuilder(
                       valueListenable: value,
                       builder: (context, val, child) {
-                        return AnimatedSwitcher(
-                            duration: const Duration(
+                        return const AnimatedSwitcher(
+                            duration: Duration(
                               microseconds: 700,
                             ),
-                            child: (val == 0)
-                                ? ModalShowMember(value: value)
-                                : ModalEditMember(value: value));
+                            child: MembersBottomSheet());
                       });
                 });
               });
