@@ -1,59 +1,25 @@
 import 'dart:math';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../config/di/di.dart';
-import '../../../../../data/models/store_location/store_location.dart';
-import '../../../../../data/models/store_user/store_user.dart';
-import '../../../../../data/remote/firestore_client.dart';
-import '../../../../../gen/gens.dart';
-import '../../../../../shared/extension/context_extension.dart';
-import '../../../../map/cubit/select_group_cubit.dart';
-import '../../dialog/group_dialog.dart';
+import '../../../../../../data/models/store_location/store_location.dart';
+import '../../../../../../data/models/store_user/store_user.dart';
+import '../../../../../../data/remote/firestore_client.dart';
+import '../../../../../../gen/assets.gen.dart';
+import '../../../../../../gen/colors.gen.dart';
+import '../../../../../../shared/extension/context_extension.dart';
 
-class MemberWidget extends StatelessWidget {
-  const MemberWidget({
-    super.key,
-    this.isAdmin = false,
-    this.isEdit = false,
-    required this.idUser,
-  });
+class ItemMember extends StatelessWidget {
+  const ItemMember({super.key, required this.isAdmin, required this.idUser});
+
   final bool isAdmin;
-  final bool isEdit;
   final String idUser;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        try {
-          showDialog(
-            context: context,
-            builder: (context) => GroupDialog(
-              title: 'Remove Member',
-              subTitle:
-                  'Are you sure to the remove this member from your group?',
-              confirmTap: () async {
-                if (isEdit) {
-                  //xóa user ra khỏi nhóm,
-                  context.popRoute();
-                  EasyLoading.show();
-                  await FirestoreClient.instance.leaveGroup(
-                      getIt<SelectGroupCubit>().state!.idGroup!, idUser);
-                  getIt<SelectGroupCubit>().removeMember(idUser);
-                  //xóa user ra khỏi group local data
-                  EasyLoading.dismiss();
-                }
-              },
-              confirmText: 'Delete',
-            ),
-          );
-          return;
-        } catch (error) {}
-      },
+      onTap: () async {},
       child: Padding(
         padding: const EdgeInsets.only(top: 16, bottom: 12),
         child: FutureBuilder<StoreUser?>(
@@ -63,12 +29,6 @@ class MemberWidget extends StatelessWidget {
                 final StoreUser user = snapshot.data!;
                 return Row(
                   children: [
-                    if (isEdit)
-                      Padding(
-                        padding: EdgeInsets.only(right: 12.w),
-                        child: InkWell(
-                            child: Assets.icons.icDelete.svg(width: 20.r)),
-                      ),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(15.r),
                       child: Image.asset(
@@ -141,18 +101,17 @@ class MemberWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (!isEdit)
-                      IconButton(
-                        onPressed: () {},
-                        icon: Transform.rotate(
-                          angle: pi,
-                          child: Icon(
-                            Icons.arrow_back_ios,
-                            size: 20.r,
-                            color: MyColors.primary,
-                          ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Transform.rotate(
+                        angle: pi,
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          size: 20.r,
+                          color: MyColors.primary,
                         ),
-                      )
+                      ),
+                    )
                   ],
                 );
               }
