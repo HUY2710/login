@@ -1,13 +1,22 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../../config/di/di.dart';
+import '../../../../../data/models/store_location/store_location.dart';
 import '../../../../../data/models/store_place/store_place.dart';
+import '../../../../../data/remote/firestore_client.dart';
 import '../../../../../gen/assets.gen.dart';
+import '../../../../../global/global.dart';
+import '../../../../../services/location_service.dart';
 import '../../../../../shared/cubit/value_cubit.dart';
+import '../../../../../shared/extension/int_extension.dart';
+import '../../../../../shared/widgets/main_switch.dart';
 import '../../../../../shared/widgets/my_drag.dart';
+import '../../../../map/cubit/select_group_cubit.dart';
 
 class AddPlaceBottomSheet extends StatefulWidget {
   const AddPlaceBottomSheet({super.key});
@@ -45,6 +54,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const MyDrag(),
           Row(
@@ -79,7 +89,34 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () async {
+                          EasyLoading.show();
+                          final location = Global.instance.location;
+                          final address = await getIt<LocationService>()
+                              .getCurrentAddress(location);
+                          //test add place
+                          final StorePlace newPlace = StorePlace(
+                            idCreator: Global.instance.user!.code,
+                            idPlace: 24.randomString(),
+                            iconPlace: Assets.icons.places.icAnimal.path,
+                            namePlace: 'Test Place',
+                            location: StoreLocation(
+                              address: address,
+                              lat: location.latitude,
+                              lng: location.longitude,
+                              updatedAt: DateTime.now(),
+                            ).toJson(),
+                            radius: 100,
+                            onNotify: onNotify,
+                          );
+
+                          if (getIt<SelectGroupCubit>().state != null) {
+                            await FirestoreClient.instance.createPlace(
+                                getIt<SelectGroupCubit>().state!.idGroup!,
+                                newPlace);
+                          }
+                          EasyLoading.dismiss();
+                        },
                         child: Text(
                           'Done',
                           style: TextStyle(
@@ -146,6 +183,35 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
             ),
           ),
           24.verticalSpace,
+          Text(
+            'Name',
+            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+          ),
+          8.verticalSpace,
+          TextField(
+            controller: nameLocationCtrl,
+          ),
+          24.verticalSpace,
+          Text(
+            'Location',
+            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+          ),
+          8.verticalSpace,
+          TextField(
+            controller: addressLocationCtrl,
+          ),
+          24.verticalSpace,
+          Row(
+            children: [
+              const Expanded(
+                  child:
+                      Text('Get notified if members leaved or arrived here')),
+              MainSwitch(value: true, onChanged: (value) {}),
+            ],
+          ),
+          const Text(
+              "Don't worry, we won't let them know that you're tracking their location"),
+          16.verticalSpace,
         ],
       ),
     );

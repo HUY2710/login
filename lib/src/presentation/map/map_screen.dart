@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../config/di/di.dart';
 import '../../data/models/store_group/store_group.dart';
+import '../../data/models/store_place/store_place.dart';
 import '../../data/models/store_user/store_user.dart';
 import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
@@ -20,9 +21,11 @@ import 'cubit/location_listen/location_listen_cubit.dart';
 import 'cubit/map_type_cubit.dart';
 import 'cubit/select_group_cubit.dart';
 import 'cubit/tracking_members/tracking_member_cubit.dart';
+import 'cubit/tracking_places/tracking_places_cubit.dart';
 import 'widgets/custom_map.dart';
 import 'widgets/float_right_app_bar.dart';
 import 'widgets/member_marker_list.dart';
+import 'widgets/place_mark_list.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -39,6 +42,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
   GoogleMapController? _controller;
   BitmapDescriptor? marker;
   final _trackingMemberCubit = getIt<TrackingMemberCubit>();
+  final _trackingPlacesCubit = getIt<TrackingPlacesCubit>();
 
   //all-cubit
   final LocationListenCubit _locationListenCubit = getIt<LocationListenCubit>();
@@ -53,13 +57,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
     _getMyMarker();
     super.initState();
     _trackingMemberCubit.initTrackingMember();
-    // WidgetsBinding.instance.addPostFrameCallback(
-    //   (_) async {
-    //     await getIt<GroupCubit>().initStreamUser();
-
-    //   },
-    // );
-
+    _trackingPlacesCubit.initTrackingPlaces();
     getIt<GroupCubit>().initStreamGroupChat();
   }
 
@@ -171,6 +169,29 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
             ),
           ),
           Positioned.fill(
+            child: Align(
+              child: BlocBuilder<TrackingPlacesCubit, TrackingPlacesState>(
+                bloc: _trackingPlacesCubit,
+                builder: (context, state) {
+                  return state.maybeWhen(
+                    orElse: () => const SizedBox(),
+                    initial: () {
+                      return const SizedBox();
+                    },
+                    success: (List<StorePlace> places) {
+                      if (places.isNotEmpty) {
+                        return PlacesMarkerList(
+                          trackingPlacesCubit: _trackingPlacesCubit,
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+          Positioned.fill(
             child: Container(color: Colors.white),
           ),
           BlocConsumer<LocationListenCubit, LocationListenState>(
@@ -198,13 +219,20 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
                       return BlocBuilder<MapTypeCubit, MapType>(
                         bloc: _mapTypeCubit,
                         builder: (context, MapType mapTypeState) {
-                          return CustomMap(
-                            defaultLocation: _defaultLocation,
-                            locationListenState: locationListenState,
-                            mapController: _mapController,
-                            mapType: mapTypeState,
-                            marker: marker,
-                            trackingMemberState: trackingMemberState,
+                          return BlocBuilder<TrackingPlacesCubit,
+                              TrackingPlacesState>(
+                            bloc: _trackingPlacesCubit,
+                            builder: (context, trackingPlacesState) {
+                              return CustomMap(
+                                defaultLocation: _defaultLocation,
+                                locationListenState: locationListenState,
+                                mapController: _mapController,
+                                mapType: mapTypeState,
+                                marker: marker,
+                                trackingMemberState: trackingMemberState,
+                                trackingPlacesState: trackingPlacesState,
+                              );
+                            },
                           );
                         },
                       );

@@ -1,6 +1,6 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'dart:typed_data';
 
-import '../store_location/store_location.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'store_place.freezed.dart';
 part 'store_place.g.dart';
@@ -8,13 +8,16 @@ part 'store_place.g.dart';
 @freezed
 class StorePlace with _$StorePlace {
   const factory StorePlace({
-    required String codePlace,
     required String iconPlace,
     required String namePlace,
-    required int addressPlace,
-    StoreLocation? location,
+    required String idCreator,
+    Map<String, dynamic>? location,
     required double? radius,
-    required bool? onNotify,
+    @JsonKey(includeFromJson: false, includeToJson: false) Uint8List? marker,
+    @Default(true) bool onNotify,
+    @Default(true) bool isSendLeaved,
+    @Default(true) bool isSendArrived,
+    @JsonKey(includeFromJson: false, includeToJson: false) String? idPlace,
   }) = _StorePlace;
 
   factory StorePlace.fromJson(Map<String, dynamic> json) =>
