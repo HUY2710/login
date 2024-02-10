@@ -1,10 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../config/di/di.dart';
 import '../../../../../data/models/store_group/store_group.dart';
 import '../../../../../shared/cubit/value_cubit.dart';
 import '../../../../../shared/widgets/my_drag.dart';
+import '../../../../map/cubit/tracking_places/tracking_places_cubit.dart';
+import '../show_bottom_sheet_home.dart';
+import 'add_places_bottom_sheet.dart';
 import 'widgets/item_place.dart';
 
 class PlacesBottomSheet extends StatefulWidget {
@@ -31,6 +36,21 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const MyDrag(),
+          TextButton(
+              onPressed: () {
+                showAppModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  useSafeArea: true,
+                  builder: (context) => Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: const AddPlaceBottomSheet(),
+                  ),
+                );
+              },
+              child: const Text('Add Place')),
           Row(
             children: [
               Expanded(
@@ -82,12 +102,22 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
             ],
           ),
           Expanded(
-              child: ListView.separated(
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return const ItemPlace();
+              child: BlocBuilder<TrackingPlacesCubit, TrackingPlacesState>(
+            bloc: getIt<TrackingPlacesCubit>(),
+            builder: (context, state) {
+              return state.maybeWhen(
+                orElse: () => const SizedBox(),
+                success: (places) => ListView.separated(
+                  itemCount: places.length,
+                  itemBuilder: (context, index) {
+                    return ItemPlace(
+                      place: places[index],
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(height: 28.h),
+                ),
+              );
             },
-            separatorBuilder: (context, index) => SizedBox(height: 28.h),
           ))
         ],
       ),

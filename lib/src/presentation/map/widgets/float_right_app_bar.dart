@@ -54,7 +54,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
             return buildItem(() {
               showBottomSheetTypeOfHome(
                   context: context, child: const PlacesBottomSheet());
-            }, Assets.icons.icLocation.path);
+            }, Assets.icons.icPlace.path);
           },
         ),
         16.verticalSpace,

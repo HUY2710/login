@@ -3,11 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../data/models/store_location/store_location.dart';
+import '../../../data/models/store_place/store_place.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/constants/map_style.dart';
 import '../cubit/location_listen/location_listen_cubit.dart';
 import '../cubit/tracking_members/tracking_member_cubit.dart';
+import '../cubit/tracking_places/tracking_places_cubit.dart';
 
 class CustomMap extends StatefulWidget {
   const CustomMap({
@@ -18,6 +21,7 @@ class CustomMap extends StatefulWidget {
     required this.mapController,
     required this.locationListenState,
     required this.trackingMemberState,
+    required this.trackingPlacesState,
   });
 
   final MapType mapType;
@@ -26,6 +30,7 @@ class CustomMap extends StatefulWidget {
   final BitmapDescriptor? marker;
   final Completer<GoogleMapController> mapController;
   final TrackingMemberState trackingMemberState;
+  final TrackingPlacesState trackingPlacesState;
   @override
   State<CustomMap> createState() => _CustomMapState();
 }
@@ -48,6 +53,15 @@ class _CustomMapState extends State<CustomMap> {
           },
           success: (List<StoreUser> members) {
             return members.map((StoreUser e) => _buildFriendMarker(e));
+          },
+        ),
+        ...widget.trackingPlacesState.maybeWhen(
+          orElse: () => <Marker>{},
+          initial: () {
+            return <Marker>{};
+          },
+          success: (List<StorePlace> places) {
+            return places.map((StorePlace place) => _buildPlaceMarker(place));
           },
         ),
         Marker(
@@ -88,6 +102,22 @@ class _CustomMapState extends State<CustomMap> {
       icon: e.marker != null
           ? BitmapDescriptor.fromBytes(
               e.marker!,
+              size: const Size.fromWidth(30),
+            )
+          : BitmapDescriptor.defaultMarker,
+    );
+  }
+
+  Marker _buildPlaceMarker(StorePlace place) {
+    final double lat = StoreLocation.fromJson(place.location!).lat;
+    final double lng = StoreLocation.fromJson(place.location!).lng;
+    return Marker(
+      anchor: const Offset(0.5, 0.72),
+      position: LatLng(lat, lng),
+      markerId: MarkerId(place.idPlace!),
+      icon: place.marker != null
+          ? BitmapDescriptor.fromBytes(
+              place.marker!,
               size: const Size.fromWidth(30),
             )
           : BitmapDescriptor.defaultMarker,
