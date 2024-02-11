@@ -28,4 +28,20 @@ class PlacesManager {
         .collection(CollectionStoreConstant.places)
         .snapshots();
   }
+
+  //remove place
+  static Future<void> removePlace(
+      {required String idGroup, required String idPlace}) async {
+    await CollectionStore.groups
+        .doc(idGroup)
+        .collection(CollectionStoreConstant.places)
+        .doc(idPlace)
+        .delete()
+        .then((_) {
+      LoggerUtils.logInfo('remove place success');
+    }).catchError((error) {
+      LoggerUtils.logError('Failed to remove place: $error');
+      throw Exception(error);
+    });
+  }
 }

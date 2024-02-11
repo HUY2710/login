@@ -173,4 +173,8 @@ class FirestoreClient {
       String idGroup) {
     return PlacesManager.listenRealtimePlacesChanges(idGroup);
   }
+
+  Future<void> removePlace(String idGroup, String idPlace) async {
+    await PlacesManager.removePlace(idGroup: idGroup, idPlace: idPlace);
+  }
 }
