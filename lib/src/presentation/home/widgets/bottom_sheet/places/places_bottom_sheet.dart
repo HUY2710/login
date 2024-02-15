@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../config/di/di.dart';
+import '../../../../../data/models/store_group/store_group.dart';
+import '../../../../../shared/cubit/value_cubit.dart';
 import '../../../../../shared/widgets/my_drag.dart';
 import '../../../../map/cubit/tracking_places/tracking_places_cubit.dart';
 import '../show_bottom_sheet_home.dart';
@@ -66,9 +68,10 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
                         child: Text(
                           'Done',
                           style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16.sp,
-                              color: const Color(0xff8E52FF)),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.sp,
+                            color: const Color(0xff8E52FF),
+                          ),
                         ),
                       ),
                     )
@@ -79,6 +82,7 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
           ),
           Row(
             children: [
+              IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
               TextButton(
                   onPressed: () {
                     showAppModalBottomSheet(
@@ -101,17 +105,23 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
             bloc: getIt<TrackingPlacesCubit>(),
             builder: (context, state) {
               return state.maybeWhen(
-                orElse: () => const SizedBox(),
-                success: (places) => ListView.separated(
-                  itemCount: places.length,
-                  itemBuilder: (context, index) {
-                    return ItemPlace(
-                      place: places[index],
+                  orElse: () => const SizedBox(),
+                  failed: (message) => Text('Error:$message'),
+                  success: (places) {
+                    if (places.isEmpty) {
+                      return const Center(child: Text('No place'));
+                    }
+                    return ListView.separated(
+                      itemCount: places.length,
+                      itemBuilder: (context, index) {
+                        return ItemPlace(
+                          place: places[index],
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 28.h),
                     );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(height: 28.h),
-                ),
-              );
+                  });
             },
           ))
         ],

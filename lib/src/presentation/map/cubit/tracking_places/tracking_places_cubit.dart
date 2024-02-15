@@ -99,6 +99,13 @@ class TrackingPlacesCubit extends Cubit<TrackingPlacesState> {
     });
   }
 
+  void removePlace(String idPlace) {
+    if (_trackingListPlaces.isNotEmpty) {
+      _trackingListPlaces.removeWhere((place) => place.idPlace == idPlace);
+      emit(TrackingPlacesState.success([..._trackingListPlaces]));
+    }
+  }
+
   void resetData() {
     emit(const TrackingPlacesState.initial());
     state.mapOrNull(

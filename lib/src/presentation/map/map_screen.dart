@@ -209,8 +209,10 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
                     _trackingMemberCubit.disposeGroupSubscription();
                     _trackingMemberCubit.disposeMarkerSubscription();
                     _trackingMemberCubit.resetData();
+                    _trackingPlacesCubit.resetData();
                   } else {
                     _trackingMemberCubit.initTrackingMember();
+                    _trackingPlacesCubit.initTrackingPlaces();
                   }
                 },
                 builder: (context, state) {

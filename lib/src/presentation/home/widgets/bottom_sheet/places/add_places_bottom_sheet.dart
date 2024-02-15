@@ -90,6 +90,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                       alignment: Alignment.centerRight,
                       child: GestureDetector(
                         onTap: () async {
+                          context.popRoute();
                           EasyLoading.show();
                           final location = Global.instance.location;
                           final address = await getIt<LocationService>()
@@ -98,7 +99,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                           final StorePlace newPlace = StorePlace(
                             idCreator: Global.instance.user!.code,
                             idPlace: 24.randomString(),
-                            iconPlace: Assets.icons.places.icAnimal.path,
+                            iconPlace: icPlaceCubit.state,
                             namePlace: nameLocationCtrl.text,
                             location: StoreLocation(
                               address: address,
@@ -190,6 +191,9 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
           8.verticalSpace,
           TextField(
             controller: nameLocationCtrl,
+            onChanged: (value) {
+              setState(() {});
+            },
           ),
           24.verticalSpace,
           Text(

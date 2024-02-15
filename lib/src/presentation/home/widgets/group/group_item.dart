@@ -19,7 +19,7 @@ import '../../../map/cubit/select_group_cubit.dart';
 import '../../cubit/my_list_group/my_list_group_cubit.dart';
 import '../bottom_sheet/create_edit_group.dart';
 import '../bottom_sheet/show_bottom_sheet_home.dart';
-import '../dialog/group_dialog.dart';
+import '../dialog/action_dialog.dart';
 
 class GroupItem extends StatelessWidget {
   const GroupItem({
@@ -167,7 +167,7 @@ class GroupItem extends StatelessWidget {
                         onTap: () async {
                           showDialog(
                             context: context,
-                            builder: (context) => GroupDialog(
+                            builder: (context) => ActionDialog(
                               title: 'Remove Group',
                               subTitle:
                                   'You’re currently the group owner. Are you sure to delete it permanantly?',
@@ -200,7 +200,7 @@ class GroupItem extends StatelessWidget {
                       onTap: () {
                         showDialog(
                           context: context,
-                          builder: (context) => GroupDialog(
+                          builder: (context) => ActionDialog(
                             title: 'Leave Group',
                             subTitle: 'Are you sure to leave group?',
                             confirmTap: () {
