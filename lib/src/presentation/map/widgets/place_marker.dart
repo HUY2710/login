@@ -87,13 +87,6 @@ class _PlaceMarkerState extends State<PlaceMarker> {
           ),
           8.verticalSpace,
           _buildPlaceMarker(),
-          8.verticalSpace,
-          Image.asset(
-            Assets.images.markers.circleDot.path,
-            width: 36.r,
-            height: 36.r,
-            gaplessPlayback: true,
-          ),
         ],
       ),
     );

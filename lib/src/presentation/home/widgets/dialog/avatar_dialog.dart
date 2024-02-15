@@ -27,7 +27,6 @@ class AvatarDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('GridView Inside AlertDialog'),
       content: SizedBox(
         width: double.maxFinite,
         child: GridView.builder(

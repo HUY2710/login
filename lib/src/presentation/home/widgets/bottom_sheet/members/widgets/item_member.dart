@@ -9,7 +9,10 @@ import '../../../../../../data/models/store_user/store_user.dart';
 import '../../../../../../data/remote/firestore_client.dart';
 import '../../../../../../gen/assets.gen.dart';
 import '../../../../../../gen/colors.gen.dart';
+import '../../../../../../global/global.dart';
 import '../../../../../../shared/extension/context_extension.dart';
+import '../../places/history_place.dart';
+import '../../show_bottom_sheet_home.dart';
 
 class ItemMember extends StatelessWidget {
   const ItemMember({super.key, required this.isAdmin, required this.idUser});
@@ -19,7 +22,12 @@ class ItemMember extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {},
+      onTap: () async {
+        showAppModalBottomSheet(
+          context: context,
+          builder: (context) => HistoryPlace(idUser: idUser),
+        );
+      },
       child: Padding(
         padding: const EdgeInsets.only(top: 16, bottom: 12),
         child: FutureBuilder<StoreUser?>(
@@ -52,16 +60,19 @@ class ItemMember extends StatelessWidget {
                                 ),
                               ),
                               8.w.horizontalSpace,
-                              if (isAdmin)
+                              if (isAdmin ||
+                                  idUser == Global.instance.user?.code)
                                 Container(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 8),
+                                      horizontal: 10, vertical: 2),
                                   decoration: BoxDecoration(
                                       color: const Color(0xffEADDFF),
                                       borderRadius:
                                           BorderRadius.circular(10.r)),
                                   child: Text(
-                                    context.l10n.admin,
+                                    idUser == Global.instance.user?.code
+                                        ? 'you'
+                                        : context.l10n.admin,
                                     style: const TextStyle(
                                         fontSize: 11,
                                         fontWeight: FontWeight.w500),

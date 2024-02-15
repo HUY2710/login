@@ -15,6 +15,8 @@ class StoreUser with _$StoreUser {
     required String avatarUrl,
     required String userName,
     required int batteryLevel,
+    @Default(true) bool online,
+    @Default(true) bool shareLocation,
     @JsonKey(includeFromJson: false, includeToJson: false) Uint8List? marker,
     @JsonKey(includeFromJson: false, includeToJson: false)
     StoreLocation? location,

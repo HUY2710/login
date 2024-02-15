@@ -23,12 +23,10 @@ class ChatService {
           .collection(CollectionStoreConstant.myGroups)
           .get();
       if (snapShotGroups.docs.isNotEmpty) {
-        final List<MyIdGroup> myListIdGroup = snapShotGroups.docs
-            .map((e) => MyIdGroup.fromJson(e.data()))
-            .toList();
+        final List<String> myListIdGroup =
+            snapShotGroups.docs.map((e) => e.id).toList();
 
-        final List<String> idsCondition =
-            myListIdGroup.map((e) => e.idGroup).toList();
+        final List<String> idsCondition = myListIdGroup.map((e) => e).toList();
         return idsCondition;
       }
     } catch (e) {

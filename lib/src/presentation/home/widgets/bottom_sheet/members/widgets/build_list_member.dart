@@ -28,7 +28,8 @@ class BuildListMember extends StatelessWidget {
       itemCount: listStoreMember.length,
       itemBuilder: (context, index) {
         final StoreMember member = listStoreMember[index];
-        if (member.idUser == Global.instance.user?.code) {
+        if (member.idUser == Global.instance.user?.code &&
+            listStoreMember.length == 1) {
           return const Text('Only you');
         }
         return Row(

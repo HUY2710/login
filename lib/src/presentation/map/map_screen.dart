@@ -17,9 +17,9 @@ import '../../shared/constants/app_constants.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../chat/cubits/group_cubit.dart';
 import '../home/widgets/bottom_bar.dart';
-import 'cubit/location_listen/location_listen_cubit.dart';
 import 'cubit/map_type_cubit.dart';
 import 'cubit/select_group_cubit.dart';
+import 'cubit/tracking_location/tracking_location_cubit.dart';
 import 'cubit/tracking_members/tracking_member_cubit.dart';
 import 'cubit/tracking_places/tracking_places_cubit.dart';
 import 'widgets/custom_map.dart';
@@ -45,7 +45,8 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
   final _trackingPlacesCubit = getIt<TrackingPlacesCubit>();
 
   //all-cubit
-  final LocationListenCubit _locationListenCubit = getIt<LocationListenCubit>();
+  final TrackingLocationCubit _trackingLocationCubit =
+      getIt<TrackingLocationCubit>();
 
   bool _isInit = false;
 
@@ -106,7 +107,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
 
   //listen location in foreground
   Future<void> _listenLocation() async {
-    _locationListenCubit.listenLocation();
+    _trackingLocationCubit.listenLocation();
     final requestBackground = await Permission.locationAlways.request();
     if (requestBackground.isGranted) {
       _listenBackGroundMode();
@@ -124,7 +125,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
   Future<void> _getMyMarker() async {
     final newMarker = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(
-        size: Size.fromRadius(5.r),
+        size: Size.fromRadius(2.r),
         devicePixelRatio: ScreenUtil().pixelRatio,
       ),
       Assets.images.markers.circleDot.path,
@@ -194,10 +195,10 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
           Positioned.fill(
             child: Container(color: Colors.white),
           ),
-          BlocConsumer<LocationListenCubit, LocationListenState>(
-            bloc: _locationListenCubit,
+          BlocConsumer<TrackingLocationCubit, TrackingLocationState>(
+            bloc: _trackingLocationCubit,
             listener: _listenLocationCubit,
-            builder: (context, locationListenState) {
+            builder: (context, locationState) {
               return BlocConsumer<SelectGroupCubit, StoreGroup?>(
                 bloc: getIt<SelectGroupCubit>(),
                 listenWhen: (previous, current) =>
@@ -227,7 +228,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
                             builder: (context, trackingPlacesState) {
                               return CustomMap(
                                 defaultLocation: _defaultLocation,
-                                locationListenState: locationListenState,
+                                trackingLocationState: locationState,
                                 mapController: _mapController,
                                 mapType: mapTypeState,
                                 marker: marker,
@@ -252,7 +253,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
             bottom: 0,
             child: FloatRightAppBar(
               mapController: _mapController,
-              locationListenCubit: _locationListenCubit,
+              locationListenCubit: _trackingLocationCubit,
             ),
           ),
           Positioned(
@@ -260,7 +261,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
             left: 0,
             right: 0,
             child: BottomBar(
-              locationListenCubit: _locationListenCubit,
+              locationListenCubit: _trackingLocationCubit,
               mapController: _mapController,
               trackingMemberCubit: _trackingMemberCubit,
               moveToLocationUser: _moveToCurrentLocation,
@@ -271,7 +272,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
     );
   }
 
-  void _listenLocationCubit(BuildContext context, LocationListenState state) {
+  void _listenLocationCubit(BuildContext context, TrackingLocationState state) {
     state.whenOrNull(
       success: (latLng) async {
         if (_defaultLocation.latitude == 0 && _defaultLocation.longitude == 0) {

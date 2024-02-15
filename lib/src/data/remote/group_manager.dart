@@ -7,6 +7,7 @@ import '../models/store_group/store_group.dart';
 import '../models/store_member/store_member.dart';
 import 'collection_store.dart';
 import 'member_manager.dart';
+import 'places_manager.dart';
 
 class GroupsManager {
   GroupsManager._();
@@ -23,9 +24,7 @@ class GroupsManager {
             .doc(Global.instance.user!.code)
             .collection(CollectionStoreConstant.myGroups)
             .doc(newGroup.idGroup)
-            .set(
-              MyIdGroup(idGroup: newGroup.idGroup!).toJson(),
-            );
+            .set({});
         await MemberManager.addNewMember(
           newGroup.idGroup!,
           StoreMember(
@@ -66,6 +65,7 @@ class GroupsManager {
   static Future<bool> deleteGroup(StoreGroup group) async {
     //xóa collection members trước
     await MemberManager.deleteMemberCollection(group.idGroup!);
+    await PlacesManager.removeAllPlaceOfGroup(group.idGroup!);
     //xóa group
     debugPrint('group:${group.idGroup}');
     final resultDeleteGroup = await CollectionStore.groups
@@ -169,8 +169,8 @@ class GroupsManager {
         .collection(CollectionStoreConstant.myGroups)
         .get();
     if (snapShotGroups.docs.isNotEmpty) {
-      final List<MyIdGroup> myListIdGroup =
-          snapShotGroups.docs.map((e) => MyIdGroup.fromJson(e.data())).toList();
+      final List<String> myListIdGroup =
+          snapShotGroups.docs.map((e) => e.id).toList();
       debugPrint('myListIdGroup:$myListIdGroup');
 
       //SAU KHI LẤY ĐƯỢC TẤT CẢ ID GROUP MÀ MÌNH JOIN
@@ -182,9 +182,9 @@ class GroupsManager {
     return [];
   }
 
-  static Future<List<StoreGroup>?> allMyGroups(
-      List<MyIdGroup> myIdsGroup) async {
-    final List<String> idsCondition = myIdsGroup.map((e) => e.idGroup).toList();
+  static Future<List<StoreGroup>?> allMyGroups(List<String> myIdsGroup) async {
+    final List<String> idsCondition =
+        myIdsGroup.map((idGroup) => idGroup).toList();
     final snapshot = await CollectionStore.groups
         .where(FieldPath.documentId, whereIn: idsCondition)
         .get();
@@ -248,9 +248,7 @@ class GroupsManager {
         .doc(Global.instance.user!.code)
         .collection(CollectionStoreConstant.myGroups)
         .doc(idGroup)
-        .set(
-          MyIdGroup(idGroup: idGroup).toJson(),
-        )
+        .set({})
         .then((value) => true)
         .catchError((error) => false);
     return status;

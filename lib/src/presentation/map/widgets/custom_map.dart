@@ -8,7 +8,9 @@ import '../../../data/models/store_place/store_place.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/constants/map_style.dart';
-import '../cubit/location_listen/location_listen_cubit.dart';
+import '../../home/widgets/bottom_sheet/places/history_place.dart';
+import '../../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
+import '../cubit/tracking_location/tracking_location_cubit.dart';
 import '../cubit/tracking_members/tracking_member_cubit.dart';
 import '../cubit/tracking_places/tracking_places_cubit.dart';
 
@@ -19,14 +21,14 @@ class CustomMap extends StatefulWidget {
     required this.defaultLocation,
     this.marker,
     required this.mapController,
-    required this.locationListenState,
+    required this.trackingLocationState,
     required this.trackingMemberState,
     required this.trackingPlacesState,
   });
 
   final MapType mapType;
   final LatLng defaultLocation;
-  final LocationListenState locationListenState;
+  final TrackingLocationState trackingLocationState;
   final BitmapDescriptor? marker;
   final Completer<GoogleMapController> mapController;
   final TrackingMemberState trackingMemberState;
@@ -66,7 +68,7 @@ class _CustomMapState extends State<CustomMap> {
         ),
         Marker(
           markerId: const MarkerId('You'),
-          position: widget.locationListenState.maybeWhen(
+          position: widget.trackingLocationState.maybeWhen(
             orElse: () => widget.defaultLocation,
             success: (LatLng latLng) => latLng,
           ),
@@ -96,16 +98,22 @@ class _CustomMapState extends State<CustomMap> {
     final double lat = e.location?.lat ?? 0;
     final double lng = e.location?.lng ?? 0;
     return Marker(
-      anchor: const Offset(0.5, 0.72),
-      position: LatLng(lat, lng),
-      markerId: MarkerId(e.code),
-      icon: e.marker != null
-          ? BitmapDescriptor.fromBytes(
-              e.marker!,
-              size: const Size.fromWidth(30),
-            )
-          : BitmapDescriptor.defaultMarker,
-    );
+        anchor: const Offset(0.5, 0.72),
+        position: LatLng(lat, lng),
+        markerId: MarkerId(e.code),
+        icon: e.marker != null
+            ? BitmapDescriptor.fromBytes(
+                e.marker!,
+                size: const Size.fromWidth(30),
+              )
+            : BitmapDescriptor.defaultMarker,
+        onTap: () {
+          showAppModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            builder: (context) => HistoryPlace(idUser: e.code),
+          );
+        });
   }
 
   Marker _buildPlaceMarker(StorePlace place) {
