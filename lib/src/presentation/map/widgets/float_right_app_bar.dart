@@ -15,7 +15,7 @@ import '../../../global/global.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../home/widgets/bottom_sheet/places/places_bottom_sheet.dart';
 import '../../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
-import '../cubit/location_listen/location_listen_cubit.dart';
+import '../cubit/tracking_location/tracking_location_cubit.dart';
 import 'map_type_selector.dart';
 
 class FloatRightAppBar extends StatefulWidget {
@@ -25,7 +25,7 @@ class FloatRightAppBar extends StatefulWidget {
     required this.locationListenCubit,
   });
   final Completer<GoogleMapController> mapController;
-  final LocationListenCubit locationListenCubit;
+  final TrackingLocationCubit locationListenCubit;
   @override
   State<FloatRightAppBar> createState() => _FloatRightAppBarState();
 }
@@ -48,7 +48,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
           context.pushRoute(const SettingRoute());
         }, Assets.icons.icSetting.path),
         16.verticalSpace,
-        BlocBuilder<LocationListenCubit, LocationListenState>(
+        BlocBuilder<TrackingLocationCubit, TrackingLocationState>(
           bloc: widget.locationListenCubit,
           builder: (context, state) {
             return buildItem(() {
@@ -96,7 +96,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
     );
   }
 
-  Null _animateCurrentLocation(LocationListenState state) {
+  Null _animateCurrentLocation(TrackingLocationState state) {
     return state.maybeWhen(success: (latLng) {
       final CameraPosition newPosition = CameraPosition(
         target: latLng,

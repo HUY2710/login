@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../config/di/di.dart';
-import '../../../../../data/models/store_group/store_group.dart';
-import '../../../../../shared/cubit/value_cubit.dart';
 import '../../../../../shared/widgets/my_drag.dart';
 import '../../../../map/cubit/tracking_places/tracking_places_cubit.dart';
 import '../show_bottom_sheet_home.dart';
@@ -20,10 +18,6 @@ class PlacesBottomSheet extends StatefulWidget {
 }
 
 class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
-  final ValueCubit<String> pathAvatarCubit = ValueCubit('');
-  final TextEditingController groupNameController = TextEditingController();
-  StoreGroup? tempGroup;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,21 +30,6 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const MyDrag(),
-          TextButton(
-              onPressed: () {
-                showAppModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  useSafeArea: true,
-                  builder: (context) => Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: const AddPlaceBottomSheet(),
-                  ),
-                );
-              },
-              child: const Text('Add Place')),
           Row(
             children: [
               Expanded(
@@ -87,18 +66,34 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
                         child: Text(
                           'Done',
                           style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.sp,
-                            color: groupNameController.text.isNotEmpty
-                                ? const Color(0xff8E52FF)
-                                : const Color(0xffABABAB),
-                          ),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.sp,
+                              color: const Color(0xff8E52FF)),
                         ),
                       ),
                     )
                   ],
                 ),
               ),
+            ],
+          ),
+          Row(
+            children: [
+              TextButton(
+                  onPressed: () {
+                    showAppModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      useSafeArea: true,
+                      builder: (context) => Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                        ),
+                        child: const AddPlaceBottomSheet(),
+                      ),
+                    );
+                  },
+                  child: const Text('Add Place')),
             ],
           ),
           Expanded(

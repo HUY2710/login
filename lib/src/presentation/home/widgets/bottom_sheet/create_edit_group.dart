@@ -166,21 +166,26 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
                     ),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: GestureDetector(
-                        onTap: groupNameController.text.isNotEmpty &&
-                                pathAvatarCubit.state != ''
-                            ? _tapDone
-                            : () {},
-                        child: Text(
-                          'Done',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.sp,
-                            color: groupNameController.text.isNotEmpty
-                                ? const Color(0xff8E52FF)
-                                : const Color(0xffABABAB),
-                          ),
-                        ),
+                      child: BlocBuilder<ValueCubit<String>, String>(
+                        bloc: pathAvatarCubit,
+                        builder: (context, state) {
+                          return GestureDetector(
+                            onTap: groupNameController.text.isNotEmpty &&
+                                    state != ''
+                                ? _tapDone
+                                : () {},
+                            child: Text(
+                              'Done',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.sp,
+                                color: groupNameController.text.isNotEmpty
+                                    ? const Color(0xff8E52FF)
+                                    : const Color(0xffABABAB),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     )
                   ],

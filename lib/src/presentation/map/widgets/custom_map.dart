@@ -8,7 +8,7 @@ import '../../../data/models/store_place/store_place.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/constants/map_style.dart';
-import '../cubit/location_listen/location_listen_cubit.dart';
+import '../cubit/tracking_location/tracking_location_cubit.dart';
 import '../cubit/tracking_members/tracking_member_cubit.dart';
 import '../cubit/tracking_places/tracking_places_cubit.dart';
 
@@ -19,14 +19,14 @@ class CustomMap extends StatefulWidget {
     required this.defaultLocation,
     this.marker,
     required this.mapController,
-    required this.locationListenState,
+    required this.trackingLocationState,
     required this.trackingMemberState,
     required this.trackingPlacesState,
   });
 
   final MapType mapType;
   final LatLng defaultLocation;
-  final LocationListenState locationListenState;
+  final TrackingLocationState trackingLocationState;
   final BitmapDescriptor? marker;
   final Completer<GoogleMapController> mapController;
   final TrackingMemberState trackingMemberState;
@@ -66,7 +66,7 @@ class _CustomMapState extends State<CustomMap> {
         ),
         Marker(
           markerId: const MarkerId('You'),
-          position: widget.locationListenState.maybeWhen(
+          position: widget.trackingLocationState.maybeWhen(
             orElse: () => widget.defaultLocation,
             success: (LatLng latLng) => latLng,
           ),

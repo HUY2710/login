@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:injectable/injectable.dart';
-import 'package:permission_handler/permission_handler.dart';
 
+import '../../../../../flavors.dart';
 import '../../../../config/di/di.dart';
 import '../../../../data/models/store_location/store_location.dart';
 import '../../../../data/remote/firestore_client.dart';
@@ -13,18 +13,18 @@ import '../../../../global/global.dart';
 import '../../../../services/location_service.dart';
 import '../../../../shared/helpers/map_helper.dart';
 
-part 'location_listen_cubit.freezed.dart';
-part 'location_listen_state.dart';
+part 'tracking_location_cubit.freezed.dart';
+part 'tracking_location_state.dart';
 
 @injectable
-class LocationListenCubit extends Cubit<LocationListenState> {
-  LocationListenCubit() : super(const LocationListenState.initial());
+class TrackingLocationCubit extends Cubit<TrackingLocationState> {
+  TrackingLocationCubit() : super(const TrackingLocationState.initial());
   final LocationService locationService = getIt<LocationService>();
   StreamSubscription<LatLng>? _locationSubscription;
   FirestoreClient fireStoreClient = FirestoreClient.instance;
   Future<void> listenLocation() async {
     final LatLng latLng = await locationService.getCurrentLocation();
-    emit(LocationListenState.success(latLng));
+    emit(TrackingLocationState.success(latLng));
 
     //kiểm tra xem vị trí hiện tại so với vị trí cuối cùng trên server
     final StoreLocation? lastLocation = await fireStoreClient.getLocation();
@@ -64,27 +64,24 @@ class LocationListenCubit extends Cubit<LocationListenState> {
     _locationSubscription =
         locationService.getLocationStream().listen((LatLng latLng) async {
       Global.instance.location = latLng;
-      final backgroundMode = await Permission.locationAlways.status
-          .isGranted; // check xem quyền background mode có được bật hay không
-      if (!backgroundMode) {
-        //if background mode is off => update user in foreground
-        Timer.periodic(const Duration(seconds: 30), (timer) {
-          final bool shouldUpdate = MapHelper.checkoutRadius(
-            Global.instance.location,
-            latLng,
-            0.03,
+
+      Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 5 : 30),
+          (timer) {
+        final bool shouldUpdate = MapHelper.checkoutRadius(
+          Global.instance.location,
+          latLng,
+          0.03,
+        );
+        if (shouldUpdate) {
+          locationService.updateLocationUserForeGround(
+            latLng: latLng,
           );
-          if (shouldUpdate) {
-            locationService.updateLocationUserForeGround(
-              latLng: latLng,
-            );
-          }
-        });
-      }
-      emit(LocationListenState.success(latLng));
+        }
+      });
+      emit(TrackingLocationState.success(latLng));
     })
           ..onError((err) {
-            emit(LocationListenState.failed(err.toString()));
+            emit(TrackingLocationState.failed(err.toString()));
           });
   }
 

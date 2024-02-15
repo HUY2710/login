@@ -15,9 +15,9 @@ import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
-import '../../map/cubit/location_listen/location_listen_cubit.dart';
 import '../../map/cubit/select_group_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
+import '../../map/cubit/tracking_location/tracking_location_cubit.dart';
 import '../../map/cubit/tracking_members/tracking_member_cubit.dart';
 import 'bottom_sheet/members/members.dart';
 import 'bottom_sheet/show_bottom_sheet_home.dart';
@@ -31,7 +31,7 @@ class BottomBar extends StatefulWidget {
     required this.moveToLocationUser,
   });
   final Completer<GoogleMapController> mapController;
-  final LocationListenCubit locationListenCubit;
+  final TrackingLocationCubit locationListenCubit;
   final TrackingMemberCubit trackingMemberCubit;
   final void Function(LatLng) moveToLocationUser;
   @override

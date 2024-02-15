@@ -47,10 +47,9 @@ class GroupCubit extends Cubit<GroupState> {
   Future<void> initStreamUser() async {
     _userStream = chatService.getUser2().listen((user) {
       if (user.docs.isNotEmpty) {
-        final List<MyIdGroup> myListIdGroup =
-            user.docs.map((e) => MyIdGroup.fromJson(e.data())).toList();
+        final List<String> myListIdGroup = user.docs.map((e) => e.id).toList();
 
-        idsMyGroup = myListIdGroup.map((e) => e.idGroup).toList();
+        idsMyGroup = myListIdGroup.map((e) => e).toList();
       }
     });
   }
@@ -62,9 +61,9 @@ class GroupCubit extends Cubit<GroupState> {
       } else {
         //get all my group of user
         // lấy ra tất cả các id group trong myGroup collection user
-        final List<MyIdGroup> myListIdGroup =
-            userSnapshot.docs.map((e) => MyIdGroup.fromJson(e.data())).toList();
-        idsMyGroup = myListIdGroup.map((e) => e.idGroup).toList();
+        final List<String> myListIdGroup =
+            userSnapshot.docs.map((e) => e.id).toList();
+        idsMyGroup = myListIdGroup.map((e) => e).toList();
         // get store user of user group
         //lấy ra thông tin user từ các lasstMessage của group
         final listIdUser =

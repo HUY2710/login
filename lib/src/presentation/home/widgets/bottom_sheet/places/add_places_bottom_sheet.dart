@@ -99,7 +99,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                             idCreator: Global.instance.user!.code,
                             idPlace: 24.randomString(),
                             iconPlace: Assets.icons.places.icAnimal.path,
-                            namePlace: 'Test Place',
+                            namePlace: nameLocationCtrl.text,
                             location: StoreLocation(
                               address: address,
                               lat: location.latitude,
