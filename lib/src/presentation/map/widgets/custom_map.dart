@@ -8,7 +8,7 @@ import '../../../data/models/store_place/store_place.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/constants/map_style.dart';
-import '../../home/widgets/bottom_sheet/checkin/checkin_history.dart';
+import '../../home/widgets/bottom_sheet/places/history_place.dart';
 import '../../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import '../cubit/tracking_location/tracking_location_cubit.dart';
 import '../cubit/tracking_members/tracking_member_cubit.dart';
@@ -110,7 +110,8 @@ class _CustomMapState extends State<CustomMap> {
         onTap: () {
           showAppModalBottomSheet(
             context: context,
-            builder: (context) => CheckInHistory(idUser: e.code),
+            backgroundColor: Colors.transparent,
+            builder: (context) => HistoryPlace(idUser: e.code),
           );
         });
   }

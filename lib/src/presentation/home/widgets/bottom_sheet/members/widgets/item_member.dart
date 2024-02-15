@@ -11,7 +11,7 @@ import '../../../../../../gen/assets.gen.dart';
 import '../../../../../../gen/colors.gen.dart';
 import '../../../../../../global/global.dart';
 import '../../../../../../shared/extension/context_extension.dart';
-import '../../checkin/checkin_history.dart';
+import '../../places/history_place.dart';
 import '../../show_bottom_sheet_home.dart';
 
 class ItemMember extends StatelessWidget {
@@ -25,7 +25,7 @@ class ItemMember extends StatelessWidget {
       onTap: () async {
         showAppModalBottomSheet(
           context: context,
-          builder: (context) => CheckInHistory(idUser: idUser),
+          builder: (context) => HistoryPlace(idUser: idUser),
         );
       },
       child: Padding(
