@@ -16,7 +16,10 @@ class CheckInLocation extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: const Column(
         mainAxisSize: MainAxisSize.min,
-        children: [MyDrag(), Row()],
+        children: [
+          MyDrag(),
+          Row(),
+        ],
       ),
     );
   }

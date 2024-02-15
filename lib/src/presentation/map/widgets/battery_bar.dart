@@ -6,10 +6,12 @@ class BatteryBar extends StatelessWidget {
     super.key,
     required this.batteryLevel,
     required this.color,
+    required this.online,
   });
 
   final int batteryLevel;
   final Color color;
+  final bool online;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class BatteryBar extends StatelessWidget {
           height: 20.r,
           width: 20.r,
           decoration: BoxDecoration(
-            color: color,
+            color: online ? const Color(0xff19E04B) : const Color(0xffFFDF57),
             shape: BoxShape.circle,
           ),
         ),
@@ -30,7 +32,7 @@ class BatteryBar extends StatelessWidget {
           height: 30.w,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10.r)),
-            border: Border.all(width: 5, color: const Color(0xffBCB8FF)),
+            border: Border.all(width: 5, color: const Color(0xff343434)),
           ),
           padding: EdgeInsets.all(2.r),
           child: SizedBox(
@@ -39,12 +41,18 @@ class BatteryBar extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xff343434),
+                  color: color,
                   borderRadius: BorderRadius.all(Radius.circular(2.r)),
                 ),
               ),
             ),
           ),
+        ),
+        2.horizontalSpace,
+        Container(
+          width: 4.w,
+          height: 12.h,
+          color: color,
         ),
         10.horizontalSpace,
         Text(

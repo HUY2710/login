@@ -12,8 +12,6 @@ import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/gender_type.dart';
-import '../../../shared/extension/context_extension.dart';
-import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
 import '../widgets/gender_switch.dart';
 

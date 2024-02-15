@@ -29,7 +29,6 @@ import '../../data/local/shared_preferences_manager.dart';
 import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/assets.gen.dart';
-import '../../gen/colors.gen.dart';
 import '../../global/global.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/enum/preference_keys.dart';
