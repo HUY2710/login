@@ -11,7 +11,7 @@ import '../../../../../../gen/assets.gen.dart';
 import '../../../../../../global/global.dart';
 import '../../../../../../shared/cubit/value_cubit.dart';
 import '../../../../../map/cubit/select_group_cubit.dart';
-import '../../../dialog/group_dialog.dart';
+import '../../../dialog/action_dialog.dart';
 import 'item_member.dart';
 
 class BuildListMember extends StatelessWidget {
@@ -43,7 +43,7 @@ class BuildListMember extends StatelessWidget {
                       try {
                         showDialog(
                           context: context,
-                          builder: (context) => GroupDialog(
+                          builder: (context) => ActionDialog(
                             title: 'Remove Member',
                             subTitle:
                                 'Are you sure to the remove this member from your group?',

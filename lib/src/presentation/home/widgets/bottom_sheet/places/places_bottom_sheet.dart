@@ -36,21 +36,6 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const MyDrag(),
-          TextButton(
-              onPressed: () {
-                showAppModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  useSafeArea: true,
-                  builder: (context) => Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: const AddPlaceBottomSheet(),
-                  ),
-                );
-              },
-              child: const Text('Add Place')),
           Row(
             children: [
               Expanded(
@@ -89,9 +74,7 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.sp,
-                            color: groupNameController.text.isNotEmpty
-                                ? const Color(0xff8E52FF)
-                                : const Color(0xffABABAB),
+                            color: const Color(0xff8E52FF),
                           ),
                         ),
                       ),
@@ -101,22 +84,48 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
               ),
             ],
           ),
+          Row(
+            children: [
+              IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+              TextButton(
+                  onPressed: () {
+                    showAppModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      useSafeArea: true,
+                      builder: (context) => Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                        ),
+                        child: const AddPlaceBottomSheet(),
+                      ),
+                    );
+                  },
+                  child: const Text('Add Place')),
+            ],
+          ),
           Expanded(
               child: BlocBuilder<TrackingPlacesCubit, TrackingPlacesState>(
             bloc: getIt<TrackingPlacesCubit>(),
             builder: (context, state) {
               return state.maybeWhen(
-                orElse: () => const SizedBox(),
-                success: (places) => ListView.separated(
-                  itemCount: places.length,
-                  itemBuilder: (context, index) {
-                    return ItemPlace(
-                      place: places[index],
+                  orElse: () => const SizedBox(),
+                  failed: (message) => Text('Error:$message'),
+                  success: (places) {
+                    if (places.isEmpty) {
+                      return const Center(child: Text('No place'));
+                    }
+                    return ListView.separated(
+                      itemCount: places.length,
+                      itemBuilder: (context, index) {
+                        return ItemPlace(
+                          place: places[index],
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 28.h),
                     );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(height: 28.h),
-                ),
-              );
+                  });
             },
           ))
         ],

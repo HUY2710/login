@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class GroupDialog extends StatelessWidget {
-  const GroupDialog({
+class ActionDialog extends StatelessWidget {
+  const ActionDialog({
     super.key,
     required this.title,
     required this.subTitle,
