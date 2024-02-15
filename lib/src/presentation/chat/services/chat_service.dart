@@ -99,6 +99,38 @@ class ChatService {
     }
   }
 
+  Future<void> sendMessageLocation({
+    required String content,
+    required String idGroup,
+    required double lat,
+    required double long,
+  }) async {
+    final user = Global.instance.user;
+    if (user?.code == null) {
+      throw 'User must have';
+    } else {
+      final message = MessageModel(
+        content: content,
+        senderId: user?.code ?? '',
+        sentAt: DateTime.now().toString(),
+        lat: lat,
+        long: long,
+      );
+      try {
+        await CollectionStore.chat
+            .doc(idGroup)
+            .collection(CollectionStoreConstant.messages)
+            .add(message.toJson());
+        await GroupsManager.updateGroup(
+            idGroup: idGroup, fields: {'lastMessage': message.toJson()});
+      } catch (e) {
+        logger.e(
+          'Send Mess Location Err: $e',
+        );
+      }
+    }
+  }
+
   Stream<QuerySnapshot<StoreGroup>> getMyGroupChat(
     List<String> idsMyGroup,
     List<StoreUser> listStoreUser,

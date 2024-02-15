@@ -18,6 +18,7 @@ import 'cubits/group_state.dart';
 
 part 'widgets/chat_group_empty.dart';
 part 'widgets/group_item.dart';
+part 'widgets/input_search.dart';
 
 @RoutePage()
 class ChatScreen extends StatefulWidget {
@@ -28,6 +29,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final TextEditingController textController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -71,26 +73,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextField(
-                          decoration: InputDecoration(
-                              fillColor: const Color(0xffEFEFEF),
-                              filled: true,
-                              hintText: 'Search',
-                              hintStyle: TextStyle(
-                                color: const Color(0xff928989),
-                                fontSize: 16.sp,
-                              ),
-                              prefixIcon: Icon(
-                                Icons.search,
-                                size: 24.r,
-                                color: const Color(0xff928989),
-                              ),
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(12.sp)),
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 8.r, horizontal: 12.r)),
-                        ),
+                        InputSearch(textController: textController),
                         30.h.verticalSpace,
                         Text(
                           'Group',

@@ -108,7 +108,7 @@ class InviteCode extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.r),
-                gradient: gradienBackground),
+                gradient: gradientBackground),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

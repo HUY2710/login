@@ -6,7 +6,7 @@ class GroupChatEmpty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column( 
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Assets.images.chatGroupEmpty.image(width: 163.w, height: 145.h),
@@ -33,7 +33,7 @@ class GroupChatEmpty extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 decoration: BoxDecoration(
-                  gradient: gradienBackground,
+                  gradient: gradientBackground,
                   borderRadius: BorderRadius.circular(15.sp),
                 ),
                 child: Text(

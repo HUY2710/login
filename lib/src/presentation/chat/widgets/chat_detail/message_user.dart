@@ -1,7 +1,11 @@
-part of '../chat_detail_screen.dart';
+part of '../../chat_detail_screen.dart';
 
 class MessageTypeUser extends StatelessWidget {
-  const MessageTypeUser({super.key, required this.chats, required this.index});
+  const MessageTypeUser({
+    super.key,
+    required this.chats,
+    required this.index,
+  });
   final int index;
   final List<QueryDocumentSnapshot<MessageModel>> chats;
 

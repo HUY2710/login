@@ -38,7 +38,7 @@ class HeaderModal extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 12.r, vertical: 10.r),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(99.r),
-                  gradient: gradienBackground),
+                  gradient: gradientBackground),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
