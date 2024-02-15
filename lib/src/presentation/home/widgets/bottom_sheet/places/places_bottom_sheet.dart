@@ -4,8 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../config/di/di.dart';
-import '../../../../../data/models/store_group/store_group.dart';
-import '../../../../../shared/cubit/value_cubit.dart';
+import '../../../../../shared/widgets/containers/custom_container.dart';
 import '../../../../../shared/widgets/my_drag.dart';
 import '../../../../map/cubit/tracking_places/tracking_places_cubit.dart';
 import '../show_bottom_sheet_home.dart';
@@ -80,26 +79,40 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
               ),
             ],
           ),
-          Row(
-            children: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
-              TextButton(
-                  onPressed: () {
-                    showAppModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      useSafeArea: true,
-                      builder: (context) => Padding(
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom,
-                        ),
-                        child: const AddPlaceBottomSheet(),
-                      ),
-                    );
-                  },
-                  child: const Text('Add Place')),
-            ],
+          20.verticalSpace,
+          GestureDetector(
+            onTap: () {
+              showAppModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                useSafeArea: true,
+                builder: (context) => Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: const AddPlaceBottomSheet(),
+                ),
+              );
+            },
+            child: Row(
+              children: [
+                CustomContainer(
+                  radius: 15.r,
+                  colorBg: const Color(0xff8E52FF),
+                  child: Padding(
+                    padding: EdgeInsets.all(10.r),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                12.horizontalSpace,
+                const Text('Add Place'),
+              ],
+            ),
           ),
+          20.verticalSpace,
           Expanded(
               child: BlocBuilder<TrackingPlacesCubit, TrackingPlacesState>(
             bloc: getIt<TrackingPlacesCubit>(),

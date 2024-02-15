@@ -44,4 +44,19 @@ class PlacesManager {
       throw Exception(error);
     });
   }
+
+  // xóa tất cả các place trong group khi xóa group
+  static Future<void> removeAllPlaceOfGroup(String idGroup) async {
+    final CollectionReference collectionReference = CollectionStore.groups
+        .doc(idGroup)
+        .collection(CollectionStoreConstant.places);
+    final QuerySnapshot querySnapshot = await collectionReference.get();
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+    // Lặp qua từng tài liệu và thêm thao tác xóa vào batch
+    for (final doc in querySnapshot.docs) {
+      batch.delete(doc.reference);
+    }
+    // Thực hiện batch write để xóa tất cả các tài liệu
+    await batch.commit();
+  }
 }

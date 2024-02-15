@@ -125,7 +125,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
   Future<void> _getMyMarker() async {
     final newMarker = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(
-        size: Size.fromRadius(5.r),
+        size: Size.fromRadius(2.r),
         devicePixelRatio: ScreenUtil().pixelRatio,
       ),
       Assets.images.markers.circleDot.path,

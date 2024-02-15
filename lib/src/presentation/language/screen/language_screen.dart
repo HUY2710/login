@@ -146,7 +146,7 @@ Widget _buildItemLanguage({
     child: Container(
       margin: EdgeInsets.symmetric(
         horizontal: 16.w,
-        vertical: 4.h,
+        vertical: 12.h,
       ),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(

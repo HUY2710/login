@@ -52,20 +52,16 @@ class MemberManager {
   }
 
   static Future<void> deleteMemberCollection(String idGroup) async {
-    // Lấy reference của collection "member" trong document user
-    final CollectionReference memberCollectionRef = CollectionStore.groups
+    final CollectionReference collectionReference = CollectionStore.groups
         .doc(idGroup)
         .collection(CollectionStoreConstant.members);
-
-    // Lấy danh sách document trong collection "member"
-    final QuerySnapshot memberSnapshot = await memberCollectionRef.get();
-
-    // Xóa từng document trong collection
-    for (final QueryDocumentSnapshot memberDoc in memberSnapshot.docs) {
-      await memberDoc.reference.delete();
+    final QuerySnapshot querySnapshot = await collectionReference.get();
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+    // Lặp qua từng tài liệu và thêm thao tác xóa vào batch
+    for (final doc in querySnapshot.docs) {
+      batch.delete(doc.reference);
     }
-
-    // Cuối cùng, xóa collection "member" khỏi document user
-    await memberCollectionRef.parent?.delete();
+    // Thực hiện batch write để xóa tất cả các tài liệu
+    await batch.commit();
   }
 }

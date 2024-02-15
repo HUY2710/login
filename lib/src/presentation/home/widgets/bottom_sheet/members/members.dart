@@ -70,20 +70,15 @@ class MembersBottomSheet extends StatelessWidget {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 12.r, vertical: 10.r),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(99.r),
+                                borderRadius: BorderRadius.circular(20.r),
                                 gradient: gradienBackground,
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Done',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
+                              child: Text(
+                                'Done',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.w500),
                               ),
                             ),
                           );
@@ -158,11 +153,11 @@ class MembersBottomSheet extends StatelessWidget {
                         }),
                         shape: MaterialStateProperty.resolveWith((states) {
                           return RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.r));
+                              borderRadius: BorderRadius.circular(15.r));
                         }),
                         shadowColor:
                             MaterialStateProperty.resolveWith((states) {
-                          return Colors.black;
+                          return const Color(0xff42474C).withOpacity(0.15);
                         }),
                         elevation: MaterialStateProperty.resolveWith((states) {
                           return 8.0;

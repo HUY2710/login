@@ -67,7 +67,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       create: (context) => ValueCubit<int>(0),
       child: Scaffold(
         body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
               child: Stack(

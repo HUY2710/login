@@ -8,9 +8,11 @@ import '../../../config/navigation/app_router.dart';
 import '../../../data/local/avatar/avatar_repository.dart';
 import '../../../data/models/avatar/avatar_model.dart';
 import '../../../data/remote/firestore_client.dart';
+import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/gender_type.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
 import '../widgets/gender_switch.dart';
@@ -28,26 +30,44 @@ class CreateUserAvatarScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            leadingWidth: 44.w,
+            leading: Padding(
+              padding: EdgeInsets.only(left: 16.w),
+              child: GestureDetector(
+                onTap: () {
+                  context.popRoute();
+                },
+                child: Assets.icons.icBack.svg(
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+            ),
+            centerTitle: true,
+            title: Text(
+              'Set Avatar',
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
             expandedHeight: MediaQuery.sizeOf(context).height * 0.34,
             automaticallyImplyLeading: false,
             flexibleSpace: PreferredSize(
               preferredSize: Size(
                   double.infinity, MediaQuery.sizeOf(context).height * 0.34),
-              child: Stack(
-                children: [
-                  BlocBuilder<ValueCubit<String>, String>(
-                    bloc: avatarBgCubit,
-                    builder: (context, state) {
-                      return SizedBox(
-                        height: MediaQuery.sizeOf(context).height * 0.34,
-                        width: double.infinity,
-                        child: _buildAvatarPreview(state),
-                      );
-                    },
-                  ),
-                  const CustomAppBar(
-                      title: 'Set avatar', leadingColor: Colors.white)
-                ],
+              child: BlocBuilder<ValueCubit<String>, String>(
+                bloc: avatarBgCubit,
+                builder: (context, state) {
+                  return SizedBox(
+                    height: MediaQuery.sizeOf(context).height * 0.34,
+                    width: double.infinity,
+                    child: _buildAvatarPreview(state),
+                  );
+                },
               ),
             ),
           ),
@@ -61,7 +81,7 @@ class CreateUserAvatarScreen extends StatelessWidget {
         child: AppButton(
           title: 'Save',
           onTap: () async {
-            final avatar = Global.instance.user =
+            Global.instance.user =
                 Global.instance.user?.copyWith(avatarUrl: avatarCubit.state);
             try {
               await FirestoreClient.instance.updateUser({
@@ -85,8 +105,8 @@ class CreateUserAvatarScreen extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(20.r),
-          bottomRight: Radius.circular(20.r),
+          bottomLeft: Radius.circular(25.r),
+          bottomRight: Radius.circular(25.r),
         ),
       ),
       child: Image.asset(

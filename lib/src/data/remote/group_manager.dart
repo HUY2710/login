@@ -7,6 +7,7 @@ import '../models/store_group/store_group.dart';
 import '../models/store_member/store_member.dart';
 import 'collection_store.dart';
 import 'member_manager.dart';
+import 'places_manager.dart';
 
 class GroupsManager {
   GroupsManager._();
@@ -64,6 +65,7 @@ class GroupsManager {
   static Future<bool> deleteGroup(StoreGroup group) async {
     //xóa collection members trước
     await MemberManager.deleteMemberCollection(group.idGroup!);
+    await PlacesManager.removeAllPlaceOfGroup(group.idGroup!);
     //xóa group
     debugPrint('group:${group.idGroup}');
     final resultDeleteGroup = await CollectionStore.groups
