@@ -11,6 +11,7 @@ import '../../gen/assets.gen.dart';
 import '../../shared/cubit/value_cubit.dart';
 import '../../shared/enum/language.dart';
 import '../../shared/extension/context_extension.dart';
+import '../../shared/mixin/permission_mixin.dart';
 import 'widgets/app_button.dart';
 import 'widgets/indicator.dart';
 import 'widgets/page_widget.dart';
@@ -28,7 +29,8 @@ class OnBoardingScreen extends StatefulWidget {
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
 }
 
-class _OnBoardingScreenState extends State<OnBoardingScreen> {
+class _OnBoardingScreenState extends State<OnBoardingScreen>
+    with PermissionMixin {
   final PageController _pageController = PageController();
 
   ValueNotifier<bool> showSkipButton = ValueNotifier(false);
@@ -56,7 +58,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       if (isCreateInfoFirstTime) {
         context.replaceRoute(CreateUsernameRoute());
       } else {
-        context.replaceRoute(const HomeRoute());
+        final bool statusLocation = await checkPermissionLocation();
+        if (!statusLocation && context.mounted) {
+          context.replaceRoute(PermissionRoute(fromMapScreen: false));
+          return;
+        } else if (context.mounted) {
+          context.replaceRoute(const HomeRoute());
+        }
       }
     }
   }
@@ -67,7 +75,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       create: (context) => ValueCubit<int>(0),
       child: Scaffold(
         body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
               child: Stack(

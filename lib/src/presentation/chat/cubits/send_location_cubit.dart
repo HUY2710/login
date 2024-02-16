@@ -13,8 +13,8 @@ class SendLocationState {
 class SendLocationCubit extends ValueCubit<SendLocationState> {
   SendLocationCubit()
       : super(SendLocationState(
-          lat: Global.instance.location.latitude,
-          long: Global.instance.location.latitude,
+          lat: Global.instance.currentLocation.latitude,
+          long: Global.instance.currentLocation.latitude,
         ));
   void changeState({required double lat, required double long}) {
     emit(SendLocationState(lat: lat, long: long));

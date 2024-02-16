@@ -71,6 +71,13 @@ class _BuildMarkerState extends State<BuildMarker> {
     if (battery <= 20) {
       color = Colors.red;
     }
+    if (battery > 20 && battery <= 30) {
+      color = const Color(0xffFFDF57);
+    }
+
+    if (battery > 30) {
+      color = const Color(0xff0FEC47);
+    }
 
     return RepaintBoundary(
       key: widget.keyCap ?? _repaintKey,
@@ -86,8 +93,9 @@ class _BuildMarkerState extends State<BuildMarker> {
               ),
               padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
               child: BatteryBar(
-                  batteryLevel: widget.member.batteryLevel ?? 100,
-                  color: color),
+                  batteryLevel: widget.member.batteryLevel,
+                  color: color,
+                  online: widget.member.online),
             ),
           8.verticalSpace,
           _buildMarker(color, battery),
@@ -133,7 +141,7 @@ class _BuildMarkerState extends State<BuildMarker> {
       padding: const EdgeInsets.all(12).r,
       child: ClipOval(
         child: Image.asset(
-          Assets.images.avatars.avatar1.path,
+          widget.member.avatarUrl,
           alignment: Alignment.topCenter,
         ),
       ),

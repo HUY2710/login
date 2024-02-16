@@ -29,7 +29,6 @@ import '../../data/local/shared_preferences_manager.dart';
 import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/assets.gen.dart';
-import '../../gen/colors.gen.dart';
 import '../../global/global.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/enum/preference_keys.dart';
@@ -258,7 +257,8 @@ class _SplashScreenState extends State<SplashScreen> {
     Global.instance.user = storeUser;
     final location = await FirestoreClient.instance.getLocation();
     if (location != null) {
-      Global.instance.location = LatLng(location.lat, location.lng);
+      Global.instance.serverLocation = LatLng(location.lat, location.lng);
+      Global.instance.currentLocation = LatLng(location.lat, location.lng);
     }
   }
 
@@ -298,7 +298,7 @@ class _SplashScreenState extends State<SplashScreen> {
         code: newCode,
         userName: '',
         batteryLevel: battery,
-        avatarUrl: Assets.images.avatars.avatar1.path);
+        avatarUrl: Assets.images.avatars.male.avatar1.path);
     await FirestoreClient.instance.createUser(storeUser).then((value) async {
       await SharedPreferencesManager.setString(
           PreferenceKeys.userCode.name, newCode);
@@ -309,61 +309,49 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Assets.images.logo.roundedLogo.image(
-                    width: 145.r,
-                    height: 145.r,
-                    fit: BoxFit.contain,
-                    frameBuilder:
-                        (context, child, frame, wasSynchronouslyLoaded) {
-                      if (frame != 0) {
-                        return 145.verticalSpace;
-                      }
-                      return child;
-                    },
-                  ),
-                  16.verticalSpace,
-                  Text(
-                    F.title,
-                    style: TextStyle(
-                      color: context.colorScheme.primary,
-                      fontSize: 22.sp,
-                    ),
-                  ),
-                ],
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xffD2B0FF),
+              Color(0xff8B4FFF),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: Assets.images.splash.image(
+                  frameBuilder:
+                      (context, child, frame, wasSynchronouslyLoaded) {
+                    if (frame != 0) {
+                      return 145.verticalSpace;
+                    }
+                    return child;
+                  },
+                ),
               ),
             ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ColorFiltered(
-                colorFilter: const ColorFilter.mode(
-                  MyColors.primary,
-                  BlendMode.srcIn,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Assets.lottie.loadingSplash.lottie(
+                  width: 100.r,
                 ),
-                child: Assets.lottie.loading.lottie(
-                  width: 70.r,
+                Text(
+                  context.l10n.thisActionCanContainAds,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              15.verticalSpace,
-              Text(
-                context.l10n.thisActionCanContainAds,
-                style: const TextStyle(
-                  color: MyColors.primary,
-                ),
-              ),
-            ],
-          ),
-          40.verticalSpace,
-        ],
+              ],
+            ),
+            40.verticalSpace,
+          ],
+        ),
       ),
     );
   }

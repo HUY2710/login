@@ -13,13 +13,14 @@ import '../../../config/navigation/app_router.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
+import '../../../shared/constants/app_constants.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
-import '../../map/cubit/location_listen/location_listen_cubit.dart';
 import '../../map/cubit/select_group_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
+import '../../map/cubit/tracking_location/tracking_location_cubit.dart';
 import '../../map/cubit/tracking_members/tracking_member_cubit.dart';
-import 'bottom_sheet/members/widgets/modal_edit.dart';
-import 'bottom_sheet/members/widgets/modal_show.dart';
+import 'bottom_sheet/members/members.dart';
+import 'bottom_sheet/show_bottom_sheet_home.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({
@@ -30,7 +31,7 @@ class BottomBar extends StatefulWidget {
     required this.moveToLocationUser,
   });
   final Completer<GoogleMapController> mapController;
-  final LocationListenCubit locationListenCubit;
+  final TrackingLocationCubit locationListenCubit;
   final TrackingMemberCubit trackingMemberCubit;
   final void Function(LatLng) moveToLocationUser;
   @override
@@ -49,8 +50,8 @@ class _BottomBarState extends State<BottomBar> {
   Future<void> _goToDetailLocation() async {
     //test
     final CameraPosition newPosition = CameraPosition(
-      target: Global.instance.location,
-      zoom: 16,
+      target: Global.instance.currentLocation,
+      zoom: AppConstants.defaultCameraZoomLevel,
     );
     _googleMapController
         ?.animateCamera(CameraUpdate.newCameraPosition(newPosition));
@@ -137,20 +138,18 @@ class _BottomBarState extends State<BottomBar> {
         }
         //check xem có join group nào chưa
         if (getIt<SelectGroupCubit>().state != null) {
-          showModalBottomSheet(
+          showAppModalBottomSheet(
               context: context,
               builder: (context) {
                 return StatefulBuilder(builder: (context, _) {
                   return ValueListenableBuilder(
                       valueListenable: value,
                       builder: (context, val, child) {
-                        return AnimatedSwitcher(
-                            duration: const Duration(
+                        return const AnimatedSwitcher(
+                            duration: Duration(
                               microseconds: 700,
                             ),
-                            child: (val == 0)
-                                ? ModalShowMember(value: value)
-                                : ModalEditMember(value: value));
+                            child: MembersBottomSheet());
                       });
                 });
               });

@@ -24,34 +24,31 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: padding ?? EdgeInsets.only(top: 56.h, left: 16.w, right: 16.w),
-      child: Stack(
-        children: [
-          GestureDetector(
-            onTap: () {
-              context.popRoute();
-            },
-            child: Assets.icons.icBack.svg(
-              height: 28.h,
-              colorFilter: ColorFilter.mode(
-                leadingColor ?? context.colorScheme.primary,
-                BlendMode.srcIn,
-              ),
+    return AppBar(
+      centerTitle: true,
+      title: Text(
+        title ?? '',
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 20.sp,
+          color: textColor ?? const Color(0xFF343434),
+        ),
+      ),
+      leadingWidth: 44.w,
+      leading: Padding(
+        padding: EdgeInsets.only(left: 16.w),
+        child: GestureDetector(
+          onTap: () {
+            context.popRoute();
+          },
+          child: Assets.icons.icBack.svg(
+            height: 28.h,
+            colorFilter: ColorFilter.mode(
+              leadingColor ?? context.colorScheme.primary,
+              BlendMode.srcIn,
             ),
           ),
-          if (title != null)
-            Align(
-              child: Text(
-                title!,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20.sp,
-                  color: textColor ?? const Color(0xFF343434),
-                ),
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }

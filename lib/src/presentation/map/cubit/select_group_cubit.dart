@@ -2,6 +2,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../data/models/store_group/store_group.dart';
+import '../../../data/models/store_member/store_member.dart';
 import '../../../shared/cubit/value_cubit.dart';
 
 @singleton
@@ -11,8 +12,11 @@ class SelectGroupCubit extends ValueCubit<StoreGroup?> with HydratedMixin {
   }
 
   void removeMember(String idUser) {
-    state?.storeMembers?.removeWhere((member) => member.idUser == idUser);
-    emit(state);
+    if (state?.storeMembers != null) {
+      final List<StoreMember> updatedMembers = List.from(state!.storeMembers!);
+      updatedMembers.removeWhere((member) => member.idUser == idUser);
+      emit(state!.copyWith(storeMembers: updatedMembers));
+    }
   }
 
   @override

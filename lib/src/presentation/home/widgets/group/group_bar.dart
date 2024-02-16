@@ -18,6 +18,7 @@ import '../../../map/cubit/select_group_cubit.dart';
 import '../../cubit/my_list_group/my_list_group_cubit.dart';
 import '../bottom_sheet/create_edit_group.dart';
 import '../bottom_sheet/join_group.dart';
+import '../bottom_sheet/show_bottom_sheet_home.dart';
 import 'group_item.dart';
 
 class GroupBar extends StatelessWidget {
@@ -101,7 +102,7 @@ class GroupBar extends StatelessWidget {
                           onTap: () async {
                             await context.popRoute();
                             if (context.mounted) {
-                              await showModalBottomSheet(
+                              await showAppModalBottomSheet(
                                   isScrollControlled: true,
                                   context: context,
                                   builder: (context) {
@@ -139,7 +140,7 @@ class GroupBar extends StatelessWidget {
                           onTap: () async {
                             await context.popRoute();
                             if (context.mounted) {
-                              showModalBottomSheet(
+                              showAppModalBottomSheet(
                                   context: context,
                                   isScrollControlled: true,
                                   builder: (context) =>

@@ -9,9 +9,9 @@ import '../../../data/models/store_message/store_message.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/cubit/value_cubit.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../../shared/extension/int_extension.dart';
 import '../../../shared/helpers/valid_helper.dart';
-import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
 
 @RoutePage()
@@ -21,7 +21,20 @@ class CreateGroupNameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            context.popRoute();
+          },
+          icon: Assets.icons.icBack.svg(
+            height: 28.h,
+            colorFilter: ColorFilter.mode(
+              context.colorScheme.primary,
+              BlendMode.srcIn,
+            ),
+          ),
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Stack(

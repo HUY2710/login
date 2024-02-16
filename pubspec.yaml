@@ -42,8 +42,7 @@ dependencies:
   easy_ads_flutter:
     git:
       url: https://bitbucket.org/innofyapp/flutter_ads.git
-        # url: https://KyLQ@bitbucket.org/innofyapp/flutter_ads.git
-        # url: git@bitbucket.org:innofyapp/flutter_ads.git #Trung
+      # url: https://KyLQ@bitbucket.org/innofyapp/flutter_ads.git
   device_info_plus: ^9.0.3
   hydrated_bloc: ^9.1.2
   path_provider: ^2.1.1
@@ -66,6 +65,7 @@ dependencies:
   isar: ^3.1.0+1
   http: ^1.1.0
   cached_network_image: ^3.3.1
+  dotted_border: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +87,7 @@ flutter:
   assets:
     - assets/lottie/
     - assets/icons/
+    - assets/icons/places/
     - assets/icons/rates/
     - assets/images/
     - assets/images/logo/
@@ -101,9 +102,9 @@ flutter:
     - assets/images/chat/
     - assets/ad_unit_id/dev/
     - assets/ad_unit_id/prod/
-    - .env
+    # - .env
     - .env.dev
-    - .env.prod
+    # - .env.prod
 
   fonts:
     - family: OpenSans

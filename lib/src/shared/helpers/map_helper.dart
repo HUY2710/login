@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MapHelper {
   MapHelper._();
 
-  static double calculateDistance(double startLatitude, double startLongitude,
+  static double _calculateDistance(double startLatitude, double startLongitude,
       double endLatitude, double endLongitude) {
     const double earthRadius = 6371;
 
@@ -23,29 +23,19 @@ class MapHelper {
     final double c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
     final double distance = earthRadius * c;
-    return distance; //km
+    return distance * 1000; //m
   }
 
-  static bool checkIfWithinRadius(
+  //kiểm tra xem vị trí mới có nằm trong bán kính vị trí cũ hay không
+  static bool isWithinRadius(
       LatLng oldLocation, LatLng newLocation, double radius) {
-    final double distance = calculateDistance(
+    final double distance = _calculateDistance(
       oldLocation.latitude,
       oldLocation.longitude,
       newLocation.latitude,
       newLocation.longitude,
     );
     return distance <= radius;
-  }
-
-  static bool checkoutRadius(
-      LatLng oldLocation, LatLng newLocation, double radius) {
-    final double distance = calculateDistance(
-      oldLocation.latitude,
-      oldLocation.longitude,
-      newLocation.latitude,
-      newLocation.longitude,
-    );
-    return distance >= radius;
   }
 }
 

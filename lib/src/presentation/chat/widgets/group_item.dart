@@ -29,7 +29,7 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: () {
-        showModalBottomSheet(
+        showAppModalBottomSheet(
             context: context,
             isDismissible: false,
             backgroundColor: Colors.white,

@@ -12,7 +12,6 @@ import '../../../data/local/avatar/avatar_repository.dart';
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/avatar/avatar_model.dart';
 import '../../../data/remote/firestore_client.dart';
-import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/widgets/custom_appbar.dart';
@@ -29,20 +28,15 @@ class CreateGroupAvatarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: const CustomAppBar(
-              title: 'Avatar Group',
-              textColor: Color(
-                0xFF343434,
-              ),
-            ),
-          ),
-          _MainBody(avatarGroupCubit),
-        ],
+      backgroundColor: Colors.white,
+      appBar: const CustomAppBar(
+        title: 'Avatar Group',
+        leadingColor: Color(0xff7B3EFF),
+        textColor: Color(
+          0xFF343434,
+        ),
       ),
+      body: _MainBody(avatarGroupCubit),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 36.h),
         child: BlocBuilder<ValueCubit<String>, String>(
@@ -68,7 +62,10 @@ class CreateGroupAvatarScreen extends StatelessWidget {
                     getIt<SelectGroupCubit>().update(Global.instance.group);
                     if (context.mounted) {
                       EasyLoading.dismiss();
-                      context.replaceRoute(const HomeRoute());
+                      context.pushRoute(
+                        ShareCodeGroupRoute(
+                            code: Global.instance.group!.passCode),
+                      );
                     }
                   } else {
                     debugPrint('empty');
@@ -97,22 +94,20 @@ class _MainBody extends StatefulWidget {
 class _MainBodyState extends State<_MainBody> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          100.verticalSpace,
-          Text(
-            'Choose your favorite avatar!',
-            style: TextStyle(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w400,
-              color: const Color(0xFF3A3A3C),
-            ),
+    return Column(
+      children: [
+        24.verticalSpace,
+        Text(
+          'Choose your favorite avatar!',
+          style: TextStyle(
+            fontSize: 15.sp,
+            fontWeight: FontWeight.w400,
+            color: const Color(0xFF3A3A3C),
           ),
-          16.verticalSpace,
-          _buildAvatarGridView(widget.avatarGroupCubit),
-        ],
-      ),
+        ),
+        16.verticalSpace,
+        _buildAvatarGridView(widget.avatarGroupCubit),
+      ],
     );
   }
 
@@ -162,12 +157,6 @@ class _MainBodyState extends State<_MainBody> {
                   ),
                 ),
               ),
-              if (avatarModel.avatarPath == state)
-                Positioned(
-                  right: -6.h,
-                  top: -6.h,
-                  child: Assets.icons.icChecked.svg(height: 24.h),
-                ),
             ],
           ),
         );

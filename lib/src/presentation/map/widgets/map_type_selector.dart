@@ -22,6 +22,11 @@ class MapTypeSelector extends StatefulWidget {
 class _MapTypeSelectorState extends State<MapTypeSelector> {
   late final List<MapItem> mapTypes = <MapItem>[
     MapItem(
+      asset: Assets.images.mapTypes.traffic.path,
+      title: 'Traffic',
+      type: MapType.terrain,
+    ),
+    MapItem(
       asset: Assets.images.mapTypes.normal.path,
       title: 'Normal',
       type: MapType.normal,
@@ -30,11 +35,6 @@ class _MapTypeSelectorState extends State<MapTypeSelector> {
       asset: Assets.images.mapTypes.satellite.path,
       title: 'Satellite',
       type: MapType.satellite,
-    ),
-    MapItem(
-      asset: Assets.images.mapTypes.traffic.path,
-      title: 'Traffic',
-      type: MapType.terrain,
     ),
   ];
 

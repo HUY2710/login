@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -19,40 +20,17 @@ class LocationService {
   Location get _location => Location();
 
   Future<LatLng> getCurrentLocation() async {
-    final LocationData position = await _location.getLocation();
-    final double lat = position.latitude ?? 0;
-    final double long = position.longitude ?? 0;
-    Global.instance.location = LatLng(lat, long);
-    return LatLng(lat, long);
+    try {
+      final LocationData position = await _location.getLocation();
+      final double lat = position.latitude ?? 0;
+      final double long = position.longitude ?? 0;
+      Global.instance.currentLocation = LatLng(lat, long);
+      return LatLng(lat, long);
+    } catch (error) {
+      debugPrint('error:$error');
+      return const LatLng(0, 0);
+    }
   }
-
-  // Future<void> updateUserForeGround({
-  //   required LocationService locationService,
-  //   required LatLng latLng,
-  //   required String code,
-  //   required Battery battery,
-  // }) async {
-  //   final FirestoreClient firestoreClient = FirestoreClient.instance;
-  //   int tempBattery = 0;
-  //   try {
-  //     tempBattery = await battery.batteryLevel;
-  //   } catch (e) {
-  //     tempBattery = 100;
-  //   }
-  //   final data = await locationService.getCurrentAddress(latLng);
-
-  //   final String address = data;
-
-  //   await firestoreClient.updateUser(code, {
-  //     'lat': latLng.latitude,
-  //     'lon': latLng.longitude,
-  //     'address': address,
-  //     'batteryLevel': tempBattery,
-  //   });
-  //   //update local user
-  //   final StoreUser? localUser = await firestoreClient.fetchUser(code);
-  //   Global.instance.user = localUser;
-  // }
 
   Stream<LatLng> getLocationStream() {
     final Location location = Location();

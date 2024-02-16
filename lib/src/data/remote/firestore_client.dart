@@ -4,12 +4,14 @@ import '../../global/global.dart';
 import '../models/store_group/store_group.dart';
 import '../models/store_location/store_location.dart';
 import '../models/store_member/store_member.dart';
+import '../models/store_place/store_place.dart';
 import '../models/store_user/store_user.dart';
 import 'collection_store.dart';
 import 'current_user_store.dart';
 import 'group_manager.dart';
 import 'location_manager.dart';
 import 'member_manager.dart';
+import 'places_manager.dart';
 
 class FirestoreClient {
   FirestoreClient._privateConstructor();
@@ -76,6 +78,12 @@ class FirestoreClient {
   Future<StoreGroup?> isExistGroup(String passCode) async {
     final group = await GroupsManager.isExistGroup(passCode);
     return group;
+  }
+
+  //lay danh sach cac thanh vien trong group
+  Future<List<StoreMember>?> getListMemberOfGroup(String idGroup) async {
+    final result = await MemberManager.getListMemberOfGroup(idGroup);
+    return result;
   }
 
   //kiểm tra xem bạn đã là thành viên của group chưa
@@ -154,5 +162,19 @@ class FirestoreClient {
   Stream<DocumentSnapshot<Map<String, dynamic>>> listenLocationUser(
       String idUser) {
     return LocationManager.listenLocationUserChange(idUser);
+  }
+
+  //manager places
+  Future<void> createPlace(String idGroup, StorePlace newPlace) async {
+    await PlacesManager.createPlace(idGroup: idGroup, place: newPlace);
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> listenRealtimePlacesChanges(
+      String idGroup) {
+    return PlacesManager.listenRealtimePlacesChanges(idGroup);
+  }
+
+  Future<void> removePlace(String idGroup, String idPlace) async {
+    await PlacesManager.removePlace(idGroup: idGroup, idPlace: idPlace);
   }
 }

@@ -46,8 +46,8 @@ class _ChatLocationWidgetState extends State<ChatLocationWidget> {
             zoomControlsEnabled: false,
             initialCameraPosition: CameraPosition(
                 target: LatLng(
-                  Global.instance.location.latitude,
-                  Global.instance.location.longitude,
+                  Global.instance.currentLocation.latitude,
+                  Global.instance.currentLocation.longitude,
                 ),
                 zoom: 16),
 
@@ -59,8 +59,8 @@ class _ChatLocationWidgetState extends State<ChatLocationWidget> {
                 //   size: const Size.fromWidth(30),
                 // ))
                 position: LatLng(
-                  Global.instance.location.latitude,
-                  Global.instance.location.longitude,
+                  Global.instance.currentLocation.latitude,
+                  Global.instance.currentLocation.longitude,
                 ),
                 // icon: widget.marker ?? BitmapDescriptor.defaultMarker,
               )
@@ -71,8 +71,8 @@ class _ChatLocationWidgetState extends State<ChatLocationWidget> {
               Circle(
                 circleId: const CircleId('circle_1'),
                 center: LatLng(
-                  Global.instance.location.latitude,
-                  Global.instance.location.longitude,
+                  Global.instance.currentLocation.latitude,
+                  Global.instance.currentLocation.longitude,
                 ),
                 radius: 100,
                 fillColor: const Color(0xffA369FD).withOpacity(0.25),
@@ -139,10 +139,11 @@ class _ChatLocationWidgetState extends State<ChatLocationWidget> {
                                       context
                                           .read<SendLocationCubit>()
                                           .changeState(
-                                              lat: Global
-                                                  .instance.location.latitude,
-                                              long: Global
-                                                  .instance.location.longitude);
+                                              lat:
+                                                  Global.instance
+                                                      .currentLocation.latitude,
+                                              long: Global.instance
+                                                  .currentLocation.longitude);
                                     },
                                     child: Row(
                                       children: [
@@ -167,10 +168,10 @@ class _ChatLocationWidgetState extends State<ChatLocationWidget> {
                                         ),
                                         const Spacer(),
                                         if (locationState.lat ==
-                                                Global.instance.location
+                                                Global.instance.currentLocation
                                                     .latitude &&
                                             locationState.long ==
-                                                Global.instance.location
+                                                Global.instance.currentLocation
                                                     .longitude)
                                           const Icon(
                                             Icons.check,
@@ -258,8 +259,8 @@ class _ChatLocationWidgetState extends State<ChatLocationWidget> {
                       ChatService.instance.sendMessageLocation(
                           content: '',
                           idGroup: widget.idGroup,
-                          lat: Global.instance.location.latitude,
-                          long: Global.instance.location.longitude);
+                          lat: Global.instance.currentLocation.latitude,
+                          long: Global.instance.currentLocation.longitude);
                       EasyLoading.dismiss();
                     },
                     child: Container(

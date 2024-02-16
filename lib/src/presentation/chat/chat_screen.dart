@@ -13,6 +13,7 @@ import '../../shared/helpers/gradient_background.dart';
 import '../../shared/widgets/containers/linear_container.dart';
 import '../../shared/widgets/custom_inkwell.dart';
 import '../../shared/widgets/my_drag.dart';
+import '../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import 'cubits/group_cubit.dart';
 import 'cubits/group_state.dart';
 
