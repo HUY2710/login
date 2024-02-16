@@ -31,7 +31,7 @@ class _MainSwitchState extends State<MainSwitch> {
               gradient: LinearGradient(
                   colors: widget.value
                       ? [const Color(0xff7B3EFF), const Color(0xffB67DFF)]
-                      : [const Color(0xffEEEEEE)]),
+                      : [const Color(0xffEEEEEE), const Color(0xffEEEEEE)]),
               borderRadius: BorderRadius.circular(100).r,
             ),
             width: 56.r,

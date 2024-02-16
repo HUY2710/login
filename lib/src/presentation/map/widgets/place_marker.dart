@@ -69,7 +69,6 @@ class _PlaceMarkerState extends State<PlaceMarker> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          //chỉ có ở những member khác
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -86,44 +85,22 @@ class _PlaceMarkerState extends State<PlaceMarker> {
             ),
           ),
           8.verticalSpace,
-          _buildPlaceMarker(),
+          _buildImage(),
         ],
       ),
     );
   }
 
-  Stack _buildPlaceMarker() {
+  Widget _buildImage() {
     _generateMarker();
-    return Stack(
-      children: [
-        _buildAvatar(),
-      ],
-    );
-  }
-
-  Widget _buildAvatar() {
-    return Container(
-      width: 100.r,
-      height: 100.r,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-            const Color(0xffA369FD).withOpacity(0.5),
-            const Color(0xffA369FD).withOpacity(0.25)
-          ]),
-          border: Border.all(
-            color: const Color(0xffA369FD).withOpacity(0.5),
-          ),
-          shape: BoxShape.circle),
-      padding: const EdgeInsets.all(12).r,
-      child: ClipOval(
-        child: SvgPicture.asset(
-          widget.place.iconPlace,
-          alignment: Alignment.topCenter,
-          colorFilter: const ColorFilter.mode(
-            Color(0xff7B3EFF),
-            BlendMode.srcIn,
-          ),
-        ),
+    return SvgPicture.asset(
+      widget.place.iconPlace,
+      height: 60.r,
+      width: 60.r,
+      alignment: Alignment.topCenter,
+      colorFilter: const ColorFilter.mode(
+        Color(0xff7B3EFF),
+        BlendMode.srcIn,
       ),
     );
   }

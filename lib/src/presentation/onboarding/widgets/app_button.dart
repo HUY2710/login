@@ -17,6 +17,8 @@ class AppButton extends StatelessWidget {
     this.iconColor,
     this.iconSecondColor,
     required this.onTap,
+    this.heightBtn,
+    this.paddingVertical,
   });
 
   final String title;
@@ -34,7 +36,8 @@ class AppButton extends StatelessWidget {
   final Color? iconSecondColor;
 
   final VoidCallback onTap;
-
+  final double? heightBtn;
+  final double? paddingVertical;
   Color? _getTextColor() {
     return isEnable ? textColor : textSecondColor;
   }
@@ -48,9 +51,9 @@ class AppButton extends StatelessWidget {
     return GestureDetector(
       onTap: isEnable ? onTap : null,
       child: Container(
-        height: 56.h,
+        height: heightBtn ?? 56.h,
         width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 16.h),
+        padding: EdgeInsets.symmetric(vertical: paddingVertical ?? 16.h),
         decoration: BoxDecoration(
           gradient: isEnable
               ? (backgroundColor ??

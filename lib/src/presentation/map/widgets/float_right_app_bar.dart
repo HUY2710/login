@@ -122,8 +122,8 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
       return null;
     }, orElse: () {
       final LatLng newLatLong = LatLng(
-        Global.instance.location.latitude,
-        Global.instance.location.latitude,
+        Global.instance.serverLocation.latitude,
+        Global.instance.serverLocation.latitude,
       );
       final CameraPosition newPosition = CameraPosition(
         target: newLatLong,

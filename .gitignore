@@ -19,7 +19,9 @@ migrate_working_dir/
 *.freezed.dart
 *.config.dart
 *.gr.dart
-
+# Ignore .env file
+.env
+.env.prod
 
 # IntelliJ related
 *.iml

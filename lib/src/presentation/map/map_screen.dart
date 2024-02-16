@@ -53,7 +53,7 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
   @override
   void initState() {
     _initStart();
-    _defaultLocation = Global.instance.location;
+    _defaultLocation = Global.instance.serverLocation;
     getLocalLocation();
     _getMyMarker();
     super.initState();
@@ -63,10 +63,10 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
   }
 
   void getLocalLocation() {
-    if (Global.instance.location != const LatLng(0, 0)) {
+    if (Global.instance.serverLocation != const LatLng(0, 0)) {
       _defaultLocation = LatLng(
-        Global.instance.location.latitude,
-        Global.instance.location.longitude,
+        Global.instance.serverLocation.latitude,
+        Global.instance.serverLocation.longitude,
       );
       _moveToCurrentLocation(_defaultLocation);
     }
@@ -201,8 +201,6 @@ class MapScreenState extends State<MapScreen> with PermissionMixin {
             builder: (context, locationState) {
               return BlocConsumer<SelectGroupCubit, StoreGroup?>(
                 bloc: getIt<SelectGroupCubit>(),
-                listenWhen: (previous, current) =>
-                    previous != current || current != null,
                 listener: (context, state) {
                   //thoát nhóm hoặc chưa chọn nhóm
                   if (state == null) {
