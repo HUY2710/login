@@ -75,6 +75,10 @@ mixin PermissionMixin {
   }
 
   Future<bool> requestPermissionLocation() async {
+    final reject = await Permission.locationWhenInUse.isPermanentlyDenied;
+    if (reject) {
+      await openAppSettings();
+    }
     final status = await Permission.locationWhenInUse.request();
     return status.isGranted;
   }
@@ -101,5 +105,12 @@ mixin PermissionMixin {
   Future<bool> requestPermissionGallery() async {
     final status = await Permission.photos.request();
     return status.isGranted;
+  }
+
+  //check location alway permission
+  Future<bool> statusLocationAlways() async {
+    final PermissionStatus locationAlwaysStatus =
+        await Permission.locationAlways.status;
+    return locationAlwaysStatus.isGranted;
   }
 }
