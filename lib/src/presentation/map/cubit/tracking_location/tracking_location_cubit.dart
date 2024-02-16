@@ -44,12 +44,12 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
 
     if (lastLocation != null) {
       //vị trí lần cuối cùng cập nhật lên server với vị trí hiện tại đã cách nhau hơn 30m
-      final bool shouldUpdateLocation = MapHelper.isWithinRadius(
+      final bool inRadius = MapHelper.isWithinRadius(
         LatLng(lastLocation.lat, lastLocation.lng),
         latLng,
         30,
       );
-      if (shouldUpdateLocation) {
+      if (!inRadius) {
         final String address =
             await locationService.getCurrentAddress(latLng, countReload: 5);
         fireStoreClient.updateLocation({
@@ -67,12 +67,13 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
 
       Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 15 : 30),
           (timer) {
-        final bool shouldUpdate = MapHelper.isWithinRadius(
+        final bool inRadius = MapHelper.isWithinRadius(
           Global.instance.serverLocation,
           latLng,
           30,
         );
-        if (shouldUpdate) {
+        if (!inRadius) {
+          Global.instance.serverLocation = latLng;
           locationService.updateLocationUserForeGround(
             latLng: latLng,
           );

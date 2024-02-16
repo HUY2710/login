@@ -10,11 +10,12 @@ import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../gen/gens.dart';
 import '../../../shared/extension/context_extension.dart';
+import '../../../shared/mixin/permission_mixin.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../home/cubit/validate_code/code_validation_cubit.dart';
 
 @RoutePage()
-class JoinGroupScreen extends StatelessWidget {
+class JoinGroupScreen extends StatelessWidget with PermissionMixin {
   JoinGroupScreen({super.key});
   final CodeValidationCubit codeValidCubit = getIt<CodeValidationCubit>();
   @override
@@ -126,10 +127,18 @@ class JoinGroupScreen extends StatelessWidget {
                 listener: (context, state) {
                   state.maybeWhen(
                       orElse: () {},
-                      valid: (group) {
+                      valid: (group) async {
                         Fluttertoast.showToast(msg: 'Join group success');
                         context.popRoute();
-                        getIt<AppRouter>().replaceAll([const HomeRoute()]);
+                        final bool statusLocation =
+                            await checkPermissionLocation();
+                        if (!statusLocation && context.mounted) {
+                          getIt<AppRouter>().replaceAll(
+                              [PermissionRoute(fromMapScreen: false)]);
+                          return;
+                        } else if (context.mounted) {
+                          getIt<AppRouter>().replaceAll([const HomeRoute()]);
+                        }
                       });
                 },
                 builder: (context, state) {

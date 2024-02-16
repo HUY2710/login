@@ -8,11 +8,12 @@ import 'package:share_plus/share_plus.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../shared/mixin/permission_mixin.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
 
 @RoutePage()
-class ShareCodeGroupScreen extends StatelessWidget {
+class ShareCodeGroupScreen extends StatelessWidget with PermissionMixin {
   const ShareCodeGroupScreen({super.key, required this.code});
   final String code;
 
@@ -41,8 +42,15 @@ class ShareCodeGroupScreen extends StatelessWidget {
               },
             ),
             TextButton(
-              onPressed: () {
-                getIt<AppRouter>().replaceAll([const HomeRoute()]);
+              onPressed: () async {
+                final bool statusLocation = await checkPermissionLocation();
+                if (!statusLocation && context.mounted) {
+                  getIt<AppRouter>()
+                      .replaceAll([PermissionRoute(fromMapScreen: false)]);
+                  return;
+                } else if (context.mounted) {
+                  getIt<AppRouter>().replaceAll([const HomeRoute()]);
+                }
               },
               child: const Text('Share it later'),
             ),
