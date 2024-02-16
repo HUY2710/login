@@ -24,7 +24,7 @@ class LocationService {
       final LocationData position = await _location.getLocation();
       final double lat = position.latitude ?? 0;
       final double long = position.longitude ?? 0;
-      Global.instance.location = LatLng(lat, long);
+      Global.instance.currentLocation = LatLng(lat, long);
       return LatLng(lat, long);
     } catch (error) {
       debugPrint('error:$error');

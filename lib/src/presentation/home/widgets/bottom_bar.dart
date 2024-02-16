@@ -50,7 +50,7 @@ class _BottomBarState extends State<BottomBar> {
   Future<void> _goToDetailLocation() async {
     //test
     final CameraPosition newPosition = CameraPosition(
-      target: Global.instance.location,
+      target: Global.instance.currentLocation,
       zoom: AppConstants.defaultCameraZoomLevel,
     );
     _googleMapController

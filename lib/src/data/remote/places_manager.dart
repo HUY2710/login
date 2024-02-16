@@ -9,10 +9,10 @@ class PlacesManager {
 
   static Future<void> createPlace(
       {required String idGroup, required StorePlace place}) async {
-    return CollectionStore.groups
+    CollectionStore.groups
         .doc(idGroup)
         .collection(CollectionStoreConstant.places)
-        .doc()
+        .doc(place.idPlace)
         .set(place.toJson())
         .then((_) => LoggerUtils.logInfo('Create new place: $place'))
         .catchError((error) {

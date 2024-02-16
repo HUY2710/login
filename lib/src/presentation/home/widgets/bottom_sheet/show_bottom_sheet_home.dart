@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../shared/constants/app_constants.dart';
 
@@ -36,26 +37,27 @@ Future<void> showAppModalBottomSheet({
   RouteSettings? routeSettings,
   AnimationController? transitionAnimationController,
   Offset? anchorPoint,
-  }) async {
-  await showModalBottomSheet(context: context,
+}) async {
+  await showModalBottomSheet(
+      context: context,
       builder: builder,
-    backgroundColor: backgroundColor,
-    barrierLabel: barrierLabel,
-    elevation: elevation,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(AppConstants.containerBorder)),
-    ),
-    clipBehavior: clipBehavior,
-    constraints: constraints,
-    barrierColor: barrierColor,
-    isScrollControlled: isScrollControlled,
-    useRootNavigator: useRootNavigator,
-    isDismissible: isDismissible,
-    enableDrag: enableDrag,
-    showDragHandle: showDragHandle,
-    useSafeArea: useSafeArea,
-    routeSettings: routeSettings,
-    transitionAnimationController: transitionAnimationController,
-    anchorPoint: anchorPoint
-  );
+      backgroundColor: backgroundColor,
+      barrierLabel: barrierLabel,
+      elevation: elevation,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+            top: const Radius.circular(AppConstants.containerBorder).r),
+      ),
+      clipBehavior: clipBehavior,
+      constraints: constraints,
+      barrierColor: barrierColor,
+      isScrollControlled: isScrollControlled,
+      useRootNavigator: useRootNavigator,
+      isDismissible: isDismissible,
+      enableDrag: enableDrag,
+      showDragHandle: showDragHandle,
+      useSafeArea: useSafeArea,
+      routeSettings: routeSettings,
+      transitionAnimationController: transitionAnimationController,
+      anchorPoint: anchorPoint);
 }

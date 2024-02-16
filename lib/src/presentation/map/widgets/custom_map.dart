@@ -76,10 +76,28 @@ class _CustomMapState extends State<CustomMap> {
         ),
       },
       circles: <Circle>{
+        ...widget.trackingPlacesState.maybeWhen(
+          orElse: () => <Circle>{},
+          initial: () {
+            return <Circle>{};
+          },
+          success: (List<StorePlace> places) {
+            return places.map(
+              (StorePlace place) => Circle(
+                circleId: CircleId(place.idPlace.toString()),
+                center: LatLng(place.location!['lat'], place.location!['lng']),
+                radius: 100,
+                fillColor: const Color(0xffA369FD).withOpacity(0.25),
+                strokeColor: const Color(0xffA369FD),
+                strokeWidth: 1,
+              ),
+            );
+          },
+        ),
         Circle(
           circleId: const CircleId('circle_1'),
           center: widget.defaultLocation,
-          radius: 100,
+          radius: 30,
           fillColor: const Color(0xffA369FD).withOpacity(0.25),
           strokeColor: const Color(0xffA369FD),
           strokeWidth: 1,

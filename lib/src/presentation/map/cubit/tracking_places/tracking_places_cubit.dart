@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,9 +32,10 @@ class TrackingPlacesCubit extends Cubit<TrackingPlacesState> {
   StreamSubscription<MemberMarkerData>? _markerSubscription;
 
   // lấy thông tin hiện tại của group mà user chọn
-  final SelectGroupCubit currentGroupCubit = getIt<SelectGroupCubit>();
+  SelectGroupCubit currentGroupCubit = getIt<SelectGroupCubit>();
 
   Future<void> initTrackingPlaces() async {
+    dispose();
     _trackingListPlaces = [];
     //khi mà user chọn group => thì tiến hành lắng nghe realtime danh sách places trong group
     if (currentGroupCubit.state != null) {
@@ -128,7 +128,6 @@ class TrackingPlacesCubit extends Cubit<TrackingPlacesState> {
 
   void dispose() {
     _markerSubscription?.cancel();
-
     _placesSubscription?.cancel();
   }
 }

@@ -44,10 +44,10 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
 
     if (lastLocation != null) {
       //vị trí lần cuối cùng cập nhật lên server với vị trí hiện tại đã cách nhau hơn 30m
-      final bool shouldUpdateLocation = MapHelper.checkoutRadius(
+      final bool shouldUpdateLocation = MapHelper.isWithinRadius(
         LatLng(lastLocation.lat, lastLocation.lng),
         latLng,
-        0.03,
+        30,
       );
       if (shouldUpdateLocation) {
         final String address =
@@ -63,14 +63,14 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
 
     _locationSubscription =
         locationService.getLocationStream().listen((LatLng latLng) async {
-      Global.instance.location = latLng;
+      Global.instance.currentLocation = latLng;
 
-      Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 5 : 30),
+      Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 15 : 30),
           (timer) {
-        final bool shouldUpdate = MapHelper.checkoutRadius(
-          Global.instance.location,
+        final bool shouldUpdate = MapHelper.isWithinRadius(
+          Global.instance.serverLocation,
           latLng,
-          0.03,
+          30,
         );
         if (shouldUpdate) {
           locationService.updateLocationUserForeGround(

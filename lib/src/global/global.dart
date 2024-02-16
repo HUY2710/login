@@ -13,5 +13,6 @@ class Global {
   bool isExitApp = false;
   StoreUser? user;
   StoreGroup? group;
-  LatLng location = const LatLng(0, 0);
+  LatLng currentLocation = const LatLng(0, 0);
+  LatLng serverLocation = const LatLng(0, 0);
 }

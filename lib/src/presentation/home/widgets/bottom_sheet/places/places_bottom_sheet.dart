@@ -7,8 +7,8 @@ import '../../../../../config/di/di.dart';
 import '../../../../../shared/widgets/containers/custom_container.dart';
 import '../../../../../shared/widgets/my_drag.dart';
 import '../../../../map/cubit/tracking_places/tracking_places_cubit.dart';
+import '../../../../place/add_place.dart';
 import '../show_bottom_sheet_home.dart';
-import 'add_places_bottom_sheet.dart';
 import 'widgets/item_place.dart';
 
 class PlacesBottomSheet extends StatefulWidget {
@@ -63,7 +63,9 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          context.popRoute();
+                        },
                         child: Text(
                           'Done',
                           style: TextStyle(

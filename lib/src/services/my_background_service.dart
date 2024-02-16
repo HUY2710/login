@@ -24,12 +24,12 @@ class MyBackgroundService {
     }
     final LocationService locationService = getIt<LocationService>();
     final StoreUser? user = Global.instance.user;
-    final LatLng userLocation = Global.instance.location;
+    final LatLng serverLocation = Global.instance.serverLocation;
     final Battery battery = Battery();
 
     if (user != null) {
       LatLng newLocation =
-          LatLng(userLocation.latitude, userLocation.longitude);
+          LatLng(serverLocation.latitude, serverLocation.longitude);
 
       locationService
           .getLocationStreamOnBackground()
@@ -39,14 +39,14 @@ class MyBackgroundService {
 
       Timer.periodic(const Duration(seconds: 30), (timer) async {
         //check current location with new location => location > 30m => update
-        final bool shouldUpdate = MapHelper.checkoutRadius(
-          LatLng(userLocation.latitude, userLocation.longitude),
+        final bool shouldUpdate = MapHelper.isWithinRadius(
+          LatLng(serverLocation.latitude, serverLocation.longitude),
           LatLng(newLocation.latitude, newLocation.longitude),
-          0.03,
+          30,
         );
         if (shouldUpdate) {
           //update local
-          Global.instance.location = newLocation;
+          Global.instance.serverLocation = newLocation;
 
           //update to sever
           //do something

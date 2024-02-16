@@ -257,7 +257,8 @@ class _SplashScreenState extends State<SplashScreen> {
     Global.instance.user = storeUser;
     final location = await FirestoreClient.instance.getLocation();
     if (location != null) {
-      Global.instance.location = LatLng(location.lat, location.lng);
+      Global.instance.serverLocation = LatLng(location.lat, location.lng);
+      Global.instance.currentLocation = LatLng(location.lat, location.lng);
     }
   }
 
