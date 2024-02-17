@@ -13,10 +13,13 @@ class ShadowContainer extends StatelessWidget {
     this.maxWidth,
     this.width,
     this.height,
+    this.margin,
   });
   final Widget child;
   final BorderRadius? borderRadius;
   final EdgeInsets? padding;
+  final EdgeInsets? margin;
+
   final Color? colorBg;
   final Color? colorShadow;
   final double? blurRadius;
@@ -27,6 +30,7 @@ class ShadowContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: padding,
+      margin: margin,
       width: width,
       height: height,
       constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),

@@ -27,6 +27,7 @@ import 'cubit/select_group_cubit.dart';
 import 'cubit/tracking_location/tracking_location_cubit.dart';
 import 'cubit/tracking_members/tracking_member_cubit.dart';
 import 'cubit/tracking_places/tracking_places_cubit.dart';
+import 'cubit/tracking_routes/tracking_routes_cubit.dart';
 import 'widgets/custom_map.dart';
 import 'widgets/float_right_app_bar.dart';
 import 'widgets/member_marker_list.dart';
@@ -329,14 +330,21 @@ class MapScreenState extends State<MapScreen>
                               TrackingPlacesState>(
                             bloc: _trackingPlacesCubit,
                             builder: (context, trackingPlacesState) {
-                              return CustomMap(
-                                defaultLocation: _defaultLocation,
-                                trackingLocationState: locationState,
-                                mapController: _mapController,
-                                mapType: mapTypeState,
-                                marker: marker,
-                                trackingMemberState: trackingMemberState,
-                                trackingPlacesState: trackingPlacesState,
+                              return BlocBuilder<TrackingRoutesCubit,
+                                  Set<Polyline>?>(
+                                bloc: getIt<TrackingRoutesCubit>(),
+                                builder: (context, polylinesState) {
+                                  return CustomMap(
+                                    defaultLocation: _defaultLocation,
+                                    trackingLocationState: locationState,
+                                    mapController: _mapController,
+                                    mapType: mapTypeState,
+                                    marker: marker,
+                                    trackingMemberState: trackingMemberState,
+                                    trackingPlacesState: trackingPlacesState,
+                                    polylines: polylinesState,
+                                  );
+                                },
                               );
                             },
                           );

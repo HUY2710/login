@@ -10,6 +10,7 @@ import '../../presentation/create/screens/create_user_avatar_screen.dart';
 import '../../presentation/create/screens/create_username_screen.dart';
 import '../../presentation/create/screens/join_group_screen.dart';
 import '../../presentation/create/screens/share_code_group.dart';
+import '../../presentation/direction/test_direction.dart';
 import '../../presentation/home/home_screen.dart';
 import '../../presentation/language/screen/language_screen.dart';
 import '../../presentation/onboarding/onboarding_screen.dart';
@@ -42,6 +43,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: ChatRoute.page),
         AutoRoute(page: ChatDetailRoute.page),
         AutoRoute(page: JoinGroupRoute.page),
+        AutoRoute(page: TestDirectionRoutesRoute.page),
       ];
 
   AutoRoute routeWithFadeTransition(

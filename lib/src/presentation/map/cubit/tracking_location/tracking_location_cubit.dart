@@ -70,7 +70,7 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
         final bool inRadius = MapHelper.isWithinRadius(
           Global.instance.serverLocation,
           latLng,
-          30,
+          300,
         );
         if (!inRadius) {
           Global.instance.serverLocation = latLng;

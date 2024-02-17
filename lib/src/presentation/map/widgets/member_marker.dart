@@ -66,7 +66,7 @@ class _BuildMarkerState extends State<BuildMarker> {
   @override
   Widget build(BuildContext context) {
     Color color = const Color(0xff19E04B);
-    final int battery = widget.member.batteryLevel ?? 100;
+    final int battery = widget.member.batteryLevel;
 
     if (battery <= 20) {
       color = Colors.red;

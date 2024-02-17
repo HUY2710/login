@@ -24,6 +24,7 @@ class CustomMap extends StatefulWidget {
     required this.trackingLocationState,
     required this.trackingMemberState,
     required this.trackingPlacesState,
+    this.polylines,
   });
 
   final MapType mapType;
@@ -33,6 +34,7 @@ class CustomMap extends StatefulWidget {
   final Completer<GoogleMapController> mapController;
   final TrackingMemberState trackingMemberState;
   final TrackingPlacesState trackingPlacesState;
+  final Set<Polyline>? polylines;
   @override
   State<CustomMap> createState() => _CustomMapState();
 }
@@ -109,19 +111,20 @@ class _CustomMapState extends State<CustomMap> {
       compassEnabled: false,
       mapType: widget.mapType,
       myLocationButtonEnabled: false,
+      polylines: widget.polylines ?? {},
     );
   }
 
-  Marker _buildFriendMarker(StoreUser e) {
-    final double lat = e.location?.lat ?? 0;
-    final double lng = e.location?.lng ?? 0;
+  Marker _buildFriendMarker(StoreUser user) {
+    final double lat = user.location?.lat ?? 0;
+    final double lng = user.location?.lng ?? 0;
     return Marker(
         anchor: const Offset(0.5, 0.72),
         position: LatLng(lat, lng),
-        markerId: MarkerId(e.code),
-        icon: e.marker != null
+        markerId: MarkerId(user.code),
+        icon: user.marker != null
             ? BitmapDescriptor.fromBytes(
-                e.marker!,
+                user.marker!,
                 size: const Size.fromWidth(30),
               )
             : BitmapDescriptor.defaultMarker,
@@ -129,7 +132,7 @@ class _CustomMapState extends State<CustomMap> {
           showAppModalBottomSheet(
             context: context,
             backgroundColor: Colors.transparent,
-            builder: (context) => HistoryPlace(idUser: e.code),
+            builder: (context) => HistoryPlace(idUser: user.code, user: user),
           );
         });
   }

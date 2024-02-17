@@ -1,17 +1,36 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../../data/models/store_user/store_user.dart';
 import '../../../../../gen/assets.gen.dart';
+import '../../../../../shared/widgets/containers/shadow_container.dart';
 import '../../../../../shared/widgets/custom_circle_avatar.dart';
 import '../../../../../shared/widgets/my_drag.dart';
+import '../../../../direction/direction_map.dart';
 import '../../../../map/widgets/battery_bar.dart';
+import '../show_bottom_sheet_home.dart';
 
 class HistoryPlace extends StatelessWidget {
-  const HistoryPlace({super.key, required this.idUser});
+  const HistoryPlace({super.key, required this.idUser, required this.user});
   final String idUser;
+  final StoreUser user;
   @override
   Widget build(BuildContext context) {
+    Color color = const Color(0xff19E04B);
+    final int battery = user.batteryLevel;
+
+    if (battery <= 20) {
+      color = Colors.red;
+    }
+    if (battery > 20 && battery <= 30) {
+      color = const Color(0xffFFDF57);
+    }
+
+    if (battery > 30) {
+      color = const Color(0xff0FEC47);
+    }
     return Stack(
       children: [
         Padding(
@@ -36,11 +55,30 @@ class HistoryPlace extends StatelessWidget {
                     child: MyDrag(),
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
                         padding: EdgeInsets.only(left: 95.w),
-                        child: const Text('User Name'),
-                      )
+                        child: Text(user.userName),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          context.popRoute().then(
+                                (value) => showAppModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => DirectionMap(
+                                    user: user,
+                                  ),
+                                ),
+                              );
+                        },
+                        child: ShadowContainer(
+                          margin: EdgeInsets.only(right: 12.w),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 12.w, vertical: 6.h),
+                          child: const Text('Get routes'),
+                        ),
+                      ),
                     ],
                   ),
                   4.verticalSpace,
@@ -54,8 +92,8 @@ class HistoryPlace extends StatelessWidget {
                         padding: EdgeInsets.symmetric(
                             vertical: 3.h, horizontal: 6.w),
                         child: BatteryBar(
-                          batteryLevel: 60,
-                          color: Colors.red,
+                          batteryLevel: user.batteryLevel,
+                          color: color,
                           online: true,
                           radiusActive: 8.r,
                           heightBattery: 16,
@@ -71,9 +109,9 @@ class HistoryPlace extends StatelessWidget {
                       12.horizontalSpace,
                       SvgPicture.asset(Assets.icons.icShareLocation.path),
                       2.horizontalSpace,
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          'Address 1111111111111111111111111111sadfsdaf sadfgsdfsdfsd sssssssssssssssssssssssssssss 1',
+                          user.location?.address ?? '',
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
