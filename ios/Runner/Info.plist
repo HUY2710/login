@@ -51,6 +51,24 @@
 	<string>ca-app-pub-4973559944609228~2433291331</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+    <string>comgooglemaps</string>
+    <string>baidumap</string>
+    <string>iosamap</string>
+    <string>waze</string>
+    <string>yandexmaps</string>
+    <string>yandexnavi</string>
+    <string>citymapper</string>
+    <string>mapswithme</string>
+    <string>osmandmaps</string>
+    <string>dgis</string>
+    <string>qqmap</string>
+    <string>here-location</string>
+    <string>tomtomgo</string>
+    <string>copilot</string>
+    <string>com.sygic.aura</string>
+	</array>
 	<key>NSAdvertisingAttributionReportEndpoint</key>
 	<string>https://postbacks-app.com</string>
 	<key>SKAdNetworkItems</key>

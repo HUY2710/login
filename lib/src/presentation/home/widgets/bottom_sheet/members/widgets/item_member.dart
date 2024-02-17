@@ -23,10 +23,10 @@ class ItemMember extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        showAppModalBottomSheet(
-          context: context,
-          builder: (context) => HistoryPlace(idUser: idUser),
-        );
+        // showAppModalBottomSheet(
+        //   context: context,
+        //   builder: (context) => HistoryPlace(idUser: idUser),
+        // );
       },
       child: Padding(
         padding: const EdgeInsets.only(top: 16, bottom: 12),
