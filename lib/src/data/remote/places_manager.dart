@@ -59,4 +59,22 @@ class PlacesManager {
     // Thực hiện batch write để xóa tất cả các tài liệu
     await batch.commit();
   }
+
+  //lấy toàn bộ place trong group
+  static Future<List<StorePlace>> getListStorePlace(String idGroup) async {
+    final snapShot = await CollectionStore.groups
+        .doc(idGroup)
+        .collection(CollectionStoreConstant.places)
+        .get();
+    final data = snapShot.docs;
+
+    final List<StorePlace> listPlace =
+        data.map((QueryDocumentSnapshot<Map<String, dynamic>> e) {
+      StorePlace place = StorePlace.fromJson(e.data());
+      place = place.copyWith(idPlace: e.id);
+      return place;
+    }).toList();
+
+    return listPlace;
+  }
 }

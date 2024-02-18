@@ -262,4 +262,22 @@ class GroupsManager {
         .collection(CollectionStoreConstant.members)
         .snapshots();
   }
+
+  //lấy ra toàn bộ id các group của mình
+  static Future<List<String>?> getIdMyListGroup() async {
+    if (Global.instance.user?.code != '') {
+      final String code = Global.instance.user!.code;
+      final snapShotGroups = await CollectionStore.users
+          .doc(code)
+          .collection(CollectionStoreConstant.myGroups)
+          .get();
+      if (snapShotGroups.docs.isNotEmpty) {
+        final List<String> myListIdGroup =
+            snapShotGroups.docs.map((e) => e.id).toList();
+        return myListIdGroup;
+      }
+      return [];
+    }
+    return null;
+  }
 }
