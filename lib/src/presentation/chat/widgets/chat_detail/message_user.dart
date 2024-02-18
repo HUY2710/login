@@ -33,17 +33,79 @@ class MessageTypeUser extends StatelessWidget {
                           ? Radius.zero
                           : Radius.circular(15.r)),
                   color: const Color(0xffB98EFF)),
-              child: Text(
-                chats[index].data().content,
-                style: TextStyle(
-                    color: Colors.white, fontSize: 13.sp, letterSpacing: -0.4),
-              ),
+              child: chats[index].data().content == ''
+                  ? buildMessLocation(context)
+                  : Text(
+                      chats[index].data().content,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13.sp,
+                          letterSpacing: -0.4),
+                    ),
             ),
           ],
         ),
         if (chats[index].data().senderId == Global.instance.user!.code &&
             index == chats.length - 1)
           Assets.icons.icSendSuccess.svg(width: 16.r),
+      ],
+    );
+  }
+
+  Column buildMessLocation(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(8.r),
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.white),
+              child: Assets.icons.icShareLocationFill.svg(
+                  width: 16.r,
+                  height: 16.r,
+                  colorFilter: const ColorFilter.mode(
+                      MyColors.primary, BlendMode.srcIn)),
+            ),
+            10.w.horizontalSpace,
+            Text.rich(TextSpan(children: [
+              TextSpan(
+                  text: 'Current Location',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w600)),
+              TextSpan(
+                  text: "\nYou's location",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w400)),
+            ])),
+          ],
+        ),
+        10.h.verticalSpace,
+        CustomInkWell(
+            child: Container(
+              width: double.infinity,
+              height: 30.h,
+              margin: EdgeInsets.symmetric(horizontal: 16.w),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: MyColors.primary,
+                  borderRadius: BorderRadius.circular(6.r)),
+              child: Text('View Location',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600)),
+            ),
+            onTap: () {
+              context.read<ChatTypeCubit>().update(const ChatTypeState(
+                  type: TypeChat.location,
+                  lat: 21.188609617609117,
+                  long: 05.68341411534462));
+            })
       ],
     );
   }

@@ -6,8 +6,12 @@ import 'package:intl/intl.dart';
 
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
+import '../../data/local/shared_preferences_manager.dart';
+import '../../data/models/store_group/store_group.dart';
+import '../../data/models/store_member/store_member.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
+import '../../services/firebase_message_service.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/gradient_background.dart';
 import '../../shared/widgets/containers/linear_container.dart';
@@ -16,6 +20,7 @@ import '../../shared/widgets/my_drag.dart';
 import '../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import 'cubits/group_cubit.dart';
 import 'cubits/group_state.dart';
+import 'utils/util.dart';
 
 part 'widgets/chat_group_empty.dart';
 part 'widgets/group_item.dart';
@@ -40,9 +45,12 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 30.w,
+        leadingWidth: 42.w,
         leading: CustomInkWell(
-            child: Assets.icons.iconBack.svg(width: 28.r),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: Assets.icons.iconBack.svg(width: 28.r),
+            ),
             onTap: () => context.popRoute()),
         centerTitle: true,
         title: Text(
@@ -74,6 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        12.h.verticalSpace,
                         InputSearch(textController: textController),
                         30.h.verticalSpace,
                         Text(
@@ -99,6 +108,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   groupName: groupItem.groupName,
                                   idGroup: groupItem.idGroup ?? '',
                                   seen: groupItem.seen ?? false,
+                                  isAdmin: isAdmin(groupItem),
                                 );
                               },
                               separatorBuilder: (context, index) {
@@ -117,5 +127,20 @@ class _ChatScreenState extends State<ChatScreen> {
         },
       ),
     );
+  }
+
+  bool isAdmin(StoreGroup itemGroup) {
+    if (itemGroup.storeMembers != null && Global.instance.user != null) {
+      if (itemGroup.storeMembers!
+          .firstWhere(
+            (element) => element.idUser == Global.instance.user!.code,
+            orElse: () => const StoreMember(isAdmin: false),
+          )
+          .isAdmin) {
+        return true;
+      }
+      return false;
+    }
+    return false;
   }
 }

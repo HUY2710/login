@@ -42,52 +42,60 @@ class _ChatLocationWidgetState extends State<ChatLocationWidget> {
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          GoogleMap(
-            zoomControlsEnabled: false,
-            initialCameraPosition: CameraPosition(
-                target: LatLng(
-                  Global.instance.currentLocation.latitude,
-                  Global.instance.currentLocation.longitude,
-                ),
-                zoom: 16),
+          BlocBuilder<ChatTypeCubit, ChatTypeState>(builder: (context, state) {
+            return GoogleMap(
+              zoomControlsEnabled: false,
+              initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                    state.lat != null
+                        ? state.lat!
+                        : Global.instance.currentLocation.latitude,
+                    state.long != null
+                        ? state.long!
+                        : Global.instance.currentLocation.longitude,
+                  ),
+                  zoom: 16),
+              markers: {
+                Marker(
+                  markerId: MarkerId(Global.instance.user!.code),
+                  // icon: BitmapDescriptor.fromBytes(
+                  //   e.marker!,
+                  //   size: const Size.fromWidth(30),
+                  // ))
+                  position: LatLng(
+                    Global.instance.currentLocation.latitude,
+                    Global.instance.currentLocation.longitude,
+                  ),
+                  // icon: widget.marker ?? BitmapDescriptor.defaultMarker,
+                )
+              },
 
-            markers: {
-              Marker(
-                markerId: MarkerId(Global.instance.user!.code),
-                // icon: BitmapDescriptor.fromBytes(
-                //   e.marker!,
-                //   size: const Size.fromWidth(30),
-                // ))
-                position: LatLng(
-                  Global.instance.currentLocation.latitude,
-                  Global.instance.currentLocation.longitude,
-                ),
-                // icon: widget.marker ?? BitmapDescriptor.defaultMarker,
-              )
-            },
-            // polygons: <Polygon>{Polygon(polygonId: polygonId)},
-            // polylines: <Polyline>{Polyline(polylineId: polylineId)},
-            circles: <Circle>{
-              Circle(
-                circleId: const CircleId('circle_1'),
-                center: LatLng(
-                  Global.instance.currentLocation.latitude,
-                  Global.instance.currentLocation.longitude,
-                ),
-                radius: 100,
-                fillColor: const Color(0xffA369FD).withOpacity(0.25),
-                strokeColor: const Color(0xffA369FD),
-                strokeWidth: 1,
-                zIndex: 1,
-              )
-            },
-          ),
+              // polygons: <Polygon>{Polygon(polygonId: polygonId)},
+              // polylines: <Polyline>{Polyline(polylineId: polylineId)},
+              circles: <Circle>{
+                Circle(
+                  circleId: const CircleId('circle_1'),
+                  center: LatLng(
+                    Global.instance.currentLocation.latitude,
+                    Global.instance.currentLocation.longitude,
+                  ),
+                  radius: 100,
+                  fillColor: const Color(0xffA369FD).withOpacity(0.25),
+                  strokeColor: const Color(0xffA369FD),
+                  strokeWidth: 1,
+                  zIndex: 1,
+                )
+              },
+            );
+          }),
           Positioned(
             top: ScreenUtil().statusBarHeight + 20,
             left: 16.w,
             child: GestureDetector(
               onTap: () {
-                context.read<ChatTypeCubit>().update(TypeChat.text);
+                context
+                    .read<ChatTypeCubit>()
+                    .update(const ChatTypeState(type: TypeChat.text));
               },
               child: Container(
                 padding: EdgeInsets.all(6.r),

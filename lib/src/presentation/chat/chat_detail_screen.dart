@@ -16,6 +16,7 @@ import '../../data/remote/member_manager.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
 // import '../../shared/constants/app_constants.dart';
+import '../../services/firebase_message_service.dart';
 import '../../services/location_service.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/helpers/gradient_background.dart';
@@ -24,7 +25,6 @@ import '../../shared/widgets/custom_inkwell.dart';
 import '../../shared/widgets/gradient_text.dart';
 import '../../shared/widgets/my_drag.dart';
 import 'chat_screen.dart';
-import 'cubits/chat_cubit.dart';
 import 'cubits/chat_type_cubit.dart';
 import 'cubits/group_cubit.dart';
 import 'cubits/send_location_cubit.dart';
@@ -40,8 +40,13 @@ part 'widgets/chat_detail/message_user.dart';
 
 @RoutePage()
 class ChatDetailScreen extends StatefulWidget implements AutoRouteWrapper {
-  const ChatDetailScreen({super.key, required this.idGroup});
+  const ChatDetailScreen({
+    super.key,
+    required this.idGroup,
+    required this.groupName,
+  });
   final String idGroup;
+  final String groupName;
 
   @override
   State<ChatDetailScreen> createState() => _ChatDetailScreenState();
@@ -49,9 +54,6 @@ class ChatDetailScreen extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return MultiBlocProvider(providers: [
-      BlocProvider(
-        create: (context) => ChatCubit(),
-      ),
       BlocProvider(
         create: (context) => ChatTypeCubit(),
       ),
@@ -106,14 +108,15 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatTypeCubit, TypeChat>(
+    return BlocBuilder<ChatTypeCubit, ChatTypeState>(
       builder: (context, state) {
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 500),
-          child: state == TypeChat.text
+          child: state.type == TypeChat.text
               ? ChatTextWidget(
                   idGroup: widget.idGroup,
                   listUser: listUser,
+                  groupName: widget.groupName,
                 )
               : ChatLocationWidget(
                   marker: marker,

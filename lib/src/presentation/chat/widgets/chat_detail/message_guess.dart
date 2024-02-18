@@ -43,7 +43,7 @@ class MessageTypeGuess extends StatelessWidget {
           ),
         8.w.horizontalSpace,
         if (chats[index].data().content == '')
-          buildMessLocation()
+          buildMessLocation(context)
         else
           buildMessText(),
       ],
@@ -109,77 +109,85 @@ class MessageTypeGuess extends StatelessWidget {
     );
   }
 
-  Container buildMessLocation() {
-    return Container(
-      constraints: BoxConstraints(maxWidth: 1.sw * 0.6),
-      margin: EdgeInsets.symmetric(vertical: 2.h),
-      // padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15.r),
-              topRight: Radius.circular(15.r),
-              bottomLeft: !Utils.checkLastMessByUser(index, chats)
-                  ? Radius.zero
-                  : Radius.circular(15.r),
-              bottomRight: Radius.circular(15.r)),
-          color: const Color(0xffF7F5FA)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  chats[index].data().userName ?? 'User',
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: MyColors.primary,
-                  ),
-                ),
-                Text(
-                  DateFormat('HH:mm').format(
-                    DateTime.parse(chats[index].data().sentAt),
-                  ),
-                  style: TextStyle(
-                      color: const Color(0xff6C6C6C),
+  Widget buildMessLocation(BuildContext context) {
+    return CustomInkWell(
+      onTap: () {
+        context.read<ChatTypeCubit>().update(const ChatTypeState(
+            type: TypeChat.location,
+            lat: 21.188609617609117,
+            long: 05.68341411534462));
+      },
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 1.sw * 0.6),
+        margin: EdgeInsets.symmetric(vertical: 2.h),
+        // padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15.r),
+                topRight: Radius.circular(15.r),
+                bottomLeft: !Utils.checkLastMessByUser(index, chats)
+                    ? Radius.zero
+                    : Radius.circular(15.r),
+                bottomRight: Radius.circular(15.r)),
+            color: const Color(0xffF7F5FA)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    chats[index].data().userName ?? 'User',
+                    style: TextStyle(
                       fontSize: 12.sp,
-                      letterSpacing: -0.15),
-                )
-              ],
+                      color: MyColors.primary,
+                    ),
+                  ),
+                  Text(
+                    DateFormat('HH:mm').format(
+                      DateTime.parse(chats[index].data().sentAt),
+                    ),
+                    style: TextStyle(
+                        color: const Color(0xff6C6C6C),
+                        fontSize: 12.sp,
+                        letterSpacing: -0.15),
+                  )
+                ],
+              ),
             ),
-          ),
-          CachedNetworkImage(
-            imageUrl: _constructUrl,
-            placeholder: (context, url) => const CircularProgressIndicator(),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-            fit: BoxFit.cover,
-          ),
-          8.verticalSpace,
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w),
-            child: Text(
-              "${chats[index].data().userName ?? 'User'}'s location",
-              style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
+            CachedNetworkImage(
+              imageUrl: _constructUrl,
+              placeholder: (context, url) => const CircularProgressIndicator(),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+              fit: BoxFit.cover,
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 8.h, left: 12.w, right: 12.w),
-            child: FutureBuilder<String>(
-                future: LocationService().getCurrentAddress(LatLng(
-                    chats[index].data().lat!, chats[index].data().long!)),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(
-                      snapshot.data?.trimLeft() ?? '',
-                      style: TextStyle(fontSize: 13.sp),
-                    );
-                  }
-                  return SizedBox();
-                }),
-          ),
-        ],
+            8.verticalSpace,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              child: Text(
+                "${chats[index].data().userName ?? 'User'}'s location",
+                style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 8.h, left: 12.w, right: 12.w),
+              child: FutureBuilder<String>(
+                  future: LocationService().getCurrentAddress(LatLng(
+                      chats[index].data().lat!, chats[index].data().long!)),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(
+                        snapshot.data?.trimLeft() ?? '',
+                        style: TextStyle(fontSize: 13.sp),
+                      );
+                    }
+                    return SizedBox();
+                  }),
+            ),
+          ],
+        ),
       ),
     );
   }

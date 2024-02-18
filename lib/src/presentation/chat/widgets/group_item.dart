@@ -10,6 +10,7 @@ class GroupItem extends StatefulWidget {
     required this.groupName,
     required this.idGroup,
     required this.seen,
+    required this.isAdmin,
   });
 
   final String userName;
@@ -19,6 +20,7 @@ class GroupItem extends StatefulWidget {
   final String groupName;
   final String idGroup;
   final bool seen;
+  final bool isAdmin;
 
   @override
   State<GroupItem> createState() => _GroupItemState();
@@ -40,9 +42,15 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const MyDrag(),
+                    const Align(child: MyDrag()),
                     12.verticalSpace,
+                    if (widget.isAdmin)
+                      _buildItemBottomSheet(
+                          title: 'Edit group name',
+                          icon: Assets.icons.icEdit,
+                          click: () {}),
                     _buildItemBottomSheet(
                         title: 'Mute', icon: Assets.icons.icMute, click: () {}),
                     _buildItemBottomSheet(
@@ -59,10 +67,11 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
               );
             });
       },
-      onTap: () async {
-        if (context.mounted) {
-          context.pushRoute(ChatDetailRoute(idGroup: widget.idGroup));
-        }
+      onTap: () {
+        context.pushRoute(ChatDetailRoute(
+          idGroup: widget.idGroup,
+          groupName: widget.groupName,
+        ));
       },
       child: SizedBox(
         // color: Colors.transparent,
@@ -81,7 +90,7 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
                       color: Colors.white,
                       fontWeight: FontWeight.w500),
                 ),
-                backgroundColor: Color(0xffB67DFF),
+                backgroundColor: const Color(0xffB67DFF),
                 largeSize: 20,
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: ClipRRect(
@@ -89,7 +98,7 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
                     child: Image.asset(widget.avatar)),
               ),
             ),
-            16.horizontalSpace, 
+            16.horizontalSpace,
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,6 +120,19 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
                           width: 8,
                           height: 8,
                         ))
+                      // FutureBuilder(
+                      //     future:
+                      //         Utils.getSeenMess(widget.idGroup, widget.time),
+                      //     builder: (context, snapshot) {
+                      //       if (snapshot.hasData) {
+                      //         const LinearContainer(
+                      //             child: SizedBox(
+                      //           width: 8,
+                      //           height: 8,
+                      //         ));
+                      //       }
+                      //       return SizedBox();
+                      //     })
                     ],
                   ),
                   Text(
@@ -173,7 +195,7 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
   String formatDateTime(DateTime input) {
     final DateTime now = DateTime.now();
     if (isToday(input)) {
-      return '${input.hour}:${input.minute}';
+      return '${input.hour}:${input.minute < 10 ? '0${input.minute}' : input.minute}';
     } else if (input.weekday == now.weekday) {
       return input.weekday == 1
           ? 'Sun'

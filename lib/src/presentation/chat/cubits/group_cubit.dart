@@ -7,6 +7,8 @@ import 'package:injectable/injectable.dart';
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
+import '../../../data/remote/member_manager.dart';
+import '../../../shared/helpers/logger_utils.dart';
 import '../services/chat_service.dart';
 import '../utils/util.dart';
 import 'group_state.dart';
@@ -83,33 +85,46 @@ class GroupCubit extends Cubit<GroupState> {
                     myGroups.indexWhere((e) => e.idGroup == change.doc.id);
 
                 StoreGroup storeGroup = StoreGroup.fromJson(change.doc.data()!);
-                final timeLastSeenString =
-                    await SharedPreferencesManager.getTimeSeenChat(
-                        storeGroup.idGroup ?? '');
-                final seenTemp = Utils.checkSeen(
-                    timeLastSeenString, storeGroup.lastMessage!.sentAt);
 
-                storeGroup = storeGroup.copyWith(
-                    storeUser: listStoreUser.firstWhere((storeUser) =>
-                        storeUser.code == storeGroup.lastMessage!.senderId),
-                    seen: seenTemp);
+                // final timeLastSeenString =
+                //     await SharedPreferencesManager.getTimeSeenChat(
+                //         storeGroup.idGroup ?? DateTime.now().toString());
+                // final seenTemp = Utils.checkSeen(
+                //     timeLastSeenString, storeGroup.lastMessage!.sentAt);
+
+                final storeUser = listStoreUser.firstWhere(
+                  (storeUser) =>
+                      storeUser.code == storeGroup.lastMessage!.senderId,
+                );
+                final seen = await Utils.getSeenMess(
+                    change.doc.id, storeGroup.lastMessage!.sentAt);
+
+                storeGroup =
+                    storeGroup.copyWith(storeUser: storeUser, seen: seen);
+                logger.i(storeGroup);
                 myGroups[index] = storeGroup;
+                emit(GroupState.success(myGroups));
               }
               if (change.type == DocumentChangeType.removed) {
                 emit(const GroupState.loading());
                 final index =
                     myGroups.indexWhere((e) => e.idGroup == change.doc.id);
                 myGroups.removeAt(index);
+                emit(GroupState.success(myGroups));
               }
               if (change.type == DocumentChangeType.added) {
                 emit(const GroupState.loading());
                 StoreGroup storeGroup = StoreGroup.fromJson(change.doc.data()!);
+                final memberOfGroup =
+                    await MemberManager.getListMemberOfGroup(change.doc.id);
                 storeGroup = storeGroup.copyWith(
                     storeUser: listStoreUser.firstWhere(
-                  (storeUser) =>
-                      storeUser.code == storeGroup.lastMessage!.senderId,
-                ));
+                      (storeUser) =>
+                          storeUser.code == storeGroup.lastMessage!.senderId,
+                    ),
+                    storeMembers: memberOfGroup);
                 myGroups.add(storeGroup);
+                emit(GroupState.success(myGroups));
               }
             }
             if (myGroups.isEmpty) {

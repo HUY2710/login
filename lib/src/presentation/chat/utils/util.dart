@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_message/store_message.dart';
 import '../../../global/global.dart';
+import '../../../shared/helpers/logger_utils.dart';
 
 class Utils {
   Utils._();
@@ -32,11 +34,25 @@ class Utils {
   }
 
   static bool checkSeen(String? timeLastSeenString, String timeOfMessage) {
+    bool result = false;
+
     if (timeLastSeenString == null) {
       return false;
     }
-    final timeLastSeen = DateTime.parse(timeLastSeenString);
-    return timeLastSeen.isBefore(DateTime.parse(timeOfMessage));
+    final timeLastSeen =
+        DateTime.tryParse(timeLastSeenString) ?? DateTime.now();
+    result = timeLastSeen.isBefore(DateTime.parse(timeOfMessage));
+
+    return result;
+  }
+
+  static Future<bool> getSeenMess(String idGroup, String lastSeen) async {
+    final String timeLastSeenLocal =
+        await SharedPreferencesManager.getTimeSeenChat(idGroup) ??
+            DateTime.now().toString();
+    final dateTimeLastSeenLocal = DateTime.parse(timeLastSeenLocal);
+    final dateTimeLastSeen = DateTime.parse(lastSeen);
+    return dateTimeLastSeenLocal.isBefore(dateTimeLastSeen);
   }
 
   // static void findUserByCode(String code) {

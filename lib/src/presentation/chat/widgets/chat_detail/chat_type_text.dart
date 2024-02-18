@@ -1,11 +1,16 @@
 part of '../../chat_detail_screen.dart';
 
 class ChatTextWidget extends StatefulWidget {
-  const ChatTextWidget(
-      {super.key, required this.idGroup, required this.listUser});
+  const ChatTextWidget({
+    super.key,
+    required this.idGroup,
+    required this.listUser,
+    required this.groupName,
+  });
 
   final String idGroup;
   final List<StoreUser> listUser;
+  final String groupName;
 
   @override
   State<ChatTextWidget> createState() => _ChatTypeWidgetState();
@@ -13,6 +18,18 @@ class ChatTextWidget extends StatefulWidget {
 
 class _ChatTypeWidgetState extends State<ChatTextWidget> {
   final TextEditingController textController = TextEditingController();
+  final ScrollController _controller = ScrollController();
+  bool isFirstScroll = true;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +70,28 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
                                 return const MessageEmptyScreen();
                               } else {
                                 final chats = snapshot.data!.docs;
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((timeStamp) {
+                                  if (_controller.hasClients) {
+                                    isFirstScroll
+                                        ? _controller.jumpTo(_controller
+                                                .position.maxScrollExtent +
+                                            90.h)
+                                        : _controller.animateTo(
+                                            _controller
+                                                    .position.maxScrollExtent +
+                                                0.h,
+                                            duration: const Duration(
+                                                milliseconds: 300),
+                                            curve: Curves.linear);
+                                  }
+                                  isFirstScroll = false;
+                                });
                                 return ListView.builder(
                                     itemCount: chats.length,
-                                    // controller: _controller,
+                                    controller: _controller,
+                                    padding: EdgeInsets.only(
+                                        bottom: isFirstScroll ? 20.h : 0),
                                     itemBuilder: (context, index) {
                                       return Utils.checkIsUser(
                                               code:
@@ -95,7 +131,9 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
         children: [
           GestureDetector(
             onTap: () async {
-              context.read<ChatTypeCubit>().update(TypeChat.location);
+              context
+                  .read<ChatTypeCubit>()
+                  .update(const ChatTypeState(type: TypeChat.location));
             },
             child: Container(
               padding: EdgeInsets.all(10.r),
@@ -132,14 +170,19 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
                         ? IconButton(
                             onPressed: () async {
                               if (textController.text.isNotEmpty) {
-                                getIt<GroupCubit>().sendMessage(
+                                await getIt<GroupCubit>().sendMessage(
                                     content: textController.text,
                                     idGroup: widget.idGroup);
+                                getIt<FirebaseMessageService>()
+                                    .sendChatNotification(
+                                  widget.idGroup,
+                                  widget.groupName,
+                                );
                                 textController.clear();
                               }
                             },
                             icon: Assets.icons.icSend.svg(width: 20.r))
-                        : SizedBox();
+                        : const SizedBox();
                   }),
               hintText: 'Message',
               hintStyle:
