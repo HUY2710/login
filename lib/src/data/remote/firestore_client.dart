@@ -36,6 +36,10 @@ class FirestoreClient {
   }
 
   //manager group
+  //lắng nghe sự thay đổi của tất cả groups của mình (groups mình tạo, groups mình join)
+  Stream<QuerySnapshot<Map<String, dynamic>>> listenMyGroups() {
+    return GroupsManager.listenMyIdGroups();
+  }
 
   Future<void> createGroup(StoreGroup newGroup) async {
     await GroupsManager.createGroup(newGroup);

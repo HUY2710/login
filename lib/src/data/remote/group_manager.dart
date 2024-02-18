@@ -280,4 +280,13 @@ class GroupsManager {
     }
     return null;
   }
+
+  //lắng nghe realtime myIdGroups collection
+  //xem mình join hay thoát, bị xóa ra khỏi group nào
+  static Stream<QuerySnapshot<Map<String, dynamic>>> listenMyIdGroups() {
+    return CollectionStore.users
+        .doc(Global.instance.user!.code)
+        .collection(CollectionStoreConstant.myGroups)
+        .snapshots();
+  }
 }

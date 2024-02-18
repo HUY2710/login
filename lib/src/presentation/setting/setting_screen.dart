@@ -78,7 +78,7 @@ class _SettingScreenState extends State<SettingScreen> {
               TextButton(
                 onPressed: () {
                   FirebaseMessageService().sendPlaceNotification(
-                    'group1',
+                    'FxfSRRHQgVkftlihDLMoBwkh',
                     true,
                     'Test 123',
                   );

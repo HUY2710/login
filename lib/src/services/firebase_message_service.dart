@@ -97,9 +97,12 @@ class FirebaseMessageService implements NotificationService {
       final AndroidNotification? android = message.notification?.android;
 
       //kiểm tra nếu thông báo đó là từ mình thì không cần show
+      //&&message.data['key'] != Global.instance.user?.code
       if (notification != null &&
-          android != null &&
-          message.data['key'] != Global.instance.user?.code) {
+              android != null &&
+              message.data['key'] != Global.instance.user?.code
+          //comment lại đoạn trên để test
+          ) {
         flutterLocalNotificationsPlugin?.show(
             notification.hashCode,
             notification.title,
@@ -109,7 +112,7 @@ class FirebaseMessageService implements NotificationService {
                 channel.id,
                 channel.name,
                 channelDescription: channel.description,
-                // icon: android.smallIcon,
+                icon: android.smallIcon,
                 // other properties...
               ),
             ));
