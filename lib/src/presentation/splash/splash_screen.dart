@@ -30,6 +30,7 @@ import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
+import '../../services/my_background_service.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/enum/preference_keys.dart';
 import '../../shared/extension/context_extension.dart';
@@ -255,6 +256,7 @@ class _SplashScreenState extends State<SplashScreen> {
       storeUser = await FirestoreClient.instance.getUser(userCode);
     }
     Global.instance.user = storeUser;
+    getIt<MyBackgroundService>().initSubAndUnSubTopic();
     final location = await FirestoreClient.instance.getLocation();
     if (location != null) {
       Global.instance.serverLocation = LatLng(location.lat, location.lng);

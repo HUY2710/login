@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -8,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
+
+import '../global/global.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
@@ -21,7 +22,8 @@ abstract class NotificationService {
   Future<void> sendChatNotification(String groupId, String groupName);
 
   /// When enter or left place.
-  Future<void> sendPlaceNotification(String groupId, bool enter, String placeName);
+  Future<void> sendPlaceNotification(
+      String groupId, bool enter, String placeName);
 
   /// When check in any location.
   Future<void> sendCheckInNotification(String groupId, String address);
@@ -33,24 +35,40 @@ class FirebaseMessageService implements NotificationService {
 
   FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin;
 
+  //First we need to create an instance for the FlutterLocalNotificationPlugin.
+  final FlutterLocalNotificationsPlugin notificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  Future<void> initNotification() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings();
+
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+    await notificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse:
+          (NotificationResponse notificationResponse) async {},
+    );
+  }
+
   Future<void> startService() async {
     final FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-    final NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
+    final NotificationSettings settings = await messaging.requestPermission();
 
     debugPrint('User granted permission: ${settings.authorizationStatus}');
 
     // Show notification when application in foreground.
     if (Platform.isIOS) {
-      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
         alert: true, // Required to display a heads up notification
         badge: true,
         sound: true,
@@ -59,22 +77,32 @@ class FirebaseMessageService implements NotificationService {
       // Android: Use local notification to present notification in foreground.
       flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-      await flutterLocalNotificationsPlugin?.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      await flutterLocalNotificationsPlugin
+          ?.resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(channel);
     }
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       debugPrint('Got a message whilst in the foreground!');
       debugPrint('Message data: ${message.data}');
-
+      debugPrint(
+          'Notification from you: ${message.data['key'] == Global.instance.user?.code}');
       if (message.notification != null) {
-        debugPrint('Message also contained a notification: ${message.notification}');
+        debugPrint(
+            'Message also contained a notification: ${message.notification}');
       }
 
       final RemoteNotification? notification = message.notification;
       final AndroidNotification? android = message.notification?.android;
 
-      if (notification != null && android != null) {
+      //kiểm tra nếu thông báo đó là từ mình thì không cần show
+      //&&message.data['key'] != Global.instance.user?.code
+      if (notification != null &&
+              android != null &&
+              message.data['key'] != Global.instance.user?.code
+          //comment lại đoạn trên để test
+          ) {
         flutterLocalNotificationsPlugin?.show(
             notification.hashCode,
             notification.title,
@@ -92,7 +120,8 @@ class FirebaseMessageService implements NotificationService {
     });
   }
 
-  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
     // If you're going to use other Firebase services in the background, such as Firestore,
     // make sure you call `initializeApp` before using other Firebase services.
     await Firebase.initializeApp();
@@ -105,11 +134,15 @@ class FirebaseMessageService implements NotificationService {
   }
 
   Future<void> subscribeTopics(List<String> topics) async {
-    await Future.wait(topics.map((e) => FirebaseMessaging.instance.subscribeToTopic(e)).toList());
+    await Future.wait(topics
+        .map((e) => FirebaseMessaging.instance.subscribeToTopic(e))
+        .toList());
   }
 
   Future<void> unSubscribeTopics(List<String> topics) async {
-    await Future.wait(topics.map((e) => FirebaseMessaging.instance.unsubscribeFromTopic(e)).toList());
+    await Future.wait(topics
+        .map((e) => FirebaseMessaging.instance.unsubscribeFromTopic(e))
+        .toList());
   }
 
   @override
@@ -119,7 +152,11 @@ class FirebaseMessageService implements NotificationService {
   }
 
   @override
-  Future<void> sendPlaceNotification(String groupId, bool enter, String placeName) async {
+  Future<void> sendPlaceNotification(
+    String groupId,
+    bool enter,
+    String placeName,
+  ) async {
     final message = 'Username has ${enter ? 'enter' : 'left'} the $placeName';
     await _sendMessage(groupId, 'Cycle Sharing', message);
   }
@@ -142,11 +179,10 @@ extension FirebaseMessageServiceExt on FirebaseMessageService {
       'title': title,
       'message': message,
       'topic': topic,
-      'data': {
-        'key': dataId
-      }
+      'data': {'key': dataId ?? Global.instance.user?.code}
     };
-    final response = await http.post(url, headers: headers, body: json.encode(params));
+    final response =
+        await http.post(url, headers: headers, body: json.encode(params));
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
   }

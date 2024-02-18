@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../data/models/store_place/store_place.dart';
-import '../../../gen/assets.gen.dart';
 import '../models/member_maker_data.dart';
 
 class PlaceMarker extends StatefulWidget {

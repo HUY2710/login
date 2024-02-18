@@ -11,8 +11,6 @@ import '../../../../../../gen/assets.gen.dart';
 import '../../../../../../gen/colors.gen.dart';
 import '../../../../../../global/global.dart';
 import '../../../../../../shared/extension/context_extension.dart';
-import '../../places/history_place.dart';
-import '../../show_bottom_sheet_home.dart';
 
 class ItemMember extends StatelessWidget {
   const ItemMember({super.key, required this.isAdmin, required this.idUser});

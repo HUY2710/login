@@ -36,6 +36,10 @@ class FirestoreClient {
   }
 
   //manager group
+  //lắng nghe sự thay đổi của tất cả groups của mình (groups mình tạo, groups mình join)
+  Stream<QuerySnapshot<Map<String, dynamic>>> listenMyGroups() {
+    return GroupsManager.listenMyIdGroups();
+  }
 
   Future<void> createGroup(StoreGroup newGroup) async {
     await GroupsManager.createGroup(newGroup);
@@ -134,10 +138,10 @@ class FirestoreClient {
     return GroupsManager.listenToGroupMembersChanges(idGroup);
   }
 
-  //listen member group
-  // Stream<QuerySnapshot<Map<String, dynamic>>> fetchTrackingMemberStream() {
-  //   return GroupsManager.fetchTrackingMemberStream();
-  // }
+  //lấy toàn bộ id group mà mình join
+  Future<List<String>?> listIdGroup() async {
+    return GroupsManager.getIdMyListGroup();
+  }
 
   ///[Location]
   Future<void> createNewLocation(StoreLocation newLocation) async {
@@ -176,5 +180,10 @@ class FirestoreClient {
 
   Future<void> removePlace(String idGroup, String idPlace) async {
     await PlacesManager.removePlace(idGroup: idGroup, idPlace: idPlace);
+  }
+
+  //lấy toàn bộ place trong group
+  Future<List<StorePlace>?> listPlaces(String idGroup) async {
+    return PlacesManager.getListStorePlace(idGroup);
   }
 }

@@ -28,9 +28,9 @@ class AppConfig with SystemUiMixin {
       _initHydrateBlocStorage(),
       _initGlobalData(),
     ]);
+    await FirebaseMessageService().initNotification();
     await FirebaseMessageService().startService();
     FirebaseMessageService().listenBackgroundMessage();
-    await FirebaseMessageService().subscribeTopics(['group1']);
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.fadingCircle
       ..maskType = EasyLoadingMaskType.custom
