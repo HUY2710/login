@@ -106,6 +106,8 @@ class TrackingHistoryPlaceService {
             .copyWith(isSendArrived: inRadius, isSendLeaved: !inRadius);
         listMapPlaces[listIdGroup.indexOf(groupId)] = {groupId: places};
       }
+      debugPrint(
+          'listMapPlaces:${listMapPlaces[listIdGroup.indexOf(groupId)]}');
     } else if (!inRadius && place.isSendArrived && !place.isSendLeaved) {
       await _sendNotificationAndMarkAsSent(
         place: place,
@@ -120,6 +122,8 @@ class TrackingHistoryPlaceService {
         places[index] = places[index]
             .copyWith(isSendArrived: inRadius, isSendLeaved: !inRadius);
         listMapPlaces[listIdGroup.indexOf(groupId)] = {groupId: places};
+        debugPrint(
+            'listMapPlaces:${listMapPlaces[listIdGroup.indexOf(groupId)]}');
       }
     }
   }
@@ -129,7 +133,8 @@ class TrackingHistoryPlaceService {
       required String groupId,
       required bool enter}) async {
     final message =
-        '${Global.instance.user?.userName} ${context?.l10n ?? 'has'} ${enter ? context?.l10n.enter ?? 'enter' : context?.l10n.enter ?? 'left'}${place.namePlace}';
+        '${Global.instance.user?.userName} ${context?.l10n ?? 'has'} ${enter ? context?.l10n.enter ?? 'enter' : context?.l10n.enter ?? 'left'} '
+        '${place.namePlace}';
     try {
       FirebaseMessageService().sendPlaceNotification(
         groupId: groupId,

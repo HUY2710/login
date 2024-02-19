@@ -37,7 +37,7 @@ class LocationService {
     final Location location = Location();
     location.enableBackgroundMode(enable: false);
     location.changeSettings(
-      distanceFilter: 1,
+      distanceFilter: 5,
     );
     return location.onLocationChanged.map((LocationData event) =>
         LatLng(event.latitude ?? 0, event.longitude ?? 0));
@@ -48,7 +48,7 @@ class LocationService {
     final Location location = Location();
     location.enableBackgroundMode();
     location.changeSettings(
-        interval: 5000, distanceFilter: Flavor.dev == F.appFlavor ? 1 : 10);
+        interval: 5000, distanceFilter: Flavor.dev == F.appFlavor ? 5 : 10);
     return location.onLocationChanged.map((LocationData event) =>
         LatLng(event.latitude ?? 0, event.longitude ?? 0));
   }

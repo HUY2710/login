@@ -22,7 +22,7 @@ class LocationManager {
   static Future<void> updateLocation(
     Map<String, dynamic> fields,
   ) async {
-    return CollectionStore.locations
+    CollectionStore.locations
         .doc(Global.instance.user!.code)
         .update(fields)
         .then((_) {
