@@ -74,11 +74,12 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
           latLngListen,
           30,
         );
+        debugPrint('inRadius:$inRadius');
         debugPrint('server Location: ${Global.instance.serverLocation}');
         debugPrint('current Location: $latLng');
         if (!inRadius) {
           Global.instance.serverLocation = latLngListen;
-          await locationService.updateLocationUserForeGround(
+          await locationService.updateLocationUser(
             latLng: latLngListen,
           );
           await getIt<TrackingHistoryPlaceService>().trackingHistoryPlace();
