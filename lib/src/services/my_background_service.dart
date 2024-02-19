@@ -4,9 +4,11 @@ import 'dart:async';
 
 import 'package:battery_plus/battery_plus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../flavors.dart';
 import '../config/di/di.dart';
 import '../data/models/store_user/store_user.dart';
 import '../data/remote/firestore_client.dart';
@@ -14,6 +16,7 @@ import '../global/global.dart';
 import '../shared/helpers/map_helper.dart';
 import 'firebase_message_service.dart';
 import 'location_service.dart';
+import 'tracking_history_place_service.dart';
 
 @singleton
 class MyBackgroundService {
@@ -32,28 +35,33 @@ class MyBackgroundService {
     final Battery battery = Battery();
 
     if (user != null) {
-      LatLng newLocation =
-          LatLng(serverLocation.latitude, serverLocation.longitude);
-
       locationService
           .getLocationStreamOnBackground()
           .listen((LatLng latLng) async {
-        newLocation = latLng;
-      });
-      Timer.periodic(const Duration(seconds: 30), (timer) async {
-        //check current location with new location => location > 30m => update
-        final bool shouldUpdate = MapHelper.isWithinRadius(
-          LatLng(serverLocation.latitude, serverLocation.longitude),
-          LatLng(newLocation.latitude, newLocation.longitude),
-          30,
-        );
-        if (shouldUpdate) {
-          //update local
-          Global.instance.serverLocation = newLocation;
+        Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 5 : 30),
+            (timer) async {
+          //check current location with new location => location > 30m => update
+          final bool inRadius = MapHelper.isWithinRadius(
+            LatLng(serverLocation.latitude, serverLocation.longitude),
+            latLng,
+            30,
+          );
+          if (!inRadius) {
+            //update local
+            Global.instance.serverLocation = latLng;
+            Global.instance.currentLocation = latLng;
+            debugPrint('currentLocation:${Global.instance.currentLocation}');
 
-          //update to sever
-          //do something
-        }
+            debugPrint(
+                'currentLocation:${Global.instance.currentLocation != latLng}');
+
+            getIt<LocationService>().updateLocationUser(latLng: latLng);
+            await getIt<TrackingHistoryPlaceService>().trackingHistoryPlace();
+
+            //update to sever
+            //do something
+          }
+        });
       });
     }
   }

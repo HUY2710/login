@@ -186,4 +186,9 @@ class FirestoreClient {
   Future<List<StorePlace>?> listPlaces(String idGroup) async {
     return PlacesManager.getListStorePlace(idGroup);
   }
+
+  Future<void> updatePlace(
+      String idGroup, String idPlace, Map<String, dynamic> fields) async {
+    await PlacesManager.updatePlace(idGroup, idPlace, fields);
+  }
 }

@@ -99,6 +99,10 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
                 location: await _fireStoreClient.getUserLocation(infoUser.code),
                 subscriptionLocation: _listenLocationUserUpdate(infoUser));
             _trackingListMember.add(infoUser);
+          } else {
+            debugPrint('${infoUser?.code != Global.instance.user?.code}');
+            debugPrint('idMember:${infoUser?.code}');
+            debugPrint('your code:${Global.instance.user?.code}');
           }
         }
         //lắng nghe khi có member rời hoặc bị xóa khỏi group

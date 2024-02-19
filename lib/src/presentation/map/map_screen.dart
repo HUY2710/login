@@ -61,12 +61,13 @@ class MapScreenState extends State<MapScreen>
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     _initStart();
+    _trackingMemberCubit.initTrackingMember();
+    _trackingPlacesCubit.initTrackingPlaces();
     _defaultLocation = Global.instance.serverLocation;
     getLocalLocation();
     _getMyMarker();
     super.initState();
-    _trackingMemberCubit.initTrackingMember();
-    _trackingPlacesCubit.initTrackingPlaces();
+
     getIt<GroupCubit>().initStreamGroupChat();
   }
 

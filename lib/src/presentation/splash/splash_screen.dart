@@ -31,6 +31,7 @@ import '../../data/remote/firestore_client.dart';
 import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
 import '../../services/my_background_service.dart';
+import '../../services/tracking_history_place_service.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/enum/preference_keys.dart';
 import '../../shared/extension/context_extension.dart';
@@ -165,7 +166,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> setInitScreen() async {
     await getMe();
     await checkInGroup();
-
+    await getIt<TrackingHistoryPlaceService>().initGroups();
     final bool isFirstLaunch =
         await SharedPreferencesManager.getIsFirstLaunch();
     if (mounted) {
@@ -258,6 +259,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Global.instance.user = storeUser;
     getIt<MyBackgroundService>().initSubAndUnSubTopic();
     final location = await FirestoreClient.instance.getLocation();
+
     if (location != null) {
       Global.instance.serverLocation = LatLng(location.lat, location.lng);
       Global.instance.currentLocation = LatLng(location.lat, location.lng);
