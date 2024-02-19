@@ -72,11 +72,10 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
         16.verticalSpace,
         buildItem(
           () async {
-            context.pushRoute(const PremiumRoute());
-            // await showAppModalBottomSheet(
-            //   builder: (context) => const CheckInLocation(),
-            //   context: context,
-            // );
+            await showAppModalBottomSheet(
+              builder: (context) => const CheckInLocation(),
+              context: context,
+            );
           },
           Assets.icons.icCheckin.path,
         ),
