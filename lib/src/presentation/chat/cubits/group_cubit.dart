@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../data/remote/member_manager.dart';

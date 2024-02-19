@@ -7,26 +7,41 @@ class InputSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: textController,
-      decoration: InputDecoration(
-          fillColor: const Color(0xffEFEFEF),
-          filled: true,
-          hintText: 'Search',
-          hintStyle: TextStyle(
-            color: const Color(0xff928989),
-            fontSize: 16.sp,
-          ),
-          prefixIcon: Icon(
-            Icons.search,
-            size: 24.r,
-            color: const Color(0xff928989),
-          ),
-          border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(12.sp)),
-          contentPadding:
-              EdgeInsets.symmetric(vertical: 8.r, horizontal: 12.r)),
+    return BlocBuilder<SearchGroupCubit, List<StoreGroup>>(
+      builder: (context, state) {
+        return TextField(
+          controller: textController,
+          onChanged: (value) {
+            // context.read<GroupCubit>().searchGroup(value);
+            context
+                .read<SearchGroupCubit>()
+                .searchGroup(value, getIt<GroupCubit>().myGroups);
+          },
+          onSubmitted: (value) {
+            context
+                .read<SearchGroupCubit>()
+                .searchGroup(value, getIt<GroupCubit>().myGroups);
+          },
+          decoration: InputDecoration(
+              fillColor: const Color(0xffEFEFEF),
+              filled: true,
+              hintText: 'Search',
+              hintStyle: TextStyle(
+                color: const Color(0xff928989),
+                fontSize: 16.sp,
+              ),
+              prefixIcon: Icon(
+                Icons.search,
+                size: 24.r,
+                color: const Color(0xff928989),
+              ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(12.sp)),
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 8.r, horizontal: 12.r)),
+        );
+      },
     );
   }
 }
