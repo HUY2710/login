@@ -6,6 +6,8 @@ class CollectionStoreConstant {
   static const String groups = 'groups';
   static const String members = 'members';
   static const String places = 'places';
+  static const String historyPlacesOfUser =
+      'historyPlacesOfUser'; //mỗi group, mỗi user sẽ có history places khác nhau
   static const String historyPlaces = 'historyPlaces';
   static const String myGroups = 'myGroups'; // my groups
   static const String locations = 'locations';

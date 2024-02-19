@@ -50,7 +50,7 @@ class MyBackgroundService {
           if (!inRadius) {
             //update local
             Global.instance.serverLocation = latLng;
-            // Global.instance.currentLocation = latLng;
+            Global.instance.currentLocation = latLng;
             debugPrint(
                 'currentLocation background:${Global.instance.currentLocation}');
 

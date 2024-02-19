@@ -43,6 +43,7 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
           updatedAt: DateTime.now(),
         ),
       );
+      Global.instance.serverLocation = latLng;
     }
 
     if (lastLocation != null) {

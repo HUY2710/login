@@ -5,9 +5,11 @@ import 'package:injectable/injectable.dart';
 
 import '../config/di/di.dart';
 import '../config/navigation/app_router.dart';
+import '../data/models/store_history_place/store_history_place.dart';
 import '../data/models/store_place/store_place.dart';
 import '../data/remote/firestore_client.dart';
 import '../global/global.dart';
+import '../presentation/home/widgets/bottom_sheet/places/history_place.dart';
 import '../shared/extension/context_extension.dart';
 import '../shared/helpers/map_helper.dart';
 import 'firebase_message_service.dart';
@@ -145,6 +147,29 @@ class TrackingHistoryPlaceService {
         'isSendArrived': enter,
         'isSendLeaved': !enter,
       });
+
+      //đi vào place
+      if (enter) {
+        //tạo mới historyPlace
+        final StoreHistoryPlace historyPlace = StoreHistoryPlace(
+          idPlace: place.idPlace!,
+          enterTime: DateTime.now(),
+        );
+        await fireStoreClient.createHistoryPlace(
+          idGroup: groupId,
+          historyPlace: historyPlace,
+        );
+      } else {
+        //rời khỏi place
+        // cần kiểm tra xem history place có idPlace && timeLeft == null thì update timeleft
+        StoreHistoryPlace? historyPlace = await fireStoreClient
+            .getDetailHistoryPlace(idGroup: groupId, idPlace: place.idPlace!);
+        if (historyPlace != null) {
+          historyPlace = historyPlace.copyWith(leftTime: DateTime.now());
+          await fireStoreClient.updateHistoryPlace(
+              idGroup: groupId, historyPlace: historyPlace);
+        }
+      }
     } catch (error) {
       debugPrint('update Place error:$error');
     }

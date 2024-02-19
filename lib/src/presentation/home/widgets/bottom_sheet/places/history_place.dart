@@ -142,7 +142,7 @@ class HistoryPlace extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               BorderCircleAvatar(
-                path: Assets.images.avatars.female.avatar1.path,
+                path: user.avatarUrl,
               ),
               8.verticalSpace,
             ],

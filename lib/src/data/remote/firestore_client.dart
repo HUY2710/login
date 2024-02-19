@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../global/global.dart';
 import '../models/store_group/store_group.dart';
+import '../models/store_history_place/store_history_place.dart';
 import '../models/store_location/store_location.dart';
 import '../models/store_member/store_member.dart';
 import '../models/store_place/store_place.dart';
@@ -9,6 +10,7 @@ import '../models/store_user/store_user.dart';
 import 'collection_store.dart';
 import 'current_user_store.dart';
 import 'group_manager.dart';
+import 'history_place_manager.dart';
 import 'location_manager.dart';
 import 'member_manager.dart';
 import 'places_manager.dart';
@@ -190,5 +192,26 @@ class FirestoreClient {
   Future<void> updatePlace(
       String idGroup, String idPlace, Map<String, dynamic> fields) async {
     await PlacesManager.updatePlace(idGroup, idPlace, fields);
+  }
+
+  //add history place
+  Future<void> createHistoryPlace(
+      {required String idGroup,
+      required StoreHistoryPlace historyPlace}) async {
+    await HistoryPlacesManager.createHistoryPlace(
+        idGroup: idGroup, historyPlace: historyPlace);
+  }
+
+  Future<StoreHistoryPlace?> getDetailHistoryPlace(
+      {required String idGroup, required String idPlace}) async {
+    return HistoryPlacesManager.getDetailHistoryPlace(
+        idGroup: idGroup, idPlace: idPlace);
+  }
+
+  Future<void> updateHistoryPlace(
+      {required String idGroup,
+      required StoreHistoryPlace historyPlace}) async {
+    await HistoryPlacesManager.updateHistoryPlace(
+        idGroup: idGroup, historyPlace: historyPlace);
   }
 }

@@ -134,7 +134,12 @@ class FirebaseMessageService implements NotificationService {
   }
 
   void listenBackgroundMessage() {
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    try {
+      FirebaseMessaging.onBackgroundMessage(
+          _firebaseMessagingBackgroundHandler);
+    } catch (error) {
+      debugPrint('error:$error');
+    }
   }
 
   Future<void> subscribeTopics(List<String> topics) async {
