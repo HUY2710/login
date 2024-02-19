@@ -15,8 +15,8 @@ class StorePlace with _$StorePlace {
     required double? radius,
     @JsonKey(includeFromJson: false, includeToJson: false) Uint8List? marker,
     @Default(true) bool onNotify,
-    @Default(true) bool isSendLeaved,
-    @Default(true) bool isSendArrived,
+    @Default(false) bool isSendLeaved,
+    @Default(false) bool isSendArrived,
     @JsonKey(includeFromJson: false, includeToJson: false) String? idPlace,
   }) = _StorePlace;
 

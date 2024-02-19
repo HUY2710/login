@@ -23,10 +23,14 @@ abstract class NotificationService {
 
   /// When enter or left place.
   Future<void> sendPlaceNotification(
-      String groupId, bool enter, String placeName);
+      {required String groupId,
+      required bool enter,
+      required String message,
+      BuildContext? context});
 
   /// When check in any location.
-  Future<void> sendCheckInNotification(String groupId, String address);
+  Future<void> sendCheckInNotification(
+      String groupId, String address, BuildContext? context);
 }
 
 @singleton
@@ -98,9 +102,9 @@ class FirebaseMessageService implements NotificationService {
 
       //kiểm tra nếu thông báo đó là từ mình thì không cần show
       //&&message.data['key'] != Global.instance.user?.code
-      if (notification != null &&
-              android != null &&
-              message.data['key'] != Global.instance.user?.code
+      if (notification != null && android != null
+          // &&
+          // message.data['key'] != Global.instance.user?.code
           //comment lại đoạn trên để test
           ) {
         flutterLocalNotificationsPlugin?.show(
@@ -153,16 +157,16 @@ class FirebaseMessageService implements NotificationService {
 
   @override
   Future<void> sendPlaceNotification(
-    String groupId,
-    bool enter,
-    String placeName,
-  ) async {
-    final message = 'Username has ${enter ? 'enter' : 'left'} the $placeName';
+      {required String groupId,
+      required bool enter,
+      required String message,
+      BuildContext? context}) async {
     await _sendMessage(groupId, 'Cycle Sharing', message);
   }
 
   @override
-  Future<void> sendCheckInNotification(String groupId, String address) async {
+  Future<void> sendCheckInNotification(
+      String groupId, String address, BuildContext? context) async {
     final message = 'Username has checkin at $address';
     await _sendMessage(groupId, 'Cycle Sharing', message);
   }

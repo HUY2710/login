@@ -11,7 +11,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../config/navigation/app_router.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
-import '../../services/firebase_message_service.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
 import '../../shared/widgets/custom_appbar.dart';
@@ -75,16 +74,6 @@ class _SettingScreenState extends State<SettingScreen> {
               _buildLanguageSetting(),
               16.verticalSpace,
               _buildExternalSetting(context),
-              TextButton(
-                onPressed: () {
-                  FirebaseMessageService().sendPlaceNotification(
-                    'FxfSRRHQgVkftlihDLMoBwkh',
-                    true,
-                    'Test 123',
-                  );
-                },
-                child: const Text('Send notification'),
-              )
             ],
           ),
         ),

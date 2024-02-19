@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import '../../shared/utils/logger_utils.dart';
 import '../models/store_place/store_place.dart';
@@ -76,5 +77,16 @@ class PlacesManager {
     }).toList();
 
     return listPlace;
+  }
+
+  static Future<void> updatePlace(
+      String idGroup, String idPlace, Map<String, dynamic> fields) async {
+    CollectionStore.groups
+        .doc(idGroup)
+        .collection(CollectionStoreConstant.places)
+        .doc(idPlace)
+        .update(fields)
+        .then((value) => debugPrint('Update Place success'))
+        .catchError((error) => throw Exception(error));
   }
 }

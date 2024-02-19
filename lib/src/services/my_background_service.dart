@@ -14,6 +14,7 @@ import '../global/global.dart';
 import '../shared/helpers/map_helper.dart';
 import 'firebase_message_service.dart';
 import 'location_service.dart';
+import 'tracking_history_place_service.dart';
 
 @singleton
 class MyBackgroundService {
@@ -80,5 +81,9 @@ class MyBackgroundService {
         }
       }
     });
+  }
+
+  Future<void> initTrackingHistory() async {
+    TrackingHistoryPlaceService().initGroups();
   }
 }
