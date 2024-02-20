@@ -10,7 +10,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../config/di/di.dart';
-import '../../config/navigation/app_router.dart';
 import '../../data/models/routes/route_model.dart';
 import '../../data/models/store_user/store_user.dart';
 import '../../gen/gens.dart';
@@ -20,10 +19,8 @@ import '../../shared/enum/route_travel.dart';
 import '../../shared/helpers/map_helper.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
 import '../../shared/widgets/my_drag.dart';
-import '../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import '../map/cubit/tracking_routes/tracking_routes_cubit.dart';
 import '../onboarding/widgets/app_button.dart';
-import 'info_direction.dart';
 
 class DirectionMap extends StatefulWidget {
   const DirectionMap({super.key, required this.user});
@@ -40,6 +37,7 @@ class _DirectionMapState extends State<DirectionMap> {
   String typeDirection = RouteTravelMode.DRIVE.name;
   double distance = 0;
   double duration = 0;
+
   Future<void> _openMap({
     required double lat,
     required double lng,
@@ -72,7 +70,7 @@ class _DirectionMapState extends State<DirectionMap> {
         }
       },
       'travelMode': typeDirection,
-      'routingPreference': 'TRAFFIC_AWARE'
+      'routingPreference': getRoutingPreference(typeDirection)
     };
     final response = await HTTPService().postRequestRoutes(body);
     if (response.statusCode == 200) {
@@ -85,6 +83,14 @@ class _DirectionMapState extends State<DirectionMap> {
       print('Request failed with status: ${response.statusCode}');
       debugPrint('Request failed with status: ${response.body}');
     }
+  }
+
+  String getRoutingPreference(String typeDirection) {
+    if (typeDirection == RouteTravelMode.WALK.name) {
+      return RoutingPreference.ROUTING_PREFERENCE_UNSPECIFIED.name;
+    }
+    //BICYCLE ddang bị lỗi
+    return RoutingPreference.TRAFFIC_AWARE.name;
   }
 
   Future<void> _getPolyline(String endCodePolyline) async {
@@ -112,14 +118,14 @@ class _DirectionMapState extends State<DirectionMap> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20).r,
+        borderRadius: BorderRadius.circular(20),
       ),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const MyDrag(),
-          20.verticalSpace,
+          SizedBox(height: 20.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 40.w),
             child: Row(
@@ -131,34 +137,9 @@ class _DirectionMapState extends State<DirectionMap> {
                       typeDirection = RouteTravelMode.WALK.name;
                     });
                   },
-                  child: Stack(
-                    children: [
-                      ShadowContainer(
-                        opacityColor: 0.15,
-                        colorShadow: typeDirection == RouteTravelMode.WALK.name
-                            ? const Color(0xff7B3EFF).withOpacity(0.8)
-                            : null,
-                        child: Padding(
-                          padding: EdgeInsets.all(20.r),
-                          child: SvgPicture.asset(
-                            Assets.icons.activity.walking.path,
-                            height: 32.r,
-                            width: 32.r,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        right: 0,
-                        child: ShadowContainer(
-                          padding: EdgeInsets.all(6.r),
-                          child: SvgPicture.asset(
-                            Assets.icons.icPremium.path,
-                            width: 120.r,
-                            height: 12.r,
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: TravelModeIcon(
+                    iconPath: Assets.icons.activity.walking.path,
+                    isSelected: typeDirection == RouteTravelMode.WALK.name,
                   ),
                 ),
                 GestureDetector(
@@ -167,35 +148,9 @@ class _DirectionMapState extends State<DirectionMap> {
                       typeDirection = RouteTravelMode.BICYCLE.name;
                     });
                   },
-                  child: Stack(
-                    children: [
-                      ShadowContainer(
-                        opacityColor: 0.15,
-                        colorShadow:
-                            typeDirection == RouteTravelMode.BICYCLE.name
-                                ? const Color(0xff7B3EFF).withOpacity(0.8)
-                                : null,
-                        child: Padding(
-                          padding: EdgeInsets.all(20.r),
-                          child: SvgPicture.asset(
-                            Assets.icons.activity.bicycle.path,
-                            height: 32.r,
-                            width: 32.r,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        right: 0,
-                        child: ShadowContainer(
-                          padding: EdgeInsets.all(6.r),
-                          child: SvgPicture.asset(
-                            Assets.icons.icPremium.path,
-                            width: 120.r,
-                            height: 12.r,
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: TravelModeIcon(
+                    iconPath: Assets.icons.activity.bicycle.path,
+                    isSelected: typeDirection == RouteTravelMode.BICYCLE.name,
                   ),
                 ),
                 GestureDetector(
@@ -204,40 +159,15 @@ class _DirectionMapState extends State<DirectionMap> {
                       typeDirection = RouteTravelMode.DRIVE.name;
                     });
                   },
-                  child: Stack(
-                    children: [
-                      ShadowContainer(
-                        opacityColor: 0.15,
-                        colorShadow: typeDirection == RouteTravelMode.DRIVE.name
-                            ? const Color(0xff7B3EFF).withOpacity(0.8)
-                            : null,
-                        child: Padding(
-                          padding: EdgeInsets.all(20.r),
-                          child: SvgPicture.asset(
-                            Assets.icons.activity.car.path,
-                            height: 32.r,
-                            width: 32.r,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        right: 0,
-                        child: ShadowContainer(
-                          padding: EdgeInsets.all(6.r),
-                          child: SvgPicture.asset(
-                            Assets.icons.icPremium.path,
-                            width: 120.r,
-                            height: 12.r,
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: TravelModeIcon(
+                    iconPath: Assets.icons.activity.car.path,
+                    isSelected: typeDirection == RouteTravelMode.DRIVE.name,
                   ),
                 )
               ],
             ),
           ),
-          32.verticalSpace,
+          SizedBox(height: 32.h),
           AppButton(
             title: 'Get Directions in app',
             paddingVertical: 12.h,
@@ -251,23 +181,66 @@ class _DirectionMapState extends State<DirectionMap> {
               EasyLoading.dismiss();
             },
           ),
-          16.verticalSpace,
+          SizedBox(height: 16.h),
           AppButton(
-              title: 'Get Directions on Maps',
-              paddingVertical: 12.h,
-              heightBtn: 44.h,
-              onTap: () {
-                //
-                if (widget.user.location != null) {
-                  _openMap(
-                    lat: widget.user.location!.lat,
-                    lng: widget.user.location!.lng,
-                    name: widget.user.userName,
-                  );
-                }
-              })
+            title: 'Get Directions on Maps',
+            paddingVertical: 12.h,
+            heightBtn: 44.h,
+            onTap: () {
+              if (widget.user.location != null) {
+                _openMap(
+                  lat: widget.user.location!.lat,
+                  lng: widget.user.location!.lng,
+                  name: widget.user.userName,
+                );
+              }
+            },
+          )
         ],
       ),
+    );
+  }
+}
+
+class TravelModeIcon extends StatelessWidget {
+  const TravelModeIcon({
+    super.key,
+    required this.iconPath,
+    required this.isSelected,
+  });
+
+  final String iconPath;
+  final bool isSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ShadowContainer(
+          opacityColor: 0.15,
+          colorShadow:
+              isSelected ? const Color(0xff7B3EFF).withOpacity(0.8) : null,
+          child: Padding(
+            padding: EdgeInsets.all(20.r),
+            child: SvgPicture.asset(
+              iconPath,
+              height: 32.r,
+              width: 32.r,
+            ),
+          ),
+        ),
+        Positioned(
+          right: 0,
+          child: ShadowContainer(
+            padding: EdgeInsets.all(6.r),
+            child: SvgPicture.asset(
+              Assets.icons.icPremium.path,
+              width: 120.r,
+              height: 12.r,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
