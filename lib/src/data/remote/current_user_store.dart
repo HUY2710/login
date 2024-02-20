@@ -39,7 +39,7 @@ class CurrentUserManager {
       return null;
     }
     final StoreUser user = StoreUser.fromJson(doc.data()!);
-    LoggerUtils.logInfo('Fetch User: ${Global.instance.user}');
+    LoggerUtils.logInfo('Fetch User: $user');
     return user;
   }
 }

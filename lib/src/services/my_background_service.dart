@@ -38,11 +38,12 @@ class MyBackgroundService {
       locationService
           .getLocationStreamOnBackground()
           .listen((LatLng latLng) async {
-        Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 5 : 30),
+        Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 15 : 30),
             (timer) async {
+          debugPrint('timer: ${timer.tick}');
           //check current location with new location => location > 30m => update
           final bool inRadius = MapHelper.isWithinRadius(
-            LatLng(serverLocation.latitude, serverLocation.longitude),
+            Global.instance.currentLocation,
             latLng,
             30,
           );
@@ -50,12 +51,10 @@ class MyBackgroundService {
             //update local
             Global.instance.serverLocation = latLng;
             Global.instance.currentLocation = latLng;
-            debugPrint('currentLocation:${Global.instance.currentLocation}');
-
             debugPrint(
-                'currentLocation:${Global.instance.currentLocation != latLng}');
+                'currentLocation background:${Global.instance.currentLocation}');
 
-            getIt<LocationService>().updateLocationUser(latLng: latLng);
+            await getIt<LocationService>().updateLocationUser(latLng: latLng);
             await getIt<TrackingHistoryPlaceService>().trackingHistoryPlace();
 
             //update to sever

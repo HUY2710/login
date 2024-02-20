@@ -9,8 +9,11 @@ part 'store_history_place.g.dart';
 @freezed
 class StoreHistoryPlace with _$StoreHistoryPlace {
   const factory StoreHistoryPlace({
-    required String idPlace,
-    required DateTime createAt,
+    required String idPlace, //để biết thông tin về place đó
+    required DateTime enterTime, //time user vào
+    DateTime? leftTime, //time user rời khỏi
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    String? idHistoryPlace,
     @JsonKey(includeToJson: false, includeFromJson: false) StorePlace? place,
   }) = _StoreHistoryPlace;
 

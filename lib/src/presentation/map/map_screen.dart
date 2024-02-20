@@ -232,8 +232,8 @@ class MapScreenState extends State<MapScreen>
   Future<void> _getMyMarker() async {
     final newMarker = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(
-        size: Size.fromRadius(2.r),
-        devicePixelRatio: ScreenUtil().pixelRatio,
+        size: Size.fromRadius(0.5.r),
+        // devicePixelRatio: ScreenUtil().pixelRatio,
       ),
       Assets.images.markers.circleDot.path,
     );

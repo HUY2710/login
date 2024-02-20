@@ -5,11 +5,14 @@ import 'package:injectable/injectable.dart';
 
 import '../config/di/di.dart';
 import '../config/navigation/app_router.dart';
+import '../data/local/shared_preferences_manager.dart';
+import '../data/models/store_history_place/store_history_place.dart';
 import '../data/models/store_place/store_place.dart';
 import '../data/remote/firestore_client.dart';
 import '../global/global.dart';
 import '../shared/extension/context_extension.dart';
 import '../shared/helpers/map_helper.dart';
+import '../shared/helpers/time_helper.dart';
 import 'firebase_message_service.dart';
 
 @singleton
@@ -69,6 +72,7 @@ class TrackingHistoryPlaceService {
       }
 
       listMapPlaces[listIdGroup.indexOf(idGroup)] = {idGroup: listPlaceGroup};
+      trackingHistoryPlace();
     });
   }
 
@@ -76,8 +80,8 @@ class TrackingHistoryPlaceService {
     debugPrint('listMapPlaces:${listMapPlaces.length}');
     listMapPlaces.asMap().forEach((index, mapPlace) {
       for (final places in mapPlace.values) {
-        places?.forEach((place) {
-          _handlePlaceNotification(place, listIdGroup[index]);
+        places?.forEach((place) async {
+          await _handlePlaceNotification(place, listIdGroup[index]);
         });
       }
     });
@@ -90,13 +94,24 @@ class TrackingHistoryPlaceService {
       Global.instance.currentLocation,
       100,
     );
+    //check xem time đến place này có hơn 15phuts kể từ khi rời place hay không
+
+    final lastTime = await SharedPreferencesManager.getString(place.idPlace!);
+    bool isSpam = false;
+    if (lastTime != null) {
+      //true nếu spam
+      isSpam = TimerHelper.checkTimeDifferenceCurrent(DateTime.parse(lastTime));
+    }
 
     if (inRadius && !place.isSendArrived) {
-      await _sendNotificationAndMarkAsSent(
-        place: place,
-        groupId: groupId,
-        enter: inRadius,
-      );
+      if (!isSpam) {
+        await _sendNotificationAndMarkAsSent(
+          place: place,
+          groupId: groupId,
+          enter: inRadius,
+        );
+      }
+
       //update local
       final List<StorePlace>? places =
           listMapPlaces[listIdGroup.indexOf(groupId)].values.first;
@@ -106,11 +121,22 @@ class TrackingHistoryPlaceService {
             .copyWith(isSendArrived: inRadius, isSendLeaved: !inRadius);
         listMapPlaces[listIdGroup.indexOf(groupId)] = {groupId: places};
       }
+      debugPrint(
+          'listMapPlaces:${listMapPlaces[listIdGroup.indexOf(groupId)]}');
     } else if (!inRadius && place.isSendArrived && !place.isSendLeaved) {
-      await _sendNotificationAndMarkAsSent(
-        place: place,
-        groupId: groupId,
-        enter: inRadius,
+      if (!isSpam) {
+        await _sendNotificationAndMarkAsSent(
+          place: place,
+          groupId: groupId,
+          enter: inRadius,
+        );
+      }
+
+      //sau khi rời thì lưu lại time lần cuối rời place đó...để trường hợp user spam đi ra đi vào
+      //lấy idPlace đó để làm key
+      await SharedPreferencesManager.setString(
+        place.idPlace!,
+        DateTime.now().toIso8601String(),
       );
       //update local
       final List<StorePlace>? places =
@@ -120,6 +146,8 @@ class TrackingHistoryPlaceService {
         places[index] = places[index]
             .copyWith(isSendArrived: inRadius, isSendLeaved: !inRadius);
         listMapPlaces[listIdGroup.indexOf(groupId)] = {groupId: places};
+        debugPrint(
+            'listMapPlaces:${listMapPlaces[listIdGroup.indexOf(groupId)]}');
       }
     }
   }
@@ -129,7 +157,8 @@ class TrackingHistoryPlaceService {
       required String groupId,
       required bool enter}) async {
     final message =
-        '${Global.instance.user?.userName} ${context?.l10n ?? 'has'} ${enter ? context?.l10n.enter ?? 'enter' : context?.l10n.enter ?? 'left'}${place.namePlace}';
+        '${Global.instance.user?.userName} ${context?.l10n ?? 'has'} ${enter ? context?.l10n.enter ?? 'enter' : context?.l10n.enter ?? 'left'} '
+        '${place.namePlace}';
     try {
       FirebaseMessageService().sendPlaceNotification(
         groupId: groupId,
@@ -140,6 +169,29 @@ class TrackingHistoryPlaceService {
         'isSendArrived': enter,
         'isSendLeaved': !enter,
       });
+
+      //đi vào place
+      if (enter) {
+        //tạo mới historyPlace
+        final StoreHistoryPlace historyPlace = StoreHistoryPlace(
+          idPlace: place.idPlace!,
+          enterTime: DateTime.now(),
+        );
+        await fireStoreClient.createHistoryPlace(
+          idGroup: groupId,
+          historyPlace: historyPlace,
+        );
+      } else {
+        //rời khỏi place
+        // cần kiểm tra xem history place có idPlace && timeLeft == null thì update timeleft
+        StoreHistoryPlace? historyPlace = await fireStoreClient
+            .getDetailHistoryPlace(idGroup: groupId, idPlace: place.idPlace!);
+        if (historyPlace != null) {
+          historyPlace = historyPlace.copyWith(leftTime: DateTime.now());
+          await fireStoreClient.updateHistoryPlace(
+              idGroup: groupId, historyPlace: historyPlace);
+        }
+      }
     } catch (error) {
       debugPrint('update Place error:$error');
     }

@@ -12,6 +12,7 @@ import '../../../../data/models/store_location/store_location.dart';
 import '../../../../data/remote/firestore_client.dart';
 import '../../../../global/global.dart';
 import '../../../../services/location_service.dart';
+import '../../../../services/my_background_service.dart';
 import '../../../../services/tracking_history_place_service.dart';
 import '../../../../shared/helpers/map_helper.dart';
 
@@ -34,14 +35,16 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
     if (lastLocation == null) {
       final String address =
           await locationService.getCurrentAddress(latLng, countReload: 5);
-      fireStoreClient.createNewLocation(
-        StoreLocation(
-          address: address,
-          lat: latLng.latitude,
-          lng: latLng.longitude,
-          updatedAt: DateTime.now(),
-        ),
+      final StoreLocation storeLocation = StoreLocation(
+        address: address,
+        lat: latLng.latitude,
+        lng: latLng.longitude,
+        updatedAt: DateTime.now(),
       );
+      fireStoreClient.createNewLocation(storeLocation);
+      Global.instance.serverLocation = latLng;
+      Global.instance.user =
+          Global.instance.user?.copyWith(location: storeLocation);
     }
 
     if (lastLocation != null) {
@@ -77,7 +80,7 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
         debugPrint('inRadius:$inRadius');
         debugPrint('server Location: ${Global.instance.serverLocation}');
         debugPrint('current Location: $latLng');
-        if (!inRadius) {
+        if (!inRadius && !getIt<MyBackgroundService>().isRunning) {
           Global.instance.serverLocation = latLngListen;
           await locationService.updateLocationUser(
             latLng: latLngListen,
