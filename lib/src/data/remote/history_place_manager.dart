@@ -71,7 +71,7 @@ class HistoryPlacesManager {
         .collection(CollectionStoreConstant.historyPlacesOfUser)
         .doc(idUser)
         .collection(CollectionStoreConstant.historyPlaces)
-        .orderBy('leftTime', descending: true)
+        .orderBy('enterTime', descending: true)
         .get();
 
     if (result.docs.isNotEmpty) {

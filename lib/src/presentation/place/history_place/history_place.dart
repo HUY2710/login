@@ -19,8 +19,7 @@ import '../../map/widgets/battery_bar.dart';
 import 'item_history_place.dart';
 
 class HistoryPlace extends StatefulWidget {
-  const HistoryPlace({super.key, required this.idUser, required this.user});
-  final String idUser;
+  const HistoryPlace({super.key, required this.user});
   final StoreUser user;
 
   @override
@@ -191,7 +190,6 @@ class _HistoryPlaceState extends State<HistoryPlace> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text('Test'),
                 Expanded(
                   child: historyPlaces == null
                       ? const Center(

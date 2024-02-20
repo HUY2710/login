@@ -15,6 +15,8 @@ import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
 import '../../shared/widgets/custom_appbar.dart';
 import '../../shared/widgets/dialog/rate_dialog.dart';
+import '../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
+import '../place/history_place/history_place.dart';
 import 'widgets/custom_item_setting.dart';
 
 @RoutePage()
@@ -74,6 +76,17 @@ class _SettingScreenState extends State<SettingScreen> {
               _buildLanguageSetting(),
               16.verticalSpace,
               _buildExternalSetting(context),
+              TextButton(
+                onPressed: () {
+                  showAppModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) =>
+                        HistoryPlace(user: Global.instance.user!),
+                  );
+                },
+                child: const Text('Show history Place'),
+              )
             ],
           ),
         ),

@@ -45,7 +45,8 @@ class ItemHistoryPlace extends StatelessWidget {
             Row(
               children: [
                 Text(TimerHelper.formatTimeHHMM(historyPlace.enterTime) ?? ''),
-                Text(' - ${TimerHelper.formatTimeHHMM(historyPlace.leftTime)}'),
+                Text(
+                    ' - ${TimerHelper.formatTimeHHMM(historyPlace.leftTime) ?? '...'}'),
               ],
             )
           ],

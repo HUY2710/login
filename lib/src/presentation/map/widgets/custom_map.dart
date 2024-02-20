@@ -132,7 +132,7 @@ class _CustomMapState extends State<CustomMap> {
           showAppModalBottomSheet(
             context: context,
             backgroundColor: Colors.transparent,
-            builder: (context) => HistoryPlace(idUser: user.code, user: user),
+            builder: (context) => HistoryPlace(user: user),
           );
         });
   }

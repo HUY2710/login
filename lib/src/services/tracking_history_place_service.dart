@@ -5,12 +5,14 @@ import 'package:injectable/injectable.dart';
 
 import '../config/di/di.dart';
 import '../config/navigation/app_router.dart';
+import '../data/local/shared_preferences_manager.dart';
 import '../data/models/store_history_place/store_history_place.dart';
 import '../data/models/store_place/store_place.dart';
 import '../data/remote/firestore_client.dart';
 import '../global/global.dart';
 import '../shared/extension/context_extension.dart';
 import '../shared/helpers/map_helper.dart';
+import '../shared/helpers/time_helper.dart';
 import 'firebase_message_service.dart';
 
 @singleton
@@ -92,13 +94,24 @@ class TrackingHistoryPlaceService {
       Global.instance.currentLocation,
       100,
     );
+    //check xem time đến place này có hơn 15phuts kể từ khi rời place hay không
+
+    final lastTime = await SharedPreferencesManager.getString(place.idPlace!);
+    bool isSpam = false;
+    if (lastTime != null) {
+      //true nếu spam
+      isSpam = TimerHelper.checkTimeDifferenceCurrent(DateTime.parse(lastTime));
+    }
 
     if (inRadius && !place.isSendArrived) {
-      await _sendNotificationAndMarkAsSent(
-        place: place,
-        groupId: groupId,
-        enter: inRadius,
-      );
+      if (!isSpam) {
+        await _sendNotificationAndMarkAsSent(
+          place: place,
+          groupId: groupId,
+          enter: inRadius,
+        );
+      }
+
       //update local
       final List<StorePlace>? places =
           listMapPlaces[listIdGroup.indexOf(groupId)].values.first;
@@ -111,10 +124,19 @@ class TrackingHistoryPlaceService {
       debugPrint(
           'listMapPlaces:${listMapPlaces[listIdGroup.indexOf(groupId)]}');
     } else if (!inRadius && place.isSendArrived && !place.isSendLeaved) {
-      await _sendNotificationAndMarkAsSent(
-        place: place,
-        groupId: groupId,
-        enter: inRadius,
+      if (!isSpam) {
+        await _sendNotificationAndMarkAsSent(
+          place: place,
+          groupId: groupId,
+          enter: inRadius,
+        );
+      }
+
+      //sau khi rời thì lưu lại time lần cuối rời place đó...để trường hợp user spam đi ra đi vào
+      //lấy idPlace đó để làm key
+      await SharedPreferencesManager.setString(
+        place.idPlace!,
+        DateTime.now().toIso8601String(),
       );
       //update local
       final List<StorePlace>? places =

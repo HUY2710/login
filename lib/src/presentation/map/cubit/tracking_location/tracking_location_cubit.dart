@@ -35,15 +35,16 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
     if (lastLocation == null) {
       final String address =
           await locationService.getCurrentAddress(latLng, countReload: 5);
-      fireStoreClient.createNewLocation(
-        StoreLocation(
-          address: address,
-          lat: latLng.latitude,
-          lng: latLng.longitude,
-          updatedAt: DateTime.now(),
-        ),
+      final StoreLocation storeLocation = StoreLocation(
+        address: address,
+        lat: latLng.latitude,
+        lng: latLng.longitude,
+        updatedAt: DateTime.now(),
       );
+      fireStoreClient.createNewLocation(storeLocation);
       Global.instance.serverLocation = latLng;
+      Global.instance.user =
+          Global.instance.user?.copyWith(location: storeLocation);
     }
 
     if (lastLocation != null) {
