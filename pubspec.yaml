@@ -90,6 +90,7 @@ flutter:
     - assets/icons/
     - assets/icons/places/
     - assets/icons/rates/
+    - assets/icons/activity/
     - assets/images/
     - assets/images/logo/
     - assets/images/onboarding/
