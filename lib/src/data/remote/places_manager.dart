@@ -89,4 +89,22 @@ class PlacesManager {
         .then((value) => debugPrint('Update Place success'))
         .catchError((error) => throw Exception(error));
   }
+
+  static Future<StorePlace?> getDetailPlace(
+      {required String idGroup, required String idPlace}) async {
+    debugPrint('idGroup:$idGroup');
+    debugPrint('idPlace:$idPlace');
+    final DocumentSnapshot<Map<String, dynamic>> doc = await CollectionStore
+        .groups
+        .doc(idGroup)
+        .collection(CollectionStoreConstant.places)
+        .doc(idPlace)
+        .get();
+
+    if (doc.data() == null) {
+      return null;
+    }
+    final StorePlace place = StorePlace.fromJson(doc.data()!);
+    return place;
+  }
 }

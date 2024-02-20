@@ -214,4 +214,11 @@ class FirestoreClient {
     await HistoryPlacesManager.updateHistoryPlace(
         idGroup: idGroup, historyPlace: historyPlace);
   }
+
+  //get history places
+  Future<List<StoreHistoryPlace>?> getListHistoryPlace(
+      {required String idGroup, required String idUser}) async {
+    return HistoryPlacesManager.getListHistoryPlace(
+        idGroup: idGroup, idUser: idUser);
+  }
 }

@@ -9,7 +9,6 @@ import '../data/models/store_history_place/store_history_place.dart';
 import '../data/models/store_place/store_place.dart';
 import '../data/remote/firestore_client.dart';
 import '../global/global.dart';
-import '../presentation/home/widgets/bottom_sheet/places/history_place.dart';
 import '../shared/extension/context_extension.dart';
 import '../shared/helpers/map_helper.dart';
 import 'firebase_message_service.dart';
@@ -71,6 +70,7 @@ class TrackingHistoryPlaceService {
       }
 
       listMapPlaces[listIdGroup.indexOf(idGroup)] = {idGroup: listPlaceGroup};
+      trackingHistoryPlace();
     });
   }
 
@@ -78,8 +78,8 @@ class TrackingHistoryPlaceService {
     debugPrint('listMapPlaces:${listMapPlaces.length}');
     listMapPlaces.asMap().forEach((index, mapPlace) {
       for (final places in mapPlace.values) {
-        places?.forEach((place) {
-          _handlePlaceNotification(place, listIdGroup[index]);
+        places?.forEach((place) async {
+          await _handlePlaceNotification(place, listIdGroup[index]);
         });
       }
     });
