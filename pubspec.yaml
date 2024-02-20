@@ -66,6 +66,7 @@ dependencies:
   http: ^1.1.0
   cached_network_image: ^3.3.1
   dotted_border: ^2.1.0
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:
@@ -89,6 +90,7 @@ flutter:
     - assets/icons/
     - assets/icons/places/
     - assets/icons/rates/
+    - assets/icons/premium/
     - assets/images/
     - assets/images/logo/
     - assets/images/onboarding/
