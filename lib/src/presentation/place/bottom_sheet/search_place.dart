@@ -11,6 +11,7 @@ import '../../../data/models/store_location/store_location.dart';
 import '../../../global/global.dart';
 import '../../../services/http_service.dart';
 import '../../../shared/constants/app_constants.dart';
+import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/helpers/map_helper.dart';
 import '../../../shared/widgets/my_drag.dart';
 import '../../onboarding/widgets/app_button.dart';
@@ -20,8 +21,15 @@ import '../cubit/select_place_cubit.dart';
 import '../widgets/item_near_by_place.dart';
 
 class SearchPlaceBottomSheet extends StatefulWidget {
-  const SearchPlaceBottomSheet({super.key, required this.selectPlaceCubit});
+  const SearchPlaceBottomSheet(
+      {super.key,
+      required this.selectPlaceCubit,
+      required this.addressCubit,
+      required this.placeLatLngCubit});
   final SelectPlaceCubit selectPlaceCubit;
+  final ValueCubit<String> addressCubit;
+  final ValueCubit<LatLng> placeLatLngCubit;
+
   @override
   State<SearchPlaceBottomSheet> createState() => _SearchPlaceBottomSheetState();
 }
@@ -114,6 +122,8 @@ class _SearchPlaceBottomSheetState extends State<SearchPlaceBottomSheet> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(AppConstants.containerBorder).r,
       ),
+      constraints:
+          BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.4),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -129,6 +139,10 @@ class _SearchPlaceBottomSheetState extends State<SearchPlaceBottomSheet> {
                       final place = listPlaceNearBy[index];
                       return GestureDetector(
                         onTap: () {
+                          widget.addressCubit.update(place.formattedAddress);
+                          widget.placeLatLngCubit.update(LatLng(
+                              place.location.latitude,
+                              place.location.longitude));
                           setState(() {
                             locationPlace = StoreLocation(
                               address: place.displayName.text,
@@ -157,7 +171,7 @@ class _SearchPlaceBottomSheetState extends State<SearchPlaceBottomSheet> {
             onTap: locationPlace.lat != 0
                 ? () {
                     widget.selectPlaceCubit.update(locationPlace);
-                    context.popRoute();
+                    context.popRoute<bool>(true);
                   }
                 : () {},
           ),
