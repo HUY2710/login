@@ -88,9 +88,9 @@ class _CustomMapState extends State<CustomMap> {
               (StorePlace place) => Circle(
                 circleId: CircleId(place.idPlace.toString()),
                 center: LatLng(place.location!['lat'], place.location!['lng']),
-                radius: 100,
-                fillColor: const Color(0xffA369FD).withOpacity(0.25),
-                strokeColor: const Color(0xffA369FD),
+                radius: place.radius ?? 100,
+                fillColor: Color(place.colorPlace).withOpacity(0.25),
+                strokeColor: Color(place.colorPlace),
                 strokeWidth: 1,
               ),
             );
