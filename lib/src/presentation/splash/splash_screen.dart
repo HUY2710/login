@@ -37,6 +37,9 @@ import '../../shared/enum/preference_keys.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/extension/int_extension.dart';
 import '../../shared/helpers/env_params.dart';
+import '../../shared/widgets/loading/app_loading.dart';
+import '../../shared/widgets/loading/indicator_loading.dart';
+import '../../shared/widgets/loading/loading_indicator.dart';
 import '../map/cubit/select_group_cubit.dart';
 import 'update_dialog.dart';
 
@@ -329,29 +332,58 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Expanded(
               child: Center(
-                child: Assets.images.splash.image(
-                  frameBuilder:
-                      (context, child, frame, wasSynchronouslyLoaded) {
-                    if (frame != 0) {
-                      return 145.verticalSpace;
-                    }
-                    return child;
-                  },
+                child: Stack(
+                  children: [
+                    Assets.images.splash.image(
+                      frameBuilder:
+                          (context, child, frame, wasSynchronouslyLoaded) {
+                        if (frame != 0) {
+                          return 145.verticalSpace;
+                        }
+                        return child;
+                      },
+                    ),
+                    Positioned(
+                      left: 70.w,
+                      top: 110.h,
+                      child: Assets.lottie.loadingSplash.lottie(
+                        width: 60.r,
+                      ),
+                    ),
+                    Positioned(
+                      right: 90.w,
+                      top: 100.h,
+                      child: Assets.lottie.loadingSplash.lottie(
+                        width: 100.r,
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Assets.lottie.loadingSplash.lottie(
-                  width: 100.r,
-                ),
-                Text(
-                  context.l10n.thisActionCanContainAds,
-                  style: const TextStyle(
-                    color: Colors.white,
+                SizedBox(
+                  height: 50.r,
+                  width: 60.r,
+                  child: const LoadingIndicator(
+                    colors: [
+                      Color.fromARGB(255, 113, 63, 207),
+                      Color(0xffB78CFF),
+                      Color(0xffD2B0FF)
+                    ],
+                    indicatorType: Indicator.ballPulse,
                   ),
                 ),
+                24.verticalSpace,
+                if (Platform.isAndroid)
+                  Text(
+                    context.l10n.thisActionCanContainAds,
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
               ],
             ),
             40.verticalSpace,

@@ -2,7 +2,7 @@
   "@@locale": "en",
   "app_title": "Flutter Base",
   "language": "Language",
-  "thisActionCanContainAds": "This action can contain ads",
+  "thisActionCanContainAds": "This action may contain advertising",
   "people": "People",
   "edit": "Edit",
   "addMember": "Add Member",
