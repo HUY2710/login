@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../config/di/di.dart';
@@ -37,7 +38,9 @@ class _DirectionMapState extends State<DirectionMap> {
   String typeDirection = RouteTravelMode.DRIVE.name;
   double distance = 0;
   double duration = 0;
+  bool showNote = false;
 
+  bool isPremium = false;
   Future<void> _openMap({
     required double lat,
     required double lng,
@@ -75,9 +78,16 @@ class _DirectionMapState extends State<DirectionMap> {
     final response = await HTTPService().postRequestRoutes(body);
     if (response.statusCode == 200) {
       print('Response body: ${response.body}');
-      final Map<String, dynamic> result = jsonDecode(response.body);
-      final RouteModel routeModel = RouteModel.fromJson(result['routes'][0]);
-      _getPolyline(routeModel.polyline.encodedPolyline);
+      try {
+        final Map<String, dynamic> result = jsonDecode(response.body);
+        final RouteModel routeModel = RouteModel.fromJson(result['routes'][0]);
+        _getPolyline(routeModel.polyline.encodedPolyline);
+      } catch (error) {
+        debugPrint('error:$error');
+        Fluttertoast.showToast(
+            msg:
+                'WALK or BICYCLE routes are in beta and might sometimes be missing clear');
+      }
     } else {
       // Nếu yêu cầu không thành công, bạn có thể xử lý lỗi ở đây
       print('Request failed with status: ${response.statusCode}');
@@ -86,7 +96,8 @@ class _DirectionMapState extends State<DirectionMap> {
   }
 
   String getRoutingPreference(String typeDirection) {
-    if (typeDirection == RouteTravelMode.WALK.name) {
+    if (typeDirection == RouteTravelMode.WALK.name ||
+        typeDirection == RouteTravelMode.BICYCLE.name) {
       return RoutingPreference.ROUTING_PREFERENCE_UNSPECIFIED.name;
     }
     //BICYCLE ddang bị lỗi
@@ -135,6 +146,7 @@ class _DirectionMapState extends State<DirectionMap> {
                   onTap: () {
                     setState(() {
                       typeDirection = RouteTravelMode.WALK.name;
+                      showNote = true;
                     });
                   },
                   child: TravelModeIcon(
@@ -145,6 +157,7 @@ class _DirectionMapState extends State<DirectionMap> {
                 GestureDetector(
                   onTap: () {
                     setState(() {
+                      showNote = true;
                       typeDirection = RouteTravelMode.BICYCLE.name;
                     });
                   },
@@ -157,6 +170,7 @@ class _DirectionMapState extends State<DirectionMap> {
                   onTap: () {
                     setState(() {
                       typeDirection = RouteTravelMode.DRIVE.name;
+                      showNote = false;
                     });
                   },
                   child: TravelModeIcon(
@@ -167,6 +181,17 @@ class _DirectionMapState extends State<DirectionMap> {
               ],
             ),
           ),
+
+          //ở đây check nếu là premium thì mới show note
+          if (isPremium && showNote)
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.h),
+              child: Text(
+                'NOTE: WALK ands BICYCLE routes are in beta and might sometimes be missing clear sidewalks, pedestrian paths, or bicycling paths',
+                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+              ),
+            ),
+
           SizedBox(height: 32.h),
           AppButton(
             title: 'Get Directions in app',

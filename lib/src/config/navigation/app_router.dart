@@ -42,7 +42,6 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: ChatRoute.page),
         AutoRoute(page: ChatDetailRoute.page),
         AutoRoute(page: JoinGroupRoute.page),
-        AutoRoute(page: TestDirectionRoutesRoute.page),
       ];
 
   AutoRoute routeWithFadeTransition(
