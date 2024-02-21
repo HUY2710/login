@@ -22,6 +22,7 @@
   "joinGroupContent": "Ask the group creator for their code",
   "joinGroupSub": "Enter the invitation code to join the circle",
   "admin": "Admin",
+  "you": "You",
   "leaveGroup": "Leave Group",
   "leaveGroupContent": "Are you sure to leave group?",
   "removeGroup": "Remove Group",

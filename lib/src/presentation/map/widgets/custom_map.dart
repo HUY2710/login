@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../data/models/store_location/store_location.dart';
 import '../../../data/models/store_place/store_place.dart';
 import '../../../data/models/store_user/store_user.dart';
+import '../../../global/global.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/constants/map_style.dart';
 import '../../place/history_place/history_place.dart';
@@ -88,7 +89,7 @@ class _CustomMapState extends State<CustomMap> {
               (StorePlace place) => Circle(
                 circleId: CircleId(place.idPlace.toString()),
                 center: LatLng(place.location!['lat'], place.location!['lng']),
-                radius: place.radius ?? 100,
+                radius: place.radius,
                 fillColor: Color(place.colorPlace).withOpacity(0.25),
                 strokeColor: Color(place.colorPlace),
                 strokeWidth: 1,
@@ -118,6 +119,9 @@ class _CustomMapState extends State<CustomMap> {
   Marker _buildFriendMarker(StoreUser user) {
     final double lat = user.location?.lat ?? 0;
     final double lng = user.location?.lng ?? 0;
+    if (user.code == Global.instance.user?.code) {
+      return const Marker(markerId: MarkerId('you'), visible: false);
+    }
     return Marker(
         anchor: const Offset(0.5, 0.72),
         position: LatLng(lat, lng),

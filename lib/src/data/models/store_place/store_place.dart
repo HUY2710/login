@@ -13,7 +13,7 @@ class StorePlace with _$StorePlace {
     required String idCreator,
     Map<String, dynamic>? location,
     required int colorPlace,
-    required double? radius,
+    @Default(100) double radius,
     @JsonKey(includeFromJson: false, includeToJson: false) Uint8List? marker,
     @Default(true) bool onNotify,
     @Default(false) bool isSendLeaved,

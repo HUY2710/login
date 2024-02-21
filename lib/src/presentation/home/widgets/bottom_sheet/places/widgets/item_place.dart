@@ -58,10 +58,6 @@ class ItemPlace extends StatelessWidget {
             ],
           ),
         ),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.notifications),
-        ),
         if (place.idCreator == Global.instance.user?.code)
           IconButton(
             onPressed: () {

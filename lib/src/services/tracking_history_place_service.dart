@@ -92,7 +92,7 @@ class TrackingHistoryPlaceService {
     final inRadius = MapHelper.isWithinRadius(
       LatLng(place.location?['lat'], place.location?['lng']),
       Global.instance.currentLocation,
-      100,
+      place.radius,
     );
     //check xem time đến place này có hơn 15phuts kể từ khi rời place hay không
 
