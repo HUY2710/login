@@ -74,8 +74,8 @@ class ActionGroupBottomSheet extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 24.h),
             child: GestureDetector(
-              child: itemAction(Assets.icons.icNotify.svg(width: 20.r),
-                  'Location notification',
+              child: itemAction(
+                  Assets.icons.icNotify.svg(width: 20.r), 'Notification',
                   notifyCubit: notifyCubit),
             ),
           ),
@@ -155,7 +155,11 @@ class ActionGroupBottomSheet extends StatelessWidget {
                     myGroupCubit.state.maybeWhen(
                       orElse: () {},
                       success: (groups) {
-                        final indexGroup = groups.indexOf(itemGroup);
+                        final indexGroup = groups.indexWhere(
+                          (element) =>
+                              element.idGroup ==
+                              getIt<SelectGroupCubit>().state!.idGroup,
+                        );
                         final tempGroup = itemGroup.copyWith(notify: value);
                         myGroupCubit.updateItemGroup(tempGroup, indexGroup);
                       },

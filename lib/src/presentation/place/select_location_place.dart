@@ -63,7 +63,7 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
         size: Size.fromRadius(0.5.r),
         devicePixelRatio: ScreenUtil().pixelRatio,
       ),
-      Assets.images.markers.circleDot.path,
+      Assets.images.markers.pin.path,
     );
 
     setState(() {
