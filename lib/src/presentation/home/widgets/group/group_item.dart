@@ -13,13 +13,11 @@ import '../../../../data/models/store_member/store_member.dart';
 import '../../../../gen/gens.dart';
 import '../../../../global/global.dart';
 import '../../../../shared/extension/context_extension.dart';
-import '../../../../shared/widgets/custom_inkwell.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../map/cubit/select_group_cubit.dart';
 import '../../cubit/my_list_group/my_list_group_cubit.dart';
-import '../bottom_sheet/create_edit_group.dart';
+import '../bottom_sheet/groups/action_group.dart';
 import '../bottom_sheet/show_bottom_sheet_home.dart';
-import '../dialog/action_dialog.dart';
 
 class GroupItem extends StatelessWidget {
   const GroupItem({
@@ -136,96 +134,21 @@ class GroupItem extends StatelessWidget {
             BlocBuilder<SelectGroupCubit, StoreGroup?>(
               bloc: getIt<SelectGroupCubit>(),
               builder: (context, state) {
-                if (isAdmin(itemGroup)) {
-                  return Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CustomInkWell(
-                        onTap: () {
-                          context.popRoute().then(
-                                (value) => showAppModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  builder: (context) => Padding(
-                                    padding: EdgeInsets.only(
-                                      bottom: MediaQuery.of(context)
-                                          .viewInsets
-                                          .bottom,
-                                    ),
-                                    child: CreateEditGroup(
-                                      detailGroup: itemGroup,
-                                    ),
-                                  ),
-                                ),
-                              );
-                        },
-                        child:
-                            GradientSvg(Assets.icons.icEdit.svg(width: 20.r)),
+                return GestureDetector(
+                  onTap: () {
+                    showAppModalBottomSheet(
+                      context: context,
+                      builder: (context) => ActionGroupBottomSheet(
+                        itemGroup: itemGroup,
+                        isAdmin: isAdmin(itemGroup),
+                        myGroupCubit: myGroupCubit,
                       ),
-                      10.horizontalSpace,
-                      CustomInkWell(
-                        onTap: () async {
-                          showDialog(
-                            context: context,
-                            builder: (context) => ActionDialog(
-                              title: 'Remove Group',
-                              subTitle:
-                                  'You’re currently the group owner. Are you sure to delete it permanantly?',
-                              confirmTap: () async {
-                                //delete group
-                                EasyLoading.show();
-                                myGroupCubit
-                                    .deleteGroup(itemGroup)
-                                    .then((value) {
-                                  if (itemGroup.idGroup == state?.idGroup) {
-                                    getIt<SelectGroupCubit>().update(null);
-                                  }
-                                  EasyLoading.dismiss();
-                                  context.popRoute();
-                                });
-                              },
-                              confirmText: 'Delete',
-                            ),
-                          );
-                        },
-                        child: Assets.icons.icTrash.svg(width: 20.r),
-                      )
-                    ],
-                  );
-                }
-                if (!isAdmin(itemGroup)) {
-                  return Align(
-                    alignment: Alignment.centerRight,
-                    child: CustomInkWell(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => ActionDialog(
-                            title: 'Leave Group',
-                            subTitle: 'Are you sure to leave group?',
-                            confirmTap: () {
-                              EasyLoading.show();
-                              myGroupCubit
-                                  .leaveGroup(
-                                group: itemGroup,
-                                exceptionCubit: exceptionCubit,
-                                context: context,
-                              )
-                                  .then((value) async {
-                                EasyLoading.dismiss();
-                                context.popRoute();
-                              });
-                            },
-                            confirmText: 'Leave',
-                          ),
-                        );
-                      },
-                      child:
-                          GradientSvg(Assets.icons.icLoggout.svg(width: 20.r)),
-                    ),
-                  );
-                }
-                return const SizedBox();
+                    );
+                  },
+                  child: GradientSvg(
+                    Assets.icons.ic3dot.svg(width: 20.r),
+                  ),
+                );
               },
             ),
           ],

@@ -47,6 +47,12 @@ class FirestoreClient {
     await GroupsManager.createGroup(newGroup);
   }
 
+  //update notify group
+  Future<void> updateNotifyGroup(
+      {required String idGroup, required bool onNotify}) async {
+    GroupsManager.updateNotify(idGroup, onNotify);
+  }
+
   //get detail group
   Future<StoreGroup?> getDetailGroup(String idGroup) async {
     final group = await GroupsManager.getDetailGroup(idGroup);

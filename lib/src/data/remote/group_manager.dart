@@ -289,4 +289,12 @@ class GroupsManager {
         .collection(CollectionStoreConstant.myGroups)
         .snapshots();
   }
+
+  static Future<void> updateNotify(String idGroup, bool onNotify) async {
+    await CollectionStore.groups
+        .doc(idGroup)
+        .update({'notify': onNotify}).catchError((error) {
+      throw Exception(error);
+    });
+  }
 }
