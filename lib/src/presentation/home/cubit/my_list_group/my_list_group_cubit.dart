@@ -65,4 +65,14 @@ class MyListGroupCubit extends Cubit<MyListGroupState> {
       debugPrint('error:$error');
     }
   }
+
+  void updateItemGroup(StoreGroup group, int index) {
+    try {
+      _groups[index] = group;
+      emit(const MyListGroupState.loading());
+      emit(MyListGroupState.success(_groups));
+    } catch (error) {
+      emit(MyListGroupState.error(error.toString()));
+    }
+  }
 }

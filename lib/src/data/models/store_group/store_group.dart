@@ -15,6 +15,7 @@ class StoreGroup with _$StoreGroup {
     required String passCode, //code invite user join group
     required String groupName,
     required String avatarGroup,
+    @Default(true) bool notify,
     // @JsonKey(
     //   includeFromJson: true,
     //   includeToJson: false,
