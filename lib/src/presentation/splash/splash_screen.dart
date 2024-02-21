@@ -37,8 +37,6 @@ import '../../shared/enum/preference_keys.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/extension/int_extension.dart';
 import '../../shared/helpers/env_params.dart';
-import '../../shared/widgets/loading/app_loading.dart';
-import '../../shared/widgets/loading/indicator_loading.dart';
 import '../../shared/widgets/loading/loading_indicator.dart';
 import '../map/cubit/select_group_cubit.dart';
 import 'update_dialog.dart';
