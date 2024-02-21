@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../config/di/di.dart';
 import '../../../../../../data/models/store_member/store_member.dart';
+import '../../../../../../data/models/store_user/store_user.dart';
 import '../../../../../../data/remote/firestore_client.dart';
 import '../../../../../../gen/assets.gen.dart';
 import '../../../../../../global/global.dart';
@@ -17,28 +18,34 @@ import 'item_member.dart';
 class BuildListMember extends StatelessWidget {
   const BuildListMember({
     super.key,
-    required this.listStoreMember,
     required this.isEditCubit,
+    required this.listMembers,
   });
-  final List<StoreMember> listStoreMember;
+  final List<StoreUser> listMembers;
   final ValueCubit<bool> isEditCubit;
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: listStoreMember.length,
+      itemCount: listMembers.length,
       itemBuilder: (context, index) {
-        final StoreMember member = listStoreMember[index];
-        if (member.idUser == Global.instance.user?.code &&
-            listStoreMember.length == 1) {
-          return const Text('Only you');
-        }
+        final StoreUser member = listMembers[index];
+        debugPrint('code member:${member.code}');
+        final admin = getIt<SelectGroupCubit>().state?.storeMembers?.firstWhere(
+              (member) => member.isAdmin,
+              orElse: () => const StoreMember(isAdmin: false),
+            );
+        debugPrint('code admn:${admin?.idUser}');
+
+        debugPrint(' admin:${admin?.idUser == member.code}');
         return Row(
           children: [
             BlocBuilder<ValueCubit<bool>, bool?>(
               bloc: isEditCubit,
               builder: (context, state) {
                 return Visibility(
-                  visible: state != null && state,
+                  visible: state != null &&
+                      state &&
+                      member.code != Global.instance.user?.code,
                   child: GestureDetector(
                     onTap: () {
                       try {
@@ -54,9 +61,9 @@ class BuildListMember extends StatelessWidget {
                               EasyLoading.show();
                               await FirestoreClient.instance.leaveGroup(
                                   getIt<SelectGroupCubit>().state!.idGroup!,
-                                  member.idUser ?? '');
+                                  member.code);
                               getIt<SelectGroupCubit>()
-                                  .removeMember(member.idUser ?? '');
+                                  .removeMember(member.code);
                               //xóa user ra khỏi group local data
                               EasyLoading.dismiss();
                             },
@@ -77,8 +84,8 @@ class BuildListMember extends StatelessWidget {
             ),
             Expanded(
               child: ItemMember(
-                isAdmin: listStoreMember[index].isAdmin,
-                idUser: listStoreMember[index].idUser ?? '',
+                isAdmin: admin?.idUser == member.code,
+                user: member,
               ),
             ),
           ],

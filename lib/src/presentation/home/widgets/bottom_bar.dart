@@ -129,29 +129,20 @@ class _BottomBarState extends State<BottomBar> {
 
   Widget buildItem(String path, BuildContext context, bool isMessage,
       {bool? avatar}) {
-    final value = ValueNotifier<int>(0);
     return InkWell(
       onTap: () {
-        if (isMessage) {
-          context.pushRoute(const ChatRoute());
-          return;
-        }
         //check xem có join group nào chưa
         if (getIt<SelectGroupCubit>().state != null) {
+          if (isMessage) {
+            context.pushRoute(const ChatRoute());
+            return;
+          }
           showAppModalBottomSheet(
               context: context,
               builder: (context) {
-                return StatefulBuilder(builder: (context, _) {
-                  return ValueListenableBuilder(
-                      valueListenable: value,
-                      builder: (context, val, child) {
-                        return const AnimatedSwitcher(
-                            duration: Duration(
-                              microseconds: 700,
-                            ),
-                            child: MembersBottomSheet());
-                      });
-                });
+                return MembersBottomSheet(
+                  trackingMemberCubit: widget.trackingMemberCubit,
+                );
               });
         } else {
           Fluttertoast.showToast(msg: 'Please join group first');

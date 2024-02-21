@@ -93,7 +93,8 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
           //sau khi lấy được thông tin user thì tiến hành query đến location của user đó
 
           // Thực hiện các xử lý khác với infoUser...
-          if (infoUser != null && infoUser.code != Global.instance.user?.code) {
+          //&& infoUser.code != Global.instance.user?.code
+          if (infoUser != null) {
             //lấy vị trí cuối cùng của user
             infoUser = infoUser.copyWith(
                 location: await _fireStoreClient.getUserLocation(infoUser.code),
