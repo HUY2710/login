@@ -113,4 +113,17 @@ mixin PermissionMixin {
         await Permission.locationAlways.status;
     return locationAlwaysStatus.isGranted;
   }
+
+  //notification
+  Future<bool> requestNotification() async {
+    final PermissionStatus notificationStatus =
+        await Permission.notification.request();
+    return notificationStatus.isGranted;
+  }
+
+  Future<bool> requestActivityRecognition() async {
+    final PermissionStatus activityRecognition =
+        await Permission.activityRecognition.request();
+    return activityRecognition.isGranted;
+  }
 }
