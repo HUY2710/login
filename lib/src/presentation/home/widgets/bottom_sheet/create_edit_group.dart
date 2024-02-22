@@ -263,8 +263,9 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
             ),
           ),
           20.verticalSpace,
-          TextFormField(
+          TextField(
             controller: groupNameController,
+            textAlign: TextAlign.center,
             onChanged: (value) {
               setState(() {
                 groupNameController.text = value;
@@ -274,6 +275,14 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(15.r),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15.r),
+                ),
+                borderSide: const BorderSide(
+                  color: Color(0xff7B3EFF),
                 ),
               ),
             ),

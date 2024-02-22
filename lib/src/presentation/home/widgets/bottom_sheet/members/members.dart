@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../../config/di/di.dart';
-import '../../../../../data/models/store_group/store_group.dart';
+import '../../../../../data/models/store_user/store_user.dart';
 import '../../../../../gen/assets.gen.dart';
 import '../../../../../global/global.dart';
 import '../../../../../shared/cubit/value_cubit.dart';
@@ -12,7 +12,9 @@ import '../../../../../shared/extension/context_extension.dart';
 import '../../../../../shared/helpers/gradient_background.dart';
 import '../../../../../shared/widgets/custom_inkwell.dart';
 import '../../../../../shared/widgets/gradient_text.dart';
+import '../../../../../shared/widgets/loading/loading_indicator.dart';
 import '../../../../map/cubit/select_group_cubit.dart';
+import '../../../../map/cubit/tracking_members/tracking_member_cubit.dart';
 import '../invite_code.dart';
 import '../show_bottom_sheet_home.dart';
 import 'widgets/build_list_member.dart';
@@ -20,7 +22,9 @@ import 'widgets/build_list_member.dart';
 class MembersBottomSheet extends StatelessWidget {
   const MembersBottomSheet({
     super.key,
+    required this.trackingMemberCubit,
   });
+  final TrackingMemberCubit trackingMemberCubit;
   @override
   Widget build(BuildContext context) {
     final currentGroupCubit = getIt<SelectGroupCubit>();
@@ -176,21 +180,26 @@ class MembersBottomSheet extends StatelessWidget {
                 ),
               ),
               10.verticalSpace,
-              BlocBuilder<SelectGroupCubit, StoreGroup?>(
-                bloc: currentGroupCubit,
-                builder: (context, state) {
-                  if (state?.storeMembers != null &&
-                      state!.storeMembers!.isNotEmpty) {
-                    return Expanded(
-                      child: BuildListMember(
-                        listStoreMember: state.storeMembers!,
-                        isEditCubit: isEditCubit,
+              BlocBuilder<TrackingMemberCubit, TrackingMemberState>(
+                bloc: trackingMemberCubit,
+                builder: (context, stateTrackingMemberCubit) {
+                  return stateTrackingMemberCubit.maybeWhen(
+                    orElse: () => const SizedBox(),
+                    loading: () => SizedBox(
+                      height: 40,
+                      width: 60.w,
+                      child: const LoadingIndicator(
+                        indicatorType: Indicator.ballPulse,
                       ),
-                    );
-                  }
-                  return const Text(
-                    'No found other member in Group',
-                    style: TextStyle(color: Colors.black),
+                    ),
+                    success: (List<StoreUser> members) {
+                      return Expanded(
+                        child: BuildListMember(
+                          listMembers: members,
+                          isEditCubit: isEditCubit,
+                        ),
+                      );
+                    },
                   );
                 },
               )

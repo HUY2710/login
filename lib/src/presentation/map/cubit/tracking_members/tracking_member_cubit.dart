@@ -93,12 +93,17 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
           //sau khi lấy được thông tin user thì tiến hành query đến location của user đó
 
           // Thực hiện các xử lý khác với infoUser...
-          if (infoUser != null && infoUser.code != Global.instance.user?.code) {
+          //&& infoUser.code != Global.instance.user?.code
+          if (infoUser != null) {
             //lấy vị trí cuối cùng của user
             infoUser = infoUser.copyWith(
                 location: await _fireStoreClient.getUserLocation(infoUser.code),
                 subscriptionLocation: _listenLocationUserUpdate(infoUser));
             _trackingListMember.add(infoUser);
+          } else {
+            debugPrint('${infoUser?.code != Global.instance.user?.code}');
+            debugPrint('idMember:${infoUser?.code}');
+            debugPrint('your code:${Global.instance.user?.code}');
           }
         }
         //lắng nghe khi có member rời hoặc bị xóa khỏi group

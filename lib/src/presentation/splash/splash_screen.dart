@@ -30,11 +30,14 @@ import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
+import '../../services/my_background_service.dart';
+import '../../services/tracking_history_place_service.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/enum/preference_keys.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/extension/int_extension.dart';
 import '../../shared/helpers/env_params.dart';
+import '../../shared/widgets/loading/loading_indicator.dart';
 import '../map/cubit/select_group_cubit.dart';
 import 'update_dialog.dart';
 
@@ -164,7 +167,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> setInitScreen() async {
     await getMe();
     await checkInGroup();
-
+    await getIt<TrackingHistoryPlaceService>().initGroups();
     final bool isFirstLaunch =
         await SharedPreferencesManager.getIsFirstLaunch();
     if (mounted) {
@@ -255,8 +258,11 @@ class _SplashScreenState extends State<SplashScreen> {
       storeUser = await FirestoreClient.instance.getUser(userCode);
     }
     Global.instance.user = storeUser;
+    getIt<MyBackgroundService>().initSubAndUnSubTopic();
     final location = await FirestoreClient.instance.getLocation();
+
     if (location != null) {
+      Global.instance.user = Global.instance.user?.copyWith(location: location);
       Global.instance.serverLocation = LatLng(location.lat, location.lng);
       Global.instance.currentLocation = LatLng(location.lat, location.lng);
     }
@@ -324,29 +330,58 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Expanded(
               child: Center(
-                child: Assets.images.splash.image(
-                  frameBuilder:
-                      (context, child, frame, wasSynchronouslyLoaded) {
-                    if (frame != 0) {
-                      return 145.verticalSpace;
-                    }
-                    return child;
-                  },
+                child: Stack(
+                  children: [
+                    Assets.images.splash.image(
+                      frameBuilder:
+                          (context, child, frame, wasSynchronouslyLoaded) {
+                        if (frame != 0) {
+                          return 145.verticalSpace;
+                        }
+                        return child;
+                      },
+                    ),
+                    Positioned(
+                      left: 70.w,
+                      top: 110.h,
+                      child: Assets.lottie.loadingSplash.lottie(
+                        width: 60.r,
+                      ),
+                    ),
+                    Positioned(
+                      right: 90.w,
+                      top: 100.h,
+                      child: Assets.lottie.loadingSplash.lottie(
+                        width: 100.r,
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Assets.lottie.loadingSplash.lottie(
-                  width: 100.r,
-                ),
-                Text(
-                  context.l10n.thisActionCanContainAds,
-                  style: const TextStyle(
-                    color: Colors.white,
+                SizedBox(
+                  height: 50.r,
+                  width: 60.r,
+                  child: const LoadingIndicator(
+                    colors: [
+                      Color.fromARGB(255, 113, 63, 207),
+                      Color(0xffB78CFF),
+                      Color(0xffD2B0FF)
+                    ],
+                    indicatorType: Indicator.ballPulse,
                   ),
                 ),
+                24.verticalSpace,
+                if (Platform.isAndroid)
+                  Text(
+                    context.l10n.thisActionCanContainAds,
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
               ],
             ),
             40.verticalSpace,

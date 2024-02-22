@@ -8,6 +8,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
+import '../../../data/local/shared_preferences_manager.dart';
 import '../../../gen/gens.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/mixin/permission_mixin.dart';
@@ -129,7 +130,8 @@ class JoinGroupScreen extends StatelessWidget with PermissionMixin {
                       orElse: () {},
                       valid: (group) async {
                         Fluttertoast.showToast(msg: 'Join group success');
-                        context.popRoute();
+                        await SharedPreferencesManager.saveIsCreateInfoFistTime(
+                            false);
                         final bool statusLocation =
                             await checkPermissionLocation();
                         if (!statusLocation && context.mounted) {

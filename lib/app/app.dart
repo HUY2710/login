@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_lifecycle_detector/flutter_lifecycle_detector.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../module/iap/my_purchase_manager.dart';
@@ -9,6 +10,7 @@ import '../src/config/di/di.dart';
 import '../src/config/navigation/app_router.dart';
 import '../src/config/observer/route_observer.dart';
 import '../src/config/theme/light/light_theme.dart';
+import '../src/data/remote/firestore_client.dart';
 import '../src/shared/enum/language.dart';
 import 'cubit/language_cubit.dart';
 import 'cubit/native_ad_status_cubit.dart';
@@ -26,6 +28,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   double get designWidth => 390; //default
   double get designHeight => 844; //default
+  @override
+  void initState() {
+    FlutterLifecycleDetector().onBackgroundChange.listen((isBackground) {
+      FirestoreClient.instance.updateUser({'online': !isBackground});
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

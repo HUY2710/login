@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../app/cubit/language_cubit.dart';
 import '../../config/navigation/app_router.dart';
-import '../../config/remote_config.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/assets.gen.dart';
 import '../../shared/cubit/value_cubit.dart';
@@ -33,20 +32,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
     with PermissionMixin {
   final PageController _pageController = PageController();
 
-  ValueNotifier<bool> showSkipButton = ValueNotifier(false);
-
   @override
   void initState() {
     context.read<LanguageCubit>().update(widget.language);
-    checkShowSkipButton();
     super.initState();
-  }
-
-  Future<void> checkShowSkipButton() async {
-    final bool isStarted = await SharedPreferencesManager.getIsStarted();
-    final bool showButton =
-        RemoteConfigManager.instance.isShowSkipIntroButton();
-    showSkipButton.value = !isStarted && showButton;
   }
 
   Future<void> navigateToNextScreen() async {
@@ -74,33 +63,31 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
     return BlocProvider(
       create: (context) => ValueCubit<int>(0),
       child: Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          actions: [
+            TextButton(
+              onPressed: () {
+                navigateToNextScreen();
+              },
+              child: Text(
+                'Skip',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16.sp,
+                  color: Colors.white,
+                ),
+              ),
+            )
+          ],
+        ),
         body: Column(
           children: [
             Expanded(
               child: Stack(
                 children: [
                   OnboardingCarousel(pageController: _pageController),
-                  Positioned(
-                    top: ScreenUtil().statusBarHeight,
-                    left: 5,
-                    child: ValueListenableBuilder(
-                      valueListenable: showSkipButton,
-                      builder: (context, value, child) {
-                        if (!value) {
-                          return const SizedBox();
-                        }
-                        return TextButton(
-                          onPressed: navigateToNextScreen,
-                          child: Text(
-                            'Skip',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
                 ],
               ),
             ),

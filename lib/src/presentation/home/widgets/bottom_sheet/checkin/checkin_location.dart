@@ -30,7 +30,6 @@ class _CheckInLocationState extends State<CheckInLocation> {
   List<Place> listPlaceNearBy = [];
   @override
   void initState() {
-    // TODO: implement initState
     checkLocationAndRequest();
     super.initState();
   }

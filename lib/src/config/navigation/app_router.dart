@@ -15,6 +15,8 @@ import '../../presentation/language/screen/language_screen.dart';
 import '../../presentation/onboarding/onboarding_screen.dart';
 import '../../presentation/permission/permission_screen.dart';
 import '../../presentation/premium/premium_screen.dart';
+import '../../presentation/place/cubit/select_place_cubit.dart';
+import '../../presentation/place/select_location_place.dart';
 import '../../presentation/setting/about_screen.dart';
 import '../../presentation/setting/setting_screen.dart';
 import '../../presentation/splash/splash_screen.dart';
@@ -44,6 +46,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: ChatDetailRoute.page),
         AutoRoute(page: JoinGroupRoute.page),
         AutoRoute(page: PremiumRoute.page),
+        AutoRoute(page: SelectLocationPlaceRoute.page)
       ];
 
   AutoRoute routeWithFadeTransition(

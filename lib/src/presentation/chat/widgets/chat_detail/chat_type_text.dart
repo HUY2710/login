@@ -138,11 +138,13 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
               //     .read<ChatTypeCubit>()
               //     .update(const ChatTypeState(type: TypeChat.location));
               ChatService.instance.sendMessageLocation(
-                  content: '',
-                  idGroup: widget.idGroup,
-                  lat: Global.instance.currentLocation.latitude,
-                  long: Global.instance.currentLocation.longitude,
-                  groupName: widget.groupName);
+                content: '',
+                idGroup: widget.idGroup,
+                lat: Global.instance.currentLocation.latitude,
+                long: Global.instance.currentLocation.longitude,
+                groupName: widget.groupName,
+                context: context,
+              );
             },
             child: Container(
               padding: EdgeInsets.all(10.r),

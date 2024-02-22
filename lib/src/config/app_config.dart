@@ -29,9 +29,9 @@ class AppConfig with SystemUiMixin {
       _initGlobalData(),
     ]);
     configureDependencies();
+    await FirebaseMessageService().initNotification();
     await FirebaseMessageService().startService();
-    // FirebaseMessageService().listenBackgroundMessage();
-    // await FirebaseMessageService().subscribeTopics(['group1']);
+    FirebaseMessageService().listenBackgroundMessage();
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.fadingCircle
       ..maskType = EasyLoadingMaskType.custom

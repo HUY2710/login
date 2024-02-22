@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../global/global.dart';
 import '../models/store_group/store_group.dart';
+import '../models/store_history_place/store_history_place.dart';
 import '../models/store_location/store_location.dart';
 import '../models/store_member/store_member.dart';
 import '../models/store_place/store_place.dart';
@@ -9,6 +10,7 @@ import '../models/store_user/store_user.dart';
 import 'collection_store.dart';
 import 'current_user_store.dart';
 import 'group_manager.dart';
+import 'history_place_manager.dart';
 import 'location_manager.dart';
 import 'member_manager.dart';
 import 'places_manager.dart';
@@ -36,9 +38,19 @@ class FirestoreClient {
   }
 
   //manager group
+  //lắng nghe sự thay đổi của tất cả groups của mình (groups mình tạo, groups mình join)
+  Stream<QuerySnapshot<Map<String, dynamic>>> listenMyGroups() {
+    return GroupsManager.listenMyIdGroups();
+  }
 
   Future<void> createGroup(StoreGroup newGroup) async {
     await GroupsManager.createGroup(newGroup);
+  }
+
+  //update notify group
+  Future<void> updateNotifyGroup(
+      {required String idGroup, required bool onNotify}) async {
+    GroupsManager.updateNotify(idGroup, onNotify);
   }
 
   //get detail group
@@ -134,10 +146,10 @@ class FirestoreClient {
     return GroupsManager.listenToGroupMembersChanges(idGroup);
   }
 
-  //listen member group
-  // Stream<QuerySnapshot<Map<String, dynamic>>> fetchTrackingMemberStream() {
-  //   return GroupsManager.fetchTrackingMemberStream();
-  // }
+  //lấy toàn bộ id group mà mình join
+  Future<List<String>?> listIdGroup() async {
+    return GroupsManager.getIdMyListGroup();
+  }
 
   ///[Location]
   Future<void> createNewLocation(StoreLocation newLocation) async {
@@ -176,5 +188,43 @@ class FirestoreClient {
 
   Future<void> removePlace(String idGroup, String idPlace) async {
     await PlacesManager.removePlace(idGroup: idGroup, idPlace: idPlace);
+  }
+
+  //lấy toàn bộ place trong group
+  Future<List<StorePlace>?> listPlaces(String idGroup) async {
+    return PlacesManager.getListStorePlace(idGroup);
+  }
+
+  Future<void> updatePlace(
+      String idGroup, String idPlace, Map<String, dynamic> fields) async {
+    await PlacesManager.updatePlace(idGroup, idPlace, fields);
+  }
+
+  //add history place
+  Future<void> createHistoryPlace(
+      {required String idGroup,
+      required StoreHistoryPlace historyPlace}) async {
+    await HistoryPlacesManager.createHistoryPlace(
+        idGroup: idGroup, historyPlace: historyPlace);
+  }
+
+  Future<StoreHistoryPlace?> getDetailHistoryPlace(
+      {required String idGroup, required String idPlace}) async {
+    return HistoryPlacesManager.getDetailHistoryPlace(
+        idGroup: idGroup, idPlace: idPlace);
+  }
+
+  Future<void> updateHistoryPlace(
+      {required String idGroup,
+      required StoreHistoryPlace historyPlace}) async {
+    await HistoryPlacesManager.updateHistoryPlace(
+        idGroup: idGroup, historyPlace: historyPlace);
+  }
+
+  //get history places
+  Future<List<StoreHistoryPlace>?> getListHistoryPlace(
+      {required String idGroup, required String idUser}) async {
+    return HistoryPlacesManager.getListHistoryPlace(
+        idGroup: idGroup, idUser: idUser);
   }
 }

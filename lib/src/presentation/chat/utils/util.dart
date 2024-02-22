@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_message/store_message.dart';
 import '../../../global/global.dart';
-import '../../../shared/helpers/logger_utils.dart';
 
 class Utils {
   Utils._();

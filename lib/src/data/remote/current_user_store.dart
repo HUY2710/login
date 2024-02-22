@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../global/global.dart';
 import '../../shared/utils/logger_utils.dart';
 import '../models/store_user/store_user.dart';
 import 'collection_store.dart';
@@ -39,7 +38,7 @@ class CurrentUserManager {
       return null;
     }
     final StoreUser user = StoreUser.fromJson(doc.data()!);
-    LoggerUtils.logInfo('Fetch User: ${Global.instance.user}');
+    LoggerUtils.logInfo('Fetch User: $user');
     return user;
   }
 }

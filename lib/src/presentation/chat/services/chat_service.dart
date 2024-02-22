@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/di/di.dart';
@@ -84,6 +85,7 @@ class ChatService {
   }) async {
     final user = Global.instance.user;
     if (user?.code == null) {
+      // ignore: only_throw_errors
       throw 'User must have';
     } else {
       final message = MessageModel(
@@ -118,11 +120,13 @@ class ChatService {
     required double lat,
     required double long,
     required String groupName,
+    required BuildContext context,
     bool haveNoti = true,
     bool isCheckin = false,
   }) async {
     final user = Global.instance.user;
     if (user?.code == null) {
+      // ignore: only_throw_errors
       throw 'User must have';
     } else {
       final message = MessageModel(
@@ -141,8 +145,10 @@ class ChatService {
           if (isCheckin) {
             final address =
                 await LocationService().getCurrentAddress(LatLng(lat, long));
-            getIt<FirebaseMessageService>()
-                .sendCheckInNotification(idGroup, address);
+            if (context.mounted) {
+              getIt<FirebaseMessageService>()
+                  .sendCheckInNotification(idGroup, address, context);
+            }
           } else {
             getIt<FirebaseMessageService>().sendChatNotification(
               idGroup,

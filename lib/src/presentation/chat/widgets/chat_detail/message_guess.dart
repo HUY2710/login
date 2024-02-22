@@ -184,7 +184,7 @@ class MessageTypeGuess extends StatelessWidget {
                         style: TextStyle(fontSize: 13.sp),
                       );
                     }
-                    return SizedBox();
+                    return const SizedBox();
                   }),
             ),
           ],

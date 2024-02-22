@@ -124,7 +124,7 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
                     ],
                   ),
                   Text(
-                    '${widget.message}',
+                    widget.message,
                     style: TextStyle(
                         color: const Color(0xff6C6C6C),
                         fontSize: 13.sp,

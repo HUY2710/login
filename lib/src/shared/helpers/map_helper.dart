@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:map_launcher/map_launcher.dart' as mapLauncher;
 
 class MapHelper {
   MapHelper._();
@@ -42,4 +43,31 @@ class MapHelper {
 // Đổi độ sang radian
 double _degreesToRadians(double degrees) {
   return degrees * pi / 180;
+}
+
+Future<void> openMapWithDestination({
+  required double lat,
+  required double long,
+  required String title,
+}) async {
+  final List<mapLauncher.AvailableMap> availableMaps =
+      await mapLauncher.MapLauncher.installedMaps;
+
+  final int googleMapIndex = availableMaps
+      .indexWhere((element) => element.mapType == mapLauncher.MapType.google);
+
+  mapLauncher.AvailableMap map;
+
+  if (googleMapIndex >= 0) {
+    map = availableMaps[googleMapIndex];
+  } else {
+    final int appleMapIndex = availableMaps
+        .indexWhere((element) => element.mapType == mapLauncher.MapType.apple);
+    map = availableMaps[appleMapIndex];
+  }
+  final mapLauncher.Coords destination = mapLauncher.Coords(lat, long);
+  await map.showDirections(
+    destination: destination,
+    destinationTitle: title,
+  );
 }

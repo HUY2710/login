@@ -2,7 +2,7 @@
   "@@locale": "en",
   "app_title": "Flutter Base",
   "language": "Language",
-  "thisActionCanContainAds": "This action can contain ads",
+  "thisActionCanContainAds": "This action may contain advertising",
   "people": "People",
   "edit": "Edit",
   "addMember": "Add Member",
@@ -22,6 +22,7 @@
   "joinGroupContent": "Ask the group creator for their code",
   "joinGroupSub": "Enter the invitation code to join the circle",
   "admin": "Admin",
+  "you": "You",
   "leaveGroup": "Leave Group",
   "leaveGroupContent": "Are you sure to leave group?",
   "removeGroup": "Remove Group",
@@ -34,5 +35,8 @@
   "addNewMember": "Add a new members",
   "unexpectedError": "An unexpected error occurred!",
   "alreadyOwnError": "Looks like you already owned this item.\nPlease click \"Restore purchase\" to continue.",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "enter": "enter",
+  "left": "left",
+  "has": "has"
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -11,6 +12,8 @@ import '../../../../data/models/store_location/store_location.dart';
 import '../../../../data/remote/firestore_client.dart';
 import '../../../../global/global.dart';
 import '../../../../services/location_service.dart';
+import '../../../../services/my_background_service.dart';
+import '../../../../services/tracking_history_place_service.dart';
 import '../../../../shared/helpers/map_helper.dart';
 
 part 'tracking_location_cubit.freezed.dart';
@@ -32,14 +35,16 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
     if (lastLocation == null) {
       final String address =
           await locationService.getCurrentAddress(latLng, countReload: 5);
-      fireStoreClient.createNewLocation(
-        StoreLocation(
-          address: address,
-          lat: latLng.latitude,
-          lng: latLng.longitude,
-          updatedAt: DateTime.now(),
-        ),
+      final StoreLocation storeLocation = StoreLocation(
+        address: address,
+        lat: latLng.latitude,
+        lng: latLng.longitude,
+        updatedAt: DateTime.now(),
       );
+      fireStoreClient.createNewLocation(storeLocation);
+      Global.instance.serverLocation = latLng;
+      Global.instance.user =
+          Global.instance.user?.copyWith(location: storeLocation);
     }
 
     if (lastLocation != null) {
@@ -62,24 +67,28 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
     }
 
     _locationSubscription =
-        locationService.getLocationStream().listen((LatLng latLng) async {
-      Global.instance.currentLocation = latLng;
+        locationService.getLocationStream().listen((LatLng latLngListen) async {
+      Global.instance.currentLocation = latLngListen;
 
-      Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 15 : 30),
-          (timer) {
+      Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 5 : 30),
+          (timer) async {
         final bool inRadius = MapHelper.isWithinRadius(
           Global.instance.serverLocation,
-          latLng,
+          latLngListen,
           30,
         );
-        if (!inRadius) {
-          Global.instance.serverLocation = latLng;
-          locationService.updateLocationUserForeGround(
-            latLng: latLng,
+        debugPrint('inRadius:$inRadius');
+        debugPrint('server Location: ${Global.instance.serverLocation}');
+        debugPrint('current Location: $latLng');
+        if (!inRadius && !getIt<MyBackgroundService>().isRunning) {
+          Global.instance.serverLocation = latLngListen;
+          await locationService.updateLocationUser(
+            latLng: latLngListen,
           );
+          await getIt<TrackingHistoryPlaceService>().trackingHistoryPlace();
         }
       });
-      emit(TrackingLocationState.success(latLng));
+      emit(TrackingLocationState.success(latLngListen));
     })
           ..onError((err) {
             emit(TrackingLocationState.failed(err.toString()));

@@ -1,6 +1,6 @@
 # custom
-assets/adkey/adkey_prod_android.json
-assets/adkey/adkey_prod_ios.json
+assets/ad_unit_id/prod/
+
 
 # Miscellaneous
 *.class

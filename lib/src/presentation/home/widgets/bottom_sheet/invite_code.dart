@@ -91,14 +91,6 @@ class InviteCode extends StatelessWidget {
             ],
           ),
         ),
-        8.verticalSpace,
-        Text(
-          context.l10n.inviteCodeSub,
-          style: TextStyle(
-              color: MyColors.black34,
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500),
-        ),
         32.verticalSpace,
         GestureDetector(
           onTap: () => shareCode(context, code),

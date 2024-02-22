@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "623485307642",
-    "project_id": "vtn-base",
-    "storage_bucket": "vtn-base.appspot.com"
+    "project_number": "990967101864",
+    "project_id": "ios29---group-location-sharing",
+    "storage_bucket": "ios29---group-location-sharing.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:623485307642:android:39dd7617beee65ea23d743",
+        "mobilesdk_app_id": "1:990967101864:android:7fe5cb1d007039a969459d",
         "android_client_info": {
-          "package_name": "com.vtn.global.base.flutter"
+          "package_name": "com.locationsharing.livelocation.grouplocationshare.sendlocation"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCyo_uynAW-v1lIBxChB_A4YzOpnXxKM2I"
+          "current_key": "AIzaSyAcqgqBUBMNutaNqaCEkUIZ2QtJtuqIzk8"
         }
       ],
       "services": {
