@@ -75,7 +75,7 @@ class MembersBottomSheet extends StatelessWidget {
                                   horizontal: 12.r, vertical: 10.r),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20.r),
-                                gradient: gradienBackground,
+                                gradient: gradientBackground,
                               ),
                               child: Text(
                                 'Done',
@@ -96,7 +96,7 @@ class MembersBottomSheet extends StatelessWidget {
                                   horizontal: 12.r, vertical: 10.r),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(99.r),
-                                  gradient: gradienBackground),
+                                  gradient: gradientBackground),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

@@ -95,13 +95,6 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
 
                 blinkWhenObscuring: true,
                 animationType: AnimationType.fade,
-                // validator: (v) {
-                //   if (v!.length < 3) {
-                //     return "I'm from validator";
-                //   } else {
-                //     return null;
-                //   }
-                // },
                 pinTheme: PinTheme(
                     inactiveColor: MyColors.secondPrimary,
                     activeColor: MyColors.secondPrimary,

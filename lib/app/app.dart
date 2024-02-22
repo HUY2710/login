@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lifecycle_detector/flutter_lifecycle_detector.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../module/iap/my_purchase_manager.dart';
 import '../src/config/di/di.dart';
 import '../src/config/navigation/app_router.dart';
 import '../src/config/observer/route_observer.dart';
@@ -48,6 +49,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (context) => RateStatusCubit(),
         ),
+        BlocProvider(
+          create: (context) => getIt<MyPurchaseManager>(),
+        )
       ],
       child: ScreenUtilInit(
         designSize: Size(designWidth, designHeight),

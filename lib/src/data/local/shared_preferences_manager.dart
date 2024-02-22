@@ -68,4 +68,22 @@ class SharedPreferencesManager {
             .getBool(PreferenceKeys.isCreateInfoFistTime.name) ??
         true;
   }
+
+  static Future<void> setIsWeeklyPremium(bool status) async {
+    (await _preference).setBool(PreferenceKeys.isWeeklyPremium.name, status);
+  }
+
+  static Future<bool> getIsWeeklyPremium() async {
+    return (await _preference).getBool(PreferenceKeys.isWeeklyPremium.name) ??
+        false;
+  }
+
+  static Future<void> setIsMonthlyPremium(bool status) async {
+    (await _preference).setBool(PreferenceKeys.isMonthlyPremium.name, status);
+  }
+
+  static Future<bool> getIsMonthlyPremium() async {
+    return (await _preference).getBool(PreferenceKeys.isMonthlyPremium.name) ??
+        false;
+  }
 }
