@@ -35,5 +35,13 @@
   "addNewMember": "Add a new members",
   "enter": "enter",
   "left": "left",
-  "has": "has"
+  "has": "has",
+  "next": "Next",
+  "titlePermission": "Cycle sharing requires permissions to use the device’s ",
+  "location": "Location",
+  "subLocation": "Location permissions are set to “always” to allow data to be used for in-app maps, location alerts, and location sharing with your group.",
+  "notification": "Notification",
+  "subNotification": "Stay up to date with subscriptions, alerts and messages from your group.",
+  "motionTracking": "Motion tracking",
+  "subMotionTracking": "Allowing user motion tracking, such as walking, driving, riding a motorbike, etc."
 }
