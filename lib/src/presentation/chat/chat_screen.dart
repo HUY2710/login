@@ -15,8 +15,6 @@ import '../../shared/helpers/gradient_background.dart';
 import '../../shared/widgets/containers/linear_container.dart';
 import '../../shared/widgets/custom_inkwell.dart';
 import '../../shared/widgets/gradient_text.dart';
-import '../../shared/widgets/my_drag.dart';
-import '../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import 'cubits/group_cubit.dart';
 import 'cubits/group_state.dart';
 import 'cubits/search_group_cubit.dart';
@@ -53,11 +51,10 @@ class _ChatScreenState extends State<ChatScreen> {
       create: (context) => SearchGroupCubit(),
       child: Scaffold(
         appBar: AppBar(
-          leadingWidth: 42.w,
           leading: CustomInkWell(
               child: Padding(
-                padding: const EdgeInsets.only(left: 12),
-                child: Assets.icons.iconBack.svg(width: 28.r),
+                padding: EdgeInsets.all(12.w),
+                child: Assets.icons.iconBack.svg(),
               ),
               onTap: () => context.popRoute()),
           centerTitle: true,
@@ -126,11 +123,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                               : groups[index];
                                       return GroupItem(
                                         userName: groupItem.storeUser!.userName,
-                                        message: (groupItem
-                                                    .lastMessage!.content ==
-                                                '')
-                                            ? '${groupItem.storeUser!.code == Global.instance.user!.code ? 'You' : groupItem.storeUser!.userName} created group'
-                                            : groupItem.lastMessage!.content,
+                                        message: convertLastMessage(groupItem),
                                         time: groupItem.lastMessage!.sentAt,
                                         avatar: groupItem.avatarGroup,
                                         groupName: groupItem.groupName,
@@ -158,6 +151,28 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
+  }
+
+  String convertLastMessage(StoreGroup group) {
+    final String userCode = Global.instance.user!.code;
+    final String userName = group.storeUser!.userName;
+    final String content = group.lastMessage!.content;
+
+    if (content.isEmpty) {
+      if (group.lastMessage!.lat == null || group.lastMessage!.long == null) {
+        return (group.storeUser!.code == userCode)
+            ? 'You created group'
+            : '$userName created group';
+      } else {
+        return (group.storeUser!.code == userCode)
+            ? 'You send location'
+            : '$userName send location';
+      }
+    } else {
+      return (group.storeUser!.code == userCode)
+          ? 'You: $content'
+          : '$userName: $content';
+    }
   }
 
   bool isAdmin(StoreGroup itemGroup) {

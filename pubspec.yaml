@@ -67,6 +67,9 @@ dependencies:
   cached_network_image: ^3.3.1
   dotted_border: ^2.1.0
   carousel_slider: ^4.2.1
+  flutter_iap:
+    git:
+      url: https://bitbucket.org/innofyapp/flutter_iap.git
 
 dev_dependencies:
   flutter_test:
@@ -104,9 +107,9 @@ flutter:
     - assets/images/chat/
     - assets/ad_unit_id/dev/
     - assets/ad_unit_id/prod/
-    # - .env
+    - .env
     - .env.dev
-    # - .env.prod
+    - .env.prod
 
   fonts:
     - family: OpenSans

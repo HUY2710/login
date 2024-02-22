@@ -2,9 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_iap/flutter_iap.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../module/iap/my_purchase_manager.dart';
+import '../../../module/iap/product_id.dart';
+import '../../config/di/di.dart';
 import '../../gen/gens.dart';
 import '../../shared/constants/url_constants.dart';
 import '../../shared/helpers/gradient_background.dart';
@@ -92,86 +96,106 @@ class PremiumScreen extends StatelessWidget {
                       ),
                     )),
                 Positioned.fill(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CarouselSlider(
-                      carouselController: controller,
-                      items: [
-                        buildItem(
-                          context,
-                          svgItem: Assets.icons.premium.icNoAds,
-                          title: 'No ads',
-                          subTitle: 'Enjoy a completely ad-free app experience',
-                          index: 0,
+                    child: BlocBuilder<MyPurchaseManager, PurchaseState>(
+                  builder: (context, purchaseState) {
+                    if (purchaseState.storeState == StoreState.loading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (purchaseState.storeState ==
+                        StoreState.notAvailable) {
+                      return const Center(
+                        child: Text('Not avaiable'),
+                      );
+                    }
+
+                    final weeklyProduct =
+                        purchaseState.getProductGroup(productKeyWeekly);
+                    final monthlyProduct =
+                        purchaseState.getProductGroup(productKeyMonthly);
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CarouselSlider(
+                          carouselController: controller,
+                          items: [
+                            buildItem(
+                              context,
+                              svgItem: Assets.icons.premium.icNoAds,
+                              title: 'No ads',
+                              subTitle:
+                                  'Enjoy a completely ad-free app experience',
+                              index: 0,
+                            ),
+                            buildItem(
+                              context,
+                              svgItem: Assets.icons.premium.icNearPlace,
+                              title: 'Check in at nearby places',
+                              subTitle:
+                                  'Explore interesting places around you by checking in',
+                              index: 1,
+                            ),
+                            buildItem(
+                              context,
+                              svgItem: Assets.icons.premium.icMember,
+                              title: 'Guide to group members',
+                              subTitle:
+                                  'Easily and quickly navigate to your location for members',
+                              index: 2,
+                            ),
+                            buildItem(
+                              context,
+                              svgItem: Assets.icons.premium.icSharePremium,
+                              title: 'Send my current location',
+                              subTitle:
+                                  'Easily and quickly navigate to your location for members',
+                              index: 3,
+                            )
+                          ],
+                          disableGesture: true,
+                          options: CarouselOptions(
+                            viewportFraction: 0.6,
+                            height: 136,
+                            // autoPlay: false,
+                            aspectRatio: 207 / 136,
+                            onPageChanged: (index, reason) {
+                              context.read<IndicatorCubit>().update(index);
+                            },
+                          ),
                         ),
-                        buildItem(
-                          context,
-                          svgItem: Assets.icons.premium.icNearPlace,
-                          title: 'Check in at nearby places',
-                          subTitle:
-                              'Explore interesting places around you by checking in',
-                          index: 1,
+                        20.h.verticalSpace,
+                        buildIndicator(),
+                        40.h.verticalSpace,
+                        Text(
+                          'Try 3 days for free',
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            color: const Color(0xff7D7D7D),
+                          ),
                         ),
-                        buildItem(
-                          context,
-                          svgItem: Assets.icons.premium.icMember,
-                          title: 'Guide to group members',
-                          subTitle:
-                              'Easily and quickly navigate to your location for members',
-                          index: 2,
+                        Text(
+                          'Then \$5.99}/week, cancel anytime.',
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xff343434),
+                          ),
                         ),
-                        buildItem(
-                          context,
-                          svgItem: Assets.icons.premium.icSharePremium,
-                          title: 'Send my current location',
-                          subTitle:
-                              'Easily and quickly navigate to your location for members',
-                          index: 3,
-                        )
+                        16.h.verticalSpace,
+                        buildButtonSubmit(item: weeklyProduct),
+                        8.h.verticalSpace,
+                        buildDivider(),
+                        8.h.verticalSpace,
+                        buildButtonMonth(item: monthlyProduct),
+                        12.h.verticalSpace,
+                        buildRestoreButton(),
+                        30.h.verticalSpace,
+                        buildRowTextButton(),
+                        10.h.verticalSpace,
                       ],
-                      disableGesture: true,
-                      options: CarouselOptions(
-                        viewportFraction: 0.6,
-                        height: 136,
-                        // autoPlay: false,
-                        aspectRatio: 207 / 136,
-                        onPageChanged: (index, reason) {
-                          context.read<IndicatorCubit>().update(index);
-                        },
-                      ),
-                    ),
-                    20.h.verticalSpace,
-                    buildIndicator(),
-                    40.h.verticalSpace,
-                    Text(
-                      'Try 3 days for free',
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: const Color(0xff7D7D7D),
-                      ),
-                    ),
-                    Text(
-                      'Then \$5.99/week, cancel anytime.',
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xff343434),
-                      ),
-                    ),
-                    16.h.verticalSpace,
-                    buildButtonSubmit(),
-                    8.h.verticalSpace,
-                    buildDivider(),
-                    8.h.verticalSpace,
-                    buildButtonMonth(),
-                    12.h.verticalSpace,
-                    buildRestoreButton(),
-                    30.h.verticalSpace,
-                    buildRowTextButton(),
-                    10.h.verticalSpace,
-                  ],
+                    );
+                  },
                 ))
               ],
             );
@@ -257,7 +281,7 @@ class PremiumScreen extends StatelessWidget {
     );
   }
 
-  CustomInkWell buildButtonMonth() {
+  CustomInkWell buildButtonMonth({required List<PurchasableProduct> item}) {
     return CustomInkWell(
         child: Container(
           width: double.infinity,
@@ -269,17 +293,19 @@ class PremiumScreen extends StatelessWidget {
               border: Border.all(width: 2, color: const Color(0xffB67DFF)),
               borderRadius: BorderRadius.circular(15.r)),
           child: Text(
-            '\$9.99/Monthly',
+            '\$12.99/Monthly',
             style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
                 color: const Color(0xff8E52FF)),
           ),
         ),
-        onTap: () {});
+        onTap: () {
+          getIt<MyPurchaseManager>().buy(item.first);
+        });
   }
 
-  CustomInkWell buildButtonSubmit() {
+  Widget buildButtonSubmit({required List<PurchasableProduct> item}) {
     return CustomInkWell(
         child: Container(
           width: double.infinity,
@@ -297,7 +323,9 @@ class PremiumScreen extends StatelessWidget {
                 color: Colors.white),
           ),
         ),
-        onTap: () {});
+        onTap: () {
+          getIt<MyPurchaseManager>().buy(item.first);
+        });
   }
 
   Widget buildItem(

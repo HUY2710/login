@@ -27,8 +27,14 @@ class GroupCubit extends Cubit<GroupState> {
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _userStream;
 
   Future<void> sendMessage(
-      {required String content, required String idGroup}) async {
-    await ChatService.instance.sendMessage(content: content, idGroup: idGroup);
+      {required String content,
+      required String idGroup,
+      required String groupName}) async {
+    await ChatService.instance.sendMessage(
+      content: content,
+      idGroup: idGroup,
+      groupName: groupName,
+    );
     emit(GroupState.success(myGroups));
   }
 

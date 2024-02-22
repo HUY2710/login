@@ -31,5 +31,8 @@
   "onboarding_title_3": "Simplify location sharing with loved ones",
   "chatGroupEmptyTitle": "Add members to send messages",
   "chatGroupEmptySub": "At least one more person is needed \nto start a chat",
-  "addNewMember": "Add a new members"
+  "addNewMember": "Add a new members",
+  "unexpectedError": "An unexpected error occurred!",
+  "alreadyOwnError": "Looks like you already owned this item.\nPlease click \"Restore purchase\" to continue.",
+  "confirm": "Confirm"
 }

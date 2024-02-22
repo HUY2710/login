@@ -37,9 +37,12 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        leadingWidth: 30.w,
+        // leadingWidth: 30.w,
         leading: CustomInkWell(
-            child: Assets.icons.iconBack.svg(width: 28.r),
+            child: Padding(
+              padding: EdgeInsets.all(12.w),
+              child: Assets.icons.iconBack.svg(),
+            ),
             onTap: () async {
               await SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
               if (mounted) {
@@ -71,7 +74,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
                               } else {
                                 final chats = snapshot.data!.docs;
                                 WidgetsBinding.instance
-                                    .addPostFrameCallback((timeStamp) {
+                                    .addPostFrameCallback((_) {
                                   if (_controller.hasClients) {
                                     isFirstScroll
                                         ? _controller.jumpTo(_controller
@@ -131,9 +134,15 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
         children: [
           GestureDetector(
             onTap: () async {
-              context
-                  .read<ChatTypeCubit>()
-                  .update(const ChatTypeState(type: TypeChat.location));
+              // context
+              //     .read<ChatTypeCubit>()
+              //     .update(const ChatTypeState(type: TypeChat.location));
+              ChatService.instance.sendMessageLocation(
+                  content: '',
+                  idGroup: widget.idGroup,
+                  lat: Global.instance.currentLocation.latitude,
+                  long: Global.instance.currentLocation.longitude,
+                  groupName: widget.groupName);
             },
             child: Container(
               padding: EdgeInsets.all(10.r),
@@ -171,12 +180,9 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
                             onPressed: () async {
                               if (textController.text.isNotEmpty) {
                                 await getIt<GroupCubit>().sendMessage(
-                                    content: textController.text,
-                                    idGroup: widget.idGroup);
-                                getIt<FirebaseMessageService>()
-                                    .sendChatNotification(
-                                  widget.idGroup,
-                                  widget.groupName,
+                                  content: textController.text,
+                                  idGroup: widget.idGroup,
+                                  groupName: widget.groupName,
                                 );
                                 textController.clear();
                               }

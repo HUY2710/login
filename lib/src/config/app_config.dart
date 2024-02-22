@@ -28,9 +28,10 @@ class AppConfig with SystemUiMixin {
       _initHydrateBlocStorage(),
       _initGlobalData(),
     ]);
+    configureDependencies();
     await FirebaseMessageService().startService();
-    FirebaseMessageService().listenBackgroundMessage();
-    await FirebaseMessageService().subscribeTopics(['group1']);
+    // FirebaseMessageService().listenBackgroundMessage();
+    // await FirebaseMessageService().subscribeTopics(['group1']);
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.fadingCircle
       ..maskType = EasyLoadingMaskType.custom
@@ -38,7 +39,7 @@ class AppConfig with SystemUiMixin {
       ..animationDuration = const Duration(milliseconds: 50)
       ..userInteractions = false
       ..dismissOnTap = false;
-    configureDependencies();
+
     await _settingSystemUI();
   }
 

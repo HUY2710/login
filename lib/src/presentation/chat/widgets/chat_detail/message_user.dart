@@ -11,6 +11,7 @@ class MessageTypeUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final item = chats[index].data();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
@@ -28,13 +29,13 @@ class MessageTypeUser extends StatelessWidget {
                       topRight: Radius.circular(15.r),
                       bottomLeft: Radius.circular(15.r),
                       bottomRight: Utils.checkLastMessage(
-                              code: chats[index].data().senderId,
+                              code: item.senderId,
                               isLastMessage: index == chats.length - 1)
                           ? Radius.zero
                           : Radius.circular(15.r)),
                   color: const Color(0xffB98EFF)),
-              child: chats[index].data().content == ''
-                  ? buildMessLocation(context)
+              child: item.content == ''
+                  ? buildMessLocation(context, item)
                   : Text(
                       chats[index].data().content,
                       style: TextStyle(
@@ -45,14 +46,14 @@ class MessageTypeUser extends StatelessWidget {
             ),
           ],
         ),
-        if (chats[index].data().senderId == Global.instance.user!.code &&
+        if (item.senderId == Global.instance.user!.code &&
             index == chats.length - 1)
           Assets.icons.icSendSuccess.svg(width: 16.r),
       ],
     );
   }
 
-  Column buildMessLocation(BuildContext context) {
+  Column buildMessLocation(BuildContext context, MessageModel item) {
     return Column(
       children: [
         Row(
@@ -101,10 +102,11 @@ class MessageTypeUser extends StatelessWidget {
                       fontWeight: FontWeight.w600)),
             ),
             onTap: () {
-              context.read<ChatTypeCubit>().update(const ChatTypeState(
+              context.read<ChatTypeCubit>().update(ChatTypeState(
                   type: TypeChat.location,
-                  lat: 21.188609617609117,
-                  long: 05.68341411534462));
+                  lat: item.lat ?? Global.instance.currentLocation.latitude,
+                  long:
+                      item.long ?? Global.instance.currentLocation.longitude));
             })
       ],
     );

@@ -17,16 +17,8 @@ class ChatLocationWidget extends StatefulWidget {
 }
 
 class _ChatLocationWidgetState extends State<ChatLocationWidget> {
-  List<Map<String, dynamic>> places = [];
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      places = await MapApi.getNearByLocation();
-      if (places.isEmpty) {
-        places = fakeData;
-      }
-      setState(() {});
-    });
     super.initState();
   }
 
@@ -115,184 +107,184 @@ class _ChatLocationWidgetState extends State<ChatLocationWidget> {
               ),
             ),
           ),
-          Positioned(
-            // bottom: 0,
-            child: Container(
-              height: 400.h,
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              // width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(20.r),
-                  // right: Radius.circular(20.r),
-                ),
-              ),
-              child: Column(
-                children: [
-                  const MyDrag(),
-                  InputSearch(textController: widget.textController),
-                  24.h.verticalSpace,
-                  BlocBuilder<SendLocationCubit, SendLocationState>(
-                    builder: (context, locationState) {
-                      return Expanded(
-                          child: ListView.separated(
-                              // shrinkWrap: true,
-                              padding:
-                                  const EdgeInsets.only(top: 0, bottom: 10),
-                              itemBuilder: (context, index) {
-                                if (index == 0) {
-                                  return CustomInkWell(
-                                    onTap: () {
-                                      context
-                                          .read<SendLocationCubit>()
-                                          .changeState(
-                                              lat:
-                                                  Global.instance
-                                                      .currentLocation.latitude,
-                                              long: Global.instance
-                                                  .currentLocation.longitude);
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Assets.icons.icShareLocation.svg(
-                                            width: 20.r,
-                                            height: 20.r,
-                                            colorFilter: const ColorFilter.mode(
-                                                MyColors.primary,
-                                                BlendMode.srcIn)),
-                                        12.w.horizontalSpace,
-                                        SizedBox(
-                                          width: 1.sw * 0.7,
-                                          child: Text(
-                                            'My current location',
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              color: MyColors.black34,
-                                              fontSize: 13.sp,
-                                            ),
-                                          ),
-                                        ),
-                                        const Spacer(),
-                                        if (locationState.lat ==
-                                                Global.instance.currentLocation
-                                                    .latitude &&
-                                            locationState.long ==
-                                                Global.instance.currentLocation
-                                                    .longitude)
-                                          const Icon(
-                                            Icons.check,
-                                            color: MyColors.primary,
-                                          )
-                                      ],
-                                    ),
-                                  );
-                                }
-                                return CustomInkWell(
-                                  onTap: () {
-                                    context
-                                        .read<SendLocationCubit>()
-                                        .changeState(
-                                            lat: places[index - 1]['geometry']
-                                                ['location']['lat'],
-                                            long: places[index - 1]['geometry']
-                                                ['location']['lng']);
-                                  },
-                                  child: Row(
-                                    children: [
-                                      if (index == 0)
-                                        Assets.icons.icShareLocation.svg(
-                                            width: 20.r,
-                                            height: 20.r,
-                                            colorFilter: const ColorFilter.mode(
-                                                MyColors.primary,
-                                                BlendMode.srcIn))
-                                      else
-                                        Assets.icons.icLocation.svg(),
-                                      12.w.horizontalSpace,
-                                      if (index == 0)
-                                        Text(
-                                          'My current location',
-                                          style: TextStyle(
-                                            color: MyColors.primary,
-                                            fontSize: 13.sp,
-                                          ),
-                                        )
-                                      else
-                                        SizedBox(
-                                          width: 1.sw * 0.7,
-                                          child: Text(
-                                            places[index - 1]['vicinity'],
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: TextStyle(
-                                              color: MyColors.black34,
-                                              fontSize: 13.sp,
-                                            ),
-                                          ),
-                                        ),
-                                      const Spacer(),
-                                      if (locationState.lat ==
-                                              places[index - 1]['geometry']
-                                                  ['location']['lat'] &&
-                                          locationState.long ==
-                                              places[index - 1]['geometry']
-                                                  ['location']['lng'])
-                                        const Icon(
-                                          Icons.check,
-                                          color: MyColors.primary,
-                                        )
-                                    ],
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 32.r, bottom: 8.h, top: 6.h),
-                                  child: const Divider(
-                                    thickness: 1,
-                                    color: Color(0xffEAEAEA),
-                                  ),
-                                );
-                              },
-                              itemCount: places.length + 1));
-                    },
-                  ),
-                  10.h.verticalSpace,
-                  CustomInkWell(
-                    onTap: () {
-                      EasyLoading.show();
-                      ChatService.instance.sendMessageLocation(
-                          content: '',
-                          idGroup: widget.idGroup,
-                          lat: Global.instance.currentLocation.latitude,
-                          long: Global.instance.currentLocation.longitude);
-                      EasyLoading.dismiss();
-                    },
-                    child: Container(
-                      height: 40.h,
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        gradient: gradientBackground,
-                        borderRadius: BorderRadius.circular(15.r),
-                      ),
-                      child: Text(
-                        'Send location',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ),
-                  (ScreenUtil().bottomBarHeight - 10).verticalSpace
-                ],
-              ),
-            ),
-          )
+          // Positioned(
+          //   // bottom: 0,
+          //   child: Container(
+          //     height: 400.h,
+          //     padding: EdgeInsets.symmetric(horizontal: 16.w),
+          //     // width: double.infinity,
+          //     decoration: BoxDecoration(
+          //       color: Colors.white,
+          //       borderRadius: BorderRadius.vertical(
+          //         top: Radius.circular(20.r),
+          //         // right: Radius.circular(20.r),
+          //       ),
+          //     ),
+          //     child: Column(
+          //       children: [
+          //         const MyDrag(),
+          //         InputSearch(textController: widget.textController),
+          //         24.h.verticalSpace,
+          //         BlocBuilder<SendLocationCubit, SendLocationState>(
+          //           builder: (context, locationState) {
+          //             return Expanded(
+          //                 child: ListView.separated(
+          //                     // shrinkWrap: true,
+          //                     padding:
+          //                         const EdgeInsets.only(top: 0, bottom: 10),
+          //                     itemBuilder: (context, index) {
+          //                       if (index == 0) {
+          //                         return CustomInkWell(
+          //                           onTap: () {
+          //                             context
+          //                                 .read<SendLocationCubit>()
+          //                                 .changeState(
+          //                                     lat:
+          //                                         Global.instance
+          //                                             .currentLocation.latitude,
+          //                                     long: Global.instance
+          //                                         .currentLocation.longitude);
+          //                           },
+          //                           child: Row(
+          //                             children: [
+          //                               Assets.icons.icShareLocation.svg(
+          //                                   width: 20.r,
+          //                                   height: 20.r,
+          //                                   colorFilter: const ColorFilter.mode(
+          //                                       MyColors.primary,
+          //                                       BlendMode.srcIn)),
+          //                               12.w.horizontalSpace,
+          //                               SizedBox(
+          //                                 width: 1.sw * 0.7,
+          //                                 child: Text(
+          //                                   'My current location',
+          //                                   overflow: TextOverflow.ellipsis,
+          //                                   maxLines: 1,
+          //                                   style: TextStyle(
+          //                                     color: MyColors.black34,
+          //                                     fontSize: 13.sp,
+          //                                   ),
+          //                                 ),
+          //                               ),
+          //                               const Spacer(),
+          //                               if (locationState.lat ==
+          //                                       Global.instance.currentLocation
+          //                                           .latitude &&
+          //                                   locationState.long ==
+          //                                       Global.instance.currentLocation
+          //                                           .longitude)
+          //                                 const Icon(
+          //                                   Icons.check,
+          //                                   color: MyColors.primary,
+          //                                 )
+          //                             ],
+          //                           ),
+          //                         );
+          //                       }
+          //                       return CustomInkWell(
+          //                         onTap: () {
+          //                           context
+          //                               .read<SendLocationCubit>()
+          //                               .changeState(
+          //                                   lat: places[index - 1]['geometry']
+          //                                       ['location']['lat'],
+          //                                   long: places[index - 1]['geometry']
+          //                                       ['location']['lng']);
+          //                         },
+          //                         child: Row(
+          //                           children: [
+          //                             if (index == 0)
+          //                               Assets.icons.icShareLocation.svg(
+          //                                   width: 20.r,
+          //                                   height: 20.r,
+          //                                   colorFilter: const ColorFilter.mode(
+          //                                       MyColors.primary,
+          //                                       BlendMode.srcIn))
+          //                             else
+          //                               Assets.icons.icLocation.svg(),
+          //                             12.w.horizontalSpace,
+          //                             if (index == 0)
+          //                               Text(
+          //                                 'My current location',
+          //                                 style: TextStyle(
+          //                                   color: MyColors.primary,
+          //                                   fontSize: 13.sp,
+          //                                 ),
+          //                               )
+          //                             else
+          //                               SizedBox(
+          //                                 width: 1.sw * 0.7,
+          //                                 child: Text(
+          //                                   places[index - 1]['vicinity'],
+          //                                   overflow: TextOverflow.ellipsis,
+          //                                   maxLines: 1,
+          //                                   style: TextStyle(
+          //                                     color: MyColors.black34,
+          //                                     fontSize: 13.sp,
+          //                                   ),
+          //                                 ),
+          //                               ),
+          //                             const Spacer(),
+          //                             if (locationState.lat ==
+          //                                     places[index - 1]['geometry']
+          //                                         ['location']['lat'] &&
+          //                                 locationState.long ==
+          //                                     places[index - 1]['geometry']
+          //                                         ['location']['lng'])
+          //                               const Icon(
+          //                                 Icons.check,
+          //                                 color: MyColors.primary,
+          //                               )
+          //                           ],
+          //                         ),
+          //                       );
+          //                     },
+          //                     separatorBuilder: (context, index) {
+          //                       return Padding(
+          //                         padding: EdgeInsets.only(
+          //                             left: 32.r, bottom: 8.h, top: 6.h),
+          //                         child: const Divider(
+          //                           thickness: 1,
+          //                           color: Color(0xffEAEAEA),
+          //                         ),
+          //                       );
+          //                     },
+          //                     itemCount: places.length + 1));
+          //           },
+          //         ),
+          //         10.h.verticalSpace,
+          //         CustomInkWell(
+          //           onTap: () {
+          //             EasyLoading.show();
+          //             ChatService.instance.sendMessageLocation(
+          //                 content: '',
+          //                 idGroup: widget.idGroup,
+          //                 lat: Global.instance.currentLocation.latitude,
+          //                 long: Global.instance.currentLocation.longitude);
+          //             EasyLoading.dismiss();
+          //           },
+          //           child: Container(
+          //             height: 40.h,
+          //             width: double.infinity,
+          //             alignment: Alignment.center,
+          //             decoration: BoxDecoration(
+          //               gradient: gradientBackground,
+          //               borderRadius: BorderRadius.circular(15.r),
+          //             ),
+          //             child: Text(
+          //               'Send location',
+          //               style: TextStyle(
+          //                   color: Colors.white,
+          //                   fontSize: 16.sp,
+          //                   fontWeight: FontWeight.w600),
+          //             ),
+          //           ),
+          //         ),
+          //         (ScreenUtil().bottomBarHeight - 10).verticalSpace
+          //       ],
+          //     ),
+          //   ),
+          // )
         ],
       ),
       // bottomNavigationBar: ,

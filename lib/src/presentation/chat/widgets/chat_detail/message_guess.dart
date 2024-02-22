@@ -26,6 +26,7 @@ class MessageTypeGuess extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final item = chats[index].data();
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -33,7 +34,7 @@ class MessageTypeGuess extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(999),
             child: Image.asset(
-              chats[index].data().avatarUrl!,
+              item.avatarUrl!,
               width: 32.w,
             ),
           )
@@ -42,8 +43,8 @@ class MessageTypeGuess extends StatelessWidget {
             width: 32.w,
           ),
         8.w.horizontalSpace,
-        if (chats[index].data().content == '')
-          buildMessLocation(context)
+        if (item.content == '')
+          buildMessLocation(context, item)
         else
           buildMessText(),
       ],
@@ -109,13 +110,13 @@ class MessageTypeGuess extends StatelessWidget {
     );
   }
 
-  Widget buildMessLocation(BuildContext context) {
+  Widget buildMessLocation(BuildContext context, MessageModel item) {
     return CustomInkWell(
       onTap: () {
-        context.read<ChatTypeCubit>().update(const ChatTypeState(
+        context.read<ChatTypeCubit>().update(ChatTypeState(
             type: TypeChat.location,
-            lat: 21.188609617609117,
-            long: 05.68341411534462));
+            lat: item.lat ?? Global.instance.currentLocation.latitude,
+            long: item.long ?? Global.instance.currentLocation.longitude));
       },
       child: Container(
         constraints: BoxConstraints(maxWidth: 1.sw * 0.6),

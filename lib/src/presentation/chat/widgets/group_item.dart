@@ -29,44 +29,44 @@ class GroupItem extends StatefulWidget {
 class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPress: () {
-        showAppModalBottomSheet(
-            context: context,
-            isDismissible: false,
-            backgroundColor: Colors.white,
-            // elevation: 10,
-            barrierColor: Colors.black.withOpacity(0.4),
-            builder: (context) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Align(child: MyDrag()),
-                    12.verticalSpace,
-                    if (widget.isAdmin)
-                      _buildItemBottomSheet(
-                          title: 'Edit group name',
-                          icon: Assets.icons.icEdit,
-                          click: () {}),
-                    _buildItemBottomSheet(
-                        title: 'Mute', icon: Assets.icons.icMute, click: () {}),
-                    _buildItemBottomSheet(
-                        title: 'Leave group',
-                        icon: Assets.icons.icLoggout,
-                        click: () {}),
-                    _buildItemBottomSheet(
-                        title: 'Delete',
-                        icon: Assets.icons.icTrash,
-                        click: () {}),
-                    12.verticalSpace,
-                  ],
-                ),
-              );
-            });
-      },
+    return CustomInkWell(
+      // onLongPress: () {
+      //   showAppModalBottomSheet(
+      //       context: context,
+      //       isDismissible: false,
+      //       backgroundColor: Colors.white,
+      //       // elevation: 10,
+      //       barrierColor: Colors.black.withOpacity(0.4),
+      //       builder: (context) {
+      //         return Padding(
+      //           padding: const EdgeInsets.symmetric(horizontal: 16),
+      //           child: Column(
+      //             mainAxisSize: MainAxisSize.min,
+      //             crossAxisAlignment: CrossAxisAlignment.start,
+      //             children: [
+      //               const Align(child: MyDrag()),
+      //               12.verticalSpace,
+      //               if (widget.isAdmin)
+      //                 _buildItemBottomSheet(
+      //                     title: 'Edit group name',
+      //                     icon: Assets.icons.icEdit,
+      //                     click: () {}),
+      //               _buildItemBottomSheet(
+      //                   title: 'Mute', icon: Assets.icons.icMute, click: () {}),
+      //               _buildItemBottomSheet(
+      //                   title: 'Leave group',
+      //                   icon: Assets.icons.icLoggout,
+      //                   click: () {}),
+      //               _buildItemBottomSheet(
+      //                   title: 'Delete',
+      //                   icon: Assets.icons.icTrash,
+      //                   click: () {}),
+      //               12.verticalSpace,
+      //             ],
+      //           ),
+      //         );
+      //       });
+      // },
       onTap: () {
         context.pushRoute(ChatDetailRoute(
           idGroup: widget.idGroup,
@@ -82,21 +82,9 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
           children: [
             SizedBox(
               width: 52.r,
-              child: Badge(
-                label: Text(
-                  '06',
-                  style: TextStyle(
-                      fontSize: 10.sp,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500),
-                ),
-                backgroundColor: const Color(0xffB67DFF),
-                largeSize: 20,
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(99),
-                    child: Image.asset(widget.avatar)),
-              ),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(99),
+                  child: Image.asset(widget.avatar)),
             ),
             16.horizontalSpace,
             Expanded(
@@ -136,7 +124,7 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
                     ],
                   ),
                   Text(
-                    '${widget.userName}: ${widget.message}',
+                    '${widget.message}',
                     style: TextStyle(
                         color: const Color(0xff6C6C6C),
                         fontSize: 13.sp,
