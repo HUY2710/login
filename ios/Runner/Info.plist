@@ -2,12 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Allow location permission to access your location</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Allow location permission to access your location</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Allow location permission to access your location</string>
+	<key>GMSServiceKey</key>
+	<string>$(MAP_KEY)</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -49,28 +45,34 @@
 	<true/>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-4973559944609228~2433291331</string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-    <string>comgooglemaps</string>
-    <string>baidumap</string>
-    <string>iosamap</string>
-    <string>waze</string>
-    <string>yandexmaps</string>
-    <string>yandexnavi</string>
-    <string>citymapper</string>
-    <string>mapswithme</string>
-    <string>osmandmaps</string>
-    <string>dgis</string>
-    <string>qqmap</string>
-    <string>here-location</string>
-    <string>tomtomgo</string>
-    <string>copilot</string>
-    <string>com.sygic.aura</string>
+		<string>comgooglemaps</string>
+		<string>baidumap</string>
+		<string>iosamap</string>
+		<string>waze</string>
+		<string>yandexmaps</string>
+		<string>yandexnavi</string>
+		<string>citymapper</string>
+		<string>mapswithme</string>
+		<string>osmandmaps</string>
+		<string>dgis</string>
+		<string>qqmap</string>
+		<string>here-location</string>
+		<string>tomtomgo</string>
+		<string>copilot</string>
+		<string>com.sygic.aura</string>
 	</array>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
 	<key>NSAdvertisingAttributionReportEndpoint</key>
 	<string>https://postbacks-app.com</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Allow location permission to access your location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Allow location permission to access your location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow location permission to access your location</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
