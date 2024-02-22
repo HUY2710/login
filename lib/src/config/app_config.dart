@@ -28,6 +28,7 @@ class AppConfig with SystemUiMixin {
       _initHydrateBlocStorage(),
       _initGlobalData(),
     ]);
+    configureDependencies();
     await FirebaseMessageService().initNotification();
     await FirebaseMessageService().startService();
     FirebaseMessageService().listenBackgroundMessage();
@@ -38,7 +39,7 @@ class AppConfig with SystemUiMixin {
       ..animationDuration = const Duration(milliseconds: 50)
       ..userInteractions = false
       ..dismissOnTap = false;
-    configureDependencies();
+
     await _settingSystemUI();
   }
 

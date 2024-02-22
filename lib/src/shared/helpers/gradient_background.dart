@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-const gradienBackground = LinearGradient(
+const gradientBackground = LinearGradient(
   colors: [Color(0xFFB67DFF), Color(0xFF7B3EFF)],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,

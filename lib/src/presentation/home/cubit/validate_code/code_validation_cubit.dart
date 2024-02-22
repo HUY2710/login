@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_base/src/data/local/shared_preferences_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -42,7 +43,7 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
               'Bạn đã là thành viên của nhóm rồi'));
         } else {
           //trường hợp chưa phải là thành viên thì tiến hành add vào group.
-
+          await SharedPreferencesManager.saveIsCreateInfoFistTime(false);
           final StoreMember newMember =
               StoreMember(isAdmin: false, idUser: Global.instance.user?.code);
           final resultAdd =

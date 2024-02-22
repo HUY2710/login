@@ -16,7 +16,7 @@
             "name": "location sharing prod",
             "request": "launch",
             "program": "lib/main_prod.dart",
-            "args": ["--flavor", "dev"],
+            "args": ["--flavor", "prod"],
             "type": "dart"
         },
        

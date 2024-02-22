@@ -13,7 +13,10 @@ import GoogleMaps
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        GMSServices.provideAPIKey("AIzaSyCYnWDOViEVKZtwnzfcJdnULH_bD2YPCWU")
+        if let gmsKey = Bundle.main.object(forInfoDictionaryKey: "GMSServiceKey") as? String {
+            GMSServices.provideAPIKey(gmsKey)
+        }
+        
         GeneratedPluginRegistrant.register(with: self)
         //    FirebaseApp.configure()
         registerAdFactory()

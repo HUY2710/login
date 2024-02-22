@@ -8,5 +8,7 @@ enum PreferenceKeys {
   isFirstLaunch,
   mapType,
   userCode,
-  timeSeenChat
+  timeSeenChat,
+  isWeeklyPremium,
+  isMonthlyPremium,
 }

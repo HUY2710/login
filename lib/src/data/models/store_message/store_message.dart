@@ -9,6 +9,8 @@ class MessageModel with _$MessageModel {
     required String content,
     required String senderId,
     required String sentAt,
+    double? lat,
+    double? long,
     @JsonKey(includeToJson: false, includeFromJson: false) String? avatarUrl,
     @JsonKey(includeToJson: false, includeFromJson: false) String? userName,
   }) = _MessageModel;

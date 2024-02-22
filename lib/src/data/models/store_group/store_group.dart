@@ -21,6 +21,10 @@ class StoreGroup with _$StoreGroup {
     //   includeToJson: false,
     // )
     String? idGroup,
+    @JsonKey(
+      includeFromJson: false,
+      includeToJson: false,
+    )
     StoreUser? storeUser,
     MessageModel? lastMessage,
     @JsonKey(

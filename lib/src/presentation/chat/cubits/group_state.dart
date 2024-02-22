@@ -12,5 +12,7 @@ class GroupState with _$GroupState {
 
   const factory GroupState.success(List<StoreGroup> groups) = _Success;
 
+  const factory GroupState.empty() = _Empty;
+
   const factory GroupState.failed(String message) = _Failed;
 }
