@@ -13,15 +13,18 @@ class CheckInDialog extends StatelessWidget {
     return Center(
       child: Container(
         padding:
-            EdgeInsets.only(top: 25..h, bottom: 16.h, left: 17.w, right: 17.w),
+            EdgeInsets.only(top: 25.h, bottom: 16.h, left: 17.w, right: 17.w),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14.r), color: Colors.white),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Assets.lottie.loadingSplash.lottie(
-              width: 106.w,
-              height: 101.h,
+            Transform.scale(
+              scale: 2.4.r,
+              child: Assets.lottie.checkIn.lottie(
+                width: 106.w,
+                height: 101.h,
+              ),
             ),
             Text(
               'Check in completed!',

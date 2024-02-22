@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../../../../module/iap/my_purchase_manager.dart';
 import '../../../../../config/di/di.dart';
+import '../../../../../config/navigation/app_router.dart';
 import '../../../../../data/models/location/location_model.dart';
 import '../../../../../data/models/places/place_model.dart';
 import '../../../../../gen/gens.dart';
@@ -15,6 +17,8 @@ import '../../../../../services/http_service.dart';
 import '../../../../../shared/helpers/map_helper.dart';
 import '../../../../../shared/widgets/custom_inkwell.dart';
 import '../../../../../shared/widgets/my_drag.dart';
+import '../../../../chat/services/chat_service.dart';
+import '../../../../map/cubit/select_group_cubit.dart';
 import '../../../../place/cubit/location_request_place_cubit.dart';
 import '../../../../place/cubit/near_by_place_cubit.dart';
 import 'widgets/check_in_dialog.dart';
@@ -28,9 +32,12 @@ class CheckInLocation extends StatefulWidget {
 
 class _CheckInLocationState extends State<CheckInLocation> {
   List<Place> listPlaceNearBy = [];
+  final isPremium = getIt<MyPurchaseManager>().state.isPremium();
   @override
   void initState() {
-    checkLocationAndRequest();
+    if (isPremium) {
+      checkLocationAndRequest();
+    }
     super.initState();
   }
 
@@ -105,19 +112,18 @@ class _CheckInLocationState extends State<CheckInLocation> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 1.sh * 0.5,
+      height: isPremium ? 1.sh * 0.5 : 1.sh * 0.3,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20).r,
       ),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 0.h),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           const MyDrag(),
           20.h.verticalSpace,
-          Expanded(
-            child: buildListPlace(),
-          )
+          Expanded(child: buildListPlace()),
         ],
       ),
     );
@@ -125,34 +131,43 @@ class _CheckInLocationState extends State<CheckInLocation> {
 
   Widget buildListPlace() {
     return ListView.separated(
-        // shrinkWrap: true,
         padding: const EdgeInsets.only(top: 10, bottom: 10),
         itemBuilder: (context, index) {
           if (index == 0) {
             return buildButtonCurrentLc();
           }
-          return CustomInkWell(
-            onTap: () {},
-            child: buildButtonPremium(listPlaceNearBy[index - 1]),
-          );
+          if (isPremium) {
+            return CustomInkWell(
+              onTap: () {},
+              child: buildButtonPremium(item: listPlaceNearBy[index - 1]),
+            );
+          }
+
+          return buildButtonPremium();
         },
         separatorBuilder: (context, index) {
           return 16.h.verticalSpace;
         },
-        itemCount: listPlaceNearBy.length + 1);
+        itemCount: isPremium ? listPlaceNearBy.length + 1 : 2);
   }
 
-  Widget buildButtonPremium(Place item) {
+  Widget buildButtonPremium({Place? item}) {
     return CustomInkWell(
-      onTap: () {},
+      onTap: () {
+        if (item != null) {
+          _checkIn(item: item);
+        } else {
+          context.popRoute();
+          context.pushRoute(PremiumRoute());
+        }
+      },
       child: Container(
         padding: EdgeInsets.all(16.r),
+        margin: const EdgeInsets.symmetric(vertical: 2),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.r),
             color: Colors.white,
-            boxShadow: const [
-              BoxShadow(color: Colors.black12, blurRadius: 10)
-            ]),
+            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)]),
         child: Row(
           children: [
             Assets.icons.icNearPlace.svg(),
@@ -160,7 +175,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
             SizedBox(
               width: 1.sw * 0.7,
               child: Text(
-                item.formattedAddress,
+                item?.formattedAddress ?? 'Nearby location',
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 style: TextStyle(
@@ -170,8 +185,9 @@ class _CheckInLocationState extends State<CheckInLocation> {
               ),
             ),
             const Spacer(),
-            CustomInkWell(
-                child: Assets.icons.premium.icPremiumSvg.svg(), onTap: () {})
+            if (!isPremium)
+              CustomInkWell(
+                  child: Assets.icons.premium.icPremiumSvg.svg(), onTap: () {})
           ],
         ),
       ),
@@ -181,21 +197,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
   CustomInkWell buildButtonCurrentLc() {
     return CustomInkWell(
       onTap: () {
-        // ChatService().sendMessageLocation(content: '', idGroup: idGroup, lat: lat, long: long, groupName: groupName)
-        context.popRoute().then((value) {
-          return showDialog(
-              context: context,
-              builder: (ctx) {
-                Timer(
-                  const Duration(seconds: 1),
-                  () async {
-                    await ctx.popRoute();
-                  },
-                );
-
-                return const CheckInDialog();
-              });
-        });
+        _checkIn();
       },
       child: Container(
         padding: EdgeInsets.all(16.r),
@@ -229,5 +231,34 @@ class _CheckInLocationState extends State<CheckInLocation> {
         ),
       ),
     );
+  }
+
+  void _checkIn({Place? item}) {
+    final storeGroup = getIt<SelectGroupCubit>().state;
+    ChatService.instance.sendMessageLocation(
+        content: '',
+        idGroup: storeGroup?.idGroup ?? '',
+        lat: item == null
+            ? Global.instance.currentLocation.latitude
+            : item.location.latitude,
+        long: item == null
+            ? Global.instance.currentLocation.latitude
+            : item.location.longitude,
+        groupName: storeGroup?.groupName ?? 'Group',
+        context: context);
+    context.popRoute().then((value) {
+      return showDialog(
+          context: context,
+          builder: (ctx) {
+            Timer(
+              const Duration(seconds: 1),
+              () {
+                ctx.popRoute();
+              },
+            );
+
+            return const CheckInDialog();
+          });
+    });
   }
 }

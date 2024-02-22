@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_iap/flutter_iap.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import '../../../../../module/iap/my_purchase_manager.dart';
 import '../../../../config/di/di.dart';
 import '../../../../config/navigation/app_router.dart';
 import '../../../../data/models/store_group/store_group.dart';
@@ -26,65 +28,69 @@ class GroupBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        GestureDetector(
-          onTap: () {
-            showDialogGroup(context);
-          },
-          child: ShadowContainer(
-            maxWidth: MediaQuery.sizeOf(context).width - 80.w,
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
-            child: BlocBuilder<SelectGroupCubit, StoreGroup?>(
-              bloc: getIt<SelectGroupCubit>(),
-              builder: (context, state) {
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: MyColors.primary,
-                      backgroundImage: AssetImage(state == null
-                          ? Assets.images.avatars.groups.group1.path
-                          : state.avatarGroup),
-                      radius: 14.r,
-                    ),
-                    Flexible(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                        child: Text(
-                          state == null ? 'New Group' : state.groupName,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: const Color(0xff8E52FF),
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w500),
+    return BlocBuilder<MyPurchaseManager, PurchaseState>(
+        builder: (context, purchaseState) {
+      return Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              showDialogGroup(context);
+            },
+            child: ShadowContainer(
+              maxWidth: MediaQuery.sizeOf(context).width - 80.w,
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
+              child: BlocBuilder<SelectGroupCubit, StoreGroup?>(
+                bloc: getIt<SelectGroupCubit>(),
+                builder: (context, state) {
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: MyColors.primary,
+                        backgroundImage: AssetImage(state == null
+                            ? Assets.images.avatars.groups.group1.path
+                            : state.avatarGroup),
+                        radius: 14.r,
+                      ),
+                      Flexible(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: Text(
+                            state == null ? 'New Group' : state.groupName,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: const Color(0xff8E52FF),
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500),
+                          ),
                         ),
                       ),
-                    ),
-                    const Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: MyColors.primary,
-                    )
-                  ],
-                );
-              },
+                      const Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: MyColors.primary,
+                      )
+                    ],
+                  );
+                },
+              ),
             ),
           ),
-        ),
-        8.w.horizontalSpace,
-        CustomInkWell(
-          onTap: () => context.pushRoute(PremiumRoute()),
-          child: ShadowContainer(
-            width: 40.r,
-            height: 40.r,
-            padding: const EdgeInsets.all(10),
-            borderRadius: BorderRadius.circular(15.r),
-            child: Assets.icons.premium.icPremiumSvg.svg(),
-          ),
-        )
-      ],
-    );
+          8.w.horizontalSpace,
+          if (!purchaseState.isPremium())
+            CustomInkWell(
+              onTap: () => context.pushRoute(PremiumRoute()),
+              child: ShadowContainer(
+                width: 40.r,
+                height: 40.r,
+                padding: const EdgeInsets.all(10),
+                borderRadius: BorderRadius.circular(15.r),
+                child: Assets.icons.premium.icPremiumSvg.svg(),
+              ),
+            )
+        ],
+      );
+    });
   }
 
   void showDialogGroup(

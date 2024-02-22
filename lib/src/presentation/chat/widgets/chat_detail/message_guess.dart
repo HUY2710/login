@@ -9,20 +9,22 @@ class MessageTypeGuess extends StatelessWidget {
   final int index;
   final List<QueryDocumentSnapshot<MessageModel>> chats;
   //DATA LATLONG FAKE
-  String get _constructUrl => Uri(
-        scheme: 'https',
-        host: 'maps.googleapis.com',
-        port: 443,
-        path: '/maps/api/staticmap',
-        queryParameters: {
-          'center': '21.188609617609117,105.68341411534462',
-          'zoom': '16',
-          'size': '400x400',
-          'maptype': 'roadmap',
-          'key': AppConstants.apiMapKey,
-          'markers': 'color:red|21.188609617609117,105.68341411534462'
-        },
-      ).toString();
+  String _constructUrl(double lat, double long) {
+    return Uri(
+      scheme: 'https',
+      host: 'maps.googleapis.com',
+      port: 443,
+      path: '/maps/api/staticmap',
+      queryParameters: {
+        'center': '21.188609617609117,105.68341411534462',
+        'zoom': '16',
+        'size': '400x400',
+        'maptype': 'roadmap',
+        'key': AppConstants.apiMapKey,
+        'markers': 'color:red|$lat,$long'
+      },
+    ).toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,12 +160,25 @@ class MessageTypeGuess extends StatelessWidget {
                 ],
               ),
             ),
-            CachedNetworkImage(
-              imageUrl: _constructUrl,
-              placeholder: (context, url) => const CircularProgressIndicator(),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-              fit: BoxFit.cover,
-            ),
+            if (getIt<MyPurchaseManager>().state.isPremium())
+              CachedNetworkImage(
+                imageUrl: _constructUrl(
+                    item.lat ?? Global.instance.currentLocation.latitude,
+                    item.long ?? Global.instance.currentLocation.longitude),
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                fit: BoxFit.cover,
+              )
+            else
+              Container(
+                padding: const EdgeInsets.all(20),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(color: MyColors.secondPrimary),
+                ),
+                child: Text('Mua vip chua ?'),
+              ),
             8.verticalSpace,
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.w),

@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyCAROG2DEY9ooV26F1oSwjhdiF5kkzVWCw</string>
+	<string>AIzaSyAc-Ox2Go4sw0pM3KVL19yT61qk4haC0jA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>204561008176</string>
+	<string>990967101864</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.tinhvu.cycle-sharing.dev</string>
+	<string>com.locationsharing.livelocation.grouplocationshare.sendlocation</string>
 	<key>PROJECT_ID</key>
-	<string>cs-dev-34127</string>
+	<string>ios29---group-location-sharing</string>
 	<key>STORAGE_BUCKET</key>
-	<string>cs-dev-34127.appspot.com</string>
+	<string>ios29---group-location-sharing.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:204561008176:ios:19f6f3b3eaaf4d08670ff5</string>
+	<string>1:990967101864:ios:2535415bf922e34069459d</string>
 </dict>
 </plist>

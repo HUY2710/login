@@ -163,7 +163,9 @@ class MyPurchaseManager extends PurchasesManager {
     EasyLoading.show();
     SharedPreferencesManager.setIsWeeklyPremium(false);
     SharedPreferencesManager.setIsMonthlyPremium(false);
-    await iapConnection.restorePurchases();
+    try {
+      await iapConnection.restorePurchases();
+    } catch (e) {}
     EasyLoading.dismiss();
   }
 

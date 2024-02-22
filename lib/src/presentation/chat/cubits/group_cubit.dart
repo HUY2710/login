@@ -26,6 +26,8 @@ class GroupCubit extends Cubit<GroupState> {
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _groupStream;
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _userStream;
 
+  bool haveMessage = false;
+
   Future<void> sendMessage(
       {required String content,
       required String idGroup,
@@ -91,12 +93,6 @@ class GroupCubit extends Cubit<GroupState> {
 
                 StoreGroup storeGroup = StoreGroup.fromJson(change.doc.data()!);
 
-                // final timeLastSeenString =
-                //     await SharedPreferencesManager.getTimeSeenChat(
-                //         storeGroup.idGroup ?? DateTime.now().toString());
-                // final seenTemp = Utils.checkSeen(
-                //     timeLastSeenString, storeGroup.lastMessage!.sentAt);
-
                 final storeUser = listStoreUser.firstWhere(
                   (storeUser) =>
                       storeUser.code == storeGroup.lastMessage!.senderId,
@@ -106,7 +102,6 @@ class GroupCubit extends Cubit<GroupState> {
 
                 storeGroup =
                     storeGroup.copyWith(storeUser: storeUser, seen: seen);
-                logger.i(storeGroup);
                 myGroups[index] = storeGroup;
                 emit(GroupState.success(myGroups));
               }
