@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,13 +14,11 @@ import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/cubit/value_cubit.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/extension/int_extension.dart';
-import '../../shared/widgets/main_switch.dart';
 import '../../shared/widgets/my_drag.dart';
 import '../../shared/widgets/text_field/main_text_form_field.dart';
-import '../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import '../map/cubit/select_group_cubit.dart';
-import 'bottom_sheet/search_place.dart';
 import 'cubit/select_place_cubit.dart';
 
 class AddPlaceBottomSheet extends StatefulWidget {
@@ -86,7 +82,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                     children: [
                       Align(
                         child: Text(
-                          'Places',
+                          context.l10n.places,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 20.sp,
@@ -99,7 +95,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                         child: GestureDetector(
                           onTap: () => context.popRoute(),
                           child: Text(
-                            'Cancel',
+                            context.l10n.cancel,
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 16.sp,
@@ -148,7 +144,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                                     }
                                   : () {},
                               child: Text(
-                                'Done',
+                                context.l10n.done,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 16.sp,

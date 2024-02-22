@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../extension/context_extension.dart';
+
 class ErrorDialog extends StatelessWidget {
   const ErrorDialog({super.key, required this.messageError, this.cancelText});
   final String messageError;
@@ -35,7 +37,7 @@ class ErrorDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  cancelText ?? 'Cancel',
+                  cancelText ?? context.l10n.cancel,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: const Color(0xffB67DFF),

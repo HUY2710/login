@@ -45,7 +45,7 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
               bloc: typeRequest,
               builder: (context, state) {
                 return AppButton(
-                    title: 'Allow',
+                    title: context.l10n.allow,
                     onTap: () async {
                       if (state == 1) {
                         final status = await requestPermissionLocation();

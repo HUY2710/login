@@ -17,6 +17,7 @@ import '../../gen/gens.dart';
 import '../../global/global.dart';
 import '../../services/http_service.dart';
 import '../../shared/enum/route_travel.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/map_helper.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
 import '../../shared/widgets/my_drag.dart';
@@ -194,7 +195,7 @@ class _DirectionMapState extends State<DirectionMap> {
 
           SizedBox(height: 32.h),
           AppButton(
-            title: 'Get Directions in app',
+            title: context.l10n.getDirectionsInMap,
             paddingVertical: 12.h,
             heightBtn: 44.h,
             onTap: () async {
@@ -208,7 +209,7 @@ class _DirectionMapState extends State<DirectionMap> {
           ),
           SizedBox(height: 16.h),
           AppButton(
-            title: 'Get Directions on Maps',
+            title: context.l10n.getDirectionsOnMap,
             paddingVertical: 12.h,
             heightBtn: 44.h,
             onTap: () {

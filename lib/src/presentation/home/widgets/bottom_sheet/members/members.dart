@@ -78,7 +78,7 @@ class MembersBottomSheet extends StatelessWidget {
                                 gradient: gradientBackground,
                               ),
                               child: Text(
-                                'Done',
+                                context.l10n.done,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 12.sp,

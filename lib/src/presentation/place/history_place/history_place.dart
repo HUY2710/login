@@ -9,6 +9,7 @@ import '../../../data/models/store_user/store_user.dart';
 import '../../../data/remote/firestore_client.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/colors.gen.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../../shared/widgets/custom_circle_avatar.dart';
 import '../../../shared/widgets/my_drag.dart';
@@ -119,7 +120,7 @@ class _HistoryPlaceState extends State<HistoryPlace> {
                           padding: EdgeInsets.symmetric(
                               horizontal: 12.w, vertical: 6.h),
                           child: Text(
-                            'Get routes',
+                            context.l10n.getRoutes,
                             style: TextStyle(
                               color: const Color(0xff8E52FF),
                               fontSize: 13.sp,

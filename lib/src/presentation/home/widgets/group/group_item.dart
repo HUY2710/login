@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -122,7 +121,7 @@ class GroupItem extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    '$members members',
+                    '$members ${context.l10n.members}',
                     style: TextStyle(
                         fontSize: 12.sp, color: const Color(0xff6C6C6C)),
                   ),

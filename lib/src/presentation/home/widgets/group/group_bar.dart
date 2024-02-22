@@ -56,7 +56,9 @@ class GroupBar extends StatelessWidget {
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 12.w),
                           child: Text(
-                            state == null ? 'New Group' : state.groupName,
+                            state == null
+                                ? context.l10n.newGroup
+                                : state.groupName,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -144,7 +146,7 @@ class GroupBar extends StatelessWidget {
                                 vertical: 14.h,
                               ),
                               child: Text(
-                                'New Group',
+                                context.l10n.newGroup,
                                 style: TextStyle(
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.w700,
@@ -174,7 +176,7 @@ class GroupBar extends StatelessWidget {
                                 vertical: 14.h,
                               ),
                               child: Text(
-                                'Join Group',
+                                context.l10n.joinGroup,
                                 style: TextStyle(
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.w700,

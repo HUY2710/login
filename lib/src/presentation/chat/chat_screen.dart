@@ -59,7 +59,7 @@ class _ChatScreenState extends State<ChatScreen> {
               onTap: () => context.popRoute()),
           centerTitle: true,
           title: Text(
-            'Messages',
+            context.l10n.messages,
             style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
           ),
         ),
@@ -91,7 +91,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           InputSearch(textController: textController),
                           30.h.verticalSpace,
                           Text(
-                            'Group',
+                            context.l10n.group,
                             style: TextStyle(
                                 color: MyColors.black34,
                                 fontSize: 16.sp,

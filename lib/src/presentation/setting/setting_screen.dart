@@ -13,6 +13,7 @@ import '../../gen/gens.dart';
 import '../../global/global.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/widgets/custom_appbar.dart';
 import '../../shared/widgets/dialog/rate_dialog.dart';
 import '../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
@@ -62,7 +63,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Settings'),
+      appBar: CustomAppBar(title: context.l10n.settings),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
@@ -124,7 +125,7 @@ class _SettingScreenState extends State<SettingScreen> {
               12.horizontalSpace,
               Expanded(
                 child: Text(
-                  'Share',
+                  context.l10n.share,
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w400,
@@ -150,7 +151,7 @@ class _SettingScreenState extends State<SettingScreen> {
             12.horizontalSpace,
             Expanded(
               child: Text(
-                'Privacy policy',
+                context.l10n.privacy,
                 style: TextStyle(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w400,
@@ -175,7 +176,7 @@ class _SettingScreenState extends State<SettingScreen> {
             12.horizontalSpace,
             Expanded(
               child: Text(
-                'Rate us',
+                context.l10n.rateUs,
                 style: TextStyle(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w400,
@@ -204,7 +205,7 @@ class _SettingScreenState extends State<SettingScreen> {
           12.horizontalSpace,
           Expanded(
             child: Text(
-              'Language',
+              context.l10n.language,
               style: TextStyle(
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w400,

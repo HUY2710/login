@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../shared/extension/context_extension.dart';
+
 class ActionDialog extends StatelessWidget {
   const ActionDialog({
     super.key,
@@ -83,7 +85,7 @@ class ActionDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  cancelText ?? 'Cancel',
+                  cancelText ?? context.l10n.cancel,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: const Color(0xffB67DFF),
