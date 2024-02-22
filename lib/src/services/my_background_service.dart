@@ -41,16 +41,18 @@ class MyBackgroundService {
         Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 15 : 30),
             (timer) async {
           debugPrint('timer: ${timer.tick}');
+          Global.instance.currentLocation = latLng;
           //check current location with new location => location > 30m => update
           final bool inRadius = MapHelper.isWithinRadius(
             Global.instance.currentLocation,
             latLng,
             30,
           );
+
           if (!inRadius) {
             //update local
             Global.instance.serverLocation = latLng;
-            Global.instance.currentLocation = latLng;
+
             debugPrint(
                 'currentLocation background:${Global.instance.currentLocation}');
 

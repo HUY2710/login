@@ -97,9 +97,16 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
           if (infoUser != null) {
             //lấy vị trí cuối cùng của user
             infoUser = infoUser.copyWith(
-                location: await _fireStoreClient.getUserLocation(infoUser.code),
-                subscriptionLocation: _listenLocationUserUpdate(infoUser));
+                location:
+                    await _fireStoreClient.getUserLocation(infoUser.code));
             _trackingListMember.add(infoUser);
+            //check lại ở đây
+            if (infoUser.code != Global.instance.user?.code) {
+              infoUser = infoUser.copyWith(
+                subscriptionLocation: _listenLocationUserUpdate(infoUser),
+                subscriptionUser: _listenUserUpdate(infoUser),
+              );
+            }
           } else {
             debugPrint('${infoUser?.code != Global.instance.user?.code}');
             debugPrint('idMember:${infoUser?.code}');
@@ -168,6 +175,39 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
       if (docSnap.data() != null && docSnap.exists) {
         final StoreLocation location = StoreLocation.fromJson(docSnap.data()!);
         user = user.copyWith(location: location);
+        final index = _trackingListMember
+            .indexWhere((element) => element.code == user.code);
+        if (index != -1) {
+          _trackingListMember[index] = user;
+          emit(TrackingMemberState.success([..._trackingListMember]));
+        }
+      }
+    });
+    return subscription;
+  }
+
+  //lắng nghe xem user có cật nhật avatar, online....
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>?>>?
+      _listenUserUpdate(StoreUser user) {
+    final subscription = _fireStoreClient
+        .listenStreamUser(user.code)
+        .listen((DocumentSnapshot<Map<String, dynamic>?> docSnap) {
+      if (docSnap.data() != null && docSnap.exists) {
+        final StoreUser userTemp = StoreUser.fromJson(docSnap.data()!);
+        user = user.copyWith(
+          userName: userTemp.userName,
+          activityType: userTemp.activityType,
+          avatarUrl: userTemp.avatarUrl,
+          online: userTemp.online,
+          shareLocation: userTemp.shareLocation,
+          batteryLevel: userTemp.batteryLevel,
+        );
+        final index = _trackingListMember
+            .indexWhere((element) => element.code == user.code);
+        if (index != -1) {
+          _trackingListMember[index] = user;
+          emit(TrackingMemberState.success([..._trackingListMember]));
+        }
       }
     });
     return subscription;

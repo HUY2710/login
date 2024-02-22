@@ -8,6 +8,8 @@
     <string>Allow location permission to access your location</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>Allow location permission to access your location</string>
+    <key>NSMotionUsageDescription</key>
+    <string>Used to recognize user activity information.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

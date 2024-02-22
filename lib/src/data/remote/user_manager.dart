@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../global/global.dart';
 import '../../shared/utils/logger_utils.dart';
 import '../models/store_user/store_user.dart';
 import 'collection_store.dart';
@@ -40,5 +41,12 @@ class CurrentUserManager {
     final StoreUser user = StoreUser.fromJson(doc.data()!);
     LoggerUtils.logInfo('Fetch User: $user');
     return user;
+  }
+
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> streamUser(
+      String? idUser) {
+    return CollectionStore.users
+        .doc(idUser ?? Global.instance.user!.code)
+        .snapshots();
   }
 }

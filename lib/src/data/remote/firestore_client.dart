@@ -8,7 +8,7 @@ import '../models/store_member/store_member.dart';
 import '../models/store_place/store_place.dart';
 import '../models/store_user/store_user.dart';
 import 'collection_store.dart';
-import 'current_user_store.dart';
+import 'user_manager.dart';
 import 'group_manager.dart';
 import 'history_place_manager.dart';
 import 'location_manager.dart';
@@ -35,6 +35,12 @@ class FirestoreClient {
 
   Future<StoreUser?> getUser(String userCode) async {
     return CurrentUserManager.getUser(userCode);
+  }
+
+  //lắng nghe user thay đổi => acitivity, online....
+  Stream<DocumentSnapshot<Map<String, dynamic>>> listenStreamUser(
+      String? idUser) {
+    return CurrentUserManager.streamUser(idUser);
   }
 
   //manager group
