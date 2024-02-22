@@ -7,14 +7,14 @@ import '../shared/helpers/env_params.dart';
 class HTTPService {
   String searchNearByUrl = UrlConstants.nearBy;
   String routeDirectionUrl = UrlConstants.routeDirection;
-  static String apiPlaceKey = EnvParams.apiPlaceKey;
+  static String apiKey = EnvParams.apiKey;
 
   Future<http.Response> postRequestPlaces(Map<String, dynamic> body) async {
     try {
       final response = await http.post(
         Uri.parse(searchNearByUrl),
         headers: {
-          'X-Goog-Api-Key': apiPlaceKey,
+          'X-Goog-Api-Key': apiKey,
           'Content-Type': 'application/json',
           'X-Goog-FieldMask':
               'places.displayName,places.formattedAddress,places.location',
@@ -32,7 +32,7 @@ class HTTPService {
       final response = await http.post(
         Uri.parse(routeDirectionUrl),
         headers: {
-          'X-Goog-Api-Key': apiPlaceKey,
+          'X-Goog-Api-Key': apiKey,
           'Content-Type': 'application/json',
           'X-Goog-FieldMask':
               'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline',

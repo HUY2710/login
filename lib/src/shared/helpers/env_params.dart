@@ -13,5 +13,5 @@ class EnvParams {
 
   static String get appLovinKey => dotenv.get('APPLOVIN_KEY');
 
-  static String get apiPlaceKey => dotenv.get('API_PLACE_KEY');
+  static String get apiKey => dotenv.get('API_KEY');
 }

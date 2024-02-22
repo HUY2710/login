@@ -16,14 +16,14 @@ flavors:
 
   prod:
     app:
-      name: "Example"
+      name: "Group Location"
     android:
-      applicationId: "com.vtn.example.prod"
+      applicationId: "com.locationsharing.livelocation.grouplocationshare.sendlocation"
       icon: "assets/images/logo/rounded_logo.png"
-      # firebase:
-      #   config: "android/app/src/prod/google-services.json"
+      firebase:
+        config: "android/app/src/prod/google-services.json"
     ios:
-      bundleId: "com.vtn.example.prod"
+      bundleId: "com.locationsharing.livelocation.grouplocationshare.sendlocation"
       icon: "assets/images/logo/logo.png"
-      # firebase:
-      #   config: "ios/Runner/prod/GoogleService-Info.plist"
+      firebase:
+        config: "ios/Runner/prod/GoogleService-Info.plist"
