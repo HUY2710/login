@@ -14,6 +14,7 @@ import '../../../../data/remote/firestore_client.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/gens.dart';
 import '../../../../global/global.dart';
+import '../../../../services/firebase_message_service.dart';
 import '../../../../shared/cubit/value_cubit.dart';
 import '../../../../shared/extension/int_extension.dart';
 import '../../../../shared/helpers/valid_helper.dart';
@@ -72,6 +73,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
 
       try {
         await FirestoreClient.instance.createGroup(newGroup);
+        getIt<FirebaseMessageService>().subscribeTopics([newGroup.idGroup!]);
         if (context.mounted) {
           getIt<SelectGroupCubit>().update(newGroup);
           await context.popRoute().then(

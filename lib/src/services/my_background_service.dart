@@ -79,11 +79,7 @@ class MyBackgroundService {
         .listenMyGroups()
         .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
       for (final change in snapshot.docChanges) {
-        //đăng kí nhận thông báo khi có group mới
-        if (change.type == DocumentChangeType.added) {
-          FirebaseMessageService().subscribeTopics([change.doc.id]);
-        }
-        //hủy thông báo khi có group bị xóa
+        //hủy thông báo khi group trong listgroup của mình bị xóa (mình rời hoặc bị xóa)
         if (change.type == DocumentChangeType.removed) {
           FirebaseMessageService().unSubscribeTopics([change.doc.id]);
         }

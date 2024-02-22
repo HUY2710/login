@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_base/src/data/local/shared_preferences_manager.dart';
+import '../../../../data/local/shared_preferences_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -9,6 +9,7 @@ import '../../../../data/models/store_group/store_group.dart';
 import '../../../../data/models/store_member/store_member.dart';
 import '../../../../data/remote/firestore_client.dart';
 import '../../../../global/global.dart';
+import '../../../../services/firebase_message_service.dart';
 import '../../../map/cubit/select_group_cubit.dart';
 
 part 'code_validation_cubit.freezed.dart';
@@ -54,6 +55,10 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
 
             getIt<SelectGroupCubit>()
                 .update(existGroup.copyWith(storeMembers: listMember));
+
+            //đăng kí nhận lắng nghe thông báo
+            getIt<FirebaseMessageService>()
+                .subscribeTopics([existGroup.idGroup!]);
             emit(CodeValidationState.valid(existGroup));
           }
         }

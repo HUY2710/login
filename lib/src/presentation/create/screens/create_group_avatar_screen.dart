@@ -13,6 +13,7 @@ import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/avatar/avatar_model.dart';
 import '../../../data/remote/firestore_client.dart';
 import '../../../global/global.dart';
+import '../../../services/firebase_message_service.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../map/cubit/select_group_cubit.dart';
@@ -56,6 +57,9 @@ class CreateGroupAvatarScreen extends StatelessWidget {
                     //update database
                     await FirestoreClient.instance
                         .createGroup(Global.instance.group!);
+                    //đăng kí nhận lắng nghe thông báo
+                    getIt<FirebaseMessageService>()
+                        .subscribeTopics([Global.instance.group!.idGroup!]);
                     await SharedPreferencesManager.saveIsCreateInfoFistTime(
                         false);
 
