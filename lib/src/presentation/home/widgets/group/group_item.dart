@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -134,14 +135,16 @@ class GroupItem extends StatelessWidget {
               builder: (context, state) {
                 return GestureDetector(
                   onTap: () {
-                    showAppModalBottomSheet(
-                      context: context,
-                      builder: (context) => ActionGroupBottomSheet(
-                        itemGroup: itemGroup,
-                        isAdmin: isAdmin(itemGroup),
-                        myGroupCubit: myGroupCubit,
-                      ),
-                    );
+                    context.popRoute().then(
+                          (value) => showAppModalBottomSheet(
+                            context: context,
+                            builder: (context) => ActionGroupBottomSheet(
+                              itemGroup: itemGroup,
+                              isAdmin: isAdmin(itemGroup),
+                              myGroupCubit: myGroupCubit,
+                            ),
+                          ),
+                        );
                   },
                   child: GradientSvg(
                     Assets.icons.ic3dot.svg(width: 20.r),

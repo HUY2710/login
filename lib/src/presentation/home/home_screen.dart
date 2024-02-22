@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../services/activity_recognition_service.dart';
 import '../map/map_screen.dart';
-import 'widgets/group/group_bar.dart';
+import 'widgets/bottom_sheet/checkin/checkin.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -25,7 +25,8 @@ class HomeScreen extends StatelessWidget {
                 ? 20.h
                 : ScreenUtil().statusBarHeight,
             left: 16.w,
-            child: const GroupBar(),
+            right: 70.w,
+            child: const CheckInWidget(),
           ),
         ],
       ),
