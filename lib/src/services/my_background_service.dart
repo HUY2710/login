@@ -41,16 +41,18 @@ class MyBackgroundService {
         Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 15 : 30),
             (timer) async {
           debugPrint('timer: ${timer.tick}');
+          Global.instance.currentLocation = latLng;
           //check current location with new location => location > 30m => update
           final bool inRadius = MapHelper.isWithinRadius(
             Global.instance.currentLocation,
             latLng,
             30,
           );
+
           if (!inRadius) {
             //update local
             Global.instance.serverLocation = latLng;
-            Global.instance.currentLocation = latLng;
+
             debugPrint(
                 'currentLocation background:${Global.instance.currentLocation}');
 
@@ -77,11 +79,7 @@ class MyBackgroundService {
         .listenMyGroups()
         .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
       for (final change in snapshot.docChanges) {
-        //đăng kí nhận thông báo khi có group mới
-        if (change.type == DocumentChangeType.added) {
-          FirebaseMessageService().subscribeTopics([change.doc.id]);
-        }
-        //hủy thông báo khi có group bị xóa
+        //hủy thông báo khi group trong listgroup của mình bị xóa (mình rời hoặc bị xóa)
         if (change.type == DocumentChangeType.removed) {
           FirebaseMessageService().unSubscribeTopics([change.doc.id]);
         }

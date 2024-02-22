@@ -68,26 +68,30 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
 
     _locationSubscription =
         locationService.getLocationStream().listen((LatLng latLngListen) async {
-      Global.instance.currentLocation = latLngListen;
+      //nếu background không được enable thì mới chạy ở đây
+      if (!getIt<MyBackgroundService>().isRunning) {
+        Global.instance.currentLocation = latLngListen;
 
-      Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 5 : 30),
-          (timer) async {
-        final bool inRadius = MapHelper.isWithinRadius(
-          Global.instance.serverLocation,
-          latLngListen,
-          30,
-        );
-        debugPrint('inRadius:$inRadius');
-        debugPrint('server Location: ${Global.instance.serverLocation}');
-        debugPrint('current Location: $latLng');
-        if (!inRadius && !getIt<MyBackgroundService>().isRunning) {
-          Global.instance.serverLocation = latLngListen;
-          await locationService.updateLocationUser(
-            latLng: latLngListen,
+        Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 5 : 30),
+            (timer) async {
+          final bool inRadius = MapHelper.isWithinRadius(
+            Global.instance.serverLocation,
+            latLngListen,
+            30,
           );
-          await getIt<TrackingHistoryPlaceService>().trackingHistoryPlace();
-        }
-      });
+          debugPrint('inRadius:$inRadius');
+          debugPrint('server Location: ${Global.instance.serverLocation}');
+          debugPrint('current Location: $latLng');
+          if (!inRadius && !getIt<MyBackgroundService>().isRunning) {
+            Global.instance.serverLocation = latLngListen;
+            await locationService.updateLocationUser(
+              latLng: latLngListen,
+            );
+            await getIt<TrackingHistoryPlaceService>().trackingHistoryPlace();
+          }
+        });
+      }
+
       emit(TrackingLocationState.success(latLngListen));
     })
           ..onError((err) {

@@ -10,9 +10,12 @@ import '../../../../../../app/cubit/exception/exception_cubit.dart';
 import '../../../../../config/di/di.dart';
 import '../../../../../config/navigation/app_router.dart';
 import '../../../../../data/models/store_group/store_group.dart';
+import '../../../../../data/models/store_member/store_member.dart';
 import '../../../../../data/remote/firestore_client.dart';
 import '../../../../../gen/assets.gen.dart';
 import '../../../../../gen/colors.gen.dart';
+import '../../../../../global/global.dart';
+import '../../../../../services/firebase_message_service.dart';
 import '../../../../../shared/constants/app_constants.dart';
 import '../../../../../shared/cubit/value_cubit.dart';
 import '../../../../../shared/widgets/main_switch.dart';
@@ -35,7 +38,9 @@ class ActionGroupBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ValueCubit<bool> notifyCubit = ValueCubit(itemGroup.notify);
+    final StoreMember member = itemGroup.storeMembers!
+        .firstWhere((member) => member.idUser == Global.instance.user?.code);
+    final ValueCubit<bool> notifyCubit = ValueCubit(member.onNotify);
     final ExceptionCubit exceptionCubit = getIt<ExceptionCubit>();
     return BlocListener<ExceptionCubit, ExceptionState>(
       bloc: exceptionCubit,
@@ -98,7 +103,7 @@ class ActionGroupBottomSheet extends StatelessWidget {
               child: GestureDetector(
                 child: itemAction(
                     Assets.icons.icNotify.svg(width: 20.r), 'Notification',
-                    notifyCubit: notifyCubit),
+                    notifyCubit: notifyCubit, member: member),
               ),
             ),
             if (isAdmin)
@@ -171,8 +176,13 @@ class ActionGroupBottomSheet extends StatelessWidget {
     );
   }
 
-  Row itemAction(SvgPicture svg, String text,
-      {Color? colorText, ValueCubit<bool>? notifyCubit}) {
+  Row itemAction(
+    SvgPicture svg,
+    String text, {
+    Color? colorText,
+    ValueCubit<bool>? notifyCubit,
+    StoreMember? member,
+  }) {
     return Row(
       children: [
         svg,
@@ -187,7 +197,7 @@ class ActionGroupBottomSheet extends StatelessWidget {
             ),
           ),
         ),
-        if (notifyCubit != null)
+        if (notifyCubit != null && member != null)
           BlocBuilder<ValueCubit<bool>, bool>(
             bloc: notifyCubit,
             builder: (context, state) {
@@ -196,7 +206,22 @@ class ActionGroupBottomSheet extends StatelessWidget {
                   onChanged: (value) {
                     notifyCubit.update(value);
                     //update sever
-                    FirestoreClient.instance.updateNotifyGroup(
+                    if (value) {
+                      //đăng kí nhận lắng nghe thông báo
+                      getIt<FirebaseMessageService>()
+                          .subscribeTopics([itemGroup.idGroup!]);
+                      //đăng kí nhận lắng nghe thông báo
+                      getIt<FirebaseMessageService>()
+                          .subscribeTopics(['testGroup']);
+                    } else {
+                      //hủy thông báo
+                      getIt<FirebaseMessageService>()
+                          .unSubscribeTopics([itemGroup.idGroup!]);
+                      //đăng kí nhận lắng nghe thông báo
+                      getIt<FirebaseMessageService>()
+                          .unSubscribeTopics(['testGroup']);
+                    }
+                    FirestoreClient.instance.updateNotifyGroupEachMember(
                       idGroup: getIt<SelectGroupCubit>().state!.idGroup!,
                       onNotify: value,
                     );
@@ -205,12 +230,22 @@ class ActionGroupBottomSheet extends StatelessWidget {
                     myGroupCubit.state.maybeWhen(
                       orElse: () {},
                       success: (groups) {
+                        //cập nhật lại field onNotify của member (bản thân mình)
+                        member = member!.copyWith(onNotify: value);
+                        //lấy ra group hiện tại vừa cập nhật
                         final indexGroup = groups.indexWhere(
-                          (element) =>
-                              element.idGroup ==
-                              getIt<SelectGroupCubit>().state!.idGroup,
+                          (element) => element.idGroup == itemGroup.idGroup,
                         );
-                        final tempGroup = itemGroup.copyWith(notify: value);
+                        final List<StoreMember> listMembers =
+                            List.from(groups[indexGroup].storeMembers!);
+                        final index = listMembers.indexWhere(
+                            (element) => element.idUser == member?.idUser);
+                        if (index != -1) {
+                          listMembers[index] = member!;
+                        }
+                        //sau đó tiến hành cập nhật member trong list danh sách member của group
+                        final tempGroup =
+                            itemGroup.copyWith(storeMembers: listMembers);
                         myGroupCubit.updateItemGroup(tempGroup, indexGroup);
                       },
                     );

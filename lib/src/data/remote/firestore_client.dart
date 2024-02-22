@@ -8,7 +8,7 @@ import '../models/store_member/store_member.dart';
 import '../models/store_place/store_place.dart';
 import '../models/store_user/store_user.dart';
 import 'collection_store.dart';
-import 'current_user_store.dart';
+import 'user_manager.dart';
 import 'group_manager.dart';
 import 'history_place_manager.dart';
 import 'location_manager.dart';
@@ -37,6 +37,12 @@ class FirestoreClient {
     return CurrentUserManager.getUser(userCode);
   }
 
+  //lắng nghe user thay đổi => acitivity, online....
+  Stream<DocumentSnapshot<Map<String, dynamic>>> listenStreamUser(
+      String? idUser) {
+    return CurrentUserManager.streamUser(idUser);
+  }
+
   //manager group
   //lắng nghe sự thay đổi của tất cả groups của mình (groups mình tạo, groups mình join)
   Stream<QuerySnapshot<Map<String, dynamic>>> listenMyGroups() {
@@ -51,6 +57,11 @@ class FirestoreClient {
   Future<void> updateNotifyGroup(
       {required String idGroup, required bool onNotify}) async {
     GroupsManager.updateNotify(idGroup, onNotify);
+  }
+
+  Future<void> updateNotifyGroupEachMember(
+      {required String idGroup, required bool onNotify}) async {
+    GroupsManager.updateNotifyEachMember(idGroup, onNotify);
   }
 
   //get detail group

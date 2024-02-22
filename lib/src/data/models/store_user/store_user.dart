@@ -15,6 +15,7 @@ class StoreUser with _$StoreUser {
     required String avatarUrl,
     required String userName,
     required int batteryLevel,
+    @Default('UNKNOWN') String activityType,
     @Default(true) bool online,
     @Default(true) bool shareLocation,
     @JsonKey(includeFromJson: false, includeToJson: false) Uint8List? marker,
@@ -22,6 +23,8 @@ class StoreUser with _$StoreUser {
     StoreLocation? location,
     @JsonKey(includeFromJson: false, includeToJson: false)
     StreamSubscription? subscriptionLocation,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    StreamSubscription? subscriptionUser,
   }) = _StoreUser;
 
   factory StoreUser.fromJson(Map<String, dynamic> json) =>

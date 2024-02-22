@@ -58,7 +58,6 @@ class JoinGroupScreen extends StatelessWidget with PermissionMixin {
                       fontWeight: FontWeight.w600,
                       color: MyColors.black34),
                   length: 6,
-
                   blinkWhenObscuring: true,
                   animationType: AnimationType.fade,
                   textCapitalization: TextCapitalization.characters,
@@ -81,8 +80,6 @@ class JoinGroupScreen extends StatelessWidget with PermissionMixin {
                   cursorColor: Colors.black,
                   animationDuration: const Duration(milliseconds: 300),
                   enableActiveFill: true,
-                  // errorAnimationController: errorController,
-                  // controller: textEditingController,
                   keyboardType: TextInputType.text,
                   boxShadows: const [
                     BoxShadow(
@@ -97,19 +94,11 @@ class JoinGroupScreen extends StatelessWidget with PermissionMixin {
                     await codeValidCubit.submit(code, context);
                     EasyLoading.dismiss();
                   },
-                  // onTap: () {
-                  //   print("Pressed");
-                  // },
                   onChanged: (value) {
                     debugPrint(value);
-                    // setState(() {
-                    //   currentText = value;
-                    // });
                   },
                   beforeTextPaste: (text) {
                     debugPrint('Allowing to paste $text');
-                    //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                    //but you can show anything you want here, like your pop up saying wrong paste format or etc
                     return true;
                   },
                 ),

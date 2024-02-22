@@ -297,4 +297,17 @@ class GroupsManager {
       throw Exception(error);
     });
   }
+
+  //mỗi member sẽ tự quản lí thông báo của mình
+  //muốn nhận hay không nhận thông báo từ group đó
+  static Future<void> updateNotifyEachMember(
+      String idGroup, bool onNotify) async {
+    await CollectionStore.groups
+        .doc(idGroup)
+        .collection(CollectionStoreConstant.members)
+        .doc(Global.instance.user!.code)
+        .update({'onNotify': onNotify}).catchError((error) {
+      throw Exception(error);
+    });
+  }
 }

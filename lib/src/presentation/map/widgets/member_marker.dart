@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_activity_recognition/flutter_activity_recognition.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../data/models/store_user/store_user.dart';
@@ -124,7 +125,7 @@ class _BuildMarkerState extends State<BuildMarker> {
           left: 0,
           bottom: 0,
           child: Image.asset(
-            Assets.images.markers.car.path,
+            getType(),
             height: 60.r,
             width: 60.r,
             gaplessPlayback: true,
@@ -146,5 +147,33 @@ class _BuildMarkerState extends State<BuildMarker> {
         ),
       ),
     );
+  }
+
+  Widget _buildActivity() {
+    return Image.asset(
+      Assets.images.markers.car.path,
+      height: 60.r,
+      width: 60.r,
+      gaplessPlayback: true,
+    );
+  }
+
+  String getType() {
+    if (widget.member.activityType == ActivityType.RUNNING.name) {
+      return Assets.images.markers.running.path;
+    }
+    if (widget.member.activityType == ActivityType.ON_BICYCLE.name) {
+      return Assets.images.markers.onBicycle.path;
+    }
+    if (widget.member.activityType == ActivityType.IN_VEHICLE.name) {
+      return Assets.images.markers.car.path;
+    }
+    if (widget.member.activityType == ActivityType.WALKING.name) {
+      return Assets.images.markers.walking.path;
+    }
+    if (widget.member.activityType == ActivityType.STILL.name) {
+      return Assets.images.markers.still.path;
+    }
+    return Assets.images.markers.still.path;
   }
 }

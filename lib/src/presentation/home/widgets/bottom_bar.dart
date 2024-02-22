@@ -10,17 +10,17 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
-import '../../../data/models/store_user/store_user.dart';
+import '../../../data/models/store_group/store_group.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../gen/colors.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../map/cubit/select_group_cubit.dart';
-import '../../map/cubit/select_user_cubit.dart';
 import '../../map/cubit/tracking_location/tracking_location_cubit.dart';
 import '../../map/cubit/tracking_members/tracking_member_cubit.dart';
-import 'bottom_sheet/members/members.dart';
 import 'bottom_sheet/show_bottom_sheet_home.dart';
+import 'group/group_bottom_sheet.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({
@@ -62,66 +62,68 @@ class _BottomBarState extends State<BottomBar> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ShadowContainer(
-              padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 20.w),
-              blurRadius: 18,
-              child: BlocBuilder<SelectUserCubit, StoreUser?>(
-                bloc: getIt<SelectUserCubit>(),
-                builder: (context, state) {
-                  if (state != null) {
-                    return SvgPicture.asset(
-                      Assets.icons.icGps.path,
-                      height: 20.r,
-                      width: 20.r,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildItem(Assets.icons.icMessage.path, context, true),
+              16.horizontalSpace,
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    showAppModalBottomSheet(
+                      context: context,
+                      builder: (context) => const GroupBottomSheet(),
                     );
-                  }
-                  return Text(
-                    'ME',
-                    style: TextStyle(
-                      color: const Color(0xff343434),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16.sp,
+                  },
+                  child: ShadowContainer(
+                    maxWidth: MediaQuery.sizeOf(context).width - 80.w,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
+                    child: BlocBuilder<SelectGroupCubit, StoreGroup?>(
+                      bloc: getIt<SelectGroupCubit>(),
+                      builder: (context, state) {
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: MyColors.primary,
+                              backgroundImage: AssetImage(state == null
+                                  ? Assets.images.avatars.groups.group1.path
+                                  : state.avatarGroup),
+                              radius: 14.r,
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                child: Text(
+                                  state == null ? 'New Group' : state.groupName,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: const Color(0xff8E52FF),
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                            const Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color: MyColors.primary,
+                            )
+                          ],
+                        );
+                      },
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
-        8.verticalSpace,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buildItem(Assets.icons.icPeople.path, context, false),
-            23.horizontalSpace,
-            //avatar
-            GestureDetector(
-              onTap: () {
-                //nếu selectUserCubit == null thì mặc định là ME
-                //nếu có thì move đến vị trí của user đó
-                final isMe = getIt<SelectUserCubit>().state;
-                if (isMe == null) {
-                  _goToDetailLocation();
-                } else {
-                  //xử lí location của member
-                }
-              },
-              child: BlocBuilder<SelectUserCubit, StoreUser?>(
-                bloc: getIt<SelectUserCubit>(),
-                builder: (context, state) {
-                  if (state != null) {
-                    return _buildAvatar(state.avatarUrl);
-                  }
-                  return _buildAvatar(Global.instance.user!.avatarUrl);
-                },
-              ),
-            ),
-            23.horizontalSpace,
-            buildItem(Assets.icons.icMessage.path, context, true),
-          ],
+              16.horizontalSpace,
+              buildItem(Assets.icons.icSetting.path, context, false),
+            ],
+          ),
         ),
       ],
     );
@@ -137,13 +139,7 @@ class _BottomBarState extends State<BottomBar> {
             context.pushRoute(const ChatRoute());
             return;
           }
-          showAppModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return MembersBottomSheet(
-                  trackingMemberCubit: widget.trackingMemberCubit,
-                );
-              });
+          context.pushRoute(const SettingRoute());
         } else {
           Fluttertoast.showToast(msg: 'Please join group first');
         }

@@ -8,6 +8,7 @@ part 'store_member.g.dart';
 class StoreMember with _$StoreMember {
   const factory StoreMember({
     required bool isAdmin,
+    @Default(true) bool onNotify,
     @JsonKey(
       includeFromJson: false,
       includeToJson: false,
