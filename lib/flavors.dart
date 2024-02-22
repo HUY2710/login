@@ -13,7 +13,7 @@ class F {
       case Flavor.dev:
         return 'Location Sharing Dev';
       case Flavor.prod:
-        return 'Example';
+        return 'Group Location';
       default:
         return 'title';
     }

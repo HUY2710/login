@@ -130,7 +130,6 @@ class JoinGroupScreen extends StatelessWidget with PermissionMixin {
                       orElse: () {},
                       valid: (group) async {
                         Fluttertoast.showToast(msg: 'Join group success');
-                        context.popRoute();
                         await SharedPreferencesManager.saveIsCreateInfoFistTime(
                             false);
                         final bool statusLocation =
