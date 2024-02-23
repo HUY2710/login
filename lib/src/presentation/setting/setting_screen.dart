@@ -86,7 +86,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   );
                 },
                 child: const Text('Show history Place'),
-              )
+              ),
             ],
           ),
         ),

@@ -11,6 +11,7 @@ import '../src/config/navigation/app_router.dart';
 import '../src/config/observer/route_observer.dart';
 import '../src/config/theme/light/light_theme.dart';
 import '../src/data/remote/firestore_client.dart';
+import '../src/services/activity_recognition_service.dart';
 import '../src/shared/enum/language.dart';
 import 'cubit/language_cubit.dart';
 import 'cubit/native_ad_status_cubit.dart';
@@ -34,6 +35,7 @@ class _MyAppState extends State<MyApp> {
       FirestoreClient.instance.updateUser({'online': !isBackground});
     });
     super.initState();
+    ActivityRecognitionService.instance.initActivityRecognitionService();
   }
 
   @override

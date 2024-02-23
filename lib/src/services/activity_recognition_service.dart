@@ -1,8 +1,12 @@
+import 'package:battery_plus/battery_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_activity_recognition/flutter_activity_recognition.dart';
+import 'package:pedometer/pedometer.dart';
 
+import '../config/di/di.dart';
 import '../data/remote/firestore_client.dart';
 import '../global/global.dart';
+import '../presentation/home/cubit/steps_cubit.dart';
 
 class ActivityRecognitionService {
   ActivityRecognitionService._privateConstructor();
@@ -12,6 +16,14 @@ class ActivityRecognitionService {
   final FirestoreClient _firestoreClient = FirestoreClient.instance;
   String? oldActivity = Global.instance.user?.activityType;
   final activityRecognition = FlutterActivityRecognition.instance;
+
+  Future<void> initActivityRecognitionService() async {
+    if (await isPermissionGrants()) {
+      initStreamActivityRecognition();
+      initStepsStream();
+    }
+  }
+
   Future<bool> isPermissionGrants() async {
     // Check if the user has granted permission. If not, request permission.
     PermissionRequestResult reqResult;
@@ -20,32 +32,70 @@ class ActivityRecognitionService {
       debugPrint('Permission is permanently denied.');
       return false;
     } else if (reqResult == PermissionRequestResult.DENIED) {
-      reqResult = await activityRecognition.requestPermission();
-      if (reqResult != PermissionRequestResult.GRANTED) {
-        debugPrint('Permission is denied.');
-        return false;
-      }
+      debugPrint('Permission is denied.');
+      return false;
     }
     return true;
   }
 
   Future<void> initStreamActivityRecognition() async {
-    final status = await isPermissionGrants();
-    if (status) {
-      activityRecognition.activityStream.handleError((error) {}).listen(
-        (Activity activity) {
-          debugPrint('activity:${activity.confidence.name}');
-          debugPrint('activity:$activity');
-          if (oldActivity != activity.type.name) {
-            //hoat động đã thay đổi => cập nhật lên server
-            oldActivity = activity.type.name;
-            // cật nhật user local
-            Global.instance.user = Global.instance.user
-                ?.copyWith(activityType: oldActivity ?? 'STILL');
-            _firestoreClient.updateUser({'activityType': oldActivity});
-          }
-        },
-      );
-    }
+    activityRecognition.activityStream.handleError((error) {}).listen(
+      (Activity activity) {
+        debugPrint('activity:${activity.confidence.name}');
+        debugPrint('activity:$activity');
+        if (oldActivity != activity.type.name) {
+          //hoat động đã thay đổi => cập nhật lên server
+          oldActivity = activity.type.name;
+          // cật nhật user local
+          Global.instance.user = Global.instance.user
+              ?.copyWith(activityType: oldActivity ?? 'STILL');
+          _firestoreClient.updateUser({'activityType': oldActivity});
+        }
+      },
+    );
+  }
+
+  late Stream<StepCount> _stepCountStream;
+  late Stream<PedestrianStatus> _pedestrianStatusStream;
+
+  Future<void> initStepsStream() async {
+    _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
+    _pedestrianStatusStream
+        .listen(onPedestrianStatusChanged)
+        .onError(onPedestrianStatusError);
+
+    _stepCountStream = Pedometer.stepCountStream;
+    _stepCountStream.listen(onStepCount).onError(onStepCountError);
+  }
+
+  void onPedestrianStatusChanged(PedestrianStatus event) {
+    debugPrint('$event');
+    print('event: $event');
+  }
+
+  //đếm bước chân
+  Future<void> onStepCount(StepCount event) async {
+    debugPrint('step count: $event');
+    print('event: $event');
+    getIt<StepsCubit>().update(event.steps);
+
+    Future.delayed(const Duration(minutes: 5), () async {
+      int battery = 100;
+      try {
+        battery = await Battery().batteryLevel;
+      } catch (e) {}
+      _firestoreClient.updateUser({
+        'steps': getIt<StepsCubit>().state,
+        'batteryLevel': battery,
+      });
+    });
+  }
+
+  void onStepCountError(error) {
+    print('onStepCountError: $error');
+  }
+
+  void onPedestrianStatusError(error) {
+    print('onPedestrianStatusError: $error');
   }
 }
