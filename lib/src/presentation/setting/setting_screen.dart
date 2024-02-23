@@ -274,30 +274,22 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
                 20.horizontalSpace,
                 Expanded(
-                  child: Column(
-                    children: [
-                      Text(
-                        Global.instance.user?.userName ?? 'User',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        Global.instance.user?.code ?? 'User',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    Global.instance.user?.userName ?? 'User',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 )
               ],
             ),
           ),
           16.horizontalSpace,
-          Assets.icons.icEdit.svg(height: 28.h),
+          GestureDetector(
+            onTap: () => context.pushRoute(const EditInfoRoute()),
+            child: Assets.icons.icEdit.svg(height: 28.h),
+          ),
         ],
       ),
     );
