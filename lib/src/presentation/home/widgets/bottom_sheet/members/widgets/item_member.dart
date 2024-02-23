@@ -1,13 +1,16 @@
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../config/di/di.dart';
 import '../../../../../../data/models/store_user/store_user.dart';
 import '../../../../../../gen/assets.gen.dart';
 import '../../../../../../gen/colors.gen.dart';
 import '../../../../../../global/global.dart';
 import '../../../../../../shared/extension/context_extension.dart';
+import '../../../../../map/cubit/select_user_cubit.dart';
 import '../../../../../place/history_place/history_place.dart';
 import '../../show_bottom_sheet_home.dart';
 
@@ -21,10 +24,14 @@ class ItemMember extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         if (user.code != Global.instance.user?.code) {
-          showAppModalBottomSheet(
-            context: context,
-            builder: (context) => HistoryPlace(user: user),
-          );
+          getIt<SelectUserCubit>().update(user);
+          context.popRoute().then(
+                (value) => showAppModalBottomSheet(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => HistoryPlace(user: user),
+                ),
+              );
         }
       },
       child: Padding(
