@@ -11,12 +11,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/models/store_group/store_group.dart';
+import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/colors.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../map/cubit/select_group_cubit.dart';
+import '../../map/cubit/select_user_cubit.dart';
 import '../../map/cubit/tracking_location/tracking_location_cubit.dart';
 import '../../map/cubit/tracking_members/tracking_member_cubit.dart';
 import 'bottom_sheet/show_bottom_sheet_home.dart';
@@ -49,6 +51,7 @@ class _BottomBarState extends State<BottomBar> {
 
   Future<void> _goToDetailLocation() async {
     //test
+    getIt<SelectUserCubit>().update(null);
     final CameraPosition newPosition = CameraPosition(
       target: Global.instance.currentLocation,
       zoom: AppConstants.defaultCameraZoomLevel,
@@ -62,6 +65,23 @@ class _BottomBarState extends State<BottomBar> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        BlocBuilder<SelectUserCubit, StoreUser?>(
+          bloc: getIt<SelectUserCubit>(),
+          builder: (context, state) {
+            if (state != null) {
+              return GestureDetector(
+                onTap: _goToDetailLocation,
+                child: ShadowContainer(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+                  child: SvgPicture.asset(Assets.icons.icGps.path),
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+        8.verticalSpace,
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Row(
@@ -69,56 +89,68 @@ class _BottomBarState extends State<BottomBar> {
             children: [
               buildItem(Assets.icons.icMessage.path, context, true),
               16.horizontalSpace,
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    showAppModalBottomSheet(
-                      context: context,
-                      builder: (context) => const GroupBottomSheet(),
+              BlocBuilder<SelectUserCubit, StoreUser?>(
+                bloc: getIt<SelectUserCubit>(),
+                builder: (context, state) {
+                  if (state == null) {
+                    return Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          showAppModalBottomSheet(
+                            context: context,
+                            builder: (context) => const GroupBottomSheet(),
+                          );
+                        },
+                        child: ShadowContainer(
+                          maxWidth: MediaQuery.sizeOf(context).width - 80.w,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 24.w, vertical: 10.h),
+                          child: BlocBuilder<SelectGroupCubit, StoreGroup?>(
+                            bloc: getIt<SelectGroupCubit>(),
+                            builder: (context, state) {
+                              return Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: MyColors.primary,
+                                    backgroundImage: AssetImage(state == null
+                                        ? Assets
+                                            .images.avatars.groups.group1.path
+                                        : state.avatarGroup),
+                                    radius: 14.r,
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 12.w),
+                                      child: Text(
+                                        state == null
+                                            ? 'New Group'
+                                            : state.groupName,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: const Color(0xff8E52FF),
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                  const Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    color: MyColors.primary,
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ),
                     );
-                  },
-                  child: ShadowContainer(
-                    maxWidth: MediaQuery.sizeOf(context).width - 80.w,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
-                    child: BlocBuilder<SelectGroupCubit, StoreGroup?>(
-                      bloc: getIt<SelectGroupCubit>(),
-                      builder: (context, state) {
-                        return Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: MyColors.primary,
-                              backgroundImage: AssetImage(state == null
-                                  ? Assets.images.avatars.groups.group1.path
-                                  : state.avatarGroup),
-                              radius: 14.r,
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                child: Text(
-                                  state == null ? 'New Group' : state.groupName,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: const Color(0xff8E52FF),
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                            ),
-                            const Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              color: MyColors.primary,
-                            )
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                ),
+                  }
+                  return _buildAvatar(state.avatarUrl);
+                },
               ),
               16.horizontalSpace,
               buildItem(Assets.icons.icSetting.path, context, false),
