@@ -4,17 +4,22 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/navigation/app_router.dart';
+import '../../data/remote/firestore_client.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
+import '../../shared/cubit/value_cubit.dart';
 import '../../shared/widgets/custom_appbar.dart';
 import '../../shared/widgets/dialog/rate_dialog.dart';
+import '../../shared/widgets/main_switch.dart';
+import '../home/widgets/dialog/action_dialog.dart';
 import 'widgets/custom_item_setting.dart';
 
 @RoutePage()
@@ -227,6 +232,8 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Widget _buildHideMyLocationSetting() {
+    final ValueCubit<bool> allowTrackingCubit =
+        ValueCubit(Global.instance.user!.shareLocation);
     return Column(
       children: [
         CustomItemSetting(
@@ -244,13 +251,48 @@ class _SettingScreenState extends State<SettingScreen> {
                 ),
               ),
               16.horizontalSpace,
-              CupertinoSwitch(
-                activeColor: const Color(0xFF7B3EFF),
-                thumbColor: Colors.white,
-                trackColor: Colors.black12,
-                value: false,
-                onChanged: (value) => {},
-              ),
+              BlocBuilder<ValueCubit<bool>, bool>(
+                bloc: allowTrackingCubit,
+                builder: (context, state) {
+                  return MainSwitch(
+                    value: state,
+                    onChanged: (value) async {
+                      if (!value) {
+                        showDialog(
+                          context: context,
+                          builder: (context1) => ActionDialog(
+                              title: 'Allow others to track',
+                              subTitle:
+                                  'Your live location will not update for others, do you want to turn off?',
+                              confirmTap: () async {
+                                try {
+                                  await FirestoreClient.instance
+                                      .updateUser({'shareLocation': value});
+                                  allowTrackingCubit.update(value);
+                                  Global.instance.user = Global.instance.user
+                                      ?.copyWith(shareLocation: value);
+                                  context1.popRoute();
+                                } catch (error) {
+                                  debugPrint('error:$error');
+                                }
+                              },
+                              confirmText: 'Ok'),
+                        );
+                      } else {
+                        try {
+                          await FirestoreClient.instance
+                              .updateUser({'shareLocation': value});
+                          allowTrackingCubit.update(value);
+                          Global.instance.user = Global.instance.user
+                              ?.copyWith(shareLocation: value);
+                        } catch (error) {
+                          debugPrint('error:$error');
+                        }
+                      }
+                    },
+                  );
+                },
+              )
             ],
           ),
         ),
