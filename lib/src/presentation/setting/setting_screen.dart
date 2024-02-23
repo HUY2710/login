@@ -15,8 +15,6 @@ import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
 import '../../shared/widgets/custom_appbar.dart';
 import '../../shared/widgets/dialog/rate_dialog.dart';
-import '../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
-import '../place/history_place/history_place.dart';
 import 'widgets/custom_item_setting.dart';
 
 @RoutePage()
@@ -73,20 +71,30 @@ class _SettingScreenState extends State<SettingScreen> {
               24.verticalSpace,
               _buildHideMyLocationSetting(),
               16.verticalSpace,
+              CustomItemSetting(
+                onTap: () => context.pushRoute(const MapTypeRoute()),
+                child: Row(
+                  children: [
+                    Assets.icons.icMap.svg(height: 24.h),
+                    12.horizontalSpace,
+                    Expanded(
+                      child: Text(
+                        'Map type',
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    16.horizontalSpace,
+                    Assets.icons.icNext.svg(height: 24.h),
+                  ],
+                ),
+              ),
+              16.verticalSpace,
               _buildLanguageSetting(),
               16.verticalSpace,
               _buildExternalSetting(context),
-              TextButton(
-                onPressed: () {
-                  showAppModalBottomSheet(
-                    context: context,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) =>
-                        HistoryPlace(user: Global.instance.user!),
-                  );
-                },
-                child: const Text('Show history Place'),
-              ),
             ],
           ),
         ),
@@ -241,19 +249,9 @@ class _SettingScreenState extends State<SettingScreen> {
                 thumbColor: Colors.white,
                 trackColor: Colors.black12,
                 value: false,
-                onChanged: (value) => {
-                  // TODO: Implement to toggle hide location feature
-                },
+                onChanged: (value) => {},
               ),
             ],
-          ),
-        ),
-        4.verticalSpace,
-        Text(
-          'When you enable, your friends can’t see your Last Active Location.',
-          style: TextStyle(
-            fontSize: 11.sp,
-            fontWeight: FontWeight.w400,
           ),
         ),
       ],

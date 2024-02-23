@@ -15,6 +15,7 @@ class ShadowContainer extends StatelessWidget {
     this.height,
     this.margin,
     this.opacityColor,
+    this.colorBorder,
   });
   final Widget child;
   final BorderRadius? borderRadius;
@@ -28,6 +29,7 @@ class ShadowContainer extends StatelessWidget {
   final double? width;
   final double? height;
   final double? opacityColor;
+  final Color? colorBorder;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,6 +40,9 @@ class ShadowContainer extends StatelessWidget {
       constraints: BoxConstraints(maxWidth: maxWidth ?? double.infinity),
       decoration: BoxDecoration(
         color: colorBg ?? Colors.white,
+        border: colorBorder != null
+            ? Border.all(color: colorBorder!, width: 2)
+            : null,
         borderRadius: borderRadius ?? BorderRadius.all(Radius.circular(40.r)),
         boxShadow: [
           BoxShadow(
