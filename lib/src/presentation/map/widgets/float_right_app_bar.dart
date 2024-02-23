@@ -14,6 +14,7 @@ import '../../home/widgets/bottom_sheet/members/members.dart';
 import '../../home/widgets/bottom_sheet/places/places_bottom_sheet.dart';
 import '../../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import '../cubit/select_group_cubit.dart';
+import '../cubit/select_user_cubit.dart';
 import '../cubit/tracking_location/tracking_location_cubit.dart';
 import '../cubit/tracking_members/tracking_member_cubit.dart';
 
@@ -43,6 +44,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
   }
 
   void _goToCurrentLocation() {
+    getIt<SelectUserCubit>().update(null);
     final CameraPosition newPosition = CameraPosition(
       target: Global.instance.currentLocation,
       zoom: AppConstants.defaultCameraZoomLevel,
