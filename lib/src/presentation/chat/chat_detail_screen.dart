@@ -17,14 +17,13 @@ import '../../gen/gens.dart';
 import '../../global/global.dart';
 import '../../services/location_service.dart';
 import '../../shared/constants/app_constants.dart';
-import '../../shared/helpers/logger_utils.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/widgets/custom_inkwell.dart';
 import '../../shared/widgets/gradient_text.dart';
 import 'cubits/chat_type_cubit.dart';
 import 'cubits/group_cubit.dart';
 import 'cubits/send_location_cubit.dart';
 import 'services/chat_service.dart';
-
 import 'utils/util.dart';
 
 part './widgets/chat_detail/chat_mess_empty.dart';

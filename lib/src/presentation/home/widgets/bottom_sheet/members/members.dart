@@ -52,7 +52,7 @@ class MembersBottomSheet extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'People',
+                    context.l10n.people,
                     style: TextStyle(
                         fontSize: 20.sp,
                         color: const Color(0xff343434),
@@ -78,7 +78,7 @@ class MembersBottomSheet extends StatelessWidget {
                                 gradient: gradientBackground,
                               ),
                               child: Text(
-                                'Done',
+                                context.l10n.done,
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 12.sp,
@@ -111,7 +111,7 @@ class MembersBottomSheet extends StatelessWidget {
                                   ),
                                   8.horizontalSpace,
                                   Text(
-                                    'Edit',
+                                    context.l10n.edit,
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 12.sp,

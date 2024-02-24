@@ -52,7 +52,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
             }),
         centerTitle: true,
         title: Text(
-          'Messages',
+          context.l10n.messages,
           style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
         ),
       ),

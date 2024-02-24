@@ -12,6 +12,7 @@ import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/gender_type.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../onboarding/widgets/app_button.dart';
 import '../widgets/gender_switch.dart';
 
@@ -77,7 +78,7 @@ class CreateUserAvatarScreen extends StatelessWidget {
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 36.h),
         child: AppButton(
-          title: 'Save',
+          title: context.l10n.save,
           onTap: () async {
             Global.instance.user =
                 Global.instance.user?.copyWith(avatarUrl: avatarCubit.state);
@@ -143,7 +144,7 @@ class _MainBodyState extends State<_MainBody> {
           ),
           24.verticalSpace,
           Text(
-            'Choose your favorite avatar!',
+            context.l10n.chooseAvatar,
             style: TextStyle(
               fontSize: 15.sp,
               fontWeight: FontWeight.w400,

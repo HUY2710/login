@@ -8,6 +8,7 @@ import '../../../config/navigation/app_router.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/cubit/value_cubit.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../../shared/helpers/valid_helper.dart';
 import '../../onboarding/widgets/app_button.dart';
 
@@ -36,7 +37,7 @@ class CreateUsernameScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Let’s get started',
+                    context.l10n.letStarted,
                     style: TextStyle(
                       color: const Color(0xFF343434),
                       fontWeight: FontWeight.w500,
@@ -44,7 +45,7 @@ class CreateUsernameScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'What’s your name?',
+                    context.l10n.whatYourName,
                     style: TextStyle(
                       color: const Color(0xFF343434),
                       fontWeight: FontWeight.w500,
@@ -80,7 +81,7 @@ class CreateUsernameScreen extends StatelessWidget {
                       },
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Your name',
+                        hintText: context.l10n.yourName,
                         hintStyle: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 20.sp,
@@ -106,7 +107,7 @@ class CreateUsernameScreen extends StatelessWidget {
                 bloc: userNameCubit,
                 builder: (context, state) {
                   return AppButton(
-                    title: 'Continue',
+                    title: context.l10n.continueText,
                     isEnable: state.isNotEmpty,
                     onTap: () {
                       changedUsername(userNameCtrl.text);

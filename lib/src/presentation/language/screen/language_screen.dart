@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../app/cubit/language_cubit.dart';
+import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../gen/gens.dart';
@@ -142,7 +143,10 @@ Widget _buildItemLanguage({
   final selectedLanguageCubit = context.read<ValueCubit<Language>>();
   final isSelected = language == selectedValue;
   return GestureDetector(
-    onTap: () => selectedLanguageCubit.update(language),
+    onTap: () {
+      selectedLanguageCubit.update(language);
+      getIt<LanguageCubit>().update(language);
+    },
     child: Container(
       margin: EdgeInsets.symmetric(
         horizontal: 16.w,

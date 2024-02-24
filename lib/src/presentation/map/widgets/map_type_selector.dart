@@ -56,7 +56,7 @@ class _MapTypeSelectorState extends State<MapTypeSelector> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Map Type',
+                    context.l10n.mapType,
                     style: TextStyle(
                       fontSize: 20.sp,
                       fontWeight: FontWeight.w500,

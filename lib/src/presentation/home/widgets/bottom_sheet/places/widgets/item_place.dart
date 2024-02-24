@@ -10,6 +10,7 @@ import '../../../../../../data/models/store_place/store_place.dart';
 import '../../../../../../data/remote/firestore_client.dart';
 import '../../../../../../gen/assets.gen.dart';
 import '../../../../../../global/global.dart';
+import '../../../../../../shared/extension/context_extension.dart';
 import '../../../../../../shared/widgets/containers/shadow_container.dart';
 import '../../../../../map/cubit/select_group_cubit.dart';
 import '../../../../../map/cubit/tracking_places/tracking_places_cubit.dart';
@@ -80,7 +81,7 @@ class ItemPlace extends StatelessWidget {
                       debugPrint('error:$error');
                     }
                   },
-                  confirmText: 'Delete',
+                  confirmText: context.l10n.delete,
                 ),
               );
             },

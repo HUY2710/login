@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../../shared/mixin/permission_mixin.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../onboarding/widgets/app_button.dart';
@@ -95,7 +96,7 @@ class ShareCodeGroupScreen extends StatelessWidget with PermissionMixin {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Text(
-                'Share this invite cote with people you want to add to the group.',
+                context.l10n.inviteCodeContent,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16.sp,

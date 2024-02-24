@@ -16,6 +16,7 @@ import '../../../gen/assets.gen.dart';
 import '../../../gen/colors.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/constants/app_constants.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../map/cubit/select_group_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
@@ -125,7 +126,7 @@ class _BottomBarState extends State<BottomBar> {
                                           horizontal: 12.w),
                                       child: Text(
                                         state == null
-                                            ? 'New Group'
+                                            ? context.l10n.newGroup
                                             : state.groupName,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
