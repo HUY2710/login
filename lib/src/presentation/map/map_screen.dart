@@ -35,7 +35,9 @@ import 'widgets/member_marker_list.dart';
 import 'widgets/place_mark_list.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+  const MapScreen({super.key, this.latLng});
+
+  final Map<String, double>? latLng;
 
   @override
   State<MapScreen> createState() => MapScreenState();
@@ -73,12 +75,17 @@ class MapScreenState extends State<MapScreen>
   }
 
   void getLocalLocation() {
-    if (Global.instance.serverLocation != const LatLng(0, 0)) {
-      _defaultLocation = LatLng(
-        Global.instance.serverLocation.latitude,
-        Global.instance.serverLocation.longitude,
-      );
-      _moveToCurrentLocation(_defaultLocation);
+    if (widget.latLng != null) {
+      _moveToCurrentLocation(
+          LatLng(widget.latLng!['lat']!, widget.latLng!['lng']!));
+    } else {
+      if (Global.instance.serverLocation != const LatLng(0, 0)) {
+        _defaultLocation = LatLng(
+          Global.instance.serverLocation.latitude,
+          Global.instance.serverLocation.longitude,
+        );
+        _moveToCurrentLocation(_defaultLocation);
+      }
     }
   }
 

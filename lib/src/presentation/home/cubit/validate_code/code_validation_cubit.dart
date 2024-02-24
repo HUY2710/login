@@ -44,6 +44,10 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
               'Bạn đã là thành viên của nhóm rồi'));
         } else {
           //trường hợp chưa phải là thành viên thì tiến hành add vào group.
+
+          // lưu thời gian người dùng xem tin nhắn
+          await SharedPreferencesManager.saveTimeSeenChat(existGroup.idGroup!);
+
           await SharedPreferencesManager.saveIsCreateInfoFistTime(false);
           final StoreMember newMember =
               StoreMember(isAdmin: false, idUser: Global.instance.user?.code);

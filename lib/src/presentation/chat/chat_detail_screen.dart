@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +11,7 @@ import 'package:intl/intl.dart';
 
 import '../../../module/iap/my_purchase_manager.dart';
 import '../../config/di/di.dart';
+import '../../config/navigation/app_router.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../data/models/store_message/store_message.dart';
 import '../../data/models/store_user/store_user.dart';
@@ -17,17 +20,13 @@ import '../../gen/gens.dart';
 import '../../global/global.dart';
 import '../../services/location_service.dart';
 import '../../shared/constants/app_constants.dart';
-import '../../shared/extension/context_extension.dart';
 import '../../shared/widgets/custom_inkwell.dart';
-import '../../shared/widgets/gradient_text.dart';
-import 'cubits/chat_type_cubit.dart';
 import 'cubits/group_cubit.dart';
 import 'cubits/send_location_cubit.dart';
 import 'services/chat_service.dart';
 import 'utils/util.dart';
 
 part './widgets/chat_detail/chat_mess_empty.dart';
-part './widgets/chat_detail/chat_type_location.dart';
 part 'widgets/chat_detail/chat_type_text.dart';
 part 'widgets/chat_detail/message_guess.dart';
 part 'widgets/chat_detail/message_user.dart';
@@ -48,9 +47,6 @@ class ChatDetailScreen extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return MultiBlocProvider(providers: [
-      BlocProvider(
-        create: (context) => ChatTypeCubit(),
-      ),
       BlocProvider(
         create: (context) => SendLocationCubit(),
       )
@@ -102,22 +98,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatTypeCubit, ChatTypeState>(
-      builder: (context, state) {
-        return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 500),
-          child: state.type == TypeChat.text
-              ? ChatTextWidget(
-                  idGroup: widget.idGroup,
-                  listUser: listUser,
-                  groupName: widget.groupName,
-                )
-              : ChatLocationWidget(
-                  marker: marker,
-                  textController: textController,
-                  idGroup: widget.idGroup),
-        );
-      },
+    return ChatTextWidget(
+      idGroup: widget.idGroup,
+      listUser: listUser,
+      groupName: widget.groupName,
     );
   }
 }

@@ -32,19 +32,6 @@ class Utils {
     return chats[index - 1].data().senderId == chats[index].data().senderId;
   }
 
-  static bool checkSeen(String? timeLastSeenString, String timeOfMessage) {
-    bool result = false;
-
-    if (timeLastSeenString == null) {
-      return false;
-    }
-    final timeLastSeen =
-        DateTime.tryParse(timeLastSeenString) ?? DateTime.now();
-    result = timeLastSeen.isBefore(DateTime.parse(timeOfMessage));
-
-    return result;
-  }
-
   static Future<bool> getSeenMess(String idGroup, String lastSeen) async {
     final String timeLastSeenLocal =
         await SharedPreferencesManager.getTimeSeenChat(idGroup) ??
@@ -53,14 +40,4 @@ class Utils {
     final dateTimeLastSeen = DateTime.parse(lastSeen);
     return dateTimeLastSeenLocal.isBefore(dateTimeLastSeen);
   }
-
-  // static void findUserByCode(String code) {
-  //   final userSnapshot = CollectionStore.users
-  //       .where(FieldPath.documentId, isEqualTo: code)
-  //       .get();
-  //   final listStoreUser = userSnapshot.docs
-  //       .map((user) => StoreUser.fromJson(user.data()))
-  //       .toList();
-  //   return listStoreUser.firstWhere((user) => user.code == code);
-  // }
 }

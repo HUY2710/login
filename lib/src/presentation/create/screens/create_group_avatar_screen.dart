@@ -61,6 +61,9 @@ class CreateGroupAvatarScreen extends StatelessWidget {
                     //đăng kí nhận lắng nghe thông báo
                     getIt<FirebaseMessageService>()
                         .subscribeTopics([Global.instance.group!.idGroup!]);
+                    // lưu thời gian người dùng xem tin nhắn
+                    await SharedPreferencesManager.saveTimeSeenChat(
+                        Global.instance.group!.idGroup!);
                     await SharedPreferencesManager.saveIsCreateInfoFistTime(
                         false);
 
