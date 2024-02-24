@@ -103,6 +103,7 @@ class TrackingHistoryPlaceService {
       //true nếu spam
       isSpam = TimerHelper.checkTimeDifferenceCurrent(DateTime.parse(lastTime));
     }
+    debugPrint('place:$place');
 
     if (inRadius && !place.isSendArrived) {
       if (!isSpam) {
@@ -118,9 +119,11 @@ class TrackingHistoryPlaceService {
           listMapPlaces[listIdGroup.indexOf(groupId)].values.first;
       if (places != null && places.isNotEmpty) {
         final index = places.indexWhere((e) => e.idPlace == place.idPlace);
-        places[index] = places[index]
-            .copyWith(isSendArrived: inRadius, isSendLeaved: !inRadius);
-        listMapPlaces[listIdGroup.indexOf(groupId)] = {groupId: places};
+        if (index != -1) {
+          places[index] = places[index]
+              .copyWith(isSendArrived: inRadius, isSendLeaved: !inRadius);
+          listMapPlaces[listIdGroup.indexOf(groupId)] = {groupId: places};
+        }
       }
       debugPrint(
           'listMapPlaces:${listMapPlaces[listIdGroup.indexOf(groupId)]}');

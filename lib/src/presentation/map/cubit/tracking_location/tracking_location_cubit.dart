@@ -25,6 +25,7 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
   final LocationService locationService = getIt<LocationService>();
   StreamSubscription<LatLng>? _locationSubscription;
   FirestoreClient fireStoreClient = FirestoreClient.instance;
+
   Future<void> listenLocation() async {
     final LatLng latLng = await locationService.getCurrentLocation();
     emit(TrackingLocationState.success(latLng));
@@ -68,28 +69,9 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
 
     _locationSubscription =
         locationService.getLocationStream().listen((LatLng latLngListen) async {
-      //nếu background không được enable thì mới chạy ở đây
       if (!getIt<MyBackgroundService>().isRunning) {
-        Global.instance.currentLocation = latLngListen;
-
-        Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 5 : 30),
-            (timer) async {
-          final bool inRadius = MapHelper.isWithinRadius(
-            Global.instance.serverLocation,
-            latLngListen,
-            30,
-          );
-          debugPrint('inRadius:$inRadius');
-          debugPrint('server Location: ${Global.instance.serverLocation}');
-          debugPrint('current Location: $latLng');
-          if (!inRadius && !getIt<MyBackgroundService>().isRunning) {
-            Global.instance.serverLocation = latLngListen;
-            await locationService.updateLocationUser(
-              latLng: latLngListen,
-            );
-            await getIt<TrackingHistoryPlaceService>().trackingHistoryPlace();
-          }
-        });
+        Global.instance.currentLocation =
+            latLngListen; //cập nhật vị trí hiện tại
       }
 
       emit(TrackingLocationState.success(latLngListen));
@@ -97,6 +79,25 @@ class TrackingLocationCubit extends Cubit<TrackingLocationState> {
           ..onError((err) {
             emit(TrackingLocationState.failed(err.toString()));
           });
+
+    if (!getIt<MyBackgroundService>().isRunning) {
+      Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 15 : 30),
+          (timer) async {
+        final bool inRadius = MapHelper.isWithinRadius(
+          Global.instance.serverLocation,
+          Global.instance.currentLocation,
+          30,
+        );
+
+        if (!inRadius && !getIt<MyBackgroundService>().isRunning) {
+          Global.instance.serverLocation = Global.instance.currentLocation;
+          await locationService.updateLocationUser(
+            latLng: Global.instance.currentLocation,
+          );
+          await getIt<TrackingHistoryPlaceService>().trackingHistoryPlace();
+        }
+      });
+    }
   }
 
   void cancelListener() {
