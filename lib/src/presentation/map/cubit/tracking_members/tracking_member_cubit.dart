@@ -194,19 +194,21 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
         .listen((DocumentSnapshot<Map<String, dynamic>?> docSnap) {
       if (docSnap.data() != null && docSnap.exists) {
         final StoreUser userTemp = StoreUser.fromJson(docSnap.data()!);
-        user = user.copyWith(
-          userName: userTemp.userName,
-          activityType: userTemp.activityType,
-          avatarUrl: userTemp.avatarUrl,
-          online: userTemp.online,
-          shareLocation: userTemp.shareLocation,
-          batteryLevel: userTemp.batteryLevel,
-        );
-        final index = _trackingListMember
-            .indexWhere((element) => element.code == user.code);
-        if (index != -1) {
-          _trackingListMember[index] = user;
-          emit(TrackingMemberState.success([..._trackingListMember]));
+        if (userTemp.shareLocation) {
+          user = user.copyWith(
+            userName: userTemp.userName,
+            activityType: userTemp.activityType,
+            avatarUrl: userTemp.avatarUrl,
+            online: userTemp.online,
+            shareLocation: userTemp.shareLocation,
+            batteryLevel: userTemp.batteryLevel,
+          );
+          final index = _trackingListMember
+              .indexWhere((element) => element.code == user.code);
+          if (index != -1) {
+            _trackingListMember[index] = user;
+            emit(TrackingMemberState.success([..._trackingListMember]));
+          }
         }
       }
     });

@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../config/navigation/app_router.dart';
 import '../../shared/cubit/value_cubit.dart';
-import '../../shared/extension/context_extension.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../onboarding/widgets/app_button.dart';
 import 'widget/permission_content.dart';
@@ -62,6 +61,7 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
                       }
                       if (state == 3) {
                         final status = await requestActivityRecognition();
+                        if (status) {}
                         motionCubit.update(status);
                         typeRequest.update(0); //không request nữa
                         context.router.replaceAll([const HomeRoute()]);

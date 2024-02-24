@@ -190,27 +190,55 @@ class _HistoryPlaceState extends State<HistoryPlace> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                24.verticalSpace,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Today',
+                          style: TextStyle(
+                              color: MyColors.black34,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      SvgPicture.asset(Assets.icons.icSteps.path),
+                      8.horizontalSpace,
+                      Text(
+                        '${widget.user.steps} steps',
+                        style: TextStyle(
+                            color: const Color(0xff6C6C6C),
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
+                ),
                 Expanded(
                   child: historyPlaces == null
                       ? const Center(
                           child: CircularProgressIndicator(),
                         )
-                      : ListView.builder(
-                          itemCount: historyPlaces!.length,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                          ),
-                          itemBuilder: (context, index) {
-                            final StoreHistoryPlace historyPlace =
-                                historyPlaces![index];
-                            return Padding(
-                              padding: EdgeInsets.symmetric(vertical: 20.h),
-                              child: ItemHistoryPlace(
-                                historyPlace: historyPlace,
+                      : historyPlaces!.isEmpty
+                          ? const Center(child: Text('No history'))
+                          : ListView.builder(
+                              itemCount: historyPlaces!.length,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
                               ),
-                            );
-                          },
-                        ),
+                              itemBuilder: (context, index) {
+                                final StoreHistoryPlace historyPlace =
+                                    historyPlaces![index];
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                                  child: ItemHistoryPlace(
+                                    historyPlace: historyPlace,
+                                  ),
+                                );
+                              },
+                            ),
                 )
               ],
             ),

@@ -16,6 +16,7 @@ class StoreUser with _$StoreUser {
     required String userName,
     required int batteryLevel,
     @Default('UNKNOWN') String activityType,
+    @Default(0) int steps,
     @Default(true) bool online,
     @Default(true) bool shareLocation,
     @JsonKey(includeFromJson: false, includeToJson: false) Uint8List? marker,

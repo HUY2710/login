@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../services/activity_recognition_service.dart';
 import '../map/map_screen.dart';
 import 'widgets/bottom_sheet/checkin/checkin.dart';
 
@@ -14,7 +13,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ActivityRecognitionService.instance.initStreamActivityRecognition();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(

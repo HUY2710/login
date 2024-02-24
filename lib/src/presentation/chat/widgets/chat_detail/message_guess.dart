@@ -177,7 +177,7 @@ class MessageTypeGuess extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border.all(color: MyColors.secondPrimary),
                 ),
-                child: Text('Mua vip chua ?'),
+                child: const Text('Mua vip chua ?'),
               ),
             8.verticalSpace,
             Padding(
