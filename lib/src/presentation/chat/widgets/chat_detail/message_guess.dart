@@ -115,10 +115,12 @@ class MessageTypeGuess extends StatelessWidget {
   Widget buildMessLocation(BuildContext context, MessageModel item) {
     return CustomInkWell(
       onTap: () {
-        context.read<ChatTypeCubit>().update(ChatTypeState(
-            type: TypeChat.location,
-            lat: item.lat ?? Global.instance.currentLocation.latitude,
-            long: item.long ?? Global.instance.currentLocation.longitude));
+        context.router.replaceAll([
+          HomeRoute(latLng: {
+            'lat': item.lat ?? Global.instance.currentLocation.latitude,
+            'lng': item.long ?? Global.instance.currentLocation.longitude
+          })
+        ], updateExistingRoutes: false);
       },
       child: Container(
         constraints: BoxConstraints(maxWidth: 1.sw * 0.6),
@@ -171,21 +173,43 @@ class MessageTypeGuess extends StatelessWidget {
                 fit: BoxFit.cover,
               )
             else
-              Container(
-                padding: const EdgeInsets.all(20),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  border: Border.all(color: MyColors.secondPrimary),
+              ClipRRect(
+                child: Stack(
+                  children: [
+                    ImageFiltered(
+                      imageFilter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                      child: Assets.images.mapEx.image(),
+                    ),
+                    Positioned(
+                      top: 8.h,
+                      left: 12.w,
+                      child: CustomInkWell(
+                        onTap: () => context.pushRoute(PremiumRoute()),
+                        child: Container(
+                            padding: EdgeInsets.all(6.r),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12.r)),
+                            child: Assets.icons.premium.icPremiumSvg.svg()),
+                      ),
+                    )
+                  ],
                 ),
-                child: const Text('Mua vip chua ?'),
               ),
             8.verticalSpace,
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child: Text(
-                "${chats[index].data().userName ?? 'User'}'s location",
-                style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
-              ),
+              child: (item.messageType == MessageType.location)
+                  ? Text(
+                      "${chats[index].data().userName ?? 'User'}'s location",
+                      style: TextStyle(
+                          fontSize: 13.sp, fontWeight: FontWeight.w600),
+                    )
+                  : Text(
+                      "${chats[index].data().userName ?? 'User'}'s checked",
+                      style: TextStyle(
+                          fontSize: 13.sp, fontWeight: FontWeight.w600),
+                    ),
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 8.h, left: 12.w, right: 12.w),
@@ -196,6 +220,8 @@ class MessageTypeGuess extends StatelessWidget {
                     if (snapshot.hasData) {
                       return Text(
                         snapshot.data?.trimLeft() ?? '',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 13.sp),
                       );
                     }

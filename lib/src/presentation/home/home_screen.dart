@@ -7,9 +7,9 @@ import 'widgets/bottom_sheet/checkin/checkin.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({
-    super.key,
-  });
+  const HomeScreen({super.key, this.latLng});
+
+  final Map<String, double>? latLng;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,9 @@ class HomeScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          const MapScreen(),
+          MapScreen(
+            latLng: latLng,
+          ),
           Positioned(
             top: ScreenUtil().statusBarHeight == 0
                 ? 20.h

@@ -18,6 +18,8 @@ import '../../../global/global.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
+import '../../chat/cubits/group_cubit.dart';
+import '../../chat/cubits/group_state.dart';
 import '../../map/cubit/select_group_cubit.dart';
 import '../../map/cubit/select_user_cubit.dart';
 import '../../map/cubit/tracking_location/tracking_location_cubit.dart';
@@ -88,7 +90,17 @@ class _BottomBarState extends State<BottomBar> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildItem(Assets.icons.icMessage.path, context, true),
+              BlocBuilder<GroupCubit, GroupState>(
+                  bloc: getIt<GroupCubit>(),
+                  builder: (context, state) {
+                    return buildItem(
+                        !getIt<GroupCubit>().myGroups.every((element) =>
+                                element.seen == false || element.seen == null)
+                            ? Assets.icons.icChatActive.path
+                            : Assets.icons.icMessage.path,
+                        context,
+                        true);
+                  }),
               16.horizontalSpace,
               BlocBuilder<SelectUserCubit, StoreUser?>(
                 bloc: getIt<SelectUserCubit>(),
