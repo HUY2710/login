@@ -33,36 +33,34 @@ class MyBackgroundService {
     final StoreUser? user = Global.instance.user;
     final LatLng serverLocation = Global.instance.serverLocation;
     final Battery battery = Battery();
-
     if (user != null) {
+      LatLng newLocation =
+          LatLng(serverLocation.latitude, serverLocation.longitude);
       locationService
           .getLocationStreamOnBackground()
           .listen((LatLng latLng) async {
-        Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 15 : 30),
-            (timer) async {
-          debugPrint('timer: ${timer.tick}');
-          Global.instance.currentLocation = latLng;
-          //check current location with new location => location > 30m => update
-          final bool inRadius = MapHelper.isWithinRadius(
-            Global.instance.currentLocation,
-            latLng,
-            30,
-          );
-
-          if (!inRadius) {
-            //update local
-            Global.instance.serverLocation = latLng;
-
-            debugPrint(
-                'currentLocation background:${Global.instance.currentLocation}');
-
-            await getIt<LocationService>().updateLocationUser(latLng: latLng);
-            await getIt<TrackingHistoryPlaceService>().trackingHistoryPlace();
-
-            //update to sever
-            //do something
-          }
-        });
+        newLocation = latLng;
+      });
+      Timer.periodic(Duration(seconds: Flavor.dev == F.appFlavor ? 15 : 30),
+          (timers) async {
+        //update location background
+        debugPrint('update location background');
+        Global.instance.currentLocation = newLocation;
+        //check current location with new location => location > 30m => update
+        final bool inRadius = MapHelper.isWithinRadius(
+          Global.instance.serverLocation,
+          newLocation,
+          30,
+        );
+        if (!inRadius) {
+          //update local
+          Global.instance.serverLocation = newLocation;
+          await getIt<LocationService>()
+              .updateLocationUser(latLng: newLocation);
+          await getIt<TrackingHistoryPlaceService>().trackingHistoryPlace();
+        } else {
+          debugPrint('in Radius');
+        }
       });
     }
   }

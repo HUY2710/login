@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -333,7 +332,13 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
           16.horizontalSpace,
           GestureDetector(
-            onTap: () => context.pushRoute(const EditInfoRoute()),
+            onTap: () async {
+              final result =
+                  await context.pushRoute<bool>(const EditInfoRoute());
+              if (result != null && result) {
+                setState(() {});
+              }
+            },
             child: Assets.icons.icEdit.svg(height: 28.h),
           ),
         ],

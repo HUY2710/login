@@ -20,7 +20,7 @@ import '../../shared/widgets/custom_appbar.dart';
 import '../create/widgets/gender_switch.dart';
 import '../onboarding/widgets/app_button.dart';
 
-@RoutePage()
+@RoutePage<bool>()
 class EditInfoScreen extends StatefulWidget {
   const EditInfoScreen({super.key});
 
@@ -97,7 +97,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
     //không có gì thay đổi thì không update
     if (userNameCtrl.text == Global.instance.user!.userName &&
         pathAvatarCubit.state == Global.instance.user!.avatarUrl) {
-      context.popRoute();
+      context.popRoute(false);
     } else {
       try {
         EasyLoading.show();
@@ -109,7 +109,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
             avatarUrl: pathAvatarCubit.state, userName: userNameCtrl.text);
         EasyLoading.dismiss();
         Fluttertoast.showToast(msg: 'Update Success!')
-            .then((value) => context.popRoute());
+            .then((value) => context.popRoute(true));
       } catch (error) {
         EasyLoading.dismiss();
         Fluttertoast.showToast(msg: 'Update Error!');

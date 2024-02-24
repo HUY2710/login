@@ -63,7 +63,7 @@ class TrackingPlacesCubit extends Cubit<TrackingPlacesState> {
         //when remove place
         if (change.type == DocumentChangeType.removed) {
           StorePlace place = StorePlace.fromJson(change.doc.data()!);
-          place = place.copyWith(idCreator: change.doc.id);
+          place = place.copyWith(idPlace: change.doc.id);
 
           _trackingListPlaces
               .removeWhere((element) => element.idPlace == place.idPlace);

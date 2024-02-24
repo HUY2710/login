@@ -47,33 +47,34 @@ class TrackingHistoryPlaceService {
   Future<void> initPlacesOfGroup(String idGroup) async {
     //lắng nghe list place của từng group
     final List<StorePlace> listPlaceGroup = [];
-    fireStoreClient
-        .listenRealtimePlacesChanges(idGroup)
-        .listen((QuerySnapshot<Map<String, dynamic>> snapshotPlace) {
-      for (final change in snapshotPlace.docChanges) {
-        //place được thêm
-        if (change.type == DocumentChangeType.added) {
-          StorePlace place = StorePlace.fromJson(change.doc.data()!);
-          place = place.copyWith(idPlace: change.doc.id);
-          listPlaceGroup.add(place);
-        }
-        //place bị xóa
-        if (change.type == DocumentChangeType.removed) {
-          listPlaceGroup.removeWhere((place) => place.idPlace == change.doc.id);
+    fireStoreClient.listenRealtimePlacesChanges(idGroup).listen(
+      (QuerySnapshot<Map<String, dynamic>> snapshotPlace) {
+        for (final change in snapshotPlace.docChanges) {
+          //place được thêm
+          if (change.type == DocumentChangeType.added) {
+            StorePlace place = StorePlace.fromJson(change.doc.data()!);
+            place = place.copyWith(idPlace: change.doc.id);
+            listPlaceGroup.add(place);
+          }
+          //place bị xóa
+          if (change.type == DocumentChangeType.removed) {
+            listPlaceGroup
+                .removeWhere((place) => place.idPlace == change.doc.id);
+          }
+
+          if (change.type == DocumentChangeType.modified) {
+            StorePlace place = StorePlace.fromJson(change.doc.data()!);
+            place = place.copyWith(idPlace: change.doc.id);
+            final index = listPlaceGroup
+                .indexWhere((element) => element.idPlace == place.idPlace);
+            listPlaceGroup[index] = place;
+          }
         }
 
-        if (change.type == DocumentChangeType.modified) {
-          StorePlace place = StorePlace.fromJson(change.doc.data()!);
-          place = place.copyWith(idPlace: change.doc.id);
-          final index = listPlaceGroup
-              .indexWhere((element) => element.idPlace == place.idPlace);
-          listPlaceGroup[index] = place;
-        }
-      }
-
-      listMapPlaces[listIdGroup.indexOf(idGroup)] = {idGroup: listPlaceGroup};
-      trackingHistoryPlace();
-    });
+        listMapPlaces[listIdGroup.indexOf(idGroup)] = {idGroup: listPlaceGroup};
+        // trackingHistoryPlace();
+      },
+    );
   }
 
   Future<void> trackingHistoryPlace() async {
@@ -102,6 +103,7 @@ class TrackingHistoryPlaceService {
       //true nếu spam
       isSpam = TimerHelper.checkTimeDifferenceCurrent(DateTime.parse(lastTime));
     }
+    debugPrint('place:$place');
 
     if (inRadius && !place.isSendArrived) {
       if (!isSpam) {
@@ -117,9 +119,11 @@ class TrackingHistoryPlaceService {
           listMapPlaces[listIdGroup.indexOf(groupId)].values.first;
       if (places != null && places.isNotEmpty) {
         final index = places.indexWhere((e) => e.idPlace == place.idPlace);
-        places[index] = places[index]
-            .copyWith(isSendArrived: inRadius, isSendLeaved: !inRadius);
-        listMapPlaces[listIdGroup.indexOf(groupId)] = {groupId: places};
+        if (index != -1) {
+          places[index] = places[index]
+              .copyWith(isSendArrived: inRadius, isSendLeaved: !inRadius);
+          listMapPlaces[listIdGroup.indexOf(groupId)] = {groupId: places};
+        }
       }
       debugPrint(
           'listMapPlaces:${listMapPlaces[listIdGroup.indexOf(groupId)]}');
