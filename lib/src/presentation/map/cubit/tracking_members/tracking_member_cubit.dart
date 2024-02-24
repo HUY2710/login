@@ -204,6 +204,7 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
           online: userTemp.online,
           shareLocation: userTemp.shareLocation,
           batteryLevel: userTemp.batteryLevel,
+          steps: userTemp.steps,
         );
         final index = _trackingListMember
             .indexWhere((element) => element.code == user.code);
