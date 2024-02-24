@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 
 import '../global/global.dart';
+import '../shared/helpers/env_params.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
@@ -180,7 +181,7 @@ class FirebaseMessageService implements NotificationService {
 extension FirebaseMessageServiceExt on FirebaseMessageService {
   Future<void> _sendMessage(String topic, String title, String message,
       {String? dataId}) async {
-    final url = Uri.https('cs-dev.aicloud.vn', 'send-notification');
+    final url = Uri.https(EnvParams.apiUrlNotification, 'send-notification');
     final headers = {
       'Content-Type': 'application/json',
     };
