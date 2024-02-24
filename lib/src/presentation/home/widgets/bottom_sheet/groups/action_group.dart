@@ -97,13 +97,14 @@ class ActionGroupBottomSheet extends StatelessWidget {
                         );
                   });
                 },
-                child: itemAction(Assets.icons.icEdit.svg(width: 20.r), 'Edit'),
+                child: itemAction(
+                    Assets.icons.icEdit.svg(width: 20.r), context.l10n.edit),
               ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 24.h),
               child: GestureDetector(
-                child: itemAction(
-                    Assets.icons.icNotify.svg(width: 20.r), 'Notification',
+                child: itemAction(Assets.icons.icNotify.svg(width: 20.r),
+                    context.l10n.notification,
                     notifyCubit: notifyCubit, member: member),
               ),
             ),
@@ -113,9 +114,8 @@ class ActionGroupBottomSheet extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (context1) => ActionDialog(
-                      title: 'Remove Group',
-                      subTitle:
-                          'You’re currently the group owner. Are you sure to delete it permanantly?',
+                      title: context.l10n.removeGroup,
+                      subTitle: context.l10n.removeGroupSubAdmin,
                       confirmTap: () async {
                         //delete group
                         EasyLoading.show();

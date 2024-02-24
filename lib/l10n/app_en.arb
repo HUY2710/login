@@ -106,5 +106,17 @@
   "allowOthersToTrack": "Allow others to track",
   "allowOthersToTrackSub": "Your live location will not update for others, do you want to turn off?",
   "ok": "Ok",
-  "editAccount": "Edit Account"
+  "editAccount": "Edit Account",
+  "allowLocationPermission": "Allow “Cycle sharing” to also your location even when you are not using app?",
+  "justKeepIt": "Just keep it when in use",
+  "steps": "steps",
+  "noHistory": "No history",
+  "changeToAlwaysAllow": "Change to always allow",
+  "nearbyLocation": "Nearby location",
+  "currentLocation": "Current location",
+  "codeIsValid": "Code is invalid or group does not exist",
+  "youAreMember": "You are already a member of the group",
+  "errorNotDetected": "Error not detected",
+  "removeGroupSubAdmin": "You’re currently the group owner. Are you sure to delete it permanantly?",
+  "notWalkAndBicycle": "NOTE: WALK ands BICYCLE routes are in beta and might sometimes be missing clear sidewalks, pedestrian paths, or bicycling paths"
 }

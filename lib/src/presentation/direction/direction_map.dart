@@ -3,13 +3,16 @@ import 'dart:convert';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_iap/flutter_iap.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../module/iap/my_purchase_manager.dart';
 import '../../config/di/di.dart';
 import '../../data/models/routes/route_model.dart';
 import '../../data/models/store_user/store_user.dart';
@@ -41,7 +44,6 @@ class _DirectionMapState extends State<DirectionMap> {
   double duration = 0;
   bool showNote = false;
 
-  bool isPremium = false;
   Future<void> _openMap({
     required double lat,
     required double lng,
@@ -133,96 +135,104 @@ class _DirectionMapState extends State<DirectionMap> {
         borderRadius: BorderRadius.circular(20),
       ),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const MyDrag(),
-          SizedBox(height: 20.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      typeDirection = RouteTravelMode.WALK.name;
-                      showNote = true;
-                    });
-                  },
-                  child: TravelModeIcon(
-                    iconPath: Assets.icons.activity.walking.path,
-                    isSelected: typeDirection == RouteTravelMode.WALK.name,
-                  ),
+      child: BlocBuilder<MyPurchaseManager, PurchaseState>(
+        builder: (context, purchaseState) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const MyDrag(),
+              SizedBox(height: 20.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          typeDirection = RouteTravelMode.WALK.name;
+                          showNote = true;
+                        });
+                      },
+                      child: TravelModeIcon(
+                        iconPath: Assets.icons.activity.walking.path,
+                        isSelected: typeDirection == RouteTravelMode.WALK.name,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          showNote = true;
+                          typeDirection = RouteTravelMode.BICYCLE.name;
+                        });
+                      },
+                      child: TravelModeIcon(
+                        iconPath: Assets.icons.activity.bicycle.path,
+                        isSelected:
+                            typeDirection == RouteTravelMode.BICYCLE.name,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          typeDirection = RouteTravelMode.DRIVE.name;
+                          showNote = false;
+                        });
+                      },
+                      child: TravelModeIcon(
+                        iconPath: Assets.icons.activity.car.path,
+                        isSelected: typeDirection == RouteTravelMode.DRIVE.name,
+                      ),
+                    )
+                  ],
                 ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      showNote = true;
-                      typeDirection = RouteTravelMode.BICYCLE.name;
-                    });
-                  },
-                  child: TravelModeIcon(
-                    iconPath: Assets.icons.activity.bicycle.path,
-                    isSelected: typeDirection == RouteTravelMode.BICYCLE.name,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      typeDirection = RouteTravelMode.DRIVE.name;
-                      showNote = false;
-                    });
-                  },
-                  child: TravelModeIcon(
-                    iconPath: Assets.icons.activity.car.path,
-                    isSelected: typeDirection == RouteTravelMode.DRIVE.name,
-                  ),
-                )
-              ],
-            ),
-          ),
-
-          //ở đây check nếu là premium thì mới show note
-          if (isPremium && showNote)
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: Text(
-                'NOTE: WALK ands BICYCLE routes are in beta and might sometimes be missing clear sidewalks, pedestrian paths, or bicycling paths',
-                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
               ),
-            ),
 
-          SizedBox(height: 32.h),
-          AppButton(
-            title: context.l10n.getDirectionsInMap,
-            paddingVertical: 12.h,
-            heightBtn: 44.h,
-            onTap: () async {
-              EasyLoading.show();
-              try {
-                //xử lí với premium
-                testRequest().then((value) => context.popRoute());
-              } catch (error) {}
-              EasyLoading.dismiss();
-            },
-          ),
-          SizedBox(height: 16.h),
-          AppButton(
-            title: context.l10n.getDirectionsOnMap,
-            paddingVertical: 12.h,
-            heightBtn: 44.h,
-            onTap: () {
-              if (widget.user.location != null) {
-                _openMap(
-                  lat: widget.user.location!.lat,
-                  lng: widget.user.location!.lng,
-                  name: widget.user.userName,
-                );
-              }
-            },
-          )
-        ],
+              //ở đây check nếu là premium thì mới show note
+              if (purchaseState.isPremium() && showNote)
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10.h),
+                  child: Text(
+                    context.l10n.notWalkAndBicycle,
+                    style:
+                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+                  ),
+                ),
+
+              SizedBox(height: 32.h),
+              AppButton(
+                title: context.l10n.getDirectionsInMap,
+                paddingVertical: 12.h,
+                heightBtn: 44.h,
+                onTap: () async {
+                  EasyLoading.show();
+                  try {
+                    //xử lí với premium
+                    if (purchaseState.isPremium()) {
+                      testRequest().then((value) => context.popRoute());
+                    }
+                  } catch (error) {}
+                  EasyLoading.dismiss();
+                },
+              ),
+              SizedBox(height: 16.h),
+              AppButton(
+                title: context.l10n.getDirectionsOnMap,
+                paddingVertical: 12.h,
+                heightBtn: 44.h,
+                onTap: () {
+                  if (widget.user.location != null) {
+                    _openMap(
+                      lat: widget.user.location!.lat,
+                      lng: widget.user.location!.lng,
+                      name: widget.user.userName,
+                    );
+                  }
+                },
+              )
+            ],
+          );
+        },
       ),
     );
   }

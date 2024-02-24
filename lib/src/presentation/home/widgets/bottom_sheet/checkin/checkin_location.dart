@@ -14,6 +14,7 @@ import '../../../../../data/models/places/place_model.dart';
 import '../../../../../gen/gens.dart';
 import '../../../../../global/global.dart';
 import '../../../../../services/http_service.dart';
+import '../../../../../shared/extension/context_extension.dart';
 import '../../../../../shared/helpers/map_helper.dart';
 import '../../../../../shared/widgets/custom_inkwell.dart';
 import '../../../../../shared/widgets/my_drag.dart';
@@ -172,7 +173,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
             SizedBox(
               width: 1.sw * 0.7,
               child: Text(
-                item?.formattedAddress ?? 'Nearby location',
+                item?.formattedAddress ?? context.l10n.nearbyLocation,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 style: TextStyle(
@@ -213,7 +214,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
             SizedBox(
               width: 1.sw * 0.7,
               child: Text(
-                'Current location',
+                context.l10n.currentLocation,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 style: TextStyle(

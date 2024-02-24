@@ -198,7 +198,7 @@ class _HistoryPlaceState extends State<HistoryPlace> {
                     children: [
                       Expanded(
                         child: Text(
-                          'Today',
+                          context.l10n.today,
                           style: TextStyle(
                               color: MyColors.black34,
                               fontSize: 16.sp,
@@ -208,7 +208,7 @@ class _HistoryPlaceState extends State<HistoryPlace> {
                       SvgPicture.asset(Assets.icons.icSteps.path),
                       8.horizontalSpace,
                       Text(
-                        '${widget.user.steps} steps',
+                        '${widget.user.steps} ${context.l10n.steps}',
                         style: TextStyle(
                             color: const Color(0xff6C6C6C),
                             fontSize: 13.sp,
@@ -223,7 +223,7 @@ class _HistoryPlaceState extends State<HistoryPlace> {
                           child: CircularProgressIndicator(),
                         )
                       : historyPlaces!.isEmpty
-                          ? const Center(child: Text('No history'))
+                          ? Center(child: Text(context.l10n.noHistory))
                           : ListView.builder(
                               itemCount: historyPlaces!.length,
                               padding: EdgeInsets.symmetric(
