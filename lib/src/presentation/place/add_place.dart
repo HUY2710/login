@@ -255,6 +255,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                 separatorBuilder: (context, index) => SizedBox(width: 12.w),
               ),
             ),
+            24.verticalSpace,
             Text(
               'Name',
               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
@@ -292,7 +293,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                 );
               },
             ),
-            24.verticalSpace,
+            28.verticalSpace,
             Row(
               children: [
                 const Text('Radius'),

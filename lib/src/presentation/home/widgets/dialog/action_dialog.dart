@@ -53,6 +53,7 @@ class ActionDialog extends StatelessWidget {
           ),
           GestureDetector(
             onTap: confirmTap,
+            behavior: HitTestBehavior.translucent,
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
               child: Row(
