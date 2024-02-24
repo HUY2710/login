@@ -34,7 +34,7 @@ class _ActionRowState extends State<ActionRow> {
           ),
           28.verticalSpace,
           AppButton(
-            title: 'Continue',
+            title: context.l10n.continueText,
             onTap: () {
               if (currentIndex < 2) {
                 _pressNextButton(currentIndex);

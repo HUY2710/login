@@ -24,6 +24,7 @@ class PermissionDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.white.withOpacity(0.75),
+      elevation: 0.0,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

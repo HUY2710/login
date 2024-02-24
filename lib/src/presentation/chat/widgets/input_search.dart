@@ -25,7 +25,7 @@ class InputSearch extends StatelessWidget {
           decoration: InputDecoration(
               fillColor: const Color(0xffEFEFEF),
               filled: true,
-              hintText: 'Search',
+              hintText: context.l10n.search,
               hintStyle: TextStyle(
                 color: const Color(0xff928989),
                 fontSize: 16.sp,

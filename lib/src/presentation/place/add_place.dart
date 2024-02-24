@@ -14,6 +14,7 @@ import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/cubit/value_cubit.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/extension/int_extension.dart';
 import '../../shared/widgets/my_drag.dart';
 import '../../shared/widgets/text_field/main_text_form_field.dart';
@@ -81,7 +82,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                     children: [
                       Align(
                         child: Text(
-                          'Places',
+                          context.l10n.places,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 20.sp,
@@ -94,7 +95,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                         child: GestureDetector(
                           onTap: () => context.popRoute(),
                           child: Text(
-                            'Cancel',
+                            context.l10n.cancel,
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 16.sp,
@@ -143,7 +144,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                                     }
                                   : () {},
                               child: Text(
-                                'Done',
+                                context.l10n.done,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 16.sp,
@@ -252,7 +253,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
             ),
             24.verticalSpace,
             Text(
-              'Name',
+              context.l10n.name,
               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
             ),
             8.verticalSpace,
@@ -261,11 +262,11 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
               onChanged: (value) {
                 setState(() {});
               },
-              hintText: 'Name Location',
+              hintText: context.l10n.nameLocation,
             ),
             24.verticalSpace,
             Text(
-              'Location',
+              context.l10n.location,
               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
             ),
             8.verticalSpace,
@@ -280,7 +281,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                 return MainTextFormField(
                   readonly: true,
                   controller: addressLocationCtrl,
-                  hintText: 'Add Location',
+                  hintText: context.l10n.addLocation,
                   onTap: () async {
                     await context.pushRoute(SelectLocationPlaceRoute(
                         selectPlaceCubit: selectPlaceCubit));
@@ -291,7 +292,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
             28.verticalSpace,
             Row(
               children: [
-                const Text('Radius'),
+                Text(context.l10n.radius),
                 Expanded(
                   child: Slider(
                     value: currentRadius,

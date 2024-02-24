@@ -44,7 +44,7 @@ class CreateGroupNameScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Create or join groups with your loved ones and friends',
+                    context.l10n.createOrJoinGroup,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: const Color(0xFF343434),
@@ -102,7 +102,7 @@ class CreateGroupNameScreen extends StatelessWidget {
               bloc: groupNameCubit,
               builder: (context, state) {
                 return AppButton(
-                  title: 'Continue',
+                  title: context.l10n.continueText,
                   isEnable: state.isNotEmpty,
                   onTap: () {
                     Global.instance.group ??= StoreGroup(
@@ -126,7 +126,7 @@ class CreateGroupNameScreen extends StatelessWidget {
             ),
             16.verticalSpace,
             AppButton(
-              title: 'Join a group',
+              title: context.l10n.joinAGroup,
               onTap: () {
                 context.pushRoute(JoinGroupRoute());
               },

@@ -11,13 +11,20 @@ import '../../../module/iap/product_id.dart';
 import '../../config/di/di.dart';
 import '../../gen/gens.dart';
 import '../../shared/constants/url_constants.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/gradient_background.dart';
 import '../../shared/widgets/custom_inkwell.dart';
 import 'cubit/indicator_cubit.dart';
 
 @RoutePage()
-class PremiumScreen extends StatelessWidget {
-  PremiumScreen({super.key});
+class PremiumScreen extends StatefulWidget {
+  const PremiumScreen({super.key});
+
+  @override
+  State<PremiumScreen> createState() => _PremiumScreenState();
+}
+
+class _PremiumScreenState extends State<PremiumScreen> {
   final CarouselController controller = CarouselController();
 
   Future<void> _launchUrl(String url) async {
@@ -79,7 +86,7 @@ class PremiumScreen extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: Text(
-                          'Unlimited access to all features',
+                          context.l10n.premiumTitle,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 24.sp,
@@ -132,33 +139,29 @@ class PremiumScreen extends StatelessWidget {
                                 buildItem(
                                   context,
                                   svgItem: Assets.icons.premium.icNoAds,
-                                  title: 'No ads',
-                                  subTitle:
-                                      'Enjoy a completely ad-free app experience',
+                                  title: context.l10n.noAds,
+                                  subTitle: context.l10n.noAdsSub,
                                   index: 0,
                                 ),
                                 buildItem(
                                   context,
                                   svgItem: Assets.icons.premium.icNearPlace,
-                                  title: 'Check in at nearby places',
-                                  subTitle:
-                                      'Explore interesting places around you by checking in',
+                                  title: context.l10n.checkInAtPlaces,
+                                  subTitle: context.l10n.checkInAtPlacesSub,
                                   index: 1,
                                 ),
                                 buildItem(
                                   context,
                                   svgItem: Assets.icons.premium.icMember,
-                                  title: 'Guide to group members',
-                                  subTitle:
-                                      'Easily and quickly navigate to your location for members',
+                                  title: context.l10n.guideToGroupMembers,
+                                  subTitle: context.l10n.guideToGroupMembersSub,
                                   index: 2,
                                 ),
                                 buildItem(
                                   context,
                                   svgItem: Assets.icons.premium.icSharePremium,
-                                  title: 'Send my current location',
-                                  subTitle:
-                                      'Easily and quickly navigate to your location for members',
+                                  title: context.l10n.sendMyCurrent,
+                                  subTitle: context.l10n.sendMyCurrentSub,
                                   index: 3,
                                 )
                               ],
@@ -177,14 +180,14 @@ class PremiumScreen extends StatelessWidget {
                             buildIndicator(),
                             40.h.verticalSpace,
                             Text(
-                              'Try 3 days for free',
+                              context.l10n.try3days,
                               style: TextStyle(
                                 fontSize: 13.sp,
                                 color: const Color(0xff7D7D7D),
                               ),
                             ),
                             Text(
-                              'Then ${weeklyProduct.first.price}/ week, cancel anytime.',
+                              '${context.l10n.then} ${weeklyProduct.first.price}${context.l10n.weekTime}',
                               style: TextStyle(
                                 fontSize: 13.sp,
                                 fontWeight: FontWeight.w500,
@@ -253,7 +256,7 @@ class PremiumScreen extends StatelessWidget {
               _launchUrl(UrlConstants.urlTerms);
             },
             child: Text(
-              'Term of Use',
+              context.l10n.term,
               style: TextStyle(
                 fontSize: 12.sp,
                 decoration: TextDecoration.underline,
@@ -265,7 +268,7 @@ class PremiumScreen extends StatelessWidget {
               _launchUrl(UrlConstants.urlPOLICY);
             },
             child: Text(
-              'Privacy Policy',
+              context.l10n.privacy,
               style: TextStyle(
                 fontSize: 12.sp,
                 decoration: TextDecoration.underline,
@@ -281,7 +284,7 @@ class PremiumScreen extends StatelessWidget {
       onPressed: () => getIt<MyPurchaseManager>().restorePurchases(),
       icon: Assets.icons.premium.icRestore.svg(),
       label: Text(
-        'Restore Purchase',
+        context.l10n.restorePurchase,
         style: TextStyle(fontSize: 13.sp, color: const Color(0Xff8E52FF)),
       ),
       style: ButtonStyle(
@@ -302,7 +305,7 @@ class PremiumScreen extends StatelessWidget {
               border: Border.all(width: 2, color: const Color(0xffB67DFF)),
               borderRadius: BorderRadius.circular(15.r)),
           child: Text(
-            '${item.first.price}/Monthly',
+            '${item.first.price}/${context.l10n.monthly}',
             style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
@@ -325,7 +328,7 @@ class PremiumScreen extends StatelessWidget {
               gradient: gradientBackground,
               borderRadius: BorderRadius.circular(15.r)),
           child: Text(
-            'Start free trial now',
+            context.l10n.startFree,
             style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w500,

@@ -16,6 +16,7 @@ import '../../global/global.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
 import '../../shared/cubit/value_cubit.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/widgets/custom_appbar.dart';
 import '../../shared/widgets/dialog/rate_dialog.dart';
 import '../../shared/widgets/main_switch.dart';
@@ -65,7 +66,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Settings'),
+      appBar: CustomAppBar(title: context.l10n.settings),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
@@ -84,7 +85,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     12.horizontalSpace,
                     Expanded(
                       child: Text(
-                        'Map type',
+                        context.l10n.mapType,
                         style: TextStyle(
                           fontSize: 13.sp,
                           fontWeight: FontWeight.w400,
@@ -137,7 +138,7 @@ class _SettingScreenState extends State<SettingScreen> {
               12.horizontalSpace,
               Expanded(
                 child: Text(
-                  'Share',
+                  context.l10n.share,
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w400,
@@ -163,7 +164,7 @@ class _SettingScreenState extends State<SettingScreen> {
             12.horizontalSpace,
             Expanded(
               child: Text(
-                'Privacy policy',
+                context.l10n.privacy,
                 style: TextStyle(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w400,
@@ -188,7 +189,7 @@ class _SettingScreenState extends State<SettingScreen> {
             12.horizontalSpace,
             Expanded(
               child: Text(
-                'Rate us',
+                context.l10n.rateUs,
                 style: TextStyle(
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w400,
@@ -217,7 +218,7 @@ class _SettingScreenState extends State<SettingScreen> {
           12.horizontalSpace,
           Expanded(
             child: Text(
-              'Language',
+              context.l10n.language,
               style: TextStyle(
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w400,
@@ -243,7 +244,7 @@ class _SettingScreenState extends State<SettingScreen> {
               12.horizontalSpace,
               Expanded(
                 child: Text(
-                  'Hide my location',
+                  context.l10n.allowOthersToTrack,
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w400,
@@ -261,9 +262,8 @@ class _SettingScreenState extends State<SettingScreen> {
                         showDialog(
                           context: context,
                           builder: (context1) => ActionDialog(
-                              title: 'Allow others to track',
-                              subTitle:
-                                  'Your live location will not update for others, do you want to turn off?',
+                              title: context.l10n.allowOthersToTrack,
+                              subTitle: context.l10n.allowOthersToTrackSub,
                               confirmTap: () async {
                                 try {
                                   await FirestoreClient.instance
@@ -276,7 +276,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                   debugPrint('error:$error');
                                 }
                               },
-                              confirmText: 'Ok'),
+                              confirmText: context.l10n.ok),
                         );
                       } else {
                         try {
@@ -310,9 +310,13 @@ class _SettingScreenState extends State<SettingScreen> {
           Expanded(
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: 28,
-                  backgroundImage: AssetImage(Global.instance.user!.avatarUrl),
+                Hero(
+                  tag: 'editAvatar',
+                  child: CircleAvatar(
+                    radius: 28,
+                    backgroundImage:
+                        AssetImage(Global.instance.user!.avatarUrl),
+                  ),
                 ),
                 20.horizontalSpace,
                 Expanded(

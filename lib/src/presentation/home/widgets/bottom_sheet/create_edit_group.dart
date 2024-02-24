@@ -16,6 +16,7 @@ import '../../../../gen/gens.dart';
 import '../../../../global/global.dart';
 import '../../../../services/firebase_message_service.dart';
 import '../../../../shared/cubit/value_cubit.dart';
+import '../../../../shared/extension/context_extension.dart';
 import '../../../../shared/extension/int_extension.dart';
 import '../../../../shared/helpers/valid_helper.dart';
 import '../../../../shared/widgets/containers/shadow_container.dart';
@@ -144,7 +145,9 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
                   children: [
                     Align(
                       child: Text(
-                        widget.detailGroup != null ? 'Edit' : 'Create Group',
+                        widget.detailGroup != null
+                            ? context.l10n.edit
+                            : context.l10n.createGroup,
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 20.sp,
@@ -157,7 +160,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
                       child: GestureDetector(
                         onTap: () => context.popRoute(),
                         child: Text(
-                          'Cancel',
+                          context.l10n.cancel,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 16.sp,
@@ -177,7 +180,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
                                 ? _tapDone
                                 : () {},
                             child: Text(
-                              'Done',
+                              context.l10n.done,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16.sp,

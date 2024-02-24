@@ -13,6 +13,7 @@ import '../../gen/gens.dart';
 import '../../global/global.dart';
 import '../../shared/cubit/value_cubit.dart';
 import '../../shared/enum/gender_type.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/valid_helper.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
 import '../../shared/widgets/custom_appbar.dart';
@@ -119,11 +120,11 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Edit Account'),
+      appBar: CustomAppBar(title: context.l10n.editAccount),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
         child: AppButton(
-          title: 'Save',
+          title: context.l10n.save,
           onTap: updateInfo,
           isEnable: userNameCtrl.text.isNotEmpty,
         ),
@@ -136,9 +137,12 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
               BlocBuilder<ValueCubit<String>, String>(
                 bloc: pathAvatarCubit,
                 builder: (context, state) {
-                  return CircleAvatar(
-                    radius: 75,
-                    backgroundImage: AssetImage(state),
+                  return Hero(
+                    tag: 'editAvatar',
+                    child: CircleAvatar(
+                      radius: 75,
+                      backgroundImage: AssetImage(state),
+                    ),
                   );
                 },
               ),

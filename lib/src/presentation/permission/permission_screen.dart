@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../config/navigation/app_router.dart';
 import '../../shared/cubit/value_cubit.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../onboarding/widgets/app_button.dart';
 import 'widget/permission_content.dart';
@@ -44,7 +45,7 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
               bloc: typeRequest,
               builder: (context, state) {
                 return AppButton(
-                    title: 'Allow',
+                    title: context.l10n.allow,
                     onTap: () async {
                       if (state == 1) {
                         final status = await requestPermissionLocation();
