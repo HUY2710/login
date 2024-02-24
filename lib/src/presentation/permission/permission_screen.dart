@@ -78,7 +78,7 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
                   context.popRoute();
                 }
               },
-              child: const Text('Later'),
+              child: Text(context.l10n.later),
             )
           ],
         ),

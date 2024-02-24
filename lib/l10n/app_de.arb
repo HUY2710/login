@@ -104,5 +104,16 @@
   "allowOthersToTrack": "Erlaube anderen, zu verfolgen",
   "allowOthersToTrackSub": "Ihr Echtzeitstandort wird für andere nicht aktualisiert. Möchten Sie es ausschalten?",
   "ok": "Ok",
-  "editAccount": "Konto bearbeiten"
+  "editAccount": "Konto bearbeiten",
+  "male": "Männlich",
+  "female": "Weiblich",
+  "groupNameText": "Gruppenname",
+  "shareCodeNow": "Code jetzt teilen",
+  "shareItLater": "Später teilen",
+  "later": "Später",
+  "mapTraffic": "Verkehr",
+  "mapNormal": "Normal",
+  "mapSatellite": "Satellit",
+  "viewLocation": "Standort anzeigen",
+  "checked": "ausgewählt"
 }

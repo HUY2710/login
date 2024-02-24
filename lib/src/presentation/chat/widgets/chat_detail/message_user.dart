@@ -80,13 +80,14 @@ class MessageTypeUser extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           if (item.messageType == MessageType.location)
-                            Text("${item.userName}'s location",
+                            Text(
+                                "${item.userName}'s ${context.l10n.location.toLowerCase()}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 13.sp,
                                     fontWeight: FontWeight.w600)),
                           if (item.messageType == MessageType.checkIn)
-                            Text("${item.userName}'s checked",
+                            Text("${item.userName}'s ${context.l10n.checked}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 13.sp,
@@ -116,7 +117,7 @@ class MessageTypeUser extends StatelessWidget {
               decoration: BoxDecoration(
                   color: MyColors.primary,
                   borderRadius: BorderRadius.circular(6.r)),
-              child: Text('View Location',
+              child: Text(context.l10n.viewLocation,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 14.sp,

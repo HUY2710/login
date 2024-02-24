@@ -20,6 +20,7 @@ import '../../gen/gens.dart';
 import '../../global/global.dart';
 import '../../services/location_service.dart';
 import '../../shared/constants/app_constants.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/widgets/custom_inkwell.dart';
 import 'cubits/group_cubit.dart';
 import 'cubits/send_location_cubit.dart';

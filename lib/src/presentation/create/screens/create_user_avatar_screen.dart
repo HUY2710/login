@@ -46,7 +46,7 @@ class CreateUserAvatarScreen extends StatelessWidget {
             ),
             centerTitle: true,
             title: Text(
-              'Set Avatar',
+              context.l10n.setAvatar,
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.w500,

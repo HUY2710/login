@@ -104,5 +104,16 @@
   "allowOthersToTrack": "दूसरों को ट्रैक करने की अनुमति दें",
   "allowOthersToTrackSub": "आपका लाइव स्थान अन्य लोगों के लिए अपडेट नहीं होगा, क्या आप इसे बंद करना चाहते हैं?",
   "ok": "ठीक है",
-  "editAccount": "खाता संपादित करें"
+  "editAccount": "खाता संपादित करें",
+  "male": "पुरुष",
+  "female": "महिला",
+  "groupNameText": "समूह का नाम",
+  "shareCodeNow": "अब कोड साझा करें",
+  "shareItLater": "बाद में साझा करें",
+  "later": "बाद में",
+  "mapTraffic": "यातायात",
+  "mapNormal": "सामान्य",
+  "mapSatellite": "सैटेलाइट",
+  "viewLocation": "स्थान देखें",
+  "checked": "चेक किया गया"         
 }

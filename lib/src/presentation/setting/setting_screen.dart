@@ -5,6 +5,7 @@ import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -178,7 +179,16 @@ class _SettingScreenState extends State<SettingScreen> {
 
   Widget _buildRateUsSetting() {
     return GestureDetector(
-      onTap: () => showRatingDialog(fromSetting: true),
+      // onTap: () => showRatingDialog(fromSetting: true),
+      onTap: () async {
+        if (await InAppReview.instance.isAvailable()) {
+          await InAppReview.instance.requestReview();
+        } else {
+          InAppReview.instance.openStoreListing(
+            appStoreId: AppConstants.appIOSId,
+          );
+        }
+      },
       behavior: HitTestBehavior.translucent,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 16.h),

@@ -104,5 +104,16 @@
   "allowOthersToTrack": "Permitir que otros te rastreen",
   "allowOthersToTrackSub": "Tu ubicación en tiempo real no se actualizará para los demás, ¿quieres apagarlo?",
   "ok": "Ok",
-  "editAccount": "Editar cuenta"
+  "editAccount": "Editar cuenta",
+  "male": "Masculino",
+  "female": "Femenino",
+  "groupNameText": "Nombre del grupo",
+  "shareCodeNow": "Compartir código ahora",
+  "shareItLater": "Compartirlo más tarde",
+  "later": "Más tarde",
+  "mapTraffic": "Tráfico",
+  "mapNormal": "Normal",
+  "mapSatellite": "Satélite",
+  "viewLocation": "Ver ubicación",
+  "checked": "marcado"
 }

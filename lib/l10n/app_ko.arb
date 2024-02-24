@@ -104,5 +104,16 @@
   "allowOthersToTrack": "다른 사람들이 추적할 수 있게 허용",
   "allowOthersToTrackSub": "실시간 위치는 다른 사람들에게 업데이트되지 않습니다. 끄시겠습니까?",
   "ok": "확인",
-  "editAccount": "계정 편집"
+  "editAccount": "계정 편집",
+  "male": "남성",
+  "female": "여성",
+  "groupNameText": "그룹 이름",
+  "shareCodeNow": "지금 코드 공유",
+  "shareItLater": "나중에 공유",
+  "later": "나중에",
+  "mapTraffic": "교통",
+  "mapNormal": "일반",
+  "mapSatellite": "위성",
+  "viewLocation": "위치 보기",
+  "checked": "선택됨"      
 }

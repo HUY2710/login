@@ -104,5 +104,16 @@
   "allowOthersToTrack": "Izinkan orang lain melacak",
   "allowOthersToTrackSub": "Lokasi langsung Anda tidak akan diperbarui untuk orang lain, apakah Anda ingin mematikannya?",
   "ok": "Ok",
-  "editAccount": "Edit Akun"
+  "editAccount": "Edit Akun",
+  "male": "Pria",
+  "female": "Wanita",
+  "groupNameText": "Nama Grup",
+  "shareCodeNow": "Bagikan Kode sekarang",
+  "shareItLater": "Bagikan nanti",
+  "later": "Nanti",
+  "mapTraffic": "Lalu lintas",
+  "mapNormal": "Normal",
+  "mapSatellite": "Satelit",
+  "viewLocation": "Lihat Lokasi",
+  "checked": "dicentang"  
 }

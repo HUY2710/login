@@ -104,5 +104,16 @@
   "allowOthersToTrack": "Autoriser les autres à suivre",
   "allowOthersToTrackSub": "Votre emplacement en direct ne sera pas mis à jour pour les autres, voulez-vous le désactiver ?",
   "ok": "Ok",
-  "editAccount": "Modifier le compte"
+  "editAccount": "Modifier le compte",
+  "male": "Homme",
+  "female": "Femme",
+  "groupNameText": "Nom du groupe",
+  "shareCodeNow": "Partager le code maintenant",
+  "shareItLater": "Partager plus tard",
+  "later": "Plus tard",
+  "mapTraffic": "Trafic",
+  "mapNormal": "Normal",
+  "mapSatellite": "Satellite",
+  "viewLocation": "Voir l'emplacement",
+  "checked": "coché"   
 }

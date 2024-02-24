@@ -90,14 +90,14 @@ class _PremiumScreenState extends State<PremiumScreen> {
                         buildIndicator(),
                         40.h.verticalSpace,
                         Text(
-                          'Try 3 days for free',
+                          context.l10n.try3days,
                           style: TextStyle(
                             fontSize: 13.sp,
                             color: const Color(0xff7D7D7D),
                           ),
                         ),
                         Text(
-                          'Then ${weeklyProduct.first.price}/ week, cancel anytime.',
+                          '${context.l10n.then} ${weeklyProduct.first.price}${context.l10n.weekTime}',
                           style: TextStyle(
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w500,
@@ -131,7 +131,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Text(
-          'Unlimited access to all features',
+          context.l10n.premiumTitle,
           style: TextStyle(
             color: Colors.white,
             fontSize: 24.sp,

@@ -118,5 +118,16 @@
   "youAreMember": "You are already a member of the group",
   "errorNotDetected": "Error not detected",
   "removeGroupSubAdmin": "You’re currently the group owner. Are you sure to delete it permanantly?",
-  "notWalkAndBicycle": "NOTE: WALK ands BICYCLE routes are in beta and might sometimes be missing clear sidewalks, pedestrian paths, or bicycling paths"
+  "notWalkAndBicycle": "NOTE: WALK ands BICYCLE routes are in beta and might sometimes be missing clear sidewalks, pedestrian paths, or bicycling paths",
+  "male": "Male",
+  "female": "Female",
+  "groupNameText": "Group name",
+  "shareCodeNow": "Share Code now",
+  "shareItLater": "Share it later",
+  "later": "Later",
+  "mapTraffic": "Traffic",
+  "mapNormal": "Normal",
+  "mapSatellite": "Satellite",
+  "viewLocation": "View Location",
+  "checked": "checked"
 }
