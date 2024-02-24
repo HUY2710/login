@@ -102,9 +102,9 @@ class FirebaseMessageService implements NotificationService {
 
       //kiểm tra nếu thông báo đó là từ mình thì không cần show
       //&&message.data['key'] != Global.instance.user?.code
-      if (notification != null && android != null
-          // &&
-          // message.data['key'] != Global.instance.user?.code
+      if (notification != null &&
+              android != null &&
+              message.data['key'] != Global.instance.user?.code
           //comment lại đoạn trên để test
           ) {
         flutterLocalNotificationsPlugin?.show(

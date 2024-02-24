@@ -1,22 +1,27 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../shared/constants/url_constants.dart';
 import '../shared/helpers/env_params.dart';
 
 class HTTPService {
+  HTTPService._privateConstructor();
+  static final HTTPService instance = HTTPService._privateConstructor();
   String searchNearByUrl = UrlConstants.nearBy;
   String routeDirectionUrl = UrlConstants.routeDirection;
   String autoCompleteAPI =
       'https://maps.googleapis.com/maps/api/place/autocomplete/json';
-  static String apiKey = EnvParams.apiKey;
+  String detailPlaceApiUrl =
+      'https://maps.googleapis.com/maps/api/place/details/json';
+  final String _apiKey = EnvParams.apiKey;
 
   Future<http.Response> postRequestPlaces(Map<String, dynamic> body) async {
     try {
       final response = await http.post(
         Uri.parse(searchNearByUrl),
         headers: {
-          'X-Goog-Api-Key': apiKey,
+          'X-Goog-Api-Key': _apiKey,
           'Content-Type': 'application/json',
           'X-Goog-FieldMask':
               'places.displayName,places.formattedAddress,places.location',
@@ -34,7 +39,7 @@ class HTTPService {
       final response = await http.post(
         Uri.parse(routeDirectionUrl),
         headers: {
-          'X-Goog-Api-Key': apiKey,
+          'X-Goog-Api-Key': _apiKey,
           'Content-Type': 'application/json',
           'X-Goog-FieldMask':
               'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline',
@@ -47,43 +52,29 @@ class HTTPService {
     }
   }
 
-  Future<void> placeAutoComplete({required String placeInput}) async {
+  Future<http.Response> requestPlaceAutoComplete(
+      {required String placeInput}) async {
     try {
-      final Map<String, dynamic> querys = {'input': placeInput, 'key': apiKey};
+      final Map<String, dynamic> querys = {'input': placeInput, 'key': _apiKey};
       final url = Uri.https(
           'maps.googleapis.com', 'maps/api/place/autocomplete/json', querys);
       final response = await http.post(url);
-      if (response.statusCode == 200) {
-        final result = jsonDecode(response.body);
-        debugPrint('result:$result');
-      } else {
-        response.body;
-      }
+      return response;
     } on Exception catch (e) {
-      print(e);
+      throw Exception('Failed to requestDetailPlace: $e');
     }
-    return;
   }
 
-  Future<http.Response> placeAutoCompleteRequest(String placeInput) async {
+  Future<http.Response> requestDetailPlace(String placeId) async {
     try {
-      final Map<String, dynamic> body = {
-        'input': placeInput,
-        'key': apiKey,
-      };
+      final String request =
+          '$detailPlaceApiUrl?place_id=$placeId&key=$_apiKey';
+      final response = await http.get(Uri.parse(request));
 
-      final response = await http.post(
-        Uri.parse(
-            'https://maps.googleapis.com/maps/api/place/autocomplete/json'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(body),
-      );
-
+      debugPrint('response:${response.body}');
       return response;
     } catch (e) {
-      throw Exception('Failed to post data: $e');
+      throw Exception('Failed to requestDetailPlace: $e');
     }
   }
 }

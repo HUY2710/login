@@ -50,7 +50,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: PremiumRoute.page),
         AutoRoute(page: SelectLocationPlaceRoute.page),
         AutoRoute(page: MapTypeRoute.page),
-        AutoRoute(page: EditInfoRoute.page)
+        AutoRoute(page: EditInfoRoute.page),
       ];
 
   AutoRoute routeWithFadeTransition(

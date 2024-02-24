@@ -87,7 +87,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
           longitude: Global.instance.currentLocation.longitude,
         ),
       );
-      final response = await HTTPService().postRequestPlaces(body);
+      final response = await HTTPService.instance.postRequestPlaces(body);
       if (response.statusCode == 200) {
         // Nếu yêu cầu thành công (status code 200), bạn có thể xử lý dữ liệu ở đây
         print('Response body: ${response.body}');

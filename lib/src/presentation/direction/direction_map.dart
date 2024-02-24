@@ -75,7 +75,7 @@ class _DirectionMapState extends State<DirectionMap> {
       'travelMode': typeDirection,
       'routingPreference': getRoutingPreference(typeDirection)
     };
-    final response = await HTTPService().postRequestRoutes(body);
+    final response = await HTTPService.instance.postRequestRoutes(body);
     if (response.statusCode == 200) {
       print('Response body: ${response.body}');
       try {

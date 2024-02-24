@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,12 +15,9 @@ import '../../global/global.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/cubit/value_cubit.dart';
 import '../../shared/extension/int_extension.dart';
-import '../../shared/widgets/main_switch.dart';
 import '../../shared/widgets/my_drag.dart';
 import '../../shared/widgets/text_field/main_text_form_field.dart';
-import '../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import '../map/cubit/select_group_cubit.dart';
-import 'bottom_sheet/search_place.dart';
 import 'cubit/select_place_cubit.dart';
 
 class AddPlaceBottomSheet extends StatefulWidget {

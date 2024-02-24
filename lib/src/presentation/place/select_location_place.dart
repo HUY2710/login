@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,13 +11,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../module/iap/my_purchase_manager.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
+import '../../data/models/store_location/store_location.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
-import '../../services/http_service.dart';
 import '../../services/location_service.dart';
 import '../../shared/cubit/value_cubit.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
-import '../../shared/widgets/text_field/main_text_form_field.dart';
 import '../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import '../map/cubit/map_type_cubit.dart';
 import 'bottom_sheet/search_place.dart';
@@ -34,8 +35,11 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
   BitmapDescriptor? marker;
   BitmapDescriptor? defaultMarkerMap;
   ValueCubit<String> addressCubit = ValueCubit('...');
+  ValueCubit<bool> requestApi = ValueCubit(false);
   ValueCubit<LatLng> placeLatLngCubit = ValueCubit(const LatLng(0, 0));
   LatLng _currentLocationOnMap = Global.instance.currentLocation;
+  late final Completer<GoogleMapController> _mapController =
+      Completer<GoogleMapController>();
   @override
   void initState() {
     _getMyMarker();
@@ -67,11 +71,13 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
   void showModalSearchPlace() {
     showAppModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       barrierColor: Colors.white.withOpacity(0.2),
       builder: (context) => SearchPlaceBottomSheet(
         selectPlaceCubit: widget.selectPlaceCubit,
         addressCubit: addressCubit,
         placeLatLngCubit: placeLatLngCubit,
+        requestApi: requestApi,
       ),
     ).then((value) {
       if (widget.selectPlaceCubit.state != null) {
@@ -83,43 +89,61 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          BlocBuilder<ValueCubit<LatLng>, LatLng>(
+          BlocConsumer<ValueCubit<LatLng>, LatLng>(
             bloc: placeLatLngCubit,
+            listener: (context, state) async {
+              final controller = await _mapController.future;
+              controller.moveCamera(CameraUpdate.newCameraPosition(
+                CameraPosition(target: state, zoom: 16),
+              ));
+            },
             builder: (context, state) {
-              return GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: Global.instance.currentLocation,
-                  zoom: 16,
-                ),
-                onMapCreated: (controller) {},
-                markers: <Marker>{
-                  Marker(
-                    markerId: const MarkerId('You'),
-                    position: Global.instance.currentLocation,
-                    icon: marker ?? BitmapDescriptor.defaultMarker,
-                  ),
-                  Marker(
-                    markerId: const MarkerId('Place'),
-                    position: state,
-                    icon: defaultMarkerMap ?? BitmapDescriptor.defaultMarker,
-                  ),
+              return BlocBuilder<ValueCubit<LatLng>, LatLng>(
+                bloc: placeLatLngCubit,
+                builder: (context, state) {
+                  return GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target: Global.instance.currentLocation,
+                      zoom: 16,
+                    ),
+                    onMapCreated: (controller) {
+                      _mapController.complete(controller);
+                    },
+                    markers: <Marker>{
+                      Marker(
+                        markerId: const MarkerId('You'),
+                        position: Global.instance.currentLocation,
+                        icon: marker ?? BitmapDescriptor.defaultMarker,
+                      ),
+                      Marker(
+                        markerId: const MarkerId('Place'),
+                        position: state,
+                        icon:
+                            defaultMarkerMap ?? BitmapDescriptor.defaultMarker,
+                      ),
+                    },
+                    zoomControlsEnabled: false,
+                    onCameraMove: (CameraPosition position) {
+                      if (!requestApi.state) {
+                        _currentLocationOnMap = position.target;
+                      }
+                    },
+                    onCameraIdle: () async {
+                      if (!requestApi.state) {
+                        final String address = await getIt<LocationService>()
+                            .getCurrentAddress(_currentLocationOnMap);
+                        addressCubit.update(address);
+                        placeLatLngCubit.update(_currentLocationOnMap);
+                      }
+                    },
+                    compassEnabled: false,
+                    mapType: getIt<MapTypeCubit>().state,
+                    myLocationButtonEnabled: false,
+                  );
                 },
-                zoomControlsEnabled: false,
-                onCameraMove: (CameraPosition position) {
-                  _currentLocationOnMap = position.target;
-                },
-                onCameraIdle: () async {
-                  final String address = await getIt<LocationService>()
-                      .getCurrentAddress(_currentLocationOnMap);
-                  addressCubit.update(address);
-                  placeLatLngCubit.update(_currentLocationOnMap);
-                },
-                compassEnabled: false,
-                mapType: getIt<MapTypeCubit>().state,
-                myLocationButtonEnabled: false,
               );
             },
           ),
@@ -165,6 +189,29 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
                     ),
                   ),
                 ),
+                16.horizontalSpace,
+                GestureDetector(
+                  onTap: () {
+                    widget.selectPlaceCubit.update(
+                      StoreLocation(
+                        address: addressCubit.state,
+                        lat: placeLatLngCubit.state.latitude,
+                        lng: placeLatLngCubit.state.longitude,
+                        updatedAt: DateTime.now(),
+                      ),
+                    );
+                    context.popRoute<bool>(true);
+                  },
+                  child: ShadowContainer(
+                    padding: EdgeInsets.all(6.r),
+                    borderRadius: BorderRadius.all(Radius.circular(15.r)),
+                    child: SvgPicture.asset(
+                      Assets.icons.icChecked.path,
+                      width: 28.r,
+                      height: 28.r,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -176,11 +223,8 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
               builder: (context, statePurchase) {
                 return GestureDetector(
                   onTap: () async {
-                    await HTTPService()
-                        .placeAutoComplete(placeInput: ' hà nội việt nam');
-                    return;
                     if (statePurchase.isPremium()) {
-                      //show bottom sheet search place
+                      showModalSearchPlace();
                     } else {
                       context.pushRoute(PremiumRoute());
                     }
@@ -217,11 +261,12 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
                                 ),
                               ),
                               6.horizontalSpace,
-                              SvgPicture.asset(
-                                Assets.icons.icPremium.path,
-                                height: 24.r,
-                                width: 24.r,
-                              ),
+                              if (!statePurchase.isPremium())
+                                SvgPicture.asset(
+                                  Assets.icons.icPremium.path,
+                                  height: 24.r,
+                                  width: 24.r,
+                                ),
                             ],
                           ),
                         ),
