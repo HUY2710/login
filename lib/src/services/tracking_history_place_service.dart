@@ -47,33 +47,34 @@ class TrackingHistoryPlaceService {
   Future<void> initPlacesOfGroup(String idGroup) async {
     //lắng nghe list place của từng group
     final List<StorePlace> listPlaceGroup = [];
-    fireStoreClient
-        .listenRealtimePlacesChanges(idGroup)
-        .listen((QuerySnapshot<Map<String, dynamic>> snapshotPlace) {
-      for (final change in snapshotPlace.docChanges) {
-        //place được thêm
-        if (change.type == DocumentChangeType.added) {
-          StorePlace place = StorePlace.fromJson(change.doc.data()!);
-          place = place.copyWith(idPlace: change.doc.id);
-          listPlaceGroup.add(place);
-        }
-        //place bị xóa
-        if (change.type == DocumentChangeType.removed) {
-          listPlaceGroup.removeWhere((place) => place.idPlace == change.doc.id);
+    fireStoreClient.listenRealtimePlacesChanges(idGroup).listen(
+      (QuerySnapshot<Map<String, dynamic>> snapshotPlace) {
+        for (final change in snapshotPlace.docChanges) {
+          //place được thêm
+          if (change.type == DocumentChangeType.added) {
+            StorePlace place = StorePlace.fromJson(change.doc.data()!);
+            place = place.copyWith(idPlace: change.doc.id);
+            listPlaceGroup.add(place);
+          }
+          //place bị xóa
+          if (change.type == DocumentChangeType.removed) {
+            listPlaceGroup
+                .removeWhere((place) => place.idPlace == change.doc.id);
+          }
+
+          if (change.type == DocumentChangeType.modified) {
+            StorePlace place = StorePlace.fromJson(change.doc.data()!);
+            place = place.copyWith(idPlace: change.doc.id);
+            final index = listPlaceGroup
+                .indexWhere((element) => element.idPlace == place.idPlace);
+            listPlaceGroup[index] = place;
+          }
         }
 
-        if (change.type == DocumentChangeType.modified) {
-          StorePlace place = StorePlace.fromJson(change.doc.data()!);
-          place = place.copyWith(idPlace: change.doc.id);
-          final index = listPlaceGroup
-              .indexWhere((element) => element.idPlace == place.idPlace);
-          listPlaceGroup[index] = place;
-        }
-      }
-
-      listMapPlaces[listIdGroup.indexOf(idGroup)] = {idGroup: listPlaceGroup};
-      trackingHistoryPlace();
-    });
+        listMapPlaces[listIdGroup.indexOf(idGroup)] = {idGroup: listPlaceGroup};
+        // trackingHistoryPlace();
+      },
+    );
   }
 
   Future<void> trackingHistoryPlace() async {
