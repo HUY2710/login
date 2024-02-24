@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iap/flutter_iap.dart';
@@ -14,11 +13,11 @@ import '../../shared/constants/url_constants.dart';
 import '../../shared/helpers/gradient_background.dart';
 import '../../shared/widgets/custom_inkwell.dart';
 import 'cubit/indicator_cubit.dart';
+import 'widgets/carouse_slider.dart';
 
 @RoutePage()
 class PremiumScreen extends StatelessWidget {
-  PremiumScreen({super.key});
-  final CarouselController controller = CarouselController();
+  const PremiumScreen({super.key});
 
   Future<void> _launchUrl(String url) async {
     // EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
@@ -43,174 +42,135 @@ class PremiumScreen extends StatelessWidget {
             }
           },
           child: Scaffold(
-            body: BlocBuilder<IndicatorCubit, int>(
-              builder: (context, state) {
-                return Stack(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                        colors: [Color(0xFFB67DFF), Color(0xFF7B3EFF)],
-                        begin: Alignment.topRight,
-                        end: Alignment.centerLeft,
-                        stops: [0.2, 1.0],
-                        // transform: GradientRotation(274 * (pi / 180)),
-                      )),
-                    ),
-                    Positioned(
-                      top: ScreenUtil().statusBarHeight + 16,
-                      left: 16.w,
-                      child: IconButton.filled(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith((states) =>
-                                      MyColors.primary.withOpacity(0.6))),
-                          highlightColor: Colors.black,
-                          iconSize: 20.r,
-                          onPressed: () => context.popRoute(),
-                          icon: Icon(
-                            Icons.close,
-                            size: 20.r,
-                            color: Colors.white70,
-                          )),
-                    ),
-                    Positioned.fromRect(
-                      rect: Rect.fromLTWH(16.w, 0, 1.sw * 0.65, 1.sh * 0.23),
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Text(
-                          'Unlimited access to all features',
+            body: Stack(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                    colors: [Color(0xFFB67DFF), Color(0xFF7B3EFF)],
+                    begin: Alignment.topRight,
+                    end: Alignment.centerLeft,
+                    stops: [0.2, 1.0],
+                    // transform: GradientRotation(274 * (pi / 180)),
+                  )),
+                ),
+                buildButtonClose(context),
+                buildTextTitle(),
+                buildImageBackground(),
+                Positioned.fill(
+                    child: BlocBuilder<MyPurchaseManager, PurchaseState>(
+                  builder: (context, purchaseState) {
+                    if (purchaseState.storeState == StoreState.loading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (purchaseState.storeState ==
+                        StoreState.notAvailable) {
+                      return const Center(
+                        child: Text('Not avaiable'),
+                      );
+                    }
+
+                    final weeklyProduct =
+                        purchaseState.getProductGroup(productKeyWeekly);
+                    final monthlyProduct =
+                        purchaseState.getProductGroup(productKeyMonthly);
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CarouseSliderPremium(),
+                        20.h.verticalSpace,
+                        buildIndicator(),
+                        40.h.verticalSpace,
+                        Text(
+                          'Try 3 days for free',
                           style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24.sp,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 13.sp,
+                            color: const Color(0xff7D7D7D),
                           ),
                         ),
-                      ),
-                    ),
-                    Positioned.fromRect(
-                        rect: Rect.fromLTWH(0, 1.sh * 0.2, 1.sw, 1.sh),
-                        child: Container(
-                          padding: EdgeInsets.only(right: 15.w),
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  alignment: Alignment.bottomCenter,
-                                  image: Assets.images.backgroundPremium
-                                      .provider())),
-                          child: Align(
-                            alignment: const Alignment(1, -1.1),
-                            child: Assets.images.rocket
-                                .image(width: 152.w, height: 167.h),
+                        Text(
+                          'Then ${weeklyProduct.first.price}/ week, cancel anytime.',
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xff343434),
                           ),
-                        )),
-                    Positioned.fill(
-                        child: BlocBuilder<MyPurchaseManager, PurchaseState>(
-                      builder: (context, purchaseState) {
-                        if (purchaseState.storeState == StoreState.loading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (purchaseState.storeState ==
-                            StoreState.notAvailable) {
-                          return const Center(
-                            child: Text('Not avaiable'),
-                          );
-                        }
-
-                        final weeklyProduct =
-                            purchaseState.getProductGroup(productKeyWeekly);
-                        final monthlyProduct =
-                            purchaseState.getProductGroup(productKeyMonthly);
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CarouselSlider(
-                              carouselController: controller,
-                              items: [
-                                buildItem(
-                                  context,
-                                  svgItem: Assets.icons.premium.icNoAds,
-                                  title: 'No ads',
-                                  subTitle:
-                                      'Enjoy a completely ad-free app experience',
-                                  index: 0,
-                                ),
-                                buildItem(
-                                  context,
-                                  svgItem: Assets.icons.premium.icNearPlace,
-                                  title: 'Check in at nearby places',
-                                  subTitle:
-                                      'Explore interesting places around you by checking in',
-                                  index: 1,
-                                ),
-                                buildItem(
-                                  context,
-                                  svgItem: Assets.icons.premium.icMember,
-                                  title: 'Guide to group members',
-                                  subTitle:
-                                      'Easily and quickly navigate to your location for members',
-                                  index: 2,
-                                ),
-                                buildItem(
-                                  context,
-                                  svgItem: Assets.icons.premium.icSharePremium,
-                                  title: 'Send my current location',
-                                  subTitle:
-                                      'Easily and quickly navigate to your location for members',
-                                  index: 3,
-                                )
-                              ],
-                              disableGesture: true,
-                              options: CarouselOptions(
-                                viewportFraction: 0.6,
-                                height: 136,
-                                // autoPlay: false,
-                                aspectRatio: 207 / 136,
-                                onPageChanged: (index, reason) {
-                                  context.read<IndicatorCubit>().update(index);
-                                },
-                              ),
-                            ),
-                            20.h.verticalSpace,
-                            buildIndicator(),
-                            40.h.verticalSpace,
-                            Text(
-                              'Try 3 days for free',
-                              style: TextStyle(
-                                fontSize: 13.sp,
-                                color: const Color(0xff7D7D7D),
-                              ),
-                            ),
-                            Text(
-                              'Then ${weeklyProduct.first.price}/ week, cancel anytime.',
-                              style: TextStyle(
-                                fontSize: 13.sp,
-                                fontWeight: FontWeight.w500,
-                                color: const Color(0xff343434),
-                              ),
-                            ),
-                            16.h.verticalSpace,
-                            buildButtonSubmit(item: weeklyProduct),
-                            8.h.verticalSpace,
-                            buildDivider(),
-                            8.h.verticalSpace,
-                            buildButtonMonth(item: monthlyProduct),
-                            12.h.verticalSpace,
-                            buildRestoreButton(),
-                            30.h.verticalSpace,
-                            buildRowTextButton(),
-                            10.h.verticalSpace,
-                          ],
-                        );
-                      },
-                    ))
-                  ],
-                );
-              },
+                        ),
+                        16.h.verticalSpace,
+                        buildButtonSubmit(item: weeklyProduct),
+                        8.h.verticalSpace,
+                        buildDivider(),
+                        8.h.verticalSpace,
+                        buildButtonMonth(item: monthlyProduct),
+                        12.h.verticalSpace,
+                        buildRestoreButton(),
+                        30.h.verticalSpace,
+                        buildRowTextButton(),
+                        10.h.verticalSpace,
+                      ],
+                    );
+                  },
+                ))
+              ],
             ),
           )),
+    );
+  }
+
+  Positioned buildTextTitle() {
+    return Positioned.fromRect(
+      rect: Rect.fromLTWH(16.w, 0, 1.sw * 0.65, 1.sh * 0.23),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Text(
+          'Unlimited access to all features',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24.sp,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Positioned buildImageBackground() {
+    return Positioned.fromRect(
+        rect: Rect.fromLTWH(0, 1.sh * 0.2, 1.sw, 1.sh),
+        child: Container(
+          padding: EdgeInsets.only(right: 15.w),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  fit: BoxFit.cover,
+                  alignment: Alignment.bottomCenter,
+                  image: Assets.images.backgroundPremium.provider())),
+          child: Align(
+            alignment: const Alignment(1, -1.1),
+            child: Assets.images.rocket.image(width: 152.w, height: 167.h),
+          ),
+        ));
+  }
+
+  Positioned buildButtonClose(BuildContext context) {
+    return Positioned(
+      top: ScreenUtil().statusBarHeight + 16,
+      left: 16.w,
+      child: CustomInkWell(
+          child: Container(
+            width: 28.r,
+            height: 28.r,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: MyColors.primary.withOpacity(0.4)),
+            child: Icon(
+              Icons.close,
+              size: 18.r,
+              color: Colors.white70,
+            ),
+          ),
+          onTap: () => context.popRoute()),
     );
   }
 
@@ -257,7 +217,7 @@ class PremiumScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12.sp,
                 decoration: TextDecoration.underline,
-                color: Color(0xff7D7D7D),
+                color: const Color(0xff7D7D7D),
               ),
             )),
         TextButton(
@@ -269,7 +229,7 @@ class PremiumScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12.sp,
                 decoration: TextDecoration.underline,
-                color: Color(0xff7D7D7D),
+                color: const Color(0xff7D7D7D),
               ),
             ))
       ],
@@ -335,54 +295,6 @@ class PremiumScreen extends StatelessWidget {
         onTap: () {
           getIt<MyPurchaseManager>().buy(item.first);
         });
-  }
-
-  Widget buildItem(
-    BuildContext context, {
-    required int index,
-    required SvgGenImage svgItem,
-    required String title,
-    required String subTitle,
-  }) {
-    return CustomInkWell(
-      onTap: () {
-        context.read<IndicatorCubit>().update(index);
-        controller.animateToPage(index,
-            curve: Curves.linear, duration: const Duration(milliseconds: 500));
-      },
-      child: Container(
-        width: 207.w,
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30.r),
-            border: Border.all(color: const Color(0xffE9E6ED))),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                svgItem.svg(),
-                12.horizontalSpace,
-                Expanded(
-                  child: Text(
-                    title,
-                    maxLines: 2,
-                    style:
-                        TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500),
-                  ),
-                )
-              ],
-            ),
-            6.verticalSpace,
-            Text(
-              subTitle,
-              style: TextStyle(fontSize: 12.sp),
-            )
-          ],
-        ),
-      ),
-    );
   }
 
   Widget buildIndicator() {

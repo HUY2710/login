@@ -7,7 +7,7 @@ class SearchGroupCubit extends ValueCubit<List<StoreGroup>> {
   void searchGroup(String text, List<StoreGroup> myGroups) {
     final result = myGroups
         .where(
-          (group) => group.groupName.contains(text),
+          (group) => group.groupName.toLowerCase().contains(text.toLowerCase()),
         )
         .toList();
     if (text.isEmpty) {

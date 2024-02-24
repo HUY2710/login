@@ -93,19 +93,20 @@ class ChatService {
           senderId: user?.code ?? '',
           sentAt: DateTime.now().toString());
       try {
-        await CollectionStore.chat
-            .doc(idGroup)
-            .collection(CollectionStoreConstant.messages)
-            .add(message.toJson());
+        Future.wait([
+          CollectionStore.chat
+              .doc(idGroup)
+              .collection(CollectionStoreConstant.messages)
+              .add(message.toJson()),
+          GroupsManager.updateGroup(
+              idGroup: idGroup, fields: {'lastMessage': message.toJson()})
+        ]);
         if (haveNoti) {
           getIt<FirebaseMessageService>().sendChatNotification(
             idGroup,
             groupName,
           );
         }
-
-        await GroupsManager.updateGroup(
-            idGroup: idGroup, fields: {'lastMessage': message.toJson()});
       } catch (e) {
         logger.e(
           'Send Mess Err: $e',
@@ -130,17 +131,23 @@ class ChatService {
       throw 'User must have';
     } else {
       final message = MessageModel(
-        content: content,
-        senderId: user?.code ?? '',
-        sentAt: DateTime.now().toString(),
-        lat: lat,
-        long: long,
-      );
+          content: content,
+          senderId: user?.code ?? '',
+          sentAt: DateTime.now().toString(),
+          lat: lat,
+          long: long,
+          messageType: isCheckin ? MessageType.checkIn : MessageType.location);
       try {
-        await CollectionStore.chat
-            .doc(idGroup)
-            .collection(CollectionStoreConstant.messages)
-            .add(message.toJson());
+        Future.wait([
+          CollectionStore.chat
+              .doc(idGroup)
+              .collection(CollectionStoreConstant.messages)
+              .add(message.toJson()),
+          // cập nhật tin nhắn cuối cùng ở group
+          GroupsManager.updateGroup(
+              idGroup: idGroup, fields: {'lastMessage': message.toJson()})
+        ]);
+
         if (haveNoti) {
           if (isCheckin) {
             final address =
@@ -156,32 +163,12 @@ class ChatService {
             );
           }
         }
-        await GroupsManager.updateGroup(
-            idGroup: idGroup, fields: {'lastMessage': message.toJson()});
       } catch (e) {
         logger.e(
           'Send Mess Location Err: $e',
         );
       }
     }
-  }
-
-  Stream<QuerySnapshot<StoreGroup>> getMyGroupChat(
-    List<String> idsMyGroup,
-    List<StoreUser> listStoreUser,
-  ) {
-    return CollectionStore.groups
-        .where(FieldPath.documentId, whereIn: idsMyGroup)
-        .withConverter(
-            fromFirestore: (snapshot, _) {
-              StoreGroup storeGroup = StoreGroup.fromJson(snapshot.data()!);
-              storeGroup = storeGroup.copyWith(
-                  storeUser: listStoreUser.firstWhere(
-                      (user) => user.code == storeGroup.lastMessage!.senderId));
-              return storeGroup;
-            },
-            toFirestore: (message, _) => message.toJson())
-        .snapshots();
   }
 
   Stream<QuerySnapshot<MessageModel>> streamMessageGroup(

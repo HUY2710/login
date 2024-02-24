@@ -49,7 +49,7 @@ class ShareCodeGroupScreen extends StatelessWidget with PermissionMixin {
                       .replaceAll([PermissionRoute(fromMapScreen: false)]);
                   return;
                 } else if (context.mounted) {
-                  getIt<AppRouter>().replaceAll([const HomeRoute()]);
+                  getIt<AppRouter>().replaceAll([ HomeRoute()]);
                 }
               },
               child: const Text('Share it later'),

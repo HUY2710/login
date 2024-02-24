@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../config/di/di.dart';
+import '../../../../data/local/shared_preferences_manager.dart';
 import '../../../../data/models/store_group/store_group.dart';
 import '../../../../data/models/store_member/store_member.dart';
 import '../../../../data/models/store_message/store_message.dart';
@@ -73,6 +74,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
 
       try {
         await FirestoreClient.instance.createGroup(newGroup);
+        await SharedPreferencesManager.saveTimeSeenChat(newGroup.idGroup!);
         getIt<FirebaseMessageService>().subscribeTopics([newGroup.idGroup!]);
         if (context.mounted) {
           getIt<SelectGroupCubit>().update(newGroup);

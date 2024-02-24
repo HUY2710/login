@@ -137,10 +137,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
             return buildButtonCurrentLc();
           }
           if (isPremium) {
-            return CustomInkWell(
-              onTap: () {},
-              child: buildButtonPremium(item: listPlaceNearBy[index - 1]),
-            );
+            return buildButtonPremium(item: listPlaceNearBy[index - 1]);
           }
 
           return buildButtonPremium();
@@ -185,9 +182,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
               ),
             ),
             const Spacer(),
-            if (!isPremium)
-              CustomInkWell(
-                  child: Assets.icons.premium.icPremiumSvg.svg(), onTap: () {})
+            if (!isPremium) Assets.icons.premium.icPremiumSvg.svg()
           ],
         ),
       ),
@@ -236,16 +231,18 @@ class _CheckInLocationState extends State<CheckInLocation> {
   void _checkIn({Place? item}) {
     final storeGroup = getIt<SelectGroupCubit>().state;
     ChatService.instance.sendMessageLocation(
-        content: '',
-        idGroup: storeGroup?.idGroup ?? '',
-        lat: item == null
-            ? Global.instance.currentLocation.latitude
-            : item.location.latitude,
-        long: item == null
-            ? Global.instance.currentLocation.latitude
-            : item.location.longitude,
-        groupName: storeGroup?.groupName ?? 'Group',
-        context: context);
+      content: '',
+      idGroup: storeGroup?.idGroup ?? '',
+      lat: item == null
+          ? Global.instance.currentLocation.latitude
+          : item.location.latitude,
+      long: item == null
+          ? Global.instance.currentLocation.longitude
+          : item.location.longitude,
+      groupName: storeGroup?.groupName ?? 'Group',
+      context: context,
+      isCheckin: true,
+    );
     context.popRoute().then((value) {
       return showDialog(
           context: context,

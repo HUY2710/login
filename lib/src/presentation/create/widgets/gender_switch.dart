@@ -38,8 +38,7 @@ class _GenderSwitchState extends State<GenderSwitch> {
                 AnimatedPositioned(
                   height: constraints.maxHeight,
                   duration: const Duration(milliseconds: 150),
-                  left:
-                      value == GenderType.male ? 0 : constraints.maxWidth.w / 2,
+                  left: value == GenderType.male ? 0 : constraints.maxWidth / 2,
                   child: Container(
                     height: constraints.maxHeight,
                     width: constraints.maxWidth / 2,

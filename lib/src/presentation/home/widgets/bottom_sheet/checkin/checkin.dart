@@ -52,17 +52,15 @@ class CheckInWidget extends StatelessWidget {
           ),
           8.horizontalSpace,
           if (!purchaseState.isPremium())
-            Expanded(
-              child: Center(
-                child: CustomInkWell(
-                  onTap: () => context.pushRoute(PremiumRoute()),
-                  child: ShadowContainer(
-                    width: 40.r,
-                    height: 40.r,
-                    padding: const EdgeInsets.all(10),
-                    borderRadius: BorderRadius.circular(15.r),
-                    child: Assets.icons.premium.icPremiumSvg.svg(),
-                  ),
+            Center(
+              child: CustomInkWell(
+                onTap: () => context.pushRoute(PremiumRoute()),
+                child: ShadowContainer(
+                  width: 40.r,
+                  height: 40.r,
+                  padding: const EdgeInsets.all(10),
+                  borderRadius: BorderRadius.circular(15.r),
+                  child: Assets.icons.premium.icPremiumSvg.svg(),
                 ),
               ),
             )

@@ -128,7 +128,7 @@ class JoinGroupScreen extends StatelessWidget with PermissionMixin {
                               [PermissionRoute(fromMapScreen: false)]);
                           return;
                         } else if (context.mounted) {
-                          getIt<AppRouter>().replaceAll([const HomeRoute()]);
+                          getIt<AppRouter>().replaceAll([ HomeRoute()]);
                         }
                       });
                 },
