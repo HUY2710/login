@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../shared/constants/url_constants.dart';
@@ -43,5 +44,23 @@ class HTTPService {
     } catch (e) {
       throw Exception('Failed to post data: $e');
     }
+  }
+
+  Future<void> placeAutoComplete({required String placeInput}) async {
+    try {
+      final Map<String, dynamic> querys = {'input': placeInput, 'key': apiKey};
+      final url = Uri.https(
+          'maps.googleapis.com', 'maps/api/place/autocomplete/json', querys);
+      final response = await http.post(url);
+      if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+        debugPrint('result:$result');
+      } else {
+        response.body;
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+    return;
   }
 }
