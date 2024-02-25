@@ -170,8 +170,6 @@ class _SplashScreenState extends State<SplashScreen> {
     await getIt<TrackingHistoryPlaceService>().initGroups();
     final bool isFirstLaunch =
         await SharedPreferencesManager.getIsFirstLaunch();
-    AutoRouter.of(context).replace(const GuideRoute());
-    return;
     if (mounted) {
       if (isFirstLaunch) {
         AutoRouter.of(context).replace(LanguageRoute(isFirst: true));

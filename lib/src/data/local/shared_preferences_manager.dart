@@ -86,4 +86,12 @@ class SharedPreferencesManager {
     return (await _preference).getBool(PreferenceKeys.isMonthlyPremium.name) ??
         false;
   }
+
+  static Future<void> setGuide(bool value) async {
+    (await _preference).setBool(PreferenceKeys.showGuide.name, value);
+  }
+
+  static Future<bool> getGuide() async {
+    return (await _preference).getBool(PreferenceKeys.showGuide.name) ?? true;
+  }
 }

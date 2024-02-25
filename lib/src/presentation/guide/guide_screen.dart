@@ -1,14 +1,14 @@
-import 'dart:ui';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../config/navigation/app_router.dart';
+import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/gens.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
+import 'widgets/btn.dart';
 import 'widgets/checkin_guide.dart';
 import 'widgets/item_bottom.dart';
 import 'widgets/item_right.dart';
@@ -189,8 +189,13 @@ class GuideScreenState extends State<GuideScreen> {
   void createTutorial() {
     tutorialCoachMark = TutorialCoachMark(
       targets: _createTargets(),
-      onFinish: () {
-        AutoRouter.of(context).replace(const HomeRoute());
+      hideSkip: true,
+      opacityShadow: 0.5,
+      onFinish: () async {
+        await SharedPreferencesManager.setGuide(false);
+        if (context.mounted) {
+          AutoRouter.of(context).replace(const HomeRoute());
+        }
       },
       onClickTarget: (target) {
         print('onClickTarget: $target');
@@ -214,236 +219,58 @@ class GuideScreenState extends State<GuideScreen> {
   }
 
   List<TargetFocus> _createTargets() {
-    final List<TargetFocus> targets = [];
+    return [
+      _buildTarget(keyCheckIn,
+          'You can check in to places to share them with your friends and family'),
+      _buildTarget(keyPro, 'Premium content'),
+      _buildTarget(keyMember, 'Member content'),
+      _buildTarget(keyLocation, 'Location content'),
+      _buildTarget(keyPlace, 'Place content'),
+      _buildTarget(keyMessage, 'Message content', align: ContentAlign.top),
+      _buildTarget(keyGroup, 'Group content', align: ContentAlign.top),
+      _buildTarget(keySetting, 'Setting content', align: ContentAlign.top),
+    ];
+  }
 
-    targets.add(
-      TargetFocus(
-        identify: 'keyCheckIn',
-        keyTarget: keyCheckIn,
-        alignSkip: Alignment.topRight,
-        shape: ShapeLightFocus.RRect,
-        radius: 20.r,
-        enableOverlayTab: true,
-        contents: [
-          TargetContent(
-            builder: (context, controller) {
-              return ShadowContainer(
-                padding: EdgeInsets.all(16.r),
-                borderRadius: BorderRadius.all(Radius.circular(15.r)),
-                child: Text(
-                  'You can check in to places to share them with your friends and family',
-                  style: TextStyle(
-                    color: MyColors.black34,
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500,
+  TargetFocus _buildTarget(GlobalKey key, String content,
+      {ContentAlign align = ContentAlign.bottom}) {
+    return TargetFocus(
+      keyTarget: key,
+      shape: ShapeLightFocus.RRect,
+      radius: 20.r,
+      contents: [
+        TargetContent(
+          align: align,
+          builder: (context, controller) {
+            return ShadowContainer(
+              padding: EdgeInsets.all(16.r),
+              borderRadius: BorderRadius.all(Radius.circular(15.r)),
+              child: Column(
+                children: [
+                  Text(
+                    content,
+                    style: TextStyle(
+                      color: MyColors.black34,
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+                  16.verticalSpace,
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: BtnGuide(
+                      title: context.l10n.next,
+                      onTap: () {
+                        tutorialCoachMark.next();
+                      },
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        ),
+      ],
     );
-    targets.add(
-      TargetFocus(
-        identify: 'keyPro',
-        keyTarget: keyPro,
-        alignSkip: Alignment.topRight,
-        enableOverlayTab: true,
-        shape: ShapeLightFocus.RRect,
-        radius: 20.r,
-        contents: [
-          TargetContent(
-            builder: (context, controller) {
-              return ShadowContainer(
-                padding: EdgeInsets.all(16.r),
-                borderRadius: BorderRadius.all(Radius.circular(15.r)),
-                child: Text(
-                  'Premium content',
-                  style: TextStyle(
-                    color: MyColors.black34,
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-    targets.add(
-      TargetFocus(
-        identify: 'keyMember',
-        keyTarget: keyMember,
-        shape: ShapeLightFocus.RRect,
-        radius: 20.r,
-        alignSkip: Alignment.bottomCenter,
-        enableOverlayTab: true,
-        contents: [
-          TargetContent(
-            builder: (context, controller) {
-              return ShadowContainer(
-                padding: EdgeInsets.all(16.r),
-                borderRadius: BorderRadius.all(Radius.circular(15.r)),
-                child: Text(
-                  'Member content',
-                  style: TextStyle(
-                    color: MyColors.black34,
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-    targets.add(
-      TargetFocus(
-        identify: 'keyLocation',
-        keyTarget: keyLocation,
-        alignSkip: Alignment.bottomRight,
-        enableOverlayTab: true,
-        shape: ShapeLightFocus.RRect,
-        radius: 20.r,
-        contents: [
-          TargetContent(
-            builder: (context, controller) {
-              return ShadowContainer(
-                padding: EdgeInsets.all(16.r),
-                borderRadius: BorderRadius.all(Radius.circular(15.r)),
-                child: Text(
-                  'Member content',
-                  style: TextStyle(
-                    color: MyColors.black34,
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-    targets.add(
-      TargetFocus(
-        identify: 'keyPlace',
-        keyTarget: keyPlace,
-        alignSkip: Alignment.topRight,
-        enableOverlayTab: true,
-        shape: ShapeLightFocus.RRect,
-        radius: 20.r,
-        contents: [
-          TargetContent(
-            builder: (context, controller) {
-              return ShadowContainer(
-                padding: EdgeInsets.all(16.r),
-                borderRadius: BorderRadius.all(Radius.circular(15.r)),
-                child: Text(
-                  'Place content',
-                  style: TextStyle(
-                    color: MyColors.black34,
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-    targets.add(
-      TargetFocus(
-        identify: 'keyMessage',
-        keyTarget: keyMessage,
-        alignSkip: Alignment.topRight,
-        enableOverlayTab: true,
-        shape: ShapeLightFocus.RRect,
-        radius: 20.r,
-        contents: [
-          TargetContent(
-            align: ContentAlign.top,
-            builder: (context, controller) {
-              return ShadowContainer(
-                padding: EdgeInsets.all(16.r),
-                borderRadius: BorderRadius.all(Radius.circular(15.r)),
-                child: Text(
-                  'Message content',
-                  style: TextStyle(
-                    color: MyColors.black34,
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-    targets.add(
-      TargetFocus(
-        identify: 'keyGroup',
-        keyTarget: keyGroup,
-        alignSkip: Alignment.topRight,
-        enableOverlayTab: true,
-        shape: ShapeLightFocus.RRect,
-        radius: 20.r,
-        contents: [
-          TargetContent(
-            align: ContentAlign.top,
-            builder: (context, controller) {
-              return ShadowContainer(
-                padding: EdgeInsets.all(16.r),
-                borderRadius: BorderRadius.all(Radius.circular(15.r)),
-                child: Text(
-                  'Group content',
-                  style: TextStyle(
-                    color: MyColors.black34,
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-    targets.add(
-      TargetFocus(
-        identify: 'keySetting',
-        keyTarget: keySetting,
-        alignSkip: Alignment.topRight,
-        enableOverlayTab: true,
-        shape: ShapeLightFocus.RRect,
-        radius: 20.r,
-        contents: [
-          TargetContent(
-            align: ContentAlign.top,
-            builder: (context, controller) {
-              return ShadowContainer(
-                padding: EdgeInsets.all(16.r),
-                borderRadius: BorderRadius.all(Radius.circular(15.r)),
-                child: Text(
-                  'Setting content',
-                  style: TextStyle(
-                    color: MyColors.black34,
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-
-    return targets;
   }
 }

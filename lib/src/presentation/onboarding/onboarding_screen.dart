@@ -52,7 +52,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
           context.replaceRoute(PermissionRoute(fromMapScreen: false));
           return;
         } else if (context.mounted) {
-          context.replaceRoute(const HomeRoute());
+          final showGuide = await SharedPreferencesManager.getGuide();
+          if (showGuide && context.mounted) {
+            context.replaceRoute(const GuideRoute());
+          } else if (context.mounted) {
+            context.replaceRoute(const HomeRoute());
+          }
         }
       }
     }

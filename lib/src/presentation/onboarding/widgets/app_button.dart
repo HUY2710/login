@@ -19,6 +19,7 @@ class AppButton extends StatelessWidget {
     required this.onTap,
     this.heightBtn,
     this.paddingVertical,
+    this.widthBtn,
   });
 
   final String title;
@@ -37,6 +38,7 @@ class AppButton extends StatelessWidget {
 
   final VoidCallback onTap;
   final double? heightBtn;
+  final double? widthBtn;
   final double? paddingVertical;
   Color? _getTextColor() {
     return isEnable ? textColor : textSecondColor;
@@ -52,7 +54,7 @@ class AppButton extends StatelessWidget {
       onTap: isEnable ? onTap : null,
       child: Container(
         height: heightBtn ?? 56.h,
-        width: double.infinity,
+        width: widthBtn ?? double.infinity,
         padding: EdgeInsets.symmetric(vertical: paddingVertical ?? 16.h),
         decoration: BoxDecoration(
           gradient: isEnable
