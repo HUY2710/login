@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:battery_plus/battery_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_activity_recognition/flutter_activity_recognition.dart';
@@ -39,20 +41,21 @@ class ActivityRecognitionService {
   }
 
   Future<void> initStreamActivityRecognition() async {
+    String activityTemp = 'STILL';
+
     activityRecognition.activityStream.handleError((error) {}).listen(
       (Activity activity) {
-        debugPrint('activity:${activity.confidence.name}');
-        debugPrint('activity:$activity');
-        if (oldActivity != activity.type.name) {
-          //hoat động đã thay đổi => cập nhật lên server
-          oldActivity = activity.type.name;
-          // cật nhật user local
-          Global.instance.user = Global.instance.user
-              ?.copyWith(activityType: oldActivity ?? 'STILL');
-          _firestoreClient.updateUser({'activityType': oldActivity});
-        }
+        activityTemp = activity.type.name;
       },
     );
+    Timer.periodic(const Duration(minutes: 2), (timer) {
+      if (oldActivity != activityTemp && activityTemp != 'UNKNOWN') {
+        oldActivity = activityTemp;
+        Global.instance.user = Global.instance.user
+            ?.copyWith(activityType: oldActivity ?? 'STILL');
+        _firestoreClient.updateUser({'activityType': oldActivity});
+      }
+    });
   }
 
   late Stream<StepCount> _stepCountStream;
