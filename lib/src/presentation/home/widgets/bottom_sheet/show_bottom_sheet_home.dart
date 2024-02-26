@@ -40,7 +40,9 @@ Future<void> showAppModalBottomSheet({
 }) async {
   await showModalBottomSheet(
       context: context,
-      builder: builder,
+      builder: (BuildContext context) {
+        return SafeArea(child: builder(context));
+      },
       backgroundColor: backgroundColor,
       barrierLabel: barrierLabel,
       elevation: elevation,
