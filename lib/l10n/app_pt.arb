@@ -140,5 +140,9 @@
   "mapSatellite": "Satélite",
   "viewLocation": "Ver Localização",
   "checked": "marcado",
-  "at": "em"
+  "at": "em",
+  "leave": "Sair",
+  "removeThisPlace": "Remover este local",
+  "removeThisPlaceSub": "Tem certeza de que deseja remover este local do seu grupo?",
+  "searchLocationByType": "Pesquisar local digitando endereço, prédio..."
 }

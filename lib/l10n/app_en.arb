@@ -139,5 +139,9 @@
   "mapSatellite": "Satellite",
   "viewLocation": "View Location",
   "checked": "checked",
-  "at": "AT"
+  "at": "AT",
+  "leave": "Leave",
+  "removeThisPlace": "Remove this Place",
+  "removeThisPlaceSub": "Are you sure to the remove this place from your group?",
+  "searchLocationByType": "Search location by typing address, building ..."
 }

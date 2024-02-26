@@ -142,5 +142,9 @@
   "mapSatellite": "Satelit",
   "viewLocation": "Lihat Lokasi",
   "checked": "dicentang",
-  "at": "PADA"
+  "at": "PADA",
+  "leave": "Tinggalkan",
+  "removeThisPlace": "Hapus Tempat Ini",
+  "removeThisPlaceSub": "Apakah Anda yakin untuk menghapus tempat ini dari grup Anda?",
+  "searchLocationByType": "Cari lokasi dengan mengetik alamat, gedung..." 
 }

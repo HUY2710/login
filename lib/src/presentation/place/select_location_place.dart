@@ -16,6 +16,7 @@ import '../../gen/gens.dart';
 import '../../global/global.dart';
 import '../../services/location_service.dart';
 import '../../shared/cubit/value_cubit.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
 import '../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import '../map/cubit/map_type_cubit.dart';
@@ -268,7 +269,7 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
                               6.horizontalSpace,
                               Expanded(
                                 child: Text(
-                                  'Search location by typing address, building ...',
+                                  context.l10n.searchLocationByType,
                                   style: TextStyle(
                                     fontSize: 13.sp,
                                     fontWeight: FontWeight.w400,

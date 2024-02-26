@@ -141,5 +141,9 @@
   "mapSatellite": "Satellit",
   "viewLocation": "Standort anzeigen",
   "checked": "überprüft",
-  "at": "UM"
+  "at": "UM",
+  "leave": "Verlassen",
+  "removeThisPlace": "Diesen Ort entfernen",
+  "removeThisPlaceSub": "Sind Sie sicher, dass Sie diesen Ort aus Ihrer Gruppe entfernen möchten?",
+  "searchLocationByType": "Suchen Sie nach einem Ort, indem Sie die Adresse, das Gebäude eingeben..."
 }
