@@ -101,33 +101,39 @@ class _BuildMarkerState extends State<BuildMarker> {
           8.verticalSpace,
           _buildMarker(color, battery),
           8.verticalSpace,
-          ShadowContainer(
-            padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 10.w),
-            blurRadius: 4,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  height: 16.r,
-                  width: 16.r,
-                  decoration: BoxDecoration(
-                    color: widget.member.online
-                        ? const Color(0xff19E04B)
-                        : const Color(0xffFFDF57),
-                    shape: BoxShape.circle,
+          if (widget.member.code != Global.instance.user?.code)
+            ShadowContainer(
+              padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 10.w),
+              blurRadius: 4,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 16.r,
+                    width: 16.r,
+                    decoration: BoxDecoration(
+                      color: widget.member.online
+                          ? const Color(0xff19E04B)
+                          : const Color(0xffFFDF57),
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                ),
-                8.horizontalSpace,
-                Text(
-                  widget.member.userName,
-                  style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w500,
-                      color: MyColors.black34),
-                )
-              ],
-            ),
-          ),
+                  8.horizontalSpace,
+                  Text(
+                    widget.member.userName,
+                    style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w500,
+                        color: MyColors.black34),
+                  )
+                ],
+              ),
+            )
+          else
+            Image.asset(
+              Assets.images.markers.circleDot.path,
+              width: 40.r,
+            )
         ],
       ),
     );

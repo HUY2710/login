@@ -69,14 +69,6 @@ class _CustomMapState extends State<CustomMap> {
             return places.map((StorePlace place) => _buildPlaceMarker(place));
           },
         ),
-        Marker(
-          markerId: const MarkerId('You'),
-          position: widget.trackingLocationState.maybeWhen(
-            orElse: () => widget.defaultLocation,
-            success: (LatLng latLng) => latLng,
-          ),
-          icon: widget.marker ?? BitmapDescriptor.defaultMarker,
-        ),
       },
       circles: <Circle>{
         ...widget.trackingPlacesState.maybeWhen(
@@ -99,7 +91,7 @@ class _CustomMapState extends State<CustomMap> {
         ),
         Circle(
           circleId: const CircleId('circle_1'),
-          center: widget.defaultLocation,
+          center: Global.instance.currentLocation,
           radius: 30,
           fillColor: const Color(0xffA369FD).withOpacity(0.25),
           strokeColor: const Color(0xffA369FD),
@@ -119,12 +111,12 @@ class _CustomMapState extends State<CustomMap> {
   Marker _buildFriendMarker(StoreUser user) {
     final double lat = user.location?.lat ?? 0;
     final double lng = user.location?.lng ?? 0;
-    if (user.code == Global.instance.user?.code) {
-      return const Marker(markerId: MarkerId('you'), visible: false);
-    }
+
     return Marker(
         anchor: const Offset(0.5, 0.72),
-        position: LatLng(lat, lng),
+        position: user.code == Global.instance.user?.code
+            ? Global.instance.currentLocation
+            : LatLng(lat, lng),
         markerId: MarkerId(user.code),
         icon: user.marker != null
             ? BitmapDescriptor.fromBytes(
