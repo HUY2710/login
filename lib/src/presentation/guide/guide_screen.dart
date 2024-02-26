@@ -29,6 +29,7 @@ class GuideScreenState extends State<GuideScreen> {
   GlobalKey keyPro = GlobalKey();
   GlobalKey keyMember = GlobalKey();
   GlobalKey keyLocation = GlobalKey();
+  GlobalKey keyAddMember = GlobalKey();
   GlobalKey keyPlace = GlobalKey();
   GlobalKey keyMessage = GlobalKey();
   GlobalKey keyGroup = GlobalKey();
@@ -79,13 +80,13 @@ class GuideScreenState extends State<GuideScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ItemRightGuide(
-                    key: keyMember,
-                    pathIc: Assets.icons.icPeople.path,
+                    key: keyAddMember,
+                    pathIc: Assets.icons.icAddMember.path,
                   ),
                   SizedBox(height: 16.h),
                   ItemRightGuide(
-                    pathIc: Assets.icons.icGps.path,
-                    key: keyLocation,
+                    key: keyMember,
+                    pathIc: Assets.icons.icPeople.path,
                   ),
                   SizedBox(height: 16.h),
                   ItemRightGuide(
@@ -99,58 +100,71 @@ class GuideScreenState extends State<GuideScreen> {
               bottom: 50.h,
               left: 16.w,
               right: 16.w,
-              child: Row(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  ItemBottomGuide(
-                    path: Assets.icons.icMessage.path,
-                    key: keyMessage,
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ItemRightGuide(
+                      pathIc: Assets.icons.icGps.path,
+                      key: keyLocation,
+                    ),
                   ),
-                  16.horizontalSpace,
-                  Expanded(
-                      key: keyGroup,
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: ShadowContainer(
-                          maxWidth: MediaQuery.sizeOf(context).width - 80.w,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 24.w, vertical: 10.h),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: MyColors.primary,
-                                backgroundImage: AssetImage(
-                                    Assets.images.avatars.groups.group1.path),
-                                radius: 14.r,
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 12.w),
-                                  child: Text(
-                                    context.l10n.newGroup,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: const Color(0xff8E52FF),
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.w500),
+                  20.verticalSpace,
+                  Row(
+                    children: [
+                      ItemBottomGuide(
+                        path: Assets.icons.icMessage.path,
+                        key: keyMessage,
+                      ),
+                      16.horizontalSpace,
+                      Expanded(
+                          key: keyGroup,
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: ShadowContainer(
+                              maxWidth: MediaQuery.sizeOf(context).width - 80.w,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 24.w, vertical: 10.h),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: MyColors.primary,
+                                    backgroundImage: AssetImage(Assets
+                                        .images.avatars.groups.group1.path),
+                                    radius: 14.r,
                                   ),
-                                ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 12.w),
+                                      child: Text(
+                                        context.l10n.newGroup,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: const Color(0xff8E52FF),
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                  const Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    color: MyColors.primary,
+                                  )
+                                ],
                               ),
-                              const Icon(
-                                Icons.keyboard_arrow_down_rounded,
-                                color: MyColors.primary,
-                              )
-                            ],
-                          ),
-                        ),
-                      )),
-                  16.horizontalSpace,
-                  ItemBottomGuide(
-                    path: Assets.icons.icSetting.path,
-                    key: keySetting,
+                            ),
+                          )),
+                      16.horizontalSpace,
+                      ItemBottomGuide(
+                        path: Assets.icons.icSetting.path,
+                        key: keySetting,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -201,9 +215,11 @@ class GuideScreenState extends State<GuideScreen> {
     return [
       _buildTarget(keyCheckIn, context.l10n.guideCheckIn),
       _buildTarget(keyPro, context.l10n.guidePro),
+      _buildTarget(keyAddMember, context.l10n.guideAddMember),
       _buildTarget(keyMember, context.l10n.guideMember),
-      _buildTarget(keyLocation, context.l10n.guideLocation),
       _buildTarget(keyPlace, context.l10n.guidePlace),
+      _buildTarget(keyLocation, context.l10n.guideLocation,
+          align: ContentAlign.top),
       _buildTarget(keyMessage, context.l10n.guideMessenger,
           align: ContentAlign.top),
       _buildTarget(keyGroup, context.l10n.guideGroup,
@@ -219,6 +235,7 @@ class GuideScreenState extends State<GuideScreen> {
       keyTarget: key,
       shape: ShapeLightFocus.RRect,
       radius: radius ?? 20.r,
+      enableTargetTab: false,
       contents: [
         TargetContent(
           align: align,

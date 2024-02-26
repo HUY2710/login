@@ -114,5 +114,6 @@
   "allowOthersToTrack": "Izinkan orang lain melacak",
   "allowOthersToTrackSub": "Lokasi langsung Anda tidak akan diperbarui untuk orang lain, apakah Anda ingin mematikannya?",
   "ok": "Ok",
-  "editAccount": "Edit Akun"
+  "editAccount": "Edit Akun",
+  "guideAddMember": "Undang orang-orang yang ingin Anda tambahkan ke dalam grup."
 }

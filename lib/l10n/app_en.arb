@@ -114,5 +114,6 @@
   "guideMessenger": "View and manage your messages here.",
   "guideSetting": "Configure app preferences to suit your needs.",
   "guideGroup": "Hello! Click here to start creating your own groups.",
-  "guidePro": "Upgrade to Premium for exclusive features and benefits! Click here to unlock VIP access."
+  "guidePro": "Upgrade to Premium for exclusive features and benefits! Click here to unlock VIP access.",
+  "guideAddMember": "Invite people you want to add to the group."
 }
