@@ -6,20 +6,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../config/di/di.dart';
 import '../../../../../shared/extension/context_extension.dart';
 import '../../../../../shared/widgets/containers/custom_container.dart';
+import '../../../../../shared/widgets/custom_my_slidable.dart';
 import '../../../../../shared/widgets/my_drag.dart';
 import '../../../../map/cubit/tracking_places/tracking_places_cubit.dart';
 import '../../../../place/add_place.dart';
 import '../show_bottom_sheet_home.dart';
 import 'widgets/item_place.dart';
 
-class PlacesBottomSheet extends StatefulWidget {
+class PlacesBottomSheet extends StatelessWidget {
   const PlacesBottomSheet({super.key});
 
-  @override
-  State<PlacesBottomSheet> createState() => _PlacesBottomSheetState();
-}
-
-class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,9 +23,9 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(20).r,
       ),
+      constraints: BoxConstraints(maxHeight: 1.sh * 0.7),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         children: [
           const MyDrag(),
           Row(
@@ -88,7 +84,6 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
               showAppModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
-                useSafeArea: true,
                 builder: (context) => Padding(
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -130,8 +125,13 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
                     return ListView.separated(
                       itemCount: places.length,
                       itemBuilder: (context, index) {
-                        return ItemPlace(
-                          place: places[index],
+                        return CustomSwipeWidget(
+                          actionRight1: () {},
+                          actionRight2: () {},
+                          firstRight: true,
+                          child: ItemPlace(
+                            place: places[index],
+                          ),
                         );
                       },
                       separatorBuilder: (context, index) =>

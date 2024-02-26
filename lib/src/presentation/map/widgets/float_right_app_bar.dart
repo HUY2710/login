@@ -80,9 +80,10 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
             Fluttertoast.showToast(msg: 'Please join group first');
             return;
           }
-          showBottomSheetTypeOfHome(
+          showAppModalBottomSheet(
             context: context,
-            child: const PlacesBottomSheet(),
+            isScrollControlled: true,
+            builder: (context) => const PlacesBottomSheet(),
           );
         }, Assets.icons.icPlace.path),
       ],

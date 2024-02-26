@@ -12,14 +12,17 @@ import '../../../../../../data/remote/firestore_client.dart';
 import '../../../../../../gen/assets.gen.dart';
 import '../../../../../../global/global.dart';
 import '../../../../../../shared/extension/context_extension.dart';
+import '../../../../../../shared/widgets/containers/custom_container.dart';
 import '../../../../../../shared/widgets/containers/shadow_container.dart';
 import '../../../../../map/cubit/select_group_cubit.dart';
 import '../../../../../map/cubit/tracking_places/tracking_places_cubit.dart';
+import '../../../../../onboarding/widgets/app_button.dart';
 import '../../../dialog/action_dialog.dart';
 
 class ItemPlace extends StatelessWidget {
-  const ItemPlace({super.key, required this.place});
+  const ItemPlace({super.key, required this.place, this.defaultPlace = false});
   final StorePlace place;
+  final bool? defaultPlace;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -60,7 +63,31 @@ class ItemPlace extends StatelessWidget {
             ],
           ),
         ),
-        if (place.idCreator == Global.instance.user?.code)
+        if (defaultPlace != null && defaultPlace!)
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+            margin: EdgeInsets.only(right: 16.w),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(colors: [
+                Color(0xffB67DFF),
+                Color(0xff7B3EFF),
+              ]),
+              borderRadius: BorderRadius.all(
+                Radius.circular(12.r),
+              ),
+            ),
+            child: Text(
+              'Set up',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+                fontSize: 13.sp,
+              ),
+            ),
+          ),
+        if (defaultPlace != null &&
+            !defaultPlace! &&
+            place.idCreator == Global.instance.user?.code)
           IconButton(
             onPressed: () {
               showDialog(
