@@ -15,8 +15,9 @@ import '../show_bottom_sheet_home.dart';
 import 'checkin_location.dart';
 
 class CheckInWidget extends StatelessWidget {
-  const CheckInWidget({super.key});
-
+  const CheckInWidget({
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MyPurchaseManager, PurchaseState>(

@@ -65,7 +65,8 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
                         if (status) {}
                         motionCubit.update(status);
                         typeRequest.update(0); //không request nữa
-                        context.router.replaceAll([HomeRoute()]);
+
+                        context.router.replaceAll([const GuideRoute()]);
                       }
                     });
               },
@@ -73,7 +74,7 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
             TextButton(
               onPressed: () {
                 if (context.mounted && !fromMapScreen) {
-                  context.replaceRoute(HomeRoute());
+                  context.replaceRoute(const GuideRoute());
                 } else if (context.mounted) {
                   context.popRoute();
                 }
