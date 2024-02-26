@@ -46,5 +46,13 @@
   "notification": "Notification",
   "subNotification": "Stay up to date with subscriptions, alerts and messages from your group.",
   "motionTracking": "Motion tracking",
-  "subMotionTracking": "Allowing user motion tracking, such as walking, driving, riding a motorbike, etc."
+  "subMotionTracking": "Allowing user motion tracking, such as walking, driving, riding a motorbike, etc.",
+  "guideCheckIn": "You can check in to places to share them with your friends and family",
+  "guideMember": "You can find the list of group members here",
+  "guideLocation": "You can use the it to return to your current location on the map.",
+  "guidePlace": "Save locations to track member activity when they arrive and leave.",
+  "guideMessenger": "View and manage your messages here.",
+  "guideSetting": "Configure app preferences to suit your needs.",
+  "guideGroup": "Hello! Click here to start creating your own groups.",
+  "guidePro": "Upgrade to Premium for exclusive features and benefits! Click here to unlock VIP access."
 }

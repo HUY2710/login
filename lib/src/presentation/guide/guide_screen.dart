@@ -53,27 +53,6 @@ class GuideScreenState extends State<GuideScreen> {
         ),
         child: Stack(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 100.0),
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  key: keyButton,
-                  color: Colors.blue,
-                  height: 100,
-                  width: MediaQuery.of(context).size.width - 50,
-                  child: Align(
-                    child: ElevatedButton(
-                      child: const Icon(Icons.remove_red_eye),
-                      onPressed: () {
-                        createTutorial();
-                        Future.delayed(Duration.zero, showTutorial);
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
             Positioned(
               top: ScreenUtil().statusBarHeight == 0
                   ? 20.h
@@ -220,24 +199,26 @@ class GuideScreenState extends State<GuideScreen> {
 
   List<TargetFocus> _createTargets() {
     return [
-      _buildTarget(keyCheckIn,
-          'You can check in to places to share them with your friends and family'),
-      _buildTarget(keyPro, 'Premium content'),
-      _buildTarget(keyMember, 'Member content'),
-      _buildTarget(keyLocation, 'Location content'),
-      _buildTarget(keyPlace, 'Place content'),
-      _buildTarget(keyMessage, 'Message content', align: ContentAlign.top),
-      _buildTarget(keyGroup, 'Group content', align: ContentAlign.top),
-      _buildTarget(keySetting, 'Setting content', align: ContentAlign.top),
+      _buildTarget(keyCheckIn, context.l10n.guideCheckIn),
+      _buildTarget(keyPro, context.l10n.guidePro),
+      _buildTarget(keyMember, context.l10n.guideMember),
+      _buildTarget(keyLocation, context.l10n.guideLocation),
+      _buildTarget(keyPlace, context.l10n.guidePlace),
+      _buildTarget(keyMessage, context.l10n.guideMessenger,
+          align: ContentAlign.top),
+      _buildTarget(keyGroup, context.l10n.guideGroup,
+          radius: 15.r, align: ContentAlign.top),
+      _buildTarget(keySetting, context.l10n.guideSetting,
+          radius: 15.r, align: ContentAlign.top),
     ];
   }
 
   TargetFocus _buildTarget(GlobalKey key, String content,
-      {ContentAlign align = ContentAlign.bottom}) {
+      {double? radius, ContentAlign align = ContentAlign.bottom}) {
     return TargetFocus(
       keyTarget: key,
       shape: ShapeLightFocus.RRect,
-      radius: 20.r,
+      radius: radius ?? 20.r,
       contents: [
         TargetContent(
           align: align,
