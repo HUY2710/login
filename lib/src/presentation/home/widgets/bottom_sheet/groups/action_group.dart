@@ -18,6 +18,7 @@ import '../../../../../global/global.dart';
 import '../../../../../services/firebase_message_service.dart';
 import '../../../../../shared/constants/app_constants.dart';
 import '../../../../../shared/cubit/value_cubit.dart';
+import '../../../../../shared/extension/context_extension.dart';
 import '../../../../../shared/widgets/main_switch.dart';
 import '../../../../../shared/widgets/my_drag.dart';
 import '../../../../map/cubit/select_group_cubit.dart';
@@ -129,12 +130,12 @@ class ActionGroupBottomSheet extends StatelessWidget {
                               .then((value) => context.popRoute());
                         });
                       },
-                      confirmText: 'Delete',
+                      confirmText: context.l10n.delete,
                     ),
                   );
                 },
                 child: itemAction(
-                    Assets.icons.icDelete.svg(width: 20.r), 'Delete',
+                    Assets.icons.icDelete.svg(width: 20.r), context.l10n.delete,
                     colorText: Colors.red),
               ),
             if (!isAdmin)
@@ -143,8 +144,8 @@ class ActionGroupBottomSheet extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (context1) => ActionDialog(
-                      title: 'Leave Group',
-                      subTitle: 'Are you sure to leave group?',
+                      title: context.l10n.leaveGroup,
+                      subTitle: context.l10n.leaveGroupContent,
                       confirmTap: () {
                         EasyLoading.show();
                         myGroupCubit

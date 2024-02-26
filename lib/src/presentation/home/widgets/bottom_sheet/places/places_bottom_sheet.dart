@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../config/di/di.dart';
+import '../../../../../shared/extension/context_extension.dart';
 import '../../../../../shared/widgets/containers/custom_container.dart';
 import '../../../../../shared/widgets/my_drag.dart';
 import '../../../../map/cubit/tracking_places/tracking_places_cubit.dart';
@@ -38,7 +39,7 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
                   children: [
                     Align(
                       child: Text(
-                        'Places',
+                        context.l10n.places,
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 20.sp,
@@ -51,7 +52,7 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
                       child: GestureDetector(
                         onTap: () => context.popRoute(),
                         child: Text(
-                          'Cancel',
+                          context.l10n.cancel,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 16.sp,
@@ -67,7 +68,7 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
                           context.popRoute();
                         },
                         child: Text(
-                          'Done',
+                          context.l10n.done,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16.sp,
@@ -110,7 +111,7 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
                   ),
                 ),
                 12.horizontalSpace,
-                const Text('Add Place'),
+                Text(context.l10n.addPlaces),
               ],
             ),
           ),
@@ -124,7 +125,7 @@ class _PlacesBottomSheetState extends State<PlacesBottomSheet> {
                   failed: (message) => Text('Error:$message'),
                   success: (places) {
                     if (places.isEmpty) {
-                      return const Center(child: Text('No place'));
+                      return Center(child: Text(context.l10n.noPlace));
                     }
                     return ListView.separated(
                       itemCount: places.length,

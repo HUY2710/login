@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../config/di/di.dart';
+import '../../../../data/local/shared_preferences_manager.dart';
 import '../../../../data/models/store_group/store_group.dart';
 import '../../../../data/models/store_member/store_member.dart';
 import '../../../../data/models/store_message/store_message.dart';
@@ -16,6 +17,7 @@ import '../../../../gen/gens.dart';
 import '../../../../global/global.dart';
 import '../../../../services/firebase_message_service.dart';
 import '../../../../shared/cubit/value_cubit.dart';
+import '../../../../shared/extension/context_extension.dart';
 import '../../../../shared/extension/int_extension.dart';
 import '../../../../shared/helpers/valid_helper.dart';
 import '../../../../shared/widgets/containers/shadow_container.dart';
@@ -73,6 +75,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
 
       try {
         await FirestoreClient.instance.createGroup(newGroup);
+        await SharedPreferencesManager.saveTimeSeenChat(newGroup.idGroup!);
         getIt<FirebaseMessageService>().subscribeTopics([newGroup.idGroup!]);
         if (context.mounted) {
           getIt<SelectGroupCubit>().update(newGroup);
@@ -144,7 +147,9 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
                   children: [
                     Align(
                       child: Text(
-                        widget.detailGroup != null ? 'Edit' : 'Create Group',
+                        widget.detailGroup != null
+                            ? context.l10n.edit
+                            : context.l10n.createGroup,
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 20.sp,
@@ -157,7 +162,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
                       child: GestureDetector(
                         onTap: () => context.popRoute(),
                         child: Text(
-                          'Cancel',
+                          context.l10n.cancel,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 16.sp,
@@ -177,7 +182,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
                                 ? _tapDone
                                 : () {},
                             child: Text(
-                              'Done',
+                              context.l10n.done,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16.sp,

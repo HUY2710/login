@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../../module/iap/my_purchase_manager.dart';
 import '../../../../../config/navigation/app_router.dart';
 import '../../../../../gen/assets.gen.dart';
+import '../../../../../shared/extension/context_extension.dart';
 import '../../../../../shared/widgets/containers/shadow_container.dart';
 import '../../../../../shared/widgets/custom_inkwell.dart';
 import '../show_bottom_sheet_home.dart';
@@ -39,7 +40,7 @@ class CheckInWidget extends StatelessWidget {
                   SvgPicture.asset(Assets.icons.icCheckin.path),
                   12.horizontalSpace,
                   Text(
-                    'Check in',
+                    context.l10n.checkIn,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(

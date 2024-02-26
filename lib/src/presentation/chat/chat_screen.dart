@@ -59,7 +59,7 @@ class _ChatScreenState extends State<ChatScreen> {
               onTap: () => context.popRoute()),
           centerTitle: true,
           title: Text(
-            'Messages',
+            context.l10n.messages,
             style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
           ),
         ),
@@ -91,7 +91,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           InputSearch(textController: textController),
                           30.h.verticalSpace,
                           Text(
-                            'Group',
+                            context.l10n.group,
                             style: TextStyle(
                                 color: MyColors.black34,
                                 fontSize: 16.sp,
@@ -102,12 +102,12 @@ class _ChatScreenState extends State<ChatScreen> {
                             builder: (context, searchState) {
                               if (textController.text.isNotEmpty) {
                                 if (searchState.isEmpty) {
-                                  return const Padding(
-                                      padding: EdgeInsets.only(top: 30),
+                                  return Padding(
+                                      padding: const EdgeInsets.only(top: 30),
                                       child: Center(
                                         child: GradientText(
-                                          'Không tìm thấy group nào !',
-                                          style: TextStyle(
+                                          context.l10n.noGroups,
+                                          style: const TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w600),
                                         ),
@@ -138,7 +138,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                         color: Color(0xffEAEAEA),
                                       );
                                     },
-                                    itemCount: groups.length),
+                                    itemCount: textController.text.isNotEmpty
+                                        ? searchState.length
+                                        : groups.length),
                               );
                             },
                           ),
@@ -161,16 +163,16 @@ class _ChatScreenState extends State<ChatScreen> {
     if (content.isEmpty) {
       if (group.lastMessage!.lat == null || group.lastMessage!.long == null) {
         return (group.storeUser!.code == userCode)
-            ? 'You created group'
-            : '$userName created group';
+            ? '${context.l10n.you} ${context.l10n.createdGroup}'
+            : '$userName ${context.l10n.createGroup}';
       } else {
         return (group.storeUser!.code == userCode)
-            ? 'You send location'
-            : '$userName send location';
+            ? '${context.l10n.you} ${context.l10n.sendLocation}'
+            : '$userName ${context.l10n.createGroup}';
       }
     } else {
       return (group.storeUser!.code == userCode)
-          ? 'You: $content'
+          ? '${context.l10n.you}: $content'
           : '$userName: $content';
     }
   }

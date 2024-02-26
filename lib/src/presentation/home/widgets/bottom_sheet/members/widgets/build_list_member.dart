@@ -11,6 +11,7 @@ import '../../../../../../data/remote/firestore_client.dart';
 import '../../../../../../gen/assets.gen.dart';
 import '../../../../../../global/global.dart';
 import '../../../../../../shared/cubit/value_cubit.dart';
+import '../../../../../../shared/extension/context_extension.dart';
 import '../../../../../map/cubit/select_group_cubit.dart';
 import '../../../dialog/action_dialog.dart';
 import 'item_member.dart';
@@ -52,9 +53,8 @@ class BuildListMember extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (context) => ActionDialog(
-                            title: 'Remove Member',
-                            subTitle:
-                                'Are you sure to the remove this member from your group?',
+                            title: context.l10n.removeMember,
+                            subTitle: context.l10n.removeGroupContent,
                             confirmTap: () async {
                               //xóa user ra khỏi nhóm,
                               context.popRoute();
@@ -67,7 +67,7 @@ class BuildListMember extends StatelessWidget {
                               //xóa user ra khỏi group local data
                               EasyLoading.dismiss();
                             },
-                            confirmText: 'Delete',
+                            confirmText: context.l10n.delete,
                           ),
                         );
                         return;

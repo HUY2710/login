@@ -15,6 +15,7 @@ import '../../../data/remote/firestore_client.dart';
 import '../../../global/global.dart';
 import '../../../services/firebase_message_service.dart';
 import '../../../shared/cubit/value_cubit.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../map/cubit/select_group_cubit.dart';
 import '../../onboarding/widgets/app_button.dart';
@@ -30,10 +31,10 @@ class CreateGroupAvatarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(
-        title: 'Avatar Group',
-        leadingColor: Color(0xff7B3EFF),
-        textColor: Color(
+      appBar: CustomAppBar(
+        title: context.l10n.avatarGroup,
+        leadingColor: const Color(0xff7B3EFF),
+        textColor: const Color(
           0xFF343434,
         ),
       ),
@@ -44,7 +45,7 @@ class CreateGroupAvatarScreen extends StatelessWidget {
           bloc: avatarGroupCubit,
           builder: (context, state) {
             return AppButton(
-              title: 'Save',
+              title: context.l10n.save,
               onTap: () async {
                 debugPrint('${Global.instance.group}');
                 try {
@@ -60,6 +61,9 @@ class CreateGroupAvatarScreen extends StatelessWidget {
                     //đăng kí nhận lắng nghe thông báo
                     getIt<FirebaseMessageService>()
                         .subscribeTopics([Global.instance.group!.idGroup!]);
+                    // lưu thời gian người dùng xem tin nhắn
+                    await SharedPreferencesManager.saveTimeSeenChat(
+                        Global.instance.group!.idGroup!);
                     await SharedPreferencesManager.saveIsCreateInfoFistTime(
                         false);
 
@@ -102,7 +106,7 @@ class _MainBodyState extends State<_MainBody> {
       children: [
         24.verticalSpace,
         Text(
-          'Choose your favorite avatar!',
+          context.l10n.chooseAvatar,
           style: TextStyle(
             fontSize: 15.sp,
             fontWeight: FontWeight.w400,

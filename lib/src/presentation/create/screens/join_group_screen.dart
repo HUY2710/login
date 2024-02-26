@@ -32,7 +32,7 @@ class JoinGroupScreen extends StatelessWidget with PermissionMixin {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40.w),
                 child: Text(
-                  'Joining a group? Enter your invite code',
+                  context.l10n.joinGroupCode,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: MyColors.black34,
@@ -128,7 +128,7 @@ class JoinGroupScreen extends StatelessWidget with PermissionMixin {
                               [PermissionRoute(fromMapScreen: false)]);
                           return;
                         } else if (context.mounted) {
-                          getIt<AppRouter>().replaceAll([const HomeRoute()]);
+                          getIt<AppRouter>().replaceAll([ HomeRoute()]);
                         }
                       });
                 },

@@ -7,7 +7,6 @@ import 'package:injectable/injectable.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../data/remote/member_manager.dart';
-import '../../../shared/helpers/logger_utils.dart';
 import '../services/chat_service.dart';
 import '../utils/util.dart';
 import 'group_state.dart';
@@ -26,8 +25,6 @@ class GroupCubit extends Cubit<GroupState> {
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _groupStream;
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _userStream;
 
-  bool haveMessage = false;
-
   Future<void> sendMessage(
       {required String content,
       required String idGroup,
@@ -37,10 +34,6 @@ class GroupCubit extends Cubit<GroupState> {
       idGroup: idGroup,
       groupName: groupName,
     );
-    emit(GroupState.success(myGroups));
-  }
-
-  void updateStatus() {
     emit(GroupState.success(myGroups));
   }
 
@@ -73,33 +66,35 @@ class GroupCubit extends Cubit<GroupState> {
         final List<String> myListIdGroup =
             userSnapshot.docs.map((e) => e.id).toList();
         idsMyGroup = myListIdGroup.map((e) => e).toList();
-        // get store user of user group
-        //lấy ra thông tin user từ các lasstMessage của group
-        final listIdUser =
-            await ChatService.instance.getListIdUserFromLastMessage();
-        listStoreUser = await chatService.getUserFromListId(listIdUser);
         // clear gourp trước khi lắng nghe vì dữ liệu trả về có cả các group cũ
         myGroups.clear();
         //lấy thông tin group
         _groupStream = chatService
             .getMyGroupChat2(idsMyGroup)
             .listen((QuerySnapshot<Map<String, dynamic>> snapshot) async {
+          //lấy ra id của user trong collection Group
+          final listIdUser =
+              await ChatService.instance.getListIdUserFromLastMessage();
+          //lấy ra thông tin user từ các lasstMessage của group
+          listStoreUser = await chatService.getUserFromListId(listIdUser);
           if (snapshot.docs.isNotEmpty) {
             for (final change in snapshot.docChanges) {
               if (change.type == DocumentChangeType.modified) {
                 emit(const GroupState.loading());
+                // lấy ra index của group đang bị thay đổi dưới local
                 final index =
                     myGroups.indexWhere((e) => e.idGroup == change.doc.id);
 
                 StoreGroup storeGroup = StoreGroup.fromJson(change.doc.data()!);
-
+                // lấy ra thông tin user từ collection Users
                 final storeUser = listStoreUser.firstWhere(
                   (storeUser) =>
                       storeUser.code == storeGroup.lastMessage!.senderId,
                 );
+                // kiểm tra thời gian đã xem từ local
                 final seen = await Utils.getSeenMess(
                     change.doc.id, storeGroup.lastMessage!.sentAt);
-
+                // gán vào group state
                 storeGroup =
                     storeGroup.copyWith(storeUser: storeUser, seen: seen);
                 myGroups[index] = storeGroup;

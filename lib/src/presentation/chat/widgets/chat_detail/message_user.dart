@@ -69,20 +69,41 @@ class MessageTypeUser extends StatelessWidget {
                       MyColors.primary, BlendMode.srcIn)),
             ),
             10.w.horizontalSpace,
-            Text.rich(TextSpan(children: [
-              TextSpan(
-                  text: 'Current Location',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w600)),
-              TextSpan(
-                  text: "\nYou's location",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w400)),
-            ])),
+            Expanded(
+              child: FutureBuilder(
+                  future: LocationService().getCurrentAddress(LatLng(
+                      item.lat ?? Global.instance.currentLocation.latitude,
+                      item.long ?? Global.instance.currentLocation.longitude)),
+                  builder: (context, address) {
+                    if (address.hasData) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (item.messageType == MessageType.location)
+                            Text("${item.userName}'s location",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w600)),
+                          if (item.messageType == MessageType.checkIn)
+                            Text("${item.userName}'s checked",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w600)),
+                          Text('${address.data}',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w400))
+                        ],
+                      );
+                    }
+                    return const SizedBox();
+                  }),
+            ),
           ],
         ),
         10.h.verticalSpace,
@@ -102,11 +123,12 @@ class MessageTypeUser extends StatelessWidget {
                       fontWeight: FontWeight.w600)),
             ),
             onTap: () {
-              context.read<ChatTypeCubit>().update(ChatTypeState(
-                  type: TypeChat.location,
-                  lat: item.lat ?? Global.instance.currentLocation.latitude,
-                  long:
-                      item.long ?? Global.instance.currentLocation.longitude));
+              context.router.replaceAll([
+                HomeRoute(latLng: {
+                  'lat': item.lat ?? Global.instance.currentLocation.latitude,
+                  'lng': item.long ?? Global.instance.currentLocation.longitude
+                })
+              ], updateExistingRoutes: false);
             })
       ],
     );

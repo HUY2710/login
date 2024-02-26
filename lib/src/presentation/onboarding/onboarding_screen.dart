@@ -77,7 +77,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                 navigateToNextScreen();
               },
               child: Text(
-                'Skip',
+                context.l10n.skip,
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 16.sp,

@@ -17,6 +17,7 @@ import '../../gen/colors.gen.dart';
 import '../../global/global.dart';
 import '../../services/my_background_service.dart';
 import '../../shared/constants/app_constants.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../../shared/widgets/containers/custom_container.dart';
 import '../chat/cubits/group_cubit.dart';
@@ -34,7 +35,9 @@ import 'widgets/member_marker_list.dart';
 import 'widgets/place_mark_list.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+  const MapScreen({super.key, this.latLng});
+
+  final Map<String, double>? latLng;
 
   @override
   State<MapScreen> createState() => MapScreenState();
@@ -72,12 +75,17 @@ class MapScreenState extends State<MapScreen>
   }
 
   void getLocalLocation() {
-    if (Global.instance.serverLocation != const LatLng(0, 0)) {
-      _defaultLocation = LatLng(
-        Global.instance.serverLocation.latitude,
-        Global.instance.serverLocation.longitude,
-      );
-      _moveToCurrentLocation(_defaultLocation);
+    if (widget.latLng != null) {
+      _moveToCurrentLocation(
+          LatLng(widget.latLng!['lat']!, widget.latLng!['lng']!));
+    } else {
+      if (Global.instance.serverLocation != const LatLng(0, 0)) {
+        _defaultLocation = LatLng(
+          Global.instance.serverLocation.latitude,
+          Global.instance.serverLocation.longitude,
+        );
+        _moveToCurrentLocation(_defaultLocation);
+      }
     }
   }
 
@@ -130,9 +138,8 @@ class MapScreenState extends State<MapScreen>
         await showDialog(
           context: context,
           builder: (context1) => PermissionDialog(
-            title: 'Great! Now, “ change to always allow”',
-            subTitle:
-                'Location sharing will be turned off as soon as you disable the permission in the settings',
+            title: context.l10n.permissionsGreate,
+            subTitle: context.l10n.permissionsGreateSub,
             confirmTap: () async {
               context1.popRoute();
               final rejectAlway =
@@ -146,7 +153,7 @@ class MapScreenState extends State<MapScreen>
               }
               debugPrint('status:$status');
             },
-            confirmText: 'Change',
+            confirmText: context.l10n.change,
             child: Padding(
               padding: EdgeInsets.symmetric(
                 vertical: 10.h,
