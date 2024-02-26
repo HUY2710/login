@@ -357,7 +357,6 @@ class MapScreenState extends State<MapScreen>
             right: 16.w,
             bottom: 0,
             child: FloatRightAppBar(
-              mapController: _mapController,
               locationListenCubit: _trackingLocationCubit,
               trackingMemberCubit: _trackingMemberCubit,
             ),

@@ -84,7 +84,34 @@ class _BottomBarState extends State<BottomBar> {
             return const SizedBox.shrink();
           },
         ),
-        8.verticalSpace,
+        Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: EdgeInsets.only(right: 16.w),
+            child: GestureDetector(
+              onTap: _goToDetailLocation,
+              child: Container(
+                padding: EdgeInsets.all(10.r),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xff42474C).withOpacity(0.3),
+                      blurRadius: 17,
+                    )
+                  ],
+                ),
+                child: SvgPicture.asset(
+                  Assets.icons.icGps.path,
+                  height: 20.r,
+                  width: 20.r,
+                ),
+              ),
+            ),
+          ),
+        ),
+        18.verticalSpace,
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Row(
