@@ -180,7 +180,7 @@ class MapScreenState extends State<MapScreen>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Allow “Cycle sharing” to also your location even when you are not using app?',
+                            context.l10n.allowLocationPermission,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: MyColors.black34,
@@ -190,7 +190,7 @@ class MapScreenState extends State<MapScreen>
                           ),
                           14.verticalSpace,
                           Text(
-                            'Just keep it when in use',
+                            context.l10n.justKeepIt,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: MyColors.color6C6C6C,
@@ -211,8 +211,8 @@ class MapScreenState extends State<MapScreen>
                       width: 260.w,
                       padding: EdgeInsets.symmetric(vertical: 12.h),
                       colorBg: Colors.white,
-                      child: const Center(
-                        child: Text('Change to always allow'),
+                      child: Center(
+                        child: Text(context.l10n.changeToAlwaysAllow),
                       ),
                     ),
                   )

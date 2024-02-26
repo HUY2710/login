@@ -10,6 +10,7 @@ import '../../../../data/models/store_member/store_member.dart';
 import '../../../../data/remote/firestore_client.dart';
 import '../../../../global/global.dart';
 import '../../../../services/firebase_message_service.dart';
+import '../../../../shared/extension/context_extension.dart';
 import '../../../map/cubit/select_group_cubit.dart';
 
 part 'code_validation_cubit.freezed.dart';
@@ -30,8 +31,7 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
       //có thể là không tồn tại group hoặc nhập sai passCode
       if (existGroup == null) {
         emit(
-          const CodeValidationState.inValid(
-              'Code không hợp lệ hoặc không tồn tại group'),
+          CodeValidationState.inValid(context.l10n.codeIsValid),
         );
       } else {
         //kiểm tra xem trong members của group đó đã tồn tại mình hay chưa
@@ -40,8 +40,7 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
             await client.isExistMemberGroup(existGroup.idGroup!);
 
         if (isMemberGroup) {
-          emit(const CodeValidationState.inValid(
-              'Bạn đã là thành viên của nhóm rồi'));
+          emit(CodeValidationState.inValid(context.l10n.youAreMember));
         } else {
           //trường hợp chưa phải là thành viên thì tiến hành add vào group.
 
@@ -69,7 +68,7 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
       }
     } catch (e) {
       emit(
-        const CodeValidationState.inValid('Không nhận diện được lỗi'),
+        CodeValidationState.inValid(context.l10n.errorNotDetected),
       );
     }
   }

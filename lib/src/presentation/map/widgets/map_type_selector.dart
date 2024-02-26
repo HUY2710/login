@@ -23,17 +23,17 @@ class _MapTypeSelectorState extends State<MapTypeSelector> {
   late final List<MapItem> mapTypes = <MapItem>[
     MapItem(
       asset: Assets.images.mapTypes.traffic.path,
-      title: 'Traffic',
+      title: context.l10n.mapTraffic,
       type: MapType.terrain,
     ),
     MapItem(
       asset: Assets.images.mapTypes.normal.path,
-      title: 'Normal',
+      title: context.l10n.mapNormal,
       type: MapType.normal,
     ),
     MapItem(
       asset: Assets.images.mapTypes.satellite.path,
-      title: 'Satellite',
+      title: context.l10n.mapSatellite,
       type: MapType.satellite,
     ),
   ];

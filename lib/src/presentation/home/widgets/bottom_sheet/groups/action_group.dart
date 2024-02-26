@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../../../app/cubit/exception/exception_cubit.dart';
+import '../../../../../../app/cubit/loading_cubit.dart';
 import '../../../../../config/di/di.dart';
 import '../../../../../config/navigation/app_router.dart';
 import '../../../../../data/models/store_group/store_group.dart';
@@ -97,13 +98,14 @@ class ActionGroupBottomSheet extends StatelessWidget {
                         );
                   });
                 },
-                child: itemAction(Assets.icons.icEdit.svg(width: 20.r), 'Edit'),
+                child: itemAction(
+                    Assets.icons.icEdit.svg(width: 20.r), context.l10n.edit),
               ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 24.h),
               child: GestureDetector(
-                child: itemAction(
-                    Assets.icons.icNotify.svg(width: 20.r), 'Notification',
+                child: itemAction(Assets.icons.icNotify.svg(width: 20.r),
+                    context.l10n.notification,
                     notifyCubit: notifyCubit, member: member),
               ),
             ),
@@ -113,18 +115,19 @@ class ActionGroupBottomSheet extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (context1) => ActionDialog(
-                      title: 'Remove Group',
-                      subTitle:
-                          'You’re currently the group owner. Are you sure to delete it permanantly?',
+                      title: context.l10n.removeGroup,
+                      subTitle: context.l10n.removeGroupSubAdmin,
                       confirmTap: () async {
                         //delete group
-                        EasyLoading.show();
+                        // EasyLoading.show();
+                        showLoading();
                         myGroupCubit.deleteGroup(itemGroup).then((value) async {
                           if (itemGroup.idGroup ==
                               getIt<SelectGroupCubit>().state?.idGroup) {
                             getIt<SelectGroupCubit>().update(null);
                           }
-                          EasyLoading.dismiss();
+                          // EasyLoading.dismiss();
+                          hideLoading();
                           await context1
                               .popRoute()
                               .then((value) => context.popRoute());
@@ -147,7 +150,8 @@ class ActionGroupBottomSheet extends StatelessWidget {
                       title: context.l10n.leaveGroup,
                       subTitle: context.l10n.leaveGroupContent,
                       confirmTap: () {
-                        EasyLoading.show();
+                        // EasyLoading.show();
+                        showLoading();
                         myGroupCubit
                             .leaveGroup(
                           group: itemGroup,
@@ -155,7 +159,8 @@ class ActionGroupBottomSheet extends StatelessWidget {
                           context: context,
                         )
                             .then((value) async {
-                          EasyLoading.dismiss();
+                          // EasyLoading.dismiss();
+                          hideLoading();
                           await context1
                               .popRoute()
                               .then((value) => context.popRoute());

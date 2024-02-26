@@ -28,7 +28,7 @@ class ShareCodeGroupScreen extends StatelessWidget with PermissionMixin {
           mainAxisSize: MainAxisSize.min,
           children: [
             AppButton(
-              title: 'Share Code now',
+              title: context.l10n.shareCodeNow,
               onTap: () async {
                 try {
                   EasyAds.instance.appLifecycleReactor
@@ -50,10 +50,10 @@ class ShareCodeGroupScreen extends StatelessWidget with PermissionMixin {
                       .replaceAll([PermissionRoute(fromMapScreen: false)]);
                   return;
                 } else if (context.mounted) {
-                  getIt<AppRouter>().replaceAll([ HomeRoute()]);
+                  getIt<AppRouter>().replaceAll([HomeRoute()]);
                 }
               },
-              child: const Text('Share it later'),
+              child: Text(context.l10n.shareItLater),
             ),
             20.verticalSpace,
           ],

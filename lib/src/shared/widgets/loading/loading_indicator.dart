@@ -100,11 +100,12 @@ class LoadingIndicator extends StatelessWidget {
   }
 
   /// return the animation indicator.
-  BallPulse _buildIndicator() {
+  Widget _buildIndicator() {
     switch (indicatorType) {
       case Indicator.ballPulse:
         return const BallPulse();
-
+      case Indicator.ballScaleMultiple:
+        return BallScaleMultiple();
       default:
         throw Exception('no related indicator type:$indicatorType found');
     }

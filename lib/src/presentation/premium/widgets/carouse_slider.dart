@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../gen/assets.gen.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/custom_inkwell.dart';
 import '../cubit/indicator_cubit.dart';
 
@@ -27,31 +28,29 @@ class _CarouseSliderPremiumState extends State<CarouseSliderPremium> {
             buildItem(
               context,
               svgItem: Assets.icons.premium.icNoAds,
-              title: 'No ads',
-              subTitle: 'Enjoy a completely ad-free app experience',
+              title: context.l10n.noAds,
+              subTitle: context.l10n.noAdsSub,
               index: 0,
             ),
             buildItem(
               context,
               svgItem: Assets.icons.premium.icNearPlace,
-              title: 'Check in at nearby places',
-              subTitle: 'Explore interesting places around you by checking in',
+              title: context.l10n.checkInAtPlaces,
+              subTitle: context.l10n.checkInAtPlacesSub,
               index: 1,
             ),
             buildItem(
               context,
               svgItem: Assets.icons.premium.icMember,
-              title: 'Guide to group members',
-              subTitle:
-                  'Easily and quickly navigate to your location for members',
+              title: context.l10n.guideToGroupMembers,
+              subTitle: context.l10n.guideToGroupMembersSub,
               index: 2,
             ),
             buildItem(
               context,
               svgItem: Assets.icons.premium.icSharePremium,
-              title: 'Send my current location',
-              subTitle:
-                  'Easily and quickly navigate to your location for members',
+              title: context.l10n.sendMyCurrent,
+              subTitle: context.l10n.sendMyCurrentSub,
               index: 3,
             )
           ],

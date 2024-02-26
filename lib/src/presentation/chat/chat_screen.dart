@@ -51,6 +51,7 @@ class _ChatScreenState extends State<ChatScreen> {
       create: (context) => SearchGroupCubit(),
       child: Scaffold(
         appBar: AppBar(
+          toolbarHeight: 98.h,
           leading: CustomInkWell(
               child: Padding(
                 padding: EdgeInsets.all(12.w),

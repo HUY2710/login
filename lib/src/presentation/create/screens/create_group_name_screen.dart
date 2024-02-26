@@ -70,7 +70,7 @@ class CreateGroupNameScreen extends StatelessWidget {
                       },
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Group name',
+                        hintText: context.l10n.groupNameText,
                         hintStyle: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 20.sp,

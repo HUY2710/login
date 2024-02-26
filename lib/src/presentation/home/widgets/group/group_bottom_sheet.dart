@@ -64,7 +64,7 @@ class GroupBottomSheet extends StatelessWidget {
                           vertical: 14.h,
                         ),
                         child: Text(
-                          'New Group',
+                          context.l10n.newGroup,
                           style: TextStyle(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w700,
@@ -93,7 +93,7 @@ class GroupBottomSheet extends StatelessWidget {
                           vertical: 14.h,
                         ),
                         child: Text(
-                          'Join Group',
+                          context.l10n.joinGroup,
                           style: TextStyle(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w700,
@@ -127,8 +127,7 @@ class GroupBottomSheet extends StatelessWidget {
                       if (groups.isEmpty) {
                         return SizedBox(
                           height: 1.sh * 0.26,
-                          child: const Center(
-                              child: Text("Don't have any groups")),
+                          child: Center(child: Text(context.l10n.noGroups)),
                         );
                       }
                       return SizedBox(

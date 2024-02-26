@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import '../../../../../app/cubit/loading_cubit.dart';
 import '../../../../config/di/di.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../../shared/extension/context_extension.dart';
@@ -43,7 +44,7 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                           backgroundColor: MaterialStateColor.resolveWith(
                               (states) => const Color(0xffD5BBFF))),
                       padding: const EdgeInsets.all(0),
-                      onPressed: () {},
+                      onPressed: () => context.popRoute(),
                       icon: Icon(
                         Icons.close,
                         color: Colors.white,
@@ -126,9 +127,11 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                 ],
                 onCompleted: (code) async {
                   debugPrint('Completed');
-                  EasyLoading.show();
+                  // EasyLoading.show();
+                  showLoading();
                   await codeValidCubit.submit(code, context);
-                  EasyLoading.dismiss();
+                  // EasyLoading.dismiss();
+                  hideLoading();
                 },
                 // onTap: () {
                 //   print("Pressed");

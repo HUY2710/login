@@ -13,7 +13,10 @@ import '../src/config/theme/light/light_theme.dart';
 import '../src/data/remote/firestore_client.dart';
 import '../src/services/activity_recognition_service.dart';
 import '../src/shared/enum/language.dart';
+import '../src/shared/widgets/loading/app_loading.dart';
+import '../src/shared/widgets/loading/loading_indicator.dart';
 import 'cubit/language_cubit.dart';
+import 'cubit/loading_cubit.dart';
 import 'cubit/native_ad_status_cubit.dart';
 import 'cubit/rate_status_cubit.dart';
 
@@ -53,7 +56,8 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (context) => getIt<MyPurchaseManager>(),
-        )
+        ),
+        BlocProvider(create: (context) => getIt<LoadingCubit>())
       ],
       child: ScreenUtilInit(
         designSize: Size(designWidth, designHeight),
@@ -87,7 +91,42 @@ class BodyApp extends StatelessWidget {
         routerConfig: getIt<AppRouter>().config(
           navigatorObservers: () => [MainRouteObserver()],
         ),
-        builder: EasyLoading.init(),
+        builder: (context, child) {
+          return Stack(
+            children: [
+              child!,
+              BlocBuilder<LoadingCubit, bool>(
+                builder: (context, loadingState) {
+                  return loadingState
+                      ? buildLoading(loadingState)
+                      : const SizedBox();
+                },
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Positioned buildLoading(bool loadingState) {
+    return Positioned.fill(
+      child: Container(
+        alignment: Alignment.center,
+        decoration: const BoxDecoration(color: Colors.black54),
+        child: SizedBox(
+          height: 100.r,
+          width: 100.r,
+          child: LoadingIndicator(
+            colors: const [
+              Color.fromARGB(255, 113, 63, 207),
+              Color(0xffB78CFF),
+              Color(0xffD2B0FF)
+            ],
+            pause: !loadingState,
+            indicatorType: Indicator.ballScaleMultiple,
+          ),
+        ),
       ),
     );
   }

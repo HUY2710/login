@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import '../../../config/di/di.dart';
 import '../../../gen/gens.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../../shared/widgets/custom_appbar.dart';
 import '../../map/cubit/map_type_cubit.dart';
@@ -19,17 +21,17 @@ class MapTypeScreen extends StatelessWidget {
     late final List<MapItem> mapTypes = <MapItem>[
       MapItem(
         asset: Assets.images.mapTypes.traffic.path,
-        title: 'Traffic',
+        title: context.l10n.mapTraffic,
         type: MapType.terrain,
       ),
       MapItem(
         asset: Assets.images.mapTypes.normal.path,
-        title: 'Normal',
+        title: context.l10n.mapNormal,
         type: MapType.normal,
       ),
       MapItem(
         asset: Assets.images.mapTypes.satellite.path,
-        title: 'Satellite',
+        title: context.l10n.mapSatellite,
         type: MapType.satellite,
       ),
     ];
@@ -37,7 +39,7 @@ class MapTypeScreen extends StatelessWidget {
     final MapTypeCubit mapTypeCubit = getIt<MapTypeCubit>();
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const CustomAppBar(title: 'Map type'),
+      appBar: CustomAppBar(title: context.l10n.mapType),
       body: BlocBuilder<MapTypeCubit, MapType>(
         bloc: mapTypeCubit,
         builder: (context, state) {

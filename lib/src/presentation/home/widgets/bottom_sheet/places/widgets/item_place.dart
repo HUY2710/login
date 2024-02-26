@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../../../../app/cubit/loading_cubit.dart';
 import '../../../../../../config/di/di.dart';
 import '../../../../../../data/models/store_location/store_location.dart';
 import '../../../../../../data/models/store_place/store_place.dart';
@@ -71,12 +72,14 @@ class ItemPlace extends StatelessWidget {
                   confirmTap: () async {
                     try {
                       context.popRoute();
-                      EasyLoading.show();
+                      // EasyLoading.show();
+                      showLoading();
                       await FirestoreClient.instance.removePlace(
                           getIt<SelectGroupCubit>().state!.idGroup!,
                           place.idPlace!);
                       getIt<TrackingPlacesCubit>().removePlace(place.idPlace!);
-                      EasyLoading.dismiss();
+                      // EasyLoading.dismiss();
+                      hideLoading();
                     } catch (error) {
                       debugPrint('error:$error');
                     }

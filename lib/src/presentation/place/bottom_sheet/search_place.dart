@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../../../app/cubit/loading_cubit.dart';
 import '../../../data/models/autocomplete_place/autocomplete_place_model.dart';
 import '../../../data/models/places/place_model.dart';
 import '../../../gen/assets.gen.dart';
@@ -75,7 +76,8 @@ class _SearchPlaceBottomSheetState extends State<SearchPlaceBottomSheet> {
 
   String placeId = '';
   Future<void> _selectPlace(String placeId, String description) async {
-    EasyLoading.show();
+    // EasyLoading.show();
+    showLoading();
     try {
       final response = await HTTPService.instance.requestDetailPlace(placeId);
       final result = jsonDecode(response.body);
@@ -95,7 +97,8 @@ class _SearchPlaceBottomSheetState extends State<SearchPlaceBottomSheet> {
     } catch (error) {
       debugPrint('Error: $error');
     }
-    EasyLoading.dismiss();
+    // EasyLoading.dismiss();
+    hideLoading();
   }
 
   @override
