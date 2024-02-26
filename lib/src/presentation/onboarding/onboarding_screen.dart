@@ -56,7 +56,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
           if (showGuide && context.mounted) {
             context.replaceRoute(const GuideRoute());
           } else if (context.mounted) {
-            context.replaceRoute(const HomeRoute());
+            context.replaceRoute(HomeRoute());
           }
         }
       }

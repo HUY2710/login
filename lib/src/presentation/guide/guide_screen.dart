@@ -36,9 +36,11 @@ class GuideScreenState extends State<GuideScreen> {
   GlobalKey keyButton = GlobalKey();
   @override
   void initState() {
-    createTutorial();
-    Future.delayed(Duration.zero, showTutorial);
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      createTutorial();
+      Future.delayed(Duration.zero, showTutorial);
+    });
   }
 
   @override
@@ -173,7 +175,7 @@ class GuideScreenState extends State<GuideScreen> {
       onFinish: () async {
         await SharedPreferencesManager.setGuide(false);
         if (context.mounted) {
-          AutoRouter.of(context).replace(const HomeRoute());
+          AutoRouter.of(context).replace(HomeRoute());
         }
       },
       onClickTarget: (target) {

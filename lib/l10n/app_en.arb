@@ -46,7 +46,6 @@
   "notification": "Notification",
   "subNotification": "Stay up to date with subscriptions, alerts and messages from your group.",
   "motionTracking": "Motion tracking",
-  "subMotionTracking": "Allowing user motion tracking, such as walking, driving, riding a motorbike, etc.",
   "skip": "Skip",
   "letStarted": "Let’s get started",
   "whatYourName": "What’s your name?",
@@ -106,7 +105,7 @@
   "allowOthersToTrack": "Allow others to track",
   "allowOthersToTrackSub": "Your live location will not update for others, do you want to turn off?",
   "ok": "Ok",
-  "editAccount": "Edit Account"
+  "editAccount": "Edit Account",
   "subMotionTracking": "Allowing user motion tracking, such as walking, driving, riding a motorbike, etc.",
   "guideCheckIn": "You can check in to places to share them with your friends and family",
   "guideMember": "You can find the list of group members here",
