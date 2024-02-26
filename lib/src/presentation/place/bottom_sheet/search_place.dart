@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -63,6 +64,7 @@ class _SearchPlaceBottomSheetState extends State<SearchPlaceBottomSheet> {
     if (response.statusCode == 200) {
       final AutoCompletePlaceModel decodedResponse =
           AutoCompletePlaceModel.fromJson(json.decode(response.body));
+      debugPrint('resonse:${json.decode(response.body)}');
       setState(() {
         autoCompletePlaceModel = decodedResponse;
       });
@@ -87,6 +89,9 @@ class _SearchPlaceBottomSheetState extends State<SearchPlaceBottomSheet> {
         _selectedPlaceId = placeId;
       });
       debugPrint('placeId: $_selectedPlaceId');
+      if (context.mounted) {
+        context.popRoute();
+      }
     } catch (error) {
       debugPrint('Error: $error');
     }
@@ -136,7 +141,7 @@ class _SearchPlaceBottomSheetState extends State<SearchPlaceBottomSheet> {
                       ),
                     );
                   },
-                  separatorBuilder: (context, index) => SizedBox(height: 12.h),
+                  separatorBuilder: (context, index) => SizedBox(height: 16.h),
                 ),
               )
           ],
