@@ -77,6 +77,7 @@ dependencies:
   pedometer: ^4.0.1
   tutorial_coach_mark: ^1.2.11
   marquee: ^2.2.3
+  connectivity_plus: ^5.0.2
 
 dev_dependencies:
   flutter_test:
