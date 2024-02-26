@@ -114,5 +114,6 @@
   "allowOthersToTrack": "Erlaube anderen, zu verfolgen",
   "allowOthersToTrackSub": "Ihr Echtzeitstandort wird für andere nicht aktualisiert. Möchten Sie es ausschalten?",
   "ok": "Ok",
-  "editAccount": "Konto bearbeiten"
+  "editAccount": "Konto bearbeiten",
+  "guideAddMember": "Laden Sie die Personen ein, die Sie der Gruppe hinzufügen möchten."
 }

@@ -29,8 +29,8 @@ class BtnGuide extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: heightBtn ?? 40.h,
-        width: widthBtn ?? 80.w,
+        height: heightBtn,
+        width: widthBtn,
         padding: EdgeInsets.symmetric(vertical: paddingVertical ?? 6.h),
         decoration: BoxDecoration(
           gradient: backgroundColor ??
@@ -42,16 +42,14 @@ class BtnGuide extends StatelessWidget {
               ),
           borderRadius: BorderRadius.circular(15.r),
         ),
-        child: Align(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Text(
-              title,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-                fontSize: 16.sp,
-              ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: 16.sp,
             ),
           ),
         ),

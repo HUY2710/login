@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../gen/gens.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 
 class CheckInGuide extends StatelessWidget {
@@ -19,7 +20,7 @@ class CheckInGuide extends StatelessWidget {
           SvgPicture.asset(Assets.icons.icCheckin.path),
           12.horizontalSpace,
           Text(
-            'Check in',
+            context.l10n.checkIn,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(

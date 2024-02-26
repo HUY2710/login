@@ -114,5 +114,6 @@
   "guideMessenger": "Ver y administrar sus mensajes aquí.",
   "guideSetting": "Configure las preferencias de la aplicación según sus necesidades.",
   "guideGroup": "¡Hola! Haga clic aquí para comenzar a crear sus propios grupos.",
-  "guidePro": "¡Actualice a Premium para obtener funciones y beneficios exclusivos! Haga clic aquí para desbloquear el acceso VIP."
+  "guidePro": "¡Actualice a Premium para obtener funciones y beneficios exclusivos! Haga clic aquí para desbloquear el acceso VIP.",
+  "guideAddMember": "Invite a las personas que desea agregar al grupo."
 }
