@@ -129,5 +129,6 @@
   "mapNormal": "Normal",
   "mapSatellite": "Satellite",
   "viewLocation": "View Location",
-  "checked": "checked"
+  "checked": "checked",
+  "at": "AT"
 }

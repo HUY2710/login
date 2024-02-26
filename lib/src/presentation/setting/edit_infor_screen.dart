@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../../app/cubit/loading_cubit.dart';
 import '../../data/local/avatar/avatar_repository.dart';
 import '../../data/models/avatar/avatar_model.dart';
 import '../../data/remote/firestore_client.dart';
@@ -100,18 +101,21 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
       context.popRoute(false);
     } else {
       try {
-        EasyLoading.show();
+        // EasyLoading.show();
+        showLoading();
         await FirestoreClient.instance.updateUser({
           'avatarUrl': pathAvatarCubit.state,
           'userName': ValidHelper.removeExtraSpaces(userNameCtrl.text)
         });
         Global.instance.user = Global.instance.user?.copyWith(
             avatarUrl: pathAvatarCubit.state, userName: userNameCtrl.text);
-        EasyLoading.dismiss();
+        // EasyLoading.dismiss();
+        hideLoading();
         Fluttertoast.showToast(msg: 'Update Success!')
             .then((value) => context.popRoute(true));
       } catch (error) {
-        EasyLoading.dismiss();
+        // EasyLoading.dismiss();
+        hideLoading();
         Fluttertoast.showToast(msg: 'Update Error!');
       }
     }

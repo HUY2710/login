@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../../app/cubit/loading_cubit.dart';
 import '../../../../../../config/di/di.dart';
 import '../../../../../../data/models/store_member/store_member.dart';
 import '../../../../../../data/models/store_user/store_user.dart';
@@ -58,14 +59,16 @@ class BuildListMember extends StatelessWidget {
                             confirmTap: () async {
                               //xóa user ra khỏi nhóm,
                               context.popRoute();
-                              EasyLoading.show();
+                              // EasyLoading.show();
+                              showLoading();
                               await FirestoreClient.instance.leaveGroup(
                                   getIt<SelectGroupCubit>().state!.idGroup!,
                                   member.code);
                               getIt<SelectGroupCubit>()
                                   .removeMember(member.code);
                               //xóa user ra khỏi group local data
-                              EasyLoading.dismiss();
+                              // EasyLoading.dismiss();
+                              hideLoading();
                             },
                             confirmText: context.l10n.delete,
                           ),

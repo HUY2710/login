@@ -12,6 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../app/cubit/loading_cubit.dart';
 import '../../../module/iap/my_purchase_manager.dart';
 import '../../config/di/di.dart';
 import '../../data/models/routes/route_model.dart';
@@ -204,15 +205,18 @@ class _DirectionMapState extends State<DirectionMap> {
                 title: context.l10n.getDirectionsInMap,
                 paddingVertical: 12.h,
                 heightBtn: 44.h,
+                isEnable: purchaseState.isPremium(),
                 onTap: () async {
-                  EasyLoading.show();
+                  // EasyLoading.show();
+                  showLoading();
                   try {
                     //xử lí với premium
                     if (purchaseState.isPremium()) {
                       testRequest().then((value) => context.popRoute());
                     }
                   } catch (error) {}
-                  EasyLoading.dismiss();
+                  // EasyLoading.dismiss();
+                  hideLoading();
                 },
               ),
               SizedBox(height: 16.h),
@@ -250,33 +254,38 @@ class TravelModeIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ShadowContainer(
-          opacityColor: 0.15,
-          colorShadow:
-              isSelected ? const Color(0xff7B3EFF).withOpacity(0.8) : null,
-          child: Padding(
-            padding: EdgeInsets.all(20.r),
-            child: SvgPicture.asset(
-              iconPath,
-              height: 32.r,
-              width: 32.r,
+    return BlocBuilder<MyPurchaseManager, PurchaseState>(
+      builder: (context, purchaseState) {
+        return Stack(
+          children: [
+            ShadowContainer(
+              opacityColor: 0.15,
+              colorShadow:
+                  isSelected ? const Color(0xff7B3EFF).withOpacity(0.8) : null,
+              child: Padding(
+                padding: EdgeInsets.all(20.r),
+                child: SvgPicture.asset(
+                  iconPath,
+                  height: 32.r,
+                  width: 32.r,
+                ),
+              ),
             ),
-          ),
-        ),
-        Positioned(
-          right: 0,
-          child: ShadowContainer(
-            padding: EdgeInsets.all(6.r),
-            child: SvgPicture.asset(
-              Assets.icons.icPremium.path,
-              width: 120.r,
-              height: 12.r,
-            ),
-          ),
-        ),
-      ],
+            if (!purchaseState.isPremium())
+              Positioned(
+                right: 0,
+                child: ShadowContainer(
+                  padding: EdgeInsets.all(6.r),
+                  child: SvgPicture.asset(
+                    Assets.icons.icPremium.path,
+                    width: 120.r,
+                    height: 12.r,
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

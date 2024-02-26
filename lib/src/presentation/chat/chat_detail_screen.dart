@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../../../app/cubit/language_cubit.dart';
 import '../../../module/iap/my_purchase_manager.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
@@ -22,6 +23,7 @@ import '../../services/location_service.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/widgets/custom_inkwell.dart';
+import '../../shared/widgets/loading/loading_indicator.dart';
 import 'cubits/group_cubit.dart';
 import 'cubits/send_location_cubit.dart';
 import 'services/chat_service.dart';
@@ -58,7 +60,6 @@ class ChatDetailScreen extends StatefulWidget implements AutoRouteWrapper {
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
   List<StoreUser> listUser = [];
   BitmapDescriptor? marker;
-  // late final ScrollController _controller;
   final TextEditingController textController = TextEditingController();
 
   @override
@@ -68,33 +69,11 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
           await MemberManager.getListMemberOfGroup(widget.idGroup);
       final listIdUser = memberOfGroup!.map((e) => e.idUser ?? '').toList();
       listUser = await ChatService.instance.getUserFromListId(listIdUser);
-      final newMarker = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(
-          size: Size(20.r, 20.r),
-          devicePixelRatio: ScreenUtil().pixelRatio,
-        ),
-        Assets.images.markers.markerChat.path,
-      );
-      marker = newMarker;
 
       setState(() {});
     });
 
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    // _controller = ScrollController()
-    //   ..jumpTo(_controller.position.maxScrollExtent);
-    // _controller.jumpTo(_controller.position.maxScrollExtent);
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    // _controller.dispose();
-    super.dispose();
   }
 
   @override

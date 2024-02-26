@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../../../app/cubit/exception/exception_cubit.dart';
+import '../../../../../../app/cubit/loading_cubit.dart';
 import '../../../../../config/di/di.dart';
 import '../../../../../config/navigation/app_router.dart';
 import '../../../../../data/models/store_group/store_group.dart';
@@ -118,13 +119,15 @@ class ActionGroupBottomSheet extends StatelessWidget {
                       subTitle: context.l10n.removeGroupSubAdmin,
                       confirmTap: () async {
                         //delete group
-                        EasyLoading.show();
+                        // EasyLoading.show();
+                        showLoading();
                         myGroupCubit.deleteGroup(itemGroup).then((value) async {
                           if (itemGroup.idGroup ==
                               getIt<SelectGroupCubit>().state?.idGroup) {
                             getIt<SelectGroupCubit>().update(null);
                           }
-                          EasyLoading.dismiss();
+                          // EasyLoading.dismiss();
+                          hideLoading();
                           await context1
                               .popRoute()
                               .then((value) => context.popRoute());
@@ -147,7 +150,8 @@ class ActionGroupBottomSheet extends StatelessWidget {
                       title: context.l10n.leaveGroup,
                       subTitle: context.l10n.leaveGroupContent,
                       confirmTap: () {
-                        EasyLoading.show();
+                        // EasyLoading.show();
+                        showLoading();
                         myGroupCubit
                             .leaveGroup(
                           group: itemGroup,
@@ -155,7 +159,8 @@ class ActionGroupBottomSheet extends StatelessWidget {
                           context: context,
                         )
                             .then((value) async {
-                          EasyLoading.dismiss();
+                          // EasyLoading.dismiss();
+                          hideLoading();
                           await context1
                               .popRoute()
                               .then((value) => context.popRoute());

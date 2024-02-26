@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_message/store_message.dart';
@@ -39,5 +40,28 @@ class Utils {
     final dateTimeLastSeenLocal = DateTime.parse(timeLastSeenLocal);
     final dateTimeLastSeen = DateTime.parse(lastSeen);
     return dateTimeLastSeenLocal.isBefore(dateTimeLastSeen);
+  }
+
+  static bool? isMessageOnNewDay(
+      int index, List<QueryDocumentSnapshot<MessageModel>> chats) {
+    if (index >= 1 && chats.length >= 2) {
+      final DateTime timeTemp =
+          DateTime.tryParse(chats[index].data().sentAt) ?? DateTime.now();
+      final DateTime previousTimeTemp =
+          DateTime.tryParse(chats[index - 1].data().sentAt) ?? DateTime.now();
+
+      final DateTime messageDate =
+          DateTime(timeTemp.year, timeTemp.month, timeTemp.day);
+      final DateTime previousMessageDate = DateTime(
+          previousTimeTemp.year, previousTimeTemp.month, previousTimeTemp.day);
+      return messageDate.isAfter(previousMessageDate);
+    }
+    return null;
+  }
+
+  static bool isToday(DateTime dateTime) {
+    final now = DateTime.now();
+    final dateFormat = DateFormat('yyyy-MM-dd');
+    return dateFormat.format(now) == dateFormat.format(dateTime);
   }
 }

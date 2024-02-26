@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../../../../app/cubit/loading_cubit.dart';
 import '../../../../config/di/di.dart';
 import '../../../../data/local/shared_preferences_manager.dart';
 import '../../../../data/models/store_group/store_group.dart';
@@ -97,13 +98,15 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
   Future<void> updateGroup() async {
     try {
       final name = ValidHelper.removeExtraSpaces(groupNameController.text);
-      EasyLoading.show();
+      // EasyLoading.show();
+      showLoading();
       await FirestoreClient.instance.updateGroup(
         idGroup: tempGroup!.idGroup!,
         mapFields: {'groupName': name, 'avatarGroup': pathAvatarCubit.state},
       );
 
-      EasyLoading.dismiss();
+      // EasyLoading.dismiss();
+      hideLoading();
       Fluttertoast.showToast(msg: 'Update Group Success!');
 
       //sau khi update thành công thì tiến hành cập nhật lại group ở local

@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../app/cubit/loading_cubit.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../data/models/store_location/store_location.dart';
@@ -115,7 +115,8 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                                   ? () async {
                                       try {
                                         context.popRoute();
-                                        EasyLoading.show();
+                                        // EasyLoading.show();
+                                        showLoading();
                                         final StorePlace newPlace = StorePlace(
                                           idCreator: Global.instance.user!.code,
                                           idPlace: 24.randomString(),
@@ -137,7 +138,8 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                                             newPlace,
                                           );
                                         }
-                                        EasyLoading.dismiss();
+                                        // EasyLoading.dismiss();
+                                        hideLoading();
                                       } catch (error) {
                                         debugPrint('error:$error');
                                       }

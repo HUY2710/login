@@ -18,7 +18,6 @@ import '../../shared/constants/url_constants.dart';
 import '../../shared/cubit/value_cubit.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/widgets/custom_appbar.dart';
-import '../../shared/widgets/dialog/rate_dialog.dart';
 import '../../shared/widgets/main_switch.dart';
 import '../home/widgets/dialog/action_dialog.dart';
 import 'widgets/custom_item_setting.dart';

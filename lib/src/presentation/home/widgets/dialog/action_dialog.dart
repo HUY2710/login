@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../gen/gens.dart';
 import '../../../../shared/extension/context_extension.dart';
 
 class ActionDialog extends StatelessWidget {
@@ -65,9 +66,9 @@ class ActionDialog extends StatelessWidget {
                     confirmText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.red,
+                      color: const Color(0xff8E52FF),
                       fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   )
                 ],
@@ -89,7 +90,7 @@ class ActionDialog extends StatelessWidget {
                   cancelText ?? context.l10n.cancel,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: const Color(0xffB67DFF),
+                    color: const Color(0xff8E52FF),
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
                   ),

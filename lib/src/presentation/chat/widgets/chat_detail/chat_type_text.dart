@@ -38,6 +38,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         // leadingWidth: 30.w,
+        toolbarHeight: 98.h,
         leading: CustomInkWell(
             child: Padding(
               padding: EdgeInsets.all(12.w),
@@ -96,17 +97,23 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
                                     padding: EdgeInsets.only(
                                         bottom: isFirstScroll ? 20.h : 0),
                                     itemBuilder: (context, index) {
-                                      return Utils.checkIsUser(
+                                      return Column(
+                                        children: [
+                                          buildTextDay(index, chats),
+                                          if (Utils.checkIsUser(
                                               code:
-                                                  chats[index].data().senderId)
-                                          ? MessageTypeUser(
+                                                  chats[index].data().senderId))
+                                            MessageTypeUser(
                                               chats: chats,
                                               index: index,
                                             )
-                                          : MessageTypeGuess(
+                                          else
+                                            MessageTypeGuess(
                                               chats: chats,
                                               index: index,
-                                            );
+                                            )
+                                        ],
+                                      );
                                     });
                               }
                             }
@@ -119,8 +126,41 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
                 ],
               ),
             )
-          : const Center(child: CircularProgressIndicator()),
+          : Center(
+              child: SizedBox(
+                height: 100.r,
+                width: 100.r,
+                child: const LoadingIndicator(
+                  colors: [
+                    Color.fromARGB(255, 113, 63, 207),
+                    Color(0xffB78CFF),
+                    Color(0xffD2B0FF)
+                  ],
+                  indicatorType: Indicator.ballScaleMultiple,
+                ),
+              ),
+            ),
     );
+  }
+
+  Widget buildTextDay(
+      int index, List<QueryDocumentSnapshot<MessageModel>> chats) {
+    return (Utils.isMessageOnNewDay(index, chats) != null)
+        ? Utils.isMessageOnNewDay(index, chats)!
+            ? Utils.isToday(DateTime.parse(chats[index].data().sentAt))
+                ? Text(
+                    context.l10n.today,
+                    style: TextStyle(
+                        fontSize: 13.sp, color: const Color(0xff6C6C6C)),
+                  )
+                : Text(
+                    formatDateTime(
+                        DateTime.tryParse(chats[index].data().sentAt) ??
+                            DateTime.now()),
+                    style: TextStyle(
+                        fontSize: 13.sp, color: const Color(0xff6C6C6C)))
+            : const SizedBox()
+        : const SizedBox();
   }
 
   Container buildInput() {
@@ -192,7 +232,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
                             icon: Assets.icons.icSend.svg(width: 20.r))
                         : const SizedBox();
                   }),
-              hintText: 'Message',
+              hintText: context.l10n.messages,
               hintStyle:
                   TextStyle(color: const Color(0xff6C6C6C), fontSize: 14.sp),
               contentPadding:
@@ -223,5 +263,12 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
         ],
       ),
     );
+  }
+
+  String formatDateTime(DateTime dateTime) {
+    final String formattedDateTime = DateFormat('EEE ${context.l10n.at} HH:mm',
+            '${Locale(getIt<LanguageCubit>().state.languageCode)}')
+        .format(dateTime);
+    return formattedDateTime.toUpperCase();
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../../../app/cubit/loading_cubit.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/avatar/avatar_repository.dart';
@@ -50,7 +51,8 @@ class CreateGroupAvatarScreen extends StatelessWidget {
                 debugPrint('${Global.instance.group}');
                 try {
                   if (Global.instance.group != null) {
-                    EasyLoading.show();
+                    // EasyLoading.show();
+                    showLoading();
                     //update local
                     Global.instance.group =
                         Global.instance.group?.copyWith(avatarGroup: state);
@@ -69,7 +71,8 @@ class CreateGroupAvatarScreen extends StatelessWidget {
 
                     getIt<SelectGroupCubit>().update(Global.instance.group);
                     if (context.mounted) {
-                      EasyLoading.dismiss();
+                      // EasyLoading.dismiss();
+                      hideLoading();
                       context.pushRoute(
                         ShareCodeGroupRoute(
                             code: Global.instance.group!.passCode),
@@ -79,7 +82,8 @@ class CreateGroupAvatarScreen extends StatelessWidget {
                     debugPrint('empty');
                   }
                 } catch (error) {
-                  EasyLoading.dismiss();
+                  // EasyLoading.dismiss();
+                  hideLoading();
                   Fluttertoast.showToast(msg: error.toString());
                 }
               },

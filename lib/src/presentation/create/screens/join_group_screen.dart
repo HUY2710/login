@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import '../../../../app/cubit/loading_cubit.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
@@ -90,9 +91,11 @@ class JoinGroupScreen extends StatelessWidget with PermissionMixin {
                   ],
                   onCompleted: (code) async {
                     debugPrint('Completed');
-                    EasyLoading.show();
+                    // EasyLoading.show();
+                    showLoading();
                     await codeValidCubit.submit(code, context);
-                    EasyLoading.dismiss();
+                    // EasyLoading.dismiss();
+                    hideLoading();
                   },
                   onChanged: (value) {
                     debugPrint(value);
@@ -128,7 +131,7 @@ class JoinGroupScreen extends StatelessWidget with PermissionMixin {
                               [PermissionRoute(fromMapScreen: false)]);
                           return;
                         } else if (context.mounted) {
-                          getIt<AppRouter>().replaceAll([ HomeRoute()]);
+                          getIt<AppRouter>().replaceAll([HomeRoute()]);
                         }
                       });
                 },

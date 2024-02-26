@@ -5,6 +5,7 @@ import 'package:flutter_iap/flutter_iap.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../app/cubit/loading_cubit.dart';
 import '../../src/config/di/di.dart';
 import '../../src/config/navigation/app_router.dart';
 import '../../src/data/local/shared_preferences_manager.dart';
@@ -45,7 +46,8 @@ class MyPurchaseManager extends PurchasesManager {
 
   @override
   Future<void> handlePurchaseCanceled(PurchaseDetails purchaseDetails) async {
-    EasyLoading.dismiss();
+    // EasyLoading.dismiss();
+    hideLoading();
     switch (purchaseDetails.productID) {
       case productKeyWeekly:
         updateStatus(productKeyWeekly, ProductStatus.purchasable);
@@ -61,7 +63,8 @@ class MyPurchaseManager extends PurchasesManager {
 
   @override
   Future<void> handlePurchaseError(PurchaseDetails purchaseDetails) async {
-    EasyLoading.dismiss();
+    // EasyLoading.dismiss();
+    hideLoading();
     await showDialog(
         context: getIt<AppRouter>().navigatorKey.currentContext!,
         builder: (BuildContext ctx) {
@@ -100,13 +103,16 @@ class MyPurchaseManager extends PurchasesManager {
 
   @override
   Future<void> handlePurchasePending(PurchaseDetails purchaseDetails) async {
-    EasyLoading.dismiss();
-    EasyLoading.show();
+    // EasyLoading.dismiss();
+    // EasyLoading.show();
+    hideLoading();
+    showLoading();
   }
 
   @override
   Future<void> handlePurchaseRestored(PurchaseDetails purchaseDetails) async {
-    EasyLoading.dismiss();
+    // EasyLoading.dismiss();
+    hideLoading();
     final purchaseDate = purchaseDetails.transactionDate != null
         ? DateTime.fromMillisecondsSinceEpoch(
             int.parse(purchaseDetails.transactionDate!))
@@ -137,7 +143,8 @@ class MyPurchaseManager extends PurchasesManager {
 
   @override
   Future<void> handlePurchaseSuccess(PurchaseDetails purchaseDetails) async {
-    EasyLoading.dismiss();
+    // EasyLoading.dismiss();
+    hideLoading();
     // getIt<FirebaseEventService>().logUserPayment(purchaseDetails.productID);
     switch (purchaseDetails.productID) {
       case productKeyWeekly:
@@ -160,13 +167,15 @@ class MyPurchaseManager extends PurchasesManager {
 
   @override
   Future<void> restorePurchases() async {
-    EasyLoading.show();
+    // EasyLoading.show();
+    showLoading();
     SharedPreferencesManager.setIsWeeklyPremium(false);
     SharedPreferencesManager.setIsMonthlyPremium(false);
     try {
       await iapConnection.restorePurchases();
     } catch (e) {}
-    EasyLoading.dismiss();
+    // EasyLoading.dismiss();
+    hideLoading();
   }
 
   void hideAdOpenInstantly() {

@@ -30,43 +30,6 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
   @override
   Widget build(BuildContext context) {
     return CustomInkWell(
-      // onLongPress: () {
-      //   showAppModalBottomSheet(
-      //       context: context,
-      //       isDismissible: false,
-      //       backgroundColor: Colors.white,
-      //       // elevation: 10,
-      //       barrierColor: Colors.black.withOpacity(0.4),
-      //       builder: (context) {
-      //         return Padding(
-      //           padding: const EdgeInsets.symmetric(horizontal: 16),
-      //           child: Column(
-      //             mainAxisSize: MainAxisSize.min,
-      //             crossAxisAlignment: CrossAxisAlignment.start,
-      //             children: [
-      //               const Align(child: MyDrag()),
-      //               12.verticalSpace,
-      //               if (widget.isAdmin)
-      //                 _buildItemBottomSheet(
-      //                     title: 'Edit group name',
-      //                     icon: Assets.icons.icEdit,
-      //                     click: () {}),
-      //               _buildItemBottomSheet(
-      //                   title: 'Mute', icon: Assets.icons.icMute, click: () {}),
-      //               _buildItemBottomSheet(
-      //                   title: 'Leave group',
-      //                   icon: Assets.icons.icLoggout,
-      //                   click: () {}),
-      //               _buildItemBottomSheet(
-      //                   title: 'Delete',
-      //                   icon: Assets.icons.icTrash,
-      //                   click: () {}),
-      //               12.verticalSpace,
-      //             ],
-      //           ),
-      //         );
-      //       });
-      // },
       onTap: () {
         context.pushRoute(ChatDetailRoute(
           idGroup: widget.idGroup,
@@ -108,19 +71,6 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
                           width: 8,
                           height: 8,
                         ))
-                      // FutureBuilder(
-                      //     future:
-                      //         Utils.getSeenMess(widget.idGroup, widget.time),
-                      //     builder: (context, snapshot) {
-                      //       if (snapshot.hasData) {
-                      //         const LinearContainer(
-                      //             child: SizedBox(
-                      //           width: 8,
-                      //           height: 8,
-                      //         ));
-                      //       }
-                      //       return SizedBox();
-                      //     })
                     ],
                   ),
                   Text(
@@ -146,34 +96,6 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
                   fontWeight: FontWeight.w400,
                   color: const Color(0xff6C6C6C)),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  CustomInkWell _buildItemBottomSheet({
-    required String title,
-    required SvgGenImage icon,
-    required Function click,
-  }) {
-    return CustomInkWell(
-      onTap: () => click,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 12.h),
-        child: Row(
-          children: [
-            icon.svg(width: 20.r),
-            12.horizontalSpace,
-            Text(
-              title,
-              style: TextStyle(
-                  color: icon == Assets.icons.icTrash
-                      ? const Color(0xffFF3B30)
-                      : MyColors.black34,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w500),
-            )
           ],
         ),
       ),
