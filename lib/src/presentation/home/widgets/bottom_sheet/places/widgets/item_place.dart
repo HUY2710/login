@@ -25,99 +25,103 @@ class ItemPlace extends StatelessWidget {
   final bool? defaultPlace;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        ShadowContainer(
-            borderRadius: BorderRadius.circular(15.r),
-            colorShadow: const Color(0xff42474C).withOpacity(.15),
-            blurRadius: 17,
-            child: Padding(
-              padding: EdgeInsets.all(10.r),
-              child: SvgPicture.asset(
-                place.iconPlace,
-                colorFilter:
-                    const ColorFilter.mode(Color(0xff7B3EFF), BlendMode.srcIn),
-              ),
-            )),
-        12.horizontalSpace,
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                place.namePlace,
-                style: TextStyle(
-                    color: const Color(0xff343434),
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500),
-              ),
-              Text(
-                StoreLocation.fromJson(place.location!).address,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    color: const Color(0xff6C6C6C),
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500),
-              )
-            ],
-          ),
-        ),
-        if (defaultPlace != null && defaultPlace!)
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-            margin: EdgeInsets.only(right: 16.w),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(colors: [
-                Color(0xffB67DFF),
-                Color(0xff7B3EFF),
-              ]),
-              borderRadius: BorderRadius.all(
-                Radius.circular(12.r),
-              ),
-            ),
-            child: Text(
-              'Set up',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-                fontSize: 13.sp,
-              ),
-            ),
-          ),
-        if (defaultPlace != null &&
-            !defaultPlace! &&
-            place.idCreator == Global.instance.user?.code)
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => ActionDialog(
-                  title: 'Remove this Place',
-                  subTitle:
-                      'Are you sure to the remove this place from your group?',
-                  confirmTap: () async {
-                    try {
-                      context.popRoute();
-                      // EasyLoading.show();
-                      showLoading();
-                      await FirestoreClient.instance.removePlace(
-                          getIt<SelectGroupCubit>().state!.idGroup!,
-                          place.idPlace!);
-                      getIt<TrackingPlacesCubit>().removePlace(place.idPlace!);
-                      // EasyLoading.dismiss();
-                      hideLoading();
-                    } catch (error) {
-                      debugPrint('error:$error');
-                    }
-                  },
-                  confirmText: context.l10n.delete,
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 12.h),
+      child: Row(
+        children: [
+          ShadowContainer(
+              borderRadius: BorderRadius.circular(15.r),
+              colorShadow: const Color(0xff42474C).withOpacity(.15),
+              blurRadius: 17,
+              child: Padding(
+                padding: EdgeInsets.all(10.r),
+                child: SvgPicture.asset(
+                  place.iconPlace,
+                  colorFilter: const ColorFilter.mode(
+                      Color(0xff7B3EFF), BlendMode.srcIn),
                 ),
-              );
-            },
-            icon: Assets.icons.icTrash.svg(width: 20.r),
+              )),
+          12.horizontalSpace,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  place.namePlace,
+                  style: TextStyle(
+                      color: const Color(0xff343434),
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500),
+                ),
+                Text(
+                  StoreLocation.fromJson(place.location!).address,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: const Color(0xff6C6C6C),
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500),
+                )
+              ],
+            ),
           ),
-      ],
+          if (defaultPlace != null && defaultPlace!)
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+              margin: EdgeInsets.only(right: 16.w),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(colors: [
+                  Color(0xffB67DFF),
+                  Color(0xff7B3EFF),
+                ]),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12.r),
+                ),
+              ),
+              child: Text(
+                'Set up',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 13.sp,
+                ),
+              ),
+            ),
+          if (defaultPlace != null &&
+              !defaultPlace! &&
+              place.idCreator == Global.instance.user?.code)
+            IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => ActionDialog(
+                    title: 'Remove this Place',
+                    subTitle:
+                        'Are you sure to the remove this place from your group?',
+                    confirmTap: () async {
+                      try {
+                        context.popRoute();
+                        // EasyLoading.show();
+                        showLoading();
+                        await FirestoreClient.instance.removePlace(
+                            getIt<SelectGroupCubit>().state!.idGroup!,
+                            place.idPlace!);
+                        getIt<TrackingPlacesCubit>()
+                            .removePlace(place.idPlace!);
+                        // EasyLoading.dismiss();
+                        hideLoading();
+                      } catch (error) {
+                        debugPrint('error:$error');
+                      }
+                    },
+                    confirmText: context.l10n.delete,
+                  ),
+                );
+              },
+              icon: Assets.icons.icTrash.svg(width: 20.r),
+            ),
+        ],
+      ),
     );
   }
 }

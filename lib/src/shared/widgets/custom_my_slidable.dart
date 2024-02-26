@@ -35,9 +35,9 @@ class CustomSwipeWidget extends StatelessWidget {
                   actionRight1!();
                 }
               },
-              backgroundColor: Colors.yellow,
+              backgroundColor: const Color(0xff7B3EFF),
               foregroundColor: Colors.white,
-              icon: Icons.edit_square,
+              icon: Icons.edit,
             ),
           SlidableAction(
             spacing: 0,

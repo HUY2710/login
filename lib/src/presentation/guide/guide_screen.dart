@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/gens.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
+import '../place/cubit/default_places_cubit.dart';
 import 'widgets/btn.dart';
 import 'widgets/checkin_guide.dart';
 import 'widgets/item_bottom.dart';
@@ -38,11 +40,14 @@ class GuideScreenState extends State<GuideScreen> {
   @override
   void initState() {
     super.initState();
+    getIt<DefaultPlaceCubit>().update(defaultListPlace);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       createTutorial();
       Future.delayed(Duration.zero, showTutorial);
     });
   }
+
+  //check xem có null không
 
   @override
   Widget build(BuildContext context) {
