@@ -91,6 +91,7 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Stack(
+        alignment: Alignment.center,
         children: [
           BlocConsumer<ValueCubit<LatLng>, LatLng>(
             bloc: placeLatLngCubit,
@@ -118,12 +119,14 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
                         position: Global.instance.currentLocation,
                         icon: marker ?? BitmapDescriptor.defaultMarker,
                       ),
-                      Marker(
-                        markerId: const MarkerId('Place'),
-                        position: state,
-                        icon:
-                            defaultMarkerMap ?? BitmapDescriptor.defaultMarker,
-                      ),
+                      if (requestApi.state)
+                        Marker(
+                          markerId: const MarkerId('Place'),
+                          position: state,
+                          draggable: true,
+                          icon: defaultMarkerMap ??
+                              BitmapDescriptor.defaultMarker,
+                        ),
                     },
                     zoomControlsEnabled: false,
                     onCameraMove: (CameraPosition position) {
@@ -145,6 +148,25 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
                   );
                 },
               );
+            },
+          ),
+          BlocBuilder<ValueCubit<bool>, bool>(
+            bloc: requestApi,
+            builder: (context, state) {
+              if (!requestApi.state) {
+                return Positioned(
+                  child: Align(
+                    child: FractionalTranslation(
+                      translation: const Offset(0.0, -0.5),
+                      child: Image.asset(
+                        Assets.images.markers.pin.path,
+                        width: 25.w,
+                      ),
+                    ),
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
             },
           ),
           Positioned(
@@ -226,7 +248,7 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
                     if (statePurchase.isPremium()) {
                       showModalSearchPlace();
                     } else {
-                      context.pushRoute(PremiumRoute());
+                      context.pushRoute(const PremiumRoute());
                     }
                   },
                   child: Row(
@@ -245,19 +267,14 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
                               ),
                               6.horizontalSpace,
                               Expanded(
-                                child: BlocBuilder<ValueCubit<String>, String>(
-                                  bloc: addressCubit,
-                                  builder: (context, state) {
-                                    return Text(
-                                      state,
-                                      style: TextStyle(
-                                        fontSize: 13.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    );
-                                  },
+                                child: Text(
+                                  'Search location by typing address, building ...',
+                                  style: TextStyle(
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               6.horizontalSpace,

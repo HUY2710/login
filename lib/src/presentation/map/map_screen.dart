@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,6 @@ import '../../config/navigation/app_router.dart';
 import '../../data/models/store_group/store_group.dart';
 import '../../data/models/store_place/store_place.dart';
 import '../../data/models/store_user/store_user.dart';
-import '../../gen/assets.gen.dart';
 import '../../gen/colors.gen.dart';
 import '../../global/global.dart';
 import '../../services/my_background_service.dart';
@@ -68,7 +68,6 @@ class MapScreenState extends State<MapScreen>
     _trackingPlacesCubit.initTrackingPlaces();
     _defaultLocation = Global.instance.serverLocation;
     getLocalLocation();
-    _getMyMarker();
     super.initState();
 
     getIt<GroupCubit>().initStreamGroupChat();
@@ -236,19 +235,6 @@ class MapScreenState extends State<MapScreen>
     }
   }
 
-  Future<void> _getMyMarker() async {
-    final newMarker = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(
-        size: Size.fromRadius(0.5.r),
-        // devicePixelRatio: ScreenUtil().pixelRatio,
-      ),
-      Assets.images.markers.circleDot.path,
-    );
-    setState(() {
-      marker = newMarker;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -371,7 +357,6 @@ class MapScreenState extends State<MapScreen>
             right: 16.w,
             bottom: 0,
             child: FloatRightAppBar(
-              mapController: _mapController,
               locationListenCubit: _trackingLocationCubit,
               trackingMemberCubit: _trackingMemberCubit,
             ),

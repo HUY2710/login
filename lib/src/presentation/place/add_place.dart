@@ -11,6 +11,7 @@ import '../../data/models/store_location/store_location.dart';
 import '../../data/models/store_place/store_place.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/assets.gen.dart';
+import '../../gen/colors.gen.dart';
 import '../../global/global.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/cubit/value_cubit.dart';
@@ -267,7 +268,11 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
             24.verticalSpace,
             Text(
               context.l10n.location,
-              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+                color: MyColors.black34,
+              ),
             ),
             8.verticalSpace,
             BlocConsumer<SelectPlaceCubit, StoreLocation?>(
@@ -292,7 +297,14 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
             28.verticalSpace,
             Row(
               children: [
-                Text(context.l10n.radius),
+                Text(
+                  context.l10n.radius,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color: MyColors.black34,
+                  ),
+                ),
                 Expanded(
                   child: Slider(
                     value: currentRadius,

@@ -30,15 +30,6 @@ class BatteryBar extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          height: radiusActive ?? 20.r,
-          width: radiusActive ?? 20.r,
-          decoration: BoxDecoration(
-            color: online ? const Color(0xff19E04B) : const Color(0xffFFDF57),
-            shape: BoxShape.circle,
-          ),
-        ),
-        4.horizontalSpace,
-        Container(
           width: widthBattery?.w ?? 50.w,
           height: heightBattery?.h ?? 30.h,
           decoration: BoxDecoration(

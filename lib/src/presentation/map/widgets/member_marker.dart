@@ -6,7 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../gen/colors.gen.dart';
 import '../../../global/global.dart';
+import '../../../shared/widgets/containers/shadow_container.dart';
 import '../models/member_maker_data.dart';
 import 'battery_bar.dart';
 
@@ -87,26 +89,51 @@ class _BuildMarkerState extends State<BuildMarker> {
         children: [
           //chỉ có ở những member khác
           if (widget.member.code != Global.instance.user?.code)
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(20.r)),
-              ),
+            ShadowContainer(
+              blurRadius: 2,
               padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
               child: BatteryBar(
-                  batteryLevel: widget.member.batteryLevel,
-                  color: color,
-                  online: widget.member.online),
+                batteryLevel: widget.member.batteryLevel,
+                color: color,
+                online: widget.member.online,
+              ),
             ),
           8.verticalSpace,
           _buildMarker(color, battery),
           8.verticalSpace,
-          Image.asset(
-            Assets.images.markers.circleDot.path,
-            width: 36.r,
-            height: 36.r,
-            gaplessPlayback: true,
-          ),
+          if (widget.member.code != Global.instance.user?.code)
+            ShadowContainer(
+              padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 10.w),
+              blurRadius: 4,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 16.r,
+                    width: 16.r,
+                    decoration: BoxDecoration(
+                      color: widget.member.online
+                          ? const Color(0xff19E04B)
+                          : const Color(0xffFFDF57),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  8.horizontalSpace,
+                  Text(
+                    widget.member.userName,
+                    style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w500,
+                        color: MyColors.black34),
+                  )
+                ],
+              ),
+            )
+          else
+            Image.asset(
+              Assets.images.markers.circleDot.path,
+              width: 40.r,
+            )
         ],
       ),
     );

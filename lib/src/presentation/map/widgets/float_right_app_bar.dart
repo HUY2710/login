@@ -1,32 +1,30 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/di/di.dart';
+import '../../../data/models/store_group/store_group.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../global/global.dart';
-import '../../../shared/constants/app_constants.dart';
+import '../../home/widgets/bottom_sheet/invite_code.dart';
 import '../../home/widgets/bottom_sheet/members/members.dart';
 import '../../home/widgets/bottom_sheet/places/places_bottom_sheet.dart';
 import '../../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
 import '../cubit/select_group_cubit.dart';
-import '../cubit/select_user_cubit.dart';
 import '../cubit/tracking_location/tracking_location_cubit.dart';
 import '../cubit/tracking_members/tracking_member_cubit.dart';
 
 class FloatRightAppBar extends StatefulWidget {
   const FloatRightAppBar({
     super.key,
-    required this.mapController,
     required this.locationListenCubit,
     required this.trackingMemberCubit,
   });
 
-  final Completer<GoogleMapController> mapController;
   final TrackingLocationCubit locationListenCubit;
   final TrackingMemberCubit trackingMemberCubit;
 
@@ -35,22 +33,9 @@ class FloatRightAppBar extends StatefulWidget {
 }
 
 class _FloatRightAppBarState extends State<FloatRightAppBar> {
-  GoogleMapController? _googleMapController;
-
   @override
   void initState() {
-    widget.mapController.future.then((value) => _googleMapController = value);
     super.initState();
-  }
-
-  void _goToCurrentLocation() {
-    getIt<SelectUserCubit>().update(null);
-    final CameraPosition newPosition = CameraPosition(
-      target: Global.instance.currentLocation,
-      zoom: AppConstants.defaultCameraZoomLevel,
-    );
-    _googleMapController
-        ?.animateCamera(CameraUpdate.newCameraPosition(newPosition));
   }
 
   @override
@@ -58,6 +43,24 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        BlocBuilder<SelectGroupCubit, StoreGroup?>(
+          bloc: getIt<SelectGroupCubit>(),
+          builder: (context, state) {
+            return buildItem(
+              state == null
+                  ? () {
+                      Fluttertoast.showToast(msg: 'Please join group first');
+                      return;
+                    }
+                  : () => showAppModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) => InviteCode(code: state.passCode)),
+              Assets.icons.icAddMember.path,
+            );
+          },
+        ),
+        SizedBox(height: 16.h),
         buildItem(
           () async {
             showAppModalBottomSheet(
@@ -71,8 +74,6 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
           },
           Assets.icons.icPeople.path,
         ),
-        SizedBox(height: 16.h),
-        buildItem(_goToCurrentLocation, Assets.icons.icGps.path),
         SizedBox(height: 16.h),
         buildItem(() {
           if (getIt<SelectGroupCubit>().state == null) {

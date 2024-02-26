@@ -63,9 +63,7 @@ class GuideScreenState extends State<GuideScreen> {
               right: 70.w,
               child: Row(
                 children: [
-                  CheckInGuide(
-                    key: keyCheckIn,
-                  ),
+                  CheckInGuide(key: keyCheckIn),
                   12.horizontalSpace,
                   ProGuide(key: keyPro),
                 ],
