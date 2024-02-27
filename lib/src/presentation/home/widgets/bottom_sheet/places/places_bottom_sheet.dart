@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import '../../../../../../app/cubit/loading_cubit.dart';
 import '../../../../../data/remote/firestore_client.dart';
+import '../../../../../global/global.dart';
 import '../../../../map/cubit/select_group_cubit.dart';
 import '../../../../place/cubit/default_places_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,6 +38,29 @@ class PlacesBottomSheet extends StatelessWidget {
             updatedList
                 .removeWhere((element) => element.idPlace == item.idPlace);
             getIt<DefaultPlaceCubit>().update(updatedList);
+            hideLoading();
+          } catch (error) {
+            debugPrint('error:$error');
+          }
+        },
+        confirmText: context.l10n.delete,
+      ),
+    );
+  }
+
+  Future<void> removePlace(BuildContext context, String idPlace) async {
+    showDialog(
+      context: context,
+      builder: (context) => ActionDialog(
+        title: 'Remove this Place',
+        subTitle: 'Are you sure to the remove this place from your group?',
+        confirmTap: () async {
+          try {
+            context.popRoute();
+            showLoading();
+            await FirestoreClient.instance.removePlace(
+                getIt<SelectGroupCubit>().state!.idGroup!, idPlace);
+            getIt<TrackingPlacesCubit>().removePlace(idPlace);
             hideLoading();
           } catch (error) {
             debugPrint('error:$error');
@@ -205,8 +229,28 @@ class PlacesBottomSheet extends StatelessWidget {
                             horizontal: 16.w, vertical: 8.h),
                         itemBuilder: (context, index) {
                           return CustomSwipeWidget(
-                            actionRight1: () {},
-                            actionRight2: () {},
+                            enable: places[index].idCreator ==
+                                Global.instance.user?.code,
+                            actionRight1: () {
+                              showAppModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) => Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom,
+                                  ),
+                                  child: AddPlaceBottomSheet(
+                                    place: places[index],
+                                    defaultPlace: false,
+                                  ),
+                                ),
+                              );
+                            },
+                            actionRight2: () {
+                              removePlace(context, places[index].idPlace!);
+                            },
                             firstRight: true,
                             child: ItemPlace(
                               place: places[index],

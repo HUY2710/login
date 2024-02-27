@@ -53,22 +53,24 @@ class _SlidableGestureDetectorState extends State<SlidableGestureDetector> {
   }
 
   void onTapSlidable() {
-    handleDragStart(DragStartDetails(globalPosition: Offset(292.w, 460.h)));
-    handleDragUpdate(
-      DragUpdateDetails(
-        globalPosition: Offset(244.w, 473.h),
-        primaryDelta: -50.w,
-        delta: Offset(-50.w, 0),
-      ),
-    );
-    handleDragEnd(
-      DragEndDetails(
-        primaryVelocity: -185.w,
-        velocity: Velocity(
-          pixelsPerSecond: Offset(-185.w, 0),
+    if (widget.enabled) {
+      handleDragStart(DragStartDetails(globalPosition: Offset(292.w, 460.h)));
+      handleDragUpdate(
+        DragUpdateDetails(
+          globalPosition: Offset(244.w, 473.h),
+          primaryDelta: -50.w,
+          delta: Offset(-50.w, 0),
         ),
-      ),
-    );
+      );
+      handleDragEnd(
+        DragEndDetails(
+          primaryVelocity: -185.w,
+          velocity: Velocity(
+            pixelsPerSecond: Offset(-185.w, 0),
+          ),
+        ),
+      );
+    }
   }
 
   double get overallDragAxisExtent {

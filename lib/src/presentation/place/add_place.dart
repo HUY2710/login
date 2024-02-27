@@ -37,7 +37,6 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
   final TextEditingController addressLocationCtrl = TextEditingController();
   ValueCubit<bool> notifyGroupCubit = ValueCubit(true);
   final selectPlaceCubit = getIt<SelectPlaceCubit>();
-  StorePlace? tempGroup;
   bool onNotify = true;
 
   StorePlace? tempPlace;
@@ -73,12 +72,17 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
     setState(() {
       tempPlace = widget.place;
       nameLocationCtrl.text = widget.place?.namePlace ?? '';
+      addressLocationCtrl.text = widget.place?.location?['address'] ?? '';
       selectColor = widget.place?.colorPlace ?? 0xffA369FD;
     });
     if (widget.place != null) {
       icPlaceCubit.update(widget.place!.iconPlace);
+      selectPlaceCubit.update(StoreLocation.fromJson(widget.place!.location!));
+      currentRadius = widget.place!.radius;
     }
   }
+
+  Future<void> updatePlace() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +140,7 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                                         context.popRoute();
                                         showLoading();
                                         if (widget.defaultPlace) {
+                                          //chỉnh sửa và tạo mới 1 cái place
                                           final StorePlace newPlace =
                                               StorePlace(
                                             idCreator:
@@ -159,14 +164,35 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                                               newPlace,
                                             );
                                           }
-                                          final List<StorePlace> updatedList =
-                                              List.from(
-                                                  getIt<DefaultPlaceCubit>()
-                                                          .state ??
-                                                      []);
-                                          updatedList.remove(widget.place);
-                                          getIt<DefaultPlaceCubit>()
-                                              .update(updatedList);
+                                          if (widget.place != null) {
+                                            final List<StorePlace> updatedList =
+                                                List.from(
+                                                    getIt<DefaultPlaceCubit>()
+                                                            .state ??
+                                                        []);
+                                            updatedList.remove(widget.place);
+                                            getIt<DefaultPlaceCubit>()
+                                                .update(updatedList);
+                                          }
+                                        } else {
+                                          //update
+                                          tempPlace = tempPlace?.copyWith(
+                                            iconPlace: icPlaceCubit.state,
+                                            namePlace: nameLocationCtrl.text,
+                                            location: state?.toJson(),
+                                            radius: currentRadius,
+                                            colorPlace: selectColor,
+                                          );
+                                          if (tempPlace != null) {
+                                            await FirestoreClient.instance
+                                                .updatePlace(
+                                              getIt<SelectGroupCubit>()
+                                                  .state!
+                                                  .idGroup!,
+                                              tempPlace!.idPlace!,
+                                              tempPlace!.toJson(),
+                                            );
+                                          }
                                         }
 
                                         hideLoading();
@@ -310,7 +336,10 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
               bloc: selectPlaceCubit,
               listener: (context, state) {
                 setState(() {
-                  addressLocationCtrl.text = state?.address ?? '';
+                  addressLocationCtrl.text =
+                      widget.place?.location?['address'] ??
+                          state?.address ??
+                          '';
                 });
               },
               builder: (context, state) {

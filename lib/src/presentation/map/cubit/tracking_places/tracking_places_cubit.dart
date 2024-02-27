@@ -69,6 +69,18 @@ class TrackingPlacesCubit extends Cubit<TrackingPlacesState> {
               .removeWhere((element) => element.idPlace == place.idPlace);
           debugPrint('list:$_trackingListPlaces');
         }
+
+        if (change.type == DocumentChangeType.modified) {
+          StorePlace place = StorePlace.fromJson(change.doc.data()!);
+          place = place.copyWith(idPlace: change.doc.id);
+
+          final index = _trackingListPlaces
+              .indexWhere((element) => element.idPlace == place.idPlace);
+          if (index != -1) {
+            _trackingListPlaces[index] = place;
+          }
+          debugPrint('list:$_trackingListPlaces');
+        }
       }
 
       if (_trackingListPlaces.isEmpty) {

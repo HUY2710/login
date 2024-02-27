@@ -181,7 +181,8 @@ class FirebaseMessageService implements NotificationService {
 extension FirebaseMessageServiceExt on FirebaseMessageService {
   Future<void> _sendMessage(String topic, String title, String message,
       {String? dataId}) async {
-    final url = Uri.https(EnvParams.apiUrlNotification, 'send-notification');
+    final url = Uri.https(EnvParams.apiUrlNotification,
+        'group-location-sharing/send-notification');
     final headers = {
       'Content-Type': 'application/json',
     };
