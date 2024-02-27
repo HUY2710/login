@@ -11,7 +11,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/models/store_group/store_group.dart';
-import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/colors.gen.dart';
 import '../../../global/global.dart';
@@ -68,22 +67,6 @@ class _BottomBarState extends State<BottomBar> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        BlocBuilder<SelectUserCubit, StoreUser?>(
-          bloc: getIt<SelectUserCubit>(),
-          builder: (context, state) {
-            if (state != null) {
-              return GestureDetector(
-                onTap: _goToDetailLocation,
-                child: ShadowContainer(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-                  child: SvgPicture.asset(Assets.icons.icGps.path),
-                ),
-              );
-            }
-            return const SizedBox.shrink();
-          },
-        ),
         Align(
           alignment: Alignment.centerRight,
           child: Padding(
