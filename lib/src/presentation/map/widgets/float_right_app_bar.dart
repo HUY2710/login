@@ -1,15 +1,13 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/di/di.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../home/widgets/bottom_sheet/invite_code.dart';
 import '../../home/widgets/bottom_sheet/members/members.dart';
 import '../../home/widgets/bottom_sheet/places/places_bottom_sheet.dart';
@@ -49,7 +47,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
             return buildItem(
               state == null
                   ? () {
-                      Fluttertoast.showToast(msg: 'Please join group first');
+                      Fluttertoast.showToast(msg: context.l10n.joinAGroup);
                       return;
                     }
                   : () => showAppModalBottomSheet(
@@ -63,6 +61,10 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
         SizedBox(height: 16.h),
         buildItem(
           () async {
+            if (getIt<SelectGroupCubit>().state == null) {
+              Fluttertoast.showToast(msg: context.l10n.joinAGroup);
+              return;
+            }
             showAppModalBottomSheet(
               context: context,
               builder: (context) {
@@ -77,7 +79,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
         SizedBox(height: 16.h),
         buildItem(() {
           if (getIt<SelectGroupCubit>().state == null) {
-            Fluttertoast.showToast(msg: 'Please join group first');
+            Fluttertoast.showToast(msg: context.l10n.joinAGroup);
             return;
           }
           showAppModalBottomSheet(
