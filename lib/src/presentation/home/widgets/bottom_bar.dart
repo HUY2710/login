@@ -206,15 +206,16 @@ class _BottomBarState extends State<BottomBar> {
     return InkWell(
       onTap: () {
         //check xem có join group nào chưa
-        if (getIt<SelectGroupCubit>().state != null) {
-          if (isMessage) {
+        if (isMessage) {
+          if (getIt<SelectGroupCubit>().state != null) {
             context.pushRoute(const ChatRoute());
             return;
+          } else {
+            Fluttertoast.showToast(msg: context.l10n.joinAGroup);
+            return;
           }
-          context.pushRoute(const SettingRoute());
-        } else {
-          Fluttertoast.showToast(msg: 'Please join group first');
         }
+        context.pushRoute(const SettingRoute());
       },
       child: Container(
         height: 48.r,
