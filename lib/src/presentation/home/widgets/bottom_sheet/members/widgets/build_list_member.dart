@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../../app/cubit/loading_cubit.dart';
@@ -14,7 +13,10 @@ import '../../../../../../global/global.dart';
 import '../../../../../../shared/cubit/value_cubit.dart';
 import '../../../../../../shared/extension/context_extension.dart';
 import '../../../../../map/cubit/select_group_cubit.dart';
+import '../../../../../map/cubit/select_user_cubit.dart';
+import '../../../../../place/history_place/history_place.dart';
 import '../../../dialog/action_dialog.dart';
+import '../../show_bottom_sheet_home.dart';
 import 'item_member.dart';
 
 class BuildListMember extends StatelessWidget {
@@ -22,23 +24,22 @@ class BuildListMember extends StatelessWidget {
     super.key,
     required this.isEditCubit,
     required this.listMembers,
+    required this.goToUserLocation,
   });
   final List<StoreUser> listMembers;
   final ValueCubit<bool> isEditCubit;
+  final Function(StoreUser user) goToUserLocation;
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: listMembers.length,
       itemBuilder: (context, index) {
         final StoreUser member = listMembers[index];
-        debugPrint('code member:${member.code}');
         final admin = getIt<SelectGroupCubit>().state?.storeMembers?.firstWhere(
               (member) => member.isAdmin,
               orElse: () => const StoreMember(isAdmin: false),
             );
-        debugPrint('code admn:${admin?.idUser}');
 
-        debugPrint(' admin:${admin?.idUser == member.code}');
         return Row(
           children: [
             BlocBuilder<ValueCubit<bool>, bool?>(
@@ -86,9 +87,24 @@ class BuildListMember extends StatelessWidget {
               },
             ),
             Expanded(
-              child: ItemMember(
-                isAdmin: admin?.idUser == member.code,
-                user: member,
+              child: GestureDetector(
+                onTap: () {
+                  goToUserLocation(member);
+                  if (member.code != Global.instance.user?.code) {
+                    getIt<SelectUserCubit>().update(member);
+                    context.popRoute().then(
+                          (value) => showAppModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => HistoryPlace(user: member),
+                          ),
+                        );
+                  }
+                },
+                child: ItemMember(
+                  isAdmin: admin?.idUser == member.code,
+                  user: member,
+                ),
               ),
             ),
           ],
