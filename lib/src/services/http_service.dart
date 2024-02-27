@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,7 +15,7 @@ class HTTPService {
       'https://maps.googleapis.com/maps/api/place/autocomplete/json';
   String detailPlaceApiUrl =
       'https://maps.googleapis.com/maps/api/place/details/json';
-  final String _apiKey = EnvParams.apiKey;
+  final String _apiKey = Platform.isAndroid ? EnvParams.apiKey : EnvParams.apiKeyIOS;
 
   Future<http.Response> postRequestPlaces(Map<String, dynamic> body) async {
     try {
@@ -54,6 +55,7 @@ class HTTPService {
 
   Future<http.Response> requestPlaceAutoComplete(
       {required String placeInput}) async {
+    debugPrint(_apiKey);
     try {
       final Map<String, dynamic> querys = {'input': placeInput, 'key': _apiKey};
       final url = Uri.https(

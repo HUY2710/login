@@ -245,6 +245,8 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
               builder: (context, statePurchase) {
                 return GestureDetector(
                   onTap: () async {
+                    showModalSearchPlace();
+                    return;
                     if (statePurchase.isPremium()) {
                       showModalSearchPlace();
                     } else {
