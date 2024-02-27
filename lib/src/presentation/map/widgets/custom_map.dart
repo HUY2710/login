@@ -138,13 +138,15 @@ class _CustomMapState extends State<CustomMap> {
                 size: const Size.fromWidth(30),
               )
             : BitmapDescriptor.defaultMarker,
-        onTap: () {
-          showAppModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.transparent,
-            builder: (context) => HistoryPlace(user: user),
-          );
-        });
+        onTap: user.code == Global.instance.user?.code
+            ? () {}
+            : () {
+                showAppModalBottomSheet(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => HistoryPlace(user: user),
+                );
+              });
   }
 
   Marker _buildPlaceMarker(StorePlace place) {
