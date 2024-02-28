@@ -41,6 +41,7 @@ import '../../shared/helpers/env_params.dart';
 import '../../shared/widgets/loading/loading_indicator.dart';
 import '../../services/connectivity_service.dart';
 import '../map/cubit/select_group_cubit.dart';
+import '../place/cubit/default_places_cubit.dart';
 import 'update_dialog.dart';
 
 @RoutePage()
@@ -181,6 +182,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> setInitScreen() async {
     await getMe();
     await checkInGroup();
+    getIt<DefaultPlaceCubit>().update(defaultListPlace);
     await getIt<TrackingHistoryPlaceService>().initGroups();
     final bool isFirstLaunch =
         await SharedPreferencesManager.getIsFirstLaunch();

@@ -21,7 +21,7 @@ Future<void> showBottomSheetTypeOfHome({
 Future<void> showAppModalBottomSheet({
   required BuildContext context,
   required WidgetBuilder builder,
-  Color? backgroundColor,
+  Color? backgroundColor = Colors.white,
   String? barrierLabel,
   double? elevation,
   ShapeBorder? shape,
@@ -33,16 +33,14 @@ Future<void> showAppModalBottomSheet({
   bool isDismissible = true,
   bool enableDrag = true,
   bool? showDragHandle,
-  bool useSafeArea = false,
+  bool useSafeArea = true,
   RouteSettings? routeSettings,
   AnimationController? transitionAnimationController,
   Offset? anchorPoint,
 }) async {
   await showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return SafeArea(child: builder(context));
-      },
+      builder: builder,
       backgroundColor: backgroundColor,
       barrierLabel: barrierLabel,
       elevation: elevation,

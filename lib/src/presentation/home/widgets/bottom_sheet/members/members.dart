@@ -23,8 +23,10 @@ class MembersBottomSheet extends StatelessWidget {
   const MembersBottomSheet({
     super.key,
     required this.trackingMemberCubit,
+    required this.goToUserLocation,
   });
   final TrackingMemberCubit trackingMemberCubit;
+  final Function(StoreUser user) goToUserLocation;
   @override
   Widget build(BuildContext context) {
     final currentGroupCubit = getIt<SelectGroupCubit>();
@@ -197,6 +199,7 @@ class MembersBottomSheet extends StatelessWidget {
                         child: BuildListMember(
                           listMembers: members,
                           isEditCubit: isEditCubit,
+                          goToUserLocation: goToUserLocation,
                         ),
                       );
                     },

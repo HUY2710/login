@@ -144,12 +144,14 @@ class FirebaseMessageService implements NotificationService {
   }
 
   Future<void> subscribeTopics(List<String> topics) async {
+    debugPrint('Subscribe list topics: $topics');
     await Future.wait(topics
         .map((e) => FirebaseMessaging.instance.subscribeToTopic(e))
         .toList());
   }
 
   Future<void> unSubscribeTopics(List<String> topics) async {
+    debugPrint('UnSubscribe list topics: $topics');
     await Future.wait(topics
         .map((e) => FirebaseMessaging.instance.unsubscribeFromTopic(e))
         .toList());
@@ -181,7 +183,8 @@ class FirebaseMessageService implements NotificationService {
 extension FirebaseMessageServiceExt on FirebaseMessageService {
   Future<void> _sendMessage(String topic, String title, String message,
       {String? dataId}) async {
-    final url = Uri.https(EnvParams.apiUrlNotification, 'group-location-sharing/send-notification');
+    final url = Uri.https(EnvParams.apiUrlNotification,
+        'group-location-sharing/send-notification');
     final headers = {
       'Content-Type': 'application/json',
     };

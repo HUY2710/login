@@ -9,7 +9,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/di/di.dart';
 import '../../../data/models/store_group/store_group.dart';
+import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../shared/constants/app_constants.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../home/widgets/bottom_sheet/invite_code.dart';
 import '../../home/widgets/bottom_sheet/members/members.dart';
 import '../../home/widgets/bottom_sheet/places/places_bottom_sheet.dart';
@@ -23,19 +26,32 @@ class FloatRightAppBar extends StatefulWidget {
     super.key,
     required this.locationListenCubit,
     required this.trackingMemberCubit,
+    required this.mapController,
   });
 
   final TrackingLocationCubit locationListenCubit;
   final TrackingMemberCubit trackingMemberCubit;
+  final Completer<GoogleMapController> mapController;
 
   @override
   State<FloatRightAppBar> createState() => _FloatRightAppBarState();
 }
 
 class _FloatRightAppBarState extends State<FloatRightAppBar> {
+  GoogleMapController? _googleMapController;
   @override
   void initState() {
+    widget.mapController.future.then((value) => _googleMapController = value);
     super.initState();
+  }
+
+  Future<void> _goToMemberLocation(StoreUser user) async {
+    final CameraPosition newPosition = CameraPosition(
+      target: LatLng(user.location!.lat, user.location!.lng),
+      zoom: AppConstants.defaultCameraZoomLevel,
+    );
+    _googleMapController
+        ?.animateCamera(CameraUpdate.newCameraPosition(newPosition));
   }
 
   @override
@@ -49,7 +65,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
             return buildItem(
               state == null
                   ? () {
-                      Fluttertoast.showToast(msg: 'Please join group first');
+                      Fluttertoast.showToast(msg: context.l10n.joinAGroup);
                       return;
                     }
                   : () => showAppModalBottomSheet(
@@ -63,11 +79,16 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
         SizedBox(height: 16.h),
         buildItem(
           () async {
+            if (getIt<SelectGroupCubit>().state == null) {
+              Fluttertoast.showToast(msg: context.l10n.joinAGroup);
+              return;
+            }
             showAppModalBottomSheet(
               context: context,
               builder: (context) {
                 return MembersBottomSheet(
                   trackingMemberCubit: widget.trackingMemberCubit,
+                  goToUserLocation: (user) => _goToMemberLocation(user),
                 );
               },
             );
@@ -77,12 +98,13 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
         SizedBox(height: 16.h),
         buildItem(() {
           if (getIt<SelectGroupCubit>().state == null) {
-            Fluttertoast.showToast(msg: 'Please join group first');
+            Fluttertoast.showToast(msg: context.l10n.joinAGroup);
             return;
           }
-          showBottomSheetTypeOfHome(
+          showAppModalBottomSheet(
             context: context,
-            child: const PlacesBottomSheet(),
+            isScrollControlled: true,
+            builder: (context) => const PlacesBottomSheet(),
           );
         }, Assets.icons.icPlace.path),
       ],

@@ -20,11 +20,13 @@ import '../../shared/extension/int_extension.dart';
 import '../../shared/widgets/my_drag.dart';
 import '../../shared/widgets/text_field/main_text_form_field.dart';
 import '../map/cubit/select_group_cubit.dart';
+import 'cubit/default_places_cubit.dart';
 import 'cubit/select_place_cubit.dart';
 
 class AddPlaceBottomSheet extends StatefulWidget {
-  const AddPlaceBottomSheet({super.key});
-
+  const AddPlaceBottomSheet({super.key, this.place, this.defaultPlace = true});
+  final StorePlace? place;
+  final bool defaultPlace;
   @override
   State<AddPlaceBottomSheet> createState() => _AddPlaceBottomSheetState();
 }
@@ -35,17 +37,18 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
   final TextEditingController addressLocationCtrl = TextEditingController();
   ValueCubit<bool> notifyGroupCubit = ValueCubit(true);
   final selectPlaceCubit = getIt<SelectPlaceCubit>();
-  StorePlace? tempGroup;
   bool onNotify = true;
+
+  StorePlace? tempPlace;
   final List<String> pathIcPlaces = [
     Assets.icons.icPlace.path,
-    Assets.icons.places.icAnimal.path,
+    Assets.icons.places.icHome.path,
+    Assets.icons.places.icSchool.path,
     Assets.icons.places.icBook.path,
+    Assets.icons.places.icAnimal.path,
     Assets.icons.places.icBook2.path,
     Assets.icons.places.icCart.path,
     Assets.icons.places.icCook.path,
-    Assets.icons.places.icHome.path,
-    Assets.icons.places.icSchool.path,
     Assets.icons.places.icStore.path,
     Assets.icons.places.icTree.path,
   ];
@@ -62,6 +65,27 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
 
   int selectColor = 0xffA369FD;
   double currentRadius = 100;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      tempPlace = widget.place;
+      nameLocationCtrl.text = widget.place?.namePlace ?? '';
+      addressLocationCtrl.text = widget.place?.location?['address'] ?? '';
+      selectColor = widget.place?.colorPlace ?? 0xffA369FD;
+    });
+    if (widget.place != null) {
+      icPlaceCubit.update(widget.place!.iconPlace);
+      currentRadius = widget.place!.radius;
+    }
+    if (!widget.defaultPlace) {
+      selectPlaceCubit.update(StoreLocation.fromJson(widget.place!.location!));
+    }
+  }
+
+  Future<void> updatePlace() async {}
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -116,30 +140,63 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                                   ? () async {
                                       try {
                                         context.popRoute();
-                                        // EasyLoading.show();
                                         showLoading();
-                                        final StorePlace newPlace = StorePlace(
-                                          idCreator: Global.instance.user!.code,
-                                          idPlace: 24.randomString(),
-                                          iconPlace: icPlaceCubit.state,
-                                          namePlace: nameLocationCtrl.text,
-                                          location: state?.toJson(),
-                                          radius: currentRadius,
-                                          onNotify: onNotify,
-                                          colorPlace: selectColor,
-                                        );
-
-                                        if (getIt<SelectGroupCubit>().state !=
-                                            null) {
-                                          await FirestoreClient.instance
-                                              .createPlace(
-                                            getIt<SelectGroupCubit>()
-                                                .state!
-                                                .idGroup!,
-                                            newPlace,
+                                        if (widget.defaultPlace) {
+                                          //chỉnh sửa và tạo mới 1 cái place
+                                          final StorePlace newPlace =
+                                              StorePlace(
+                                            idCreator:
+                                                Global.instance.user!.code,
+                                            idPlace: 24.randomString(),
+                                            iconPlace: icPlaceCubit.state,
+                                            namePlace: nameLocationCtrl.text,
+                                            location: state?.toJson(),
+                                            radius: currentRadius,
+                                            onNotify: onNotify,
+                                            colorPlace: selectColor,
                                           );
+
+                                          if (getIt<SelectGroupCubit>().state !=
+                                              null) {
+                                            await FirestoreClient.instance
+                                                .createPlace(
+                                              getIt<SelectGroupCubit>()
+                                                  .state!
+                                                  .idGroup!,
+                                              newPlace,
+                                            );
+                                          }
+                                          if (widget.place != null) {
+                                            final List<StorePlace> updatedList =
+                                                List.from(
+                                                    getIt<DefaultPlaceCubit>()
+                                                            .state ??
+                                                        []);
+                                            updatedList.remove(widget.place);
+                                            getIt<DefaultPlaceCubit>()
+                                                .update(updatedList);
+                                          }
+                                        } else {
+                                          //update
+                                          tempPlace = tempPlace?.copyWith(
+                                            iconPlace: icPlaceCubit.state,
+                                            namePlace: nameLocationCtrl.text,
+                                            location: state?.toJson(),
+                                            radius: currentRadius,
+                                            colorPlace: selectColor,
+                                          );
+                                          if (tempPlace != null) {
+                                            await FirestoreClient.instance
+                                                .updatePlace(
+                                              getIt<SelectGroupCubit>()
+                                                  .state!
+                                                  .idGroup!,
+                                              tempPlace!.idPlace!,
+                                              tempPlace!.toJson(),
+                                            );
+                                          }
                                         }
-                                        // EasyLoading.dismiss();
+
                                         hideLoading();
                                       } catch (error) {
                                         debugPrint('error:$error');
@@ -281,7 +338,10 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
               bloc: selectPlaceCubit,
               listener: (context, state) {
                 setState(() {
-                  addressLocationCtrl.text = state?.address ?? '';
+                  addressLocationCtrl.text =
+                      widget.place?.location?['address'] ??
+                          state?.address ??
+                          '';
                 });
               },
               builder: (context, state) {
