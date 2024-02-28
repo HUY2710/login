@@ -37,11 +37,13 @@ class GuideScreenState extends State<GuideScreen> {
   GlobalKey keyGroup = GlobalKey();
   GlobalKey keySetting = GlobalKey();
   GlobalKey keyButton = GlobalKey();
+
   @override
   void initState() {
     super.initState();
     getIt<DefaultPlaceCubit>().update(defaultListPlace);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(milliseconds: 300));
       createTutorial();
       Future.delayed(Duration.zero, showTutorial);
     });
@@ -210,9 +212,9 @@ class GuideScreenState extends State<GuideScreen> {
         print('skip');
         return true;
       },
-      // focusAnimationDuration: const Duration(milliseconds: 300),
+      focusAnimationDuration: const Duration(milliseconds: 400),
       // pulseAnimationDuration: const Duration(milliseconds: 700),
-      // unFocusAnimationDuration: const Duration(milliseconds: 300),
+      unFocusAnimationDuration: const Duration(milliseconds: 400),
     );
   }
 
