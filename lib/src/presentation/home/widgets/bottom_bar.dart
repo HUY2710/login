@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:marquee/marquee.dart';
 
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
@@ -112,7 +113,8 @@ class _BottomBarState extends State<BottomBar> {
           ),
         ),
         18.verticalSpace,
-        Padding(
+        Container(
+          height: 48.h,
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -161,24 +163,53 @@ class _BottomBarState extends State<BottomBar> {
                                   ),
                                   Expanded(
                                     child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 12.w),
-                                      child: Text(
-                                        state == null
+                                      padding: EdgeInsets.only(left: 12.w),
+                                      child: LayoutBuilder(
+                                          builder: (context, constraints) {
+                                        final text = state == null
                                             ? context.l10n.newGroup
-                                            : state.groupName,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: const Color(0xff8E52FF),
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.w500),
-                                      ),
+                                            : state.groupName;
+
+                                        final painter = TextPainter(
+                                          text: TextSpan(text: text),
+                                          maxLines: 1,
+                                          textScaleFactor:
+                                              MediaQuery.of(context)
+                                                  .textScaleFactor,
+                                          textDirection: TextDirection.ltr,
+                                        );
+                                        painter.layout();
+                                        final overflow = painter.size.width >
+                                            constraints.maxWidth;
+
+                                        return overflow
+                                            ? Marquee(
+                                                text: text,
+                                                pauseAfterRound:
+                                                    const Duration(seconds: 3),
+                                                style: TextStyle(
+                                                    color:
+                                                        const Color(0xff8E52FF),
+                                                    fontSize: 16.sp,
+                                                    fontWeight:
+                                                        FontWeight.w500))
+                                            : Text(
+                                                text,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color:
+                                                        const Color(0xff8E52FF),
+                                                    fontSize: 16.sp,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              );
+                                      }),
                                     ),
                                   ),
                                   const Icon(
-                                    Icons.keyboard_arrow_down_rounded,
+                                    Icons.keyboard_arrow_up_outlined,
                                     color: MyColors.primary,
                                   )
                                 ],

@@ -66,9 +66,8 @@ class ItemPlace extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (context) => ActionDialog(
-                  title: 'Remove this Place',
-                  subTitle:
-                      'Are you sure to the remove this place from your group?',
+                  title: context.l10n.removeThisPlace,
+                  subTitle: context.l10n.removeThisPlaceSub,
                   confirmTap: () async {
                     try {
                       context.popRoute();

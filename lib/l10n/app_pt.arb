@@ -139,6 +139,18 @@
   "mapNormal": "Normal",
   "mapSatellite": "Satélite",
   "viewLocation": "Ver Localização",
-  "checked": "marcado",
-  "at": "em"
+  "checked": "fez check-in em",
+  "at": "em",
+  "leave": "Sair",
+  "removeThisPlace": "Remover este local",
+  "removeThisPlaceSub": "Tem certeza de que deseja remover este local do seu grupo?",
+  "searchLocationByType": "Pesquisar local digitando endereço, prédio...",
+  "noInternetConnection": "Sem Conexão com a Internet",
+  "noInternetConnectionSub": "Por favor, verifique sua conexão de rede e tente novamente.",
+  "goToSettings": "Ir para configurações",
+  "walk": "Andar",
+  "bicycle": "Bicicleta",
+  "car": "Carro",
+  "noMessageHereYet": "Ainda não há mensagens aqui...",
+  "noMessageSub": "Envie uma mensagem para começar sua \nconversa"
 }
