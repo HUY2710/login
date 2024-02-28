@@ -118,7 +118,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
         padding: EdgeInsets.all(10.r),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(15.r),
+          borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
           boxShadow: [
             BoxShadow(
               color: const Color(0xff42474C).withOpacity(0.3),

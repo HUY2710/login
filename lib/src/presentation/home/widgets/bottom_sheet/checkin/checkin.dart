@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../../../module/iap/my_purchase_manager.dart';
 import '../../../../../config/navigation/app_router.dart';
 import '../../../../../gen/assets.gen.dart';
+import '../../../../../shared/constants/app_constants.dart';
 import '../../../../../shared/extension/context_extension.dart';
 import '../../../../../shared/widgets/containers/shadow_container.dart';
 import '../../../../../shared/widgets/custom_inkwell.dart';
@@ -32,6 +33,7 @@ class CheckInWidget extends StatelessWidget {
               );
             },
             child: ShadowContainer(
+              borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
               maxWidth: MediaQuery.sizeOf(context).width - 80.w,
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
               child: Row(
@@ -56,12 +58,12 @@ class CheckInWidget extends StatelessWidget {
           if (!purchaseState.isPremium())
             Center(
               child: CustomInkWell(
-                onTap: () => context.pushRoute(PremiumRoute()),
+                onTap: () => context.pushRoute(const PremiumRoute()),
                 child: ShadowContainer(
                   width: 80.r,
                   height: 40.r,
                   padding: const EdgeInsets.all(10),
-                  borderRadius: BorderRadius.circular(15.r),
+                  borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
                   child: Row(
                     children: [
                       Assets.icons.premium.icPremiumSvg.svg(),

@@ -154,7 +154,7 @@ class PlacesBottomSheet extends StatelessWidget {
               child: Row(
                 children: [
                   CustomContainer(
-                    radius: 15.r,
+                    radius: 10.r,
                     colorBg: const Color(0xff8E52FF),
                     child: Padding(
                       padding: EdgeInsets.all(10.r),

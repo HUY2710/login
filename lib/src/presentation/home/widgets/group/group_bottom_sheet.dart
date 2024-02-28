@@ -59,6 +59,7 @@ class GroupBottomSheet extends StatelessWidget {
                       }
                     },
                     child: LinearContainer(
+                      radius: AppConstants.widgetBorderRadius.r,
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                           vertical: 14.h,
@@ -88,6 +89,7 @@ class GroupBottomSheet extends StatelessWidget {
                       }
                     },
                     child: BorderContainer(
+                      radius: AppConstants.widgetBorderRadius.r,
                       child: Padding(
                         padding: EdgeInsets.symmetric(
                           vertical: 14.h,

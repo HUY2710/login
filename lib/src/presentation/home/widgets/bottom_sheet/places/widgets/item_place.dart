@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../../../data/models/store_location/store_location.dart';
 import '../../../../../../data/models/store_place/store_place.dart';
+import '../../../../../../shared/constants/app_constants.dart';
 import '../../../../../../shared/extension/context_extension.dart';
 import '../../../../../../shared/widgets/containers/shadow_container.dart';
 
@@ -18,9 +19,10 @@ class ItemPlace extends StatelessWidget {
       child: Row(
         children: [
           ShadowContainer(
-              borderRadius: BorderRadius.circular(15.r),
-              colorShadow: Color(place.colorPlace).withOpacity(0.45),
-              blurRadius: 17,
+            colorShadow: Colors.transparent,
+              borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
+              colorBg: Color(place.colorPlace).withOpacity(0.25),
+              colorBorder: Color(place.colorPlace),
               child: Padding(
                 padding: EdgeInsets.all(10.r),
                 child: SvgPicture.asset(
@@ -65,7 +67,7 @@ class ItemPlace extends StatelessWidget {
                   Color(0xff7B3EFF),
                 ]),
                 borderRadius: BorderRadius.all(
-                  Radius.circular(12.r),
+                  Radius.circular(AppConstants.widgetBorderRadius.r),
                 ),
               ),
               child: Text(

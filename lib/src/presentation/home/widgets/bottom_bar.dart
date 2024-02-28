@@ -78,7 +78,7 @@ class _BottomBarState extends State<BottomBar> {
                 padding: EdgeInsets.all(10.r),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.r),
+                  borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
                   boxShadow: [
                     BoxShadow(
                       color: const Color(0xff42474C).withOpacity(0.3),
@@ -123,6 +123,7 @@ class _BottomBarState extends State<BottomBar> {
                     );
                   },
                   child: ShadowContainer(
+                    borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
                     maxWidth: MediaQuery.sizeOf(context).width - 80.w,
                     padding:
                         EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
@@ -228,7 +229,7 @@ class _BottomBarState extends State<BottomBar> {
         width: 48.r,
         padding: EdgeInsets.all(14.r),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15.r)),
+          borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
           gradient: const LinearGradient(colors: [
             Color(0xffB67DFF),
             Color(0xff7B3EFF),

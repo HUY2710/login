@@ -1,3 +1,5 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class AppConstants {
   AppConstants._();
 
@@ -7,5 +9,6 @@ class AppConstants {
   static const String apiMapKey = 'AIzaSyBFXmVTugyampjGtaI8ya7XYP2amraze7s';
 
   static const double containerBorder = 10.0;
+  static const double widgetBorderRadius = 10.0;
   static const double defaultCameraZoomLevel = 14;
 }
