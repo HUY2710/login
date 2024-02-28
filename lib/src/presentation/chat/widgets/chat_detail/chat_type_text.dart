@@ -74,22 +74,23 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
                                 return const MessageEmptyScreen();
                               } else {
                                 final chats = snapshot.data!.docs;
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  if (_controller.hasClients) {
-                                    _controller.animateTo(
-                                        _controller.position.maxScrollExtent,
-                                        duration:
-                                            const Duration(milliseconds: 700),
-                                        curve: Curves.linear);
-                                  }
-                                  isFirstScroll = false;
-                                });
+                                // WidgetsBinding.instance
+                                //     .addPostFrameCallback((_) {
+                                //   if (_controller.hasClients) {
+                                //     _controller.animateTo(
+                                //         _controller.position.maxScrollExtent,
+                                //         duration:
+                                //             const Duration(milliseconds: 700),
+                                //         curve: Curves.linear);
+                                //   }
+                                //   isFirstScroll = false;
+                                // });
                                 return ListView.builder(
                                     itemCount: chats.length,
                                     controller: _controller,
                                     // padding: EdgeInsets.only(
                                     //     bottom: isFirstScroll ? 20.h : 0),
+                                    reverse: true,
                                     padding: const EdgeInsets.all(0),
                                     itemBuilder: (context, index) {
                                       return Column(
