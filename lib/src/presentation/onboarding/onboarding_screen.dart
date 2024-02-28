@@ -69,30 +69,31 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
       create: (context) => ValueCubit<int>(0),
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          actions: [
-            TextButton(
-              onPressed: () {
-                navigateToNextScreen();
-              },
-              child: Text(
-                context.l10n.skip,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16.sp,
-                  color: Colors.white,
-                ),
-              ),
-            )
-          ],
-        ),
         body: Column(
           children: [
             Expanded(
               child: Stack(
                 children: [
                   OnboardingCarousel(pageController: _pageController),
+                  Positioned(
+                      top: ScreenUtil().statusBarHeight - 20,
+                      right: 10,
+                      child: TextButton(
+                        onPressed: () {
+                          navigateToNextScreen();
+                        },
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(0))),
+                        child: Text(
+                          context.l10n.skip,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16.sp,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ))
                 ],
               ),
             ),

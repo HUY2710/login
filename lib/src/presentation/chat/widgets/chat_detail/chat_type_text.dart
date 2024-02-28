@@ -38,7 +38,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         // leadingWidth: 30.w,
-        toolbarHeight: 98.h,
+        // toolbarHeight: 98.h,
         leading: CustomInkWell(
             child: Padding(
               padding: EdgeInsets.all(12.w),
@@ -77,25 +77,20 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
                                   if (_controller.hasClients) {
-                                    isFirstScroll
-                                        ? _controller.jumpTo(_controller
-                                                .position.maxScrollExtent +
-                                            90.h)
-                                        : _controller.animateTo(
-                                            _controller
-                                                    .position.maxScrollExtent +
-                                                0.h,
-                                            duration: const Duration(
-                                                milliseconds: 300),
-                                            curve: Curves.linear);
+                                    _controller.animateTo(
+                                        _controller.position.maxScrollExtent,
+                                        duration:
+                                            const Duration(milliseconds: 700),
+                                        curve: Curves.linear);
                                   }
                                   isFirstScroll = false;
                                 });
                                 return ListView.builder(
                                     itemCount: chats.length,
                                     controller: _controller,
-                                    padding: EdgeInsets.only(
-                                        bottom: isFirstScroll ? 20.h : 0),
+                                    // padding: EdgeInsets.only(
+                                    //     bottom: isFirstScroll ? 20.h : 0),
+                                    padding: const EdgeInsets.all(0),
                                     itemBuilder: (context, index) {
                                       return Column(
                                         children: [
