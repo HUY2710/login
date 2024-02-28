@@ -27,7 +27,8 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
 
     try {
       //kiểm tra xem có tồn tại group đó hay không
-      final StoreGroup? existGroup = await client.isExistGroup(code);
+      final StoreGroup? existGroup =
+          await client.isExistGroup(code.toUpperCase());
       //có thể là không tồn tại group hoặc nhập sai passCode
       if (existGroup == null) {
         emit(
