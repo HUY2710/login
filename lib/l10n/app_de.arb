@@ -40,8 +40,6 @@
   "onboarding_title_1": "Verfolgen Sie jederzeit den Standort Ihrer Lieben",
   "onboarding_title_2": "Tägliche Historie der besuchten Orte",
   "onboarding_title_3": "Vereinfachen Sie das Teilen des Standorts mit Ihren Lieben",
-  "chatGroupEmptyTitle": "Fügen Sie Mitglieder hinzu, um Nachrichten zu senden",
-  "chatGroupEmptySub": "Mindestens eine weitere Person ist erforderlich, um einen Chat zu starten",
   "addNewMember": "Neues Mitglied hinzufügen",
   "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten!",
   "alreadyOwnError": "Es scheint, als hätten Sie diesen Artikel bereits gekauft. Bitte klicken Sie auf \"Wiederherstellen\", um fortzufahren.",
@@ -153,5 +151,10 @@
   "bicycle": "Fahrrad",
   "car": "Auto",
   "noMessageHereYet": "Noch keine Nachrichten hier...",
-  "noMessageSub": "Senden Sie eine Nachricht, um Ihr \nGespräch zu beginnen" 
+  "noMessageSub": "Senden Sie eine Nachricht, um Ihr \nGespräch zu beginnen",
+  "setUp": "Einrichten",
+  "success": "Erfolg",
+  "error": "Fehler",
+  "emptyGroup": "Keine Gruppen vorhanden",
+  "pleaseDoNot": "Bitte enthalten Sie keine Sonderzeichen"
 }

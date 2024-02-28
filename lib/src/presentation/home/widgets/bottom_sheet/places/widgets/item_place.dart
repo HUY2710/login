@@ -71,7 +71,7 @@ class ItemPlace extends StatelessWidget {
                 ),
               ),
               child: Text(
-                'Set up',
+                context.l10n.setUp,
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w500,

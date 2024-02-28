@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -111,12 +110,12 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
             avatarUrl: pathAvatarCubit.state, userName: userNameCtrl.text);
         // EasyLoading.dismiss();
         hideLoading();
-        Fluttertoast.showToast(msg: 'Update Success!')
+        Fluttertoast.showToast(msg: context.l10n.success)
             .then((value) => context.popRoute(true));
       } catch (error) {
         // EasyLoading.dismiss();
         hideLoading();
-        Fluttertoast.showToast(msg: 'Update Error!');
+        Fluttertoast.showToast(msg: context.l10n.error);
       }
     }
   }

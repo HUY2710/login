@@ -106,7 +106,6 @@
   "allowOthersToTrack": "Permitir que outros rastreiem",
   "allowOthersToTrackSub": "Sua localização ao vivo não será atualizada para os outros, você deseja desativar?",
   "ok": "Ok",
-  "subMotionTracking": "Permitindo o rastreamento de movimento do usuário, como caminhar, dirigir, andar de moto, etc.",
   "guideCheckIn": "Você pode fazer check-in em lugares para compartilhá-los com seus amigos e familiares",
   "guideMember": "Você pode encontrar a lista de membros do grupo aqui",
   "guideLocation": "Você pode usá-lo para retornar à sua localização atual no mapa.",
@@ -152,5 +151,10 @@
   "bicycle": "Bicicleta",
   "car": "Carro",
   "noMessageHereYet": "Ainda não há mensagens aqui...",
-  "noMessageSub": "Envie uma mensagem para começar sua \nconversa"
+  "noMessageSub": "Envie uma mensagem para começar sua \nconversa",
+  "setUp": "Configurar",
+  "success": "Sucesso",
+  "error": "Erro",
+  "emptyGroup": "Não tem nenhum grupo",
+  "pleaseDoNot": "Por favor, não contenha caracteres especiais"
 }

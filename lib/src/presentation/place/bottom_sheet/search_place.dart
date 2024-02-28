@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,6 +12,7 @@ import '../../../gen/assets.gen.dart';
 import '../../../services/http_service.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/cubit/value_cubit.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/my_drag.dart';
 import '../../../shared/widgets/text_field/main_text_form_field.dart';
 import '../cubit/select_place_cubit.dart';
@@ -123,7 +123,7 @@ class _SearchPlaceBottomSheetState extends State<SearchPlaceBottomSheet> {
             MainTextFormField(
               controller: searchPlaceCtrl,
               prefixIcon: SvgPicture.asset(Assets.icons.icSearch.path),
-              hintText: 'Search',
+              hintText: context.l10n.search,
             ),
             16.verticalSpace,
             if (autoCompletePlaceModel != null)

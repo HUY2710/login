@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -156,7 +155,7 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                 state.maybeWhen(
                     orElse: () {},
                     valid: (group) {
-                      Fluttertoast.showToast(msg: 'Join group success');
+                      Fluttertoast.showToast(msg: context.l10n.joinAGroup);
                       context.popRoute();
                     });
               },

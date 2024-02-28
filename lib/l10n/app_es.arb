@@ -151,5 +151,10 @@
   "bicycle": "Bicicleta",
   "car": "Coche",
   "noMessageHereYet": "Aún no hay mensajes aquí...",
-  "noMessageSub": "Envía un mensaje para comenzar tu \nconversación"
-  }
+  "noMessageSub": "Envía un mensaje para comenzar tu \nconversación",
+  "setUp": "Configurar",
+  "success": "Éxito",
+  "error": "Error",
+  "emptyGroup": "No tiene ningún grupo",
+  "pleaseDoNot": "Por favor, no contenga caracteres especiales"
+}

@@ -67,7 +67,7 @@ class CreateUsernameScreen extends StatelessWidget {
                         if (!validName) {
                           userNameCubit.update(value);
                         } else {
-                          Fluttertoast.showToast(msg: 'Not valid user name');
+                          Fluttertoast.showToast(msg: context.l10n.pleaseDoNot);
                         }
                       },
                       onChanged: (value) {
