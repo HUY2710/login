@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -46,7 +45,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
   Future<void> _tapDone() async {
     if (groupNameController.text.isNotEmpty &&
         ValidHelper.containsSpecialCharacters(groupNameController.text)) {
-      Fluttertoast.showToast(msg: 'Vui lòng không chứa kí tự đặc biệt');
+      Fluttertoast.showToast(msg: context.l10n.pleaseDoNot);
       return;
     }
 
@@ -107,7 +106,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
 
       // EasyLoading.dismiss();
       hideLoading();
-      Fluttertoast.showToast(msg: 'Update Group Success!');
+      Fluttertoast.showToast(msg: context.l10n.success);
 
       //sau khi update thành công thì tiến hành cập nhật lại group ở local
       getIt<SelectGroupCubit>().update(
@@ -209,8 +208,8 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
               showDialog(
                 context: context,
                 builder: (context) => AvatarDialog(
-                  title: 'Select Avatar',
-                  confirmText: 'Set',
+                  title: context.l10n.setAvatar,
+                  confirmText: context.l10n.ok,
                   confirmTap: () {},
                   avatarCubit: pathAvatarCubit,
                 ),

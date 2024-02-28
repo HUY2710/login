@@ -151,5 +151,10 @@
   "bicycle": "자전거",
   "car": "자동차",
   "noMessageHereYet": "아직 메시지가 없어요...",
-  "noMessageSub": "대화를 시작하려면 메시지를 보내세요"
+  "noMessageSub": "대화를 시작하려면 메시지를 보내세요",
+  "setUp": "설치",
+  "success": "성공",
+  "error": "오류",
+  "emptyGroup": "어떤 그룹도 없습니다",
+  "pleaseDoNot": "특수 문자를 포함하지 마십시오"
 }

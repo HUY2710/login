@@ -28,8 +28,8 @@ class PlacesBottomSheet extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => ActionDialog(
-        title: 'Remove this Place',
-        subTitle: 'Are you sure to the remove this place from your group?',
+        title: context.l10n.removeThisPlace,
+        subTitle: context.l10n.removeThisPlaceSub,
         confirmTap: () async {
           try {
             context.popRoute();
@@ -52,8 +52,8 @@ class PlacesBottomSheet extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => ActionDialog(
-        title: 'Remove this Place',
-        subTitle: 'Are you sure to the remove this place from your group?',
+        title: context.l10n.removeThisPlace,
+        subTitle: context.l10n.removeThisPlaceSub,
         confirmTap: () async {
           try {
             context.popRoute();
@@ -218,7 +218,7 @@ class PlacesBottomSheet extends StatelessWidget {
               builder: (context, state) {
                 return state.maybeWhen(
                     orElse: () => const SizedBox(),
-                    failed: (message) => Text('Error:$message'),
+                    failed: (message) => Text(message),
                     success: (places) {
                       if (places.isEmpty) {
                         return const SizedBox.shrink();

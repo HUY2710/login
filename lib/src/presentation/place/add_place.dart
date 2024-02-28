@@ -386,12 +386,13 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
             ),
             Row(
               children: [
-                const Visibility(
-                    visible: false,
-                    maintainSize: true,
-                    maintainState: true,
-                    maintainAnimation: true,
-                    child: Text('Radius')),
+                Visibility(
+                  visible: false,
+                  maintainSize: true,
+                  maintainState: true,
+                  maintainAnimation: true,
+                  child: Text(context.l10n.radius),
+                ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10),

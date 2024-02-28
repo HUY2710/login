@@ -34,15 +34,12 @@
   "guideGroup": "Halo! Klik di sini untuk mulai membuat grup Anda sendiri.",
   "guidePro": "Tingkatkan ke Premium untuk fitur dan manfaat eksklusif! Klik di sini untuk membuka akses VIP.",
   "leaveGroup": "Keluar dari Grup",
-  "leaveGroup": "Tinggalkan Grup",
   "leaveGroupContent": "Apakah Anda yakin ingin meninggalkan grup?",
   "removeGroup": "Hapus Grup",
   "removeGroupContent": "Anda saat ini adalah pemilik grup. Apakah Anda yakin ingin menghapusnya secara permanen?",
   "onboarding_title_1": "Lacak lokasi orang yang Anda cintai setiap saat",
   "onboarding_title_2": "Histori harian lokasi yang dikunjungi",
   "onboarding_title_3": "Sederhanakan berbagi lokasi dengan orang yang Anda cintai",
-  "chatGroupEmptyTitle": "Tambahkan anggota untuk mengirim pesan",
-  "chatGroupEmptySub": "Diperlukan setidaknya satu orang lagi \nuntuk memulai obrolan",
   "addNewMember": "Tambah Anggota Baru",
   "unexpectedError": "Terjadi kesalahan yang tidak terduga!",
   "alreadyOwnError": "Sepertinya Anda sudah memiliki item ini.\nSilakan klik \"Pulihkan pembelian\" untuk melanjutkan.",
@@ -154,5 +151,10 @@
   "bicycle": "Sepeda",
   "car": "Mobil",
   "noMessageHereYet": "Belum ada pesan di sini...",
-  "noMessageSub": "Kirim pesan untuk memulai \npercakapan Anda"
+  "noMessageSub": "Kirim pesan untuk memulai \npercakapan Anda",
+  "setUp": "Siapkan",
+  "success": "Sukses",
+  "error": "Kesalahan",
+  "emptyGroup": "Tidak memiliki grup",
+  "pleaseDoNot": "Tolong jangan memuat karakter khusus"
 }

@@ -81,7 +81,7 @@ class GroupBar extends StatelessWidget {
           8.w.horizontalSpace,
           if (!purchaseState.isPremium())
             CustomInkWell(
-              onTap: () => context.pushRoute(PremiumRoute()),
+              onTap: () => context.pushRoute(const PremiumRoute()),
               child: ShadowContainer(
                 width: 40.r,
                 height: 40.r,
@@ -210,8 +210,8 @@ class GroupBar extends StatelessWidget {
                             if (groups.isEmpty) {
                               return SizedBox(
                                 height: 1.sh * 0.26,
-                                child: const Center(
-                                    child: Text("Don't have any groups")),
+                                child: Center(
+                                    child: Text(context.l10n.emptyGroup)),
                               );
                             }
                             return SizedBox(

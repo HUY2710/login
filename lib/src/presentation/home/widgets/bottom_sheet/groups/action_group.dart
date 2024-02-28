@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -216,16 +215,10 @@ class ActionGroupBottomSheet extends StatelessWidget {
                       //đăng kí nhận lắng nghe thông báo
                       getIt<FirebaseMessageService>()
                           .subscribeTopics([itemGroup.idGroup!]);
-                      //đăng kí nhận lắng nghe thông báo
-                      getIt<FirebaseMessageService>()
-                          .subscribeTopics(['testGroup']);
                     } else {
                       //hủy thông báo
                       getIt<FirebaseMessageService>()
                           .unSubscribeTopics([itemGroup.idGroup!]);
-                      //đăng kí nhận lắng nghe thông báo
-                      getIt<FirebaseMessageService>()
-                          .unSubscribeTopics(['testGroup']);
                     }
                     FirestoreClient.instance.updateNotifyGroupEachMember(
                       idGroup: getIt<SelectGroupCubit>().state!.idGroup!,

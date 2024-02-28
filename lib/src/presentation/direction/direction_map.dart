@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_iap/flutter_iap.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -89,9 +88,7 @@ class _DirectionMapState extends State<DirectionMap> {
         _getPolyline(routeModel.polyline.encodedPolyline);
       } catch (error) {
         debugPrint('error:$error');
-        Fluttertoast.showToast(
-            msg:
-                'WALK or BICYCLE routes are in beta and might sometimes be missing clear');
+        Fluttertoast.showToast(msg: context.l10n.notWalkAndBicycle);
       }
     } else {
       // Nếu yêu cầu không thành công, bạn có thể xử lý lỗi ở đây
@@ -213,7 +210,7 @@ class _DirectionMapState extends State<DirectionMap> {
                 onTap: () async {
                   // EasyLoading.show();
                   if (!purchaseState.isPremium()) {
-                    context.pushRoute(PremiumRoute());
+                    context.pushRoute(const PremiumRoute());
                   } else {
                     showLoading();
                     try {
@@ -303,7 +300,7 @@ class TravelModeIcon extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                  color: Color(0xff343434),
+                  color: const Color(0xff343434),
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w500),
             )
