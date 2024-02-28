@@ -68,6 +68,7 @@ class ItemMember extends StatelessWidget {
                     Expanded(
                       child: Text(
                         user.location?.address ?? '...',
+                        maxLines: 2,
                         style: TextStyle(
                             fontSize: 14.sp,
                             color: const Color(0xff6C6C6C),

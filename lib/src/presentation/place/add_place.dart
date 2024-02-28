@@ -77,8 +77,10 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
     });
     if (widget.place != null) {
       icPlaceCubit.update(widget.place!.iconPlace);
-      selectPlaceCubit.update(StoreLocation.fromJson(widget.place!.location!));
       currentRadius = widget.place!.radius;
+    }
+    if (!widget.defaultPlace) {
+      selectPlaceCubit.update(StoreLocation.fromJson(widget.place!.location!));
     }
   }
 

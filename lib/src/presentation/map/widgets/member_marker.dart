@@ -119,12 +119,14 @@ class _BuildMarkerState extends State<BuildMarker> {
                     ),
                   ),
                   8.horizontalSpace,
-                  Text(
-                    widget.member.userName,
-                    style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w500,
-                        color: MyColors.black34),
+                  Flexible(
+                    child: Text(
+                      widget.member.userName,
+                      style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w500,
+                          color: MyColors.black34),
+                    ),
                   )
                 ],
               ),

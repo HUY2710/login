@@ -79,37 +79,6 @@ class ItemPlace extends StatelessWidget {
             ),
         ],
       ),
-        ),
-        if (place.idCreator == Global.instance.user?.code)
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => ActionDialog(
-                  title: context.l10n.removeThisPlace,
-                  subTitle: context.l10n.removeThisPlaceSub,
-                  confirmTap: () async {
-                    try {
-                      context.popRoute();
-                      // EasyLoading.show();
-                      showLoading();
-                      await FirestoreClient.instance.removePlace(
-                          getIt<SelectGroupCubit>().state!.idGroup!,
-                          place.idPlace!);
-                      getIt<TrackingPlacesCubit>().removePlace(place.idPlace!);
-                      // EasyLoading.dismiss();
-                      hideLoading();
-                    } catch (error) {
-                      debugPrint('error:$error');
-                    }
-                  },
-                  confirmText: context.l10n.delete,
-                ),
-              );
-            },
-            icon: Assets.icons.icTrash.svg(width: 20.r),
-          ),
-      ],
     );
   }
 }
