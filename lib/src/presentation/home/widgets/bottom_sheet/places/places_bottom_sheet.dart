@@ -180,7 +180,7 @@ class PlacesBottomSheet extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    final item = getIt<DefaultPlaceCubit>().state![index];
+                    final item = state[index];
                     return CustomSwipeWidget(
                       actionRight1: () {
                         showAppModalBottomSheet(

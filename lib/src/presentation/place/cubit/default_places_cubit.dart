@@ -21,7 +21,11 @@ class DefaultPlaceCubit extends Cubit<List<StorePlace>?> with HydratedMixin {
   @override
   List<StorePlace>? fromJson(Map<String, dynamic> json) {
     if (json['listDefaultPlaces'] != null) {
-      return json['listDefaultPlaces'];
+      // Convert json['listDefaultPlaces'] thành List<StorePlace>
+      final List<dynamic> jsonList = json['listDefaultPlaces'];
+      final List<StorePlace> placesList =
+          jsonList.map((placeJson) => StorePlace.fromJson(placeJson)).toList();
+      return placesList;
     }
     return null;
   }
