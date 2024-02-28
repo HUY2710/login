@@ -106,6 +106,10 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
                 subscriptionLocation: _listenLocationUserUpdate(infoUser),
                 subscriptionUser: _listenUserUpdate(infoUser),
               );
+            } else {
+              infoUser = infoUser.copyWith(
+                subscriptionUser: _listenUserUpdate(infoUser),
+              );
             }
           } else {
             debugPrint('${infoUser?.code != Global.instance.user?.code}');

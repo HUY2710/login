@@ -3,14 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../config/di/di.dart';
 import '../../../data/models/store_location/store_location.dart';
 import '../../../data/models/store_place/store_place.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../global/global.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/constants/map_style.dart';
-import '../../place/history_place/history_place.dart';
 import '../../home/widgets/bottom_sheet/show_bottom_sheet_home.dart';
+import '../../place/history_place/history_place.dart';
+import '../cubit/select_group_cubit.dart';
 import '../cubit/tracking_location/tracking_location_cubit.dart';
 import '../cubit/tracking_members/tracking_member_cubit.dart';
 import '../cubit/tracking_places/tracking_places_cubit.dart';
@@ -69,6 +71,12 @@ class _CustomMapState extends State<CustomMap> {
             return places.map((StorePlace place) => _buildPlaceMarker(place));
           },
         ),
+        if (getIt<SelectGroupCubit>().state == null)
+          Marker(
+            position: Global.instance.currentLocation,
+            markerId: MarkerId(Global.instance.user?.code ?? ''),
+            icon: Global.instance.myMarker ?? BitmapDescriptor.defaultMarker,
+          )
       },
       circles: <Circle>{
         ...widget.trackingPlacesState.maybeWhen(
@@ -111,12 +119,18 @@ class _CustomMapState extends State<CustomMap> {
   Marker _buildFriendMarker(StoreUser user) {
     final double lat = user.location?.lat ?? 0;
     final double lng = user.location?.lng ?? 0;
-
+    if (user.code == Global.instance.user?.code && user.marker != null) {
+      Global.instance.myMarker = BitmapDescriptor.fromBytes(
+        user.marker!,
+        size: const Size.fromWidth(30),
+      );
+    }
     return Marker(
-        anchor: const Offset(0.5, 0.72),
+        // anchor: const Offset(0.5, 0.72),
         position: user.code == Global.instance.user?.code
             ? Global.instance.currentLocation
             : LatLng(lat, lng),
+        visible: user.marker != null,
         markerId: MarkerId(user.code),
         icon: user.marker != null
             ? BitmapDescriptor.fromBytes(
@@ -124,13 +138,15 @@ class _CustomMapState extends State<CustomMap> {
                 size: const Size.fromWidth(30),
               )
             : BitmapDescriptor.defaultMarker,
-        onTap: () {
-          showAppModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.transparent,
-            builder: (context) => HistoryPlace(user: user),
-          );
-        });
+        onTap: user.code == Global.instance.user?.code
+            ? () {}
+            : () {
+                showAppModalBottomSheet(
+                  context: context,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => HistoryPlace(user: user),
+                );
+              });
   }
 
   Marker _buildPlaceMarker(StorePlace place) {
