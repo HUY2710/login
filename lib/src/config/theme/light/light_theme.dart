@@ -19,6 +19,7 @@ ThemeData lightThemeData = ThemeData(
   colorScheme: const ColorScheme.light(
     primary: MyColors.primary,
   ),
+  fontFamily: 'Poppins',
   useMaterial3: true,
   textTheme: MyTextTheme(),
   dialogTheme: MyDialogTheme(),
