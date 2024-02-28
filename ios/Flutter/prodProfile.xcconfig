@@ -2,5 +2,5 @@
 
 FLUTTER_TARGET=lib/main_prod.dart
 ASSET_PREFIX=prod
-BUNDLE_NAME=Group Location
-BUNDLE_DISPLAY_NAME=Group Location
+BUNDLE_NAME=Group Sharing
+BUNDLE_DISPLAY_NAME=Group Sharing
