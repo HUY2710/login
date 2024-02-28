@@ -66,6 +66,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release-prod"
+      customArchiveName = "Group Location"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

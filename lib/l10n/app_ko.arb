@@ -158,5 +158,6 @@
   "emptyGroup": "어떤 그룹도 없습니다",
   "pleaseDoNot": "특수 문자를 포함하지 마십시오",
   "checkInNoti": "에서 체크인 했습니다",
-  "sendMessageNoti": "에서 메시지를 보냈습니다"
+  "sendMessageNoti": "에서 메시지를 보냈습니다",
+  "joined": "참여함"
 }

@@ -158,5 +158,6 @@
   "emptyGroup": "Tidak memiliki grup",
   "pleaseDoNot": "Tolong jangan memuat karakter khusus",
   "checkInNoti": "telah check-in di",
-  "sendMessageNoti": "telah mengirim pesan di"
+  "sendMessageNoti": "telah mengirim pesan di",
+  "joined": "bergabung"
 }

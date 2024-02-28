@@ -158,5 +158,6 @@
   "emptyGroup": "Não tem nenhum grupo",
   "pleaseDoNot": "Por favor, não contenha caracteres especiais",
   "checkInNoti": "fez check-in em",
-  "sendMessageNoti": "enviou a mensagem em"
+  "sendMessageNoti": "enviou a mensagem em",
+  "joined": "juntou-se"
 }

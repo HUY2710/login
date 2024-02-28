@@ -579,8 +579,11 @@
 				MAP_KEY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterBase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Profile;
@@ -855,6 +858,9 @@
 				MAP_KEY = AIzaSyCYnWDOViEVKZtwnzfcJdnULH_bD2YPCWU;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tinhvu.cycle-sharing.dev";
 				PRODUCT_NAME = Runner;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Debug-dev";
 		};
@@ -865,6 +871,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MAP_KEY = "";
 				PRODUCT_NAME = Runner;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Profile-dev";
 		};
@@ -875,6 +884,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MAP_KEY = AIzaSyCYnWDOViEVKZtwnzfcJdnULH_bD2YPCWU;
 				PRODUCT_NAME = Runner;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Release-dev";
 		};
@@ -882,12 +894,16 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 702264A7A9C3AEF185FDBBC5 /* Pods-Runner.debug-prod.xcconfig */;
 			buildSettings = {
+				BUNDLE_NAME = "Group Sharing";
 				CODE_SIGN_ENTITLEMENTS = "Runner/RunnerDebug-prod.entitlements";
 				DEVELOPMENT_TEAM = 4J8WSCVQ98;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MAP_KEY = "AIzaSyAc-Ox2Go4sw0pM3KVL19yT61qk4haC0jA";
 				PRODUCT_BUNDLE_IDENTIFIER = com.locationsharing.livelocation.grouplocationshare.sendlocation;
 				PRODUCT_NAME = Runner;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Debug-prod";
 		};
@@ -898,6 +914,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MAP_KEY = "";
 				PRODUCT_NAME = Runner;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Profile-prod";
 		};
@@ -905,6 +924,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7D798C2BD7029B3D03B93E74 /* Pods-Runner.release-prod.xcconfig */;
 			buildSettings = {
+				BUNDLE_NAME = "Group Sharing";
 				CODE_SIGN_ENTITLEMENTS = "Runner/RunnerRelease-prod.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -914,6 +934,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.locationsharing.livelocation.grouplocationshare.sendlocation;
 				PRODUCT_NAME = Runner;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Release-prod";
 		};
@@ -1220,9 +1243,12 @@
 				MAP_KEY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterBase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1244,8 +1270,11 @@
 				MAP_KEY = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.flutterBase;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
