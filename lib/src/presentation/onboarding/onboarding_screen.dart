@@ -76,7 +76,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                 children: [
                   OnboardingCarousel(pageController: _pageController),
                   Positioned(
-                      top: ScreenUtil().statusBarHeight - 20,
+                      top: ScreenUtil().statusBarHeight,
                       right: 10,
                       child: TextButton(
                         onPressed: () {

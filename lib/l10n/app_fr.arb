@@ -156,5 +156,7 @@
   "success": "Succès",
   "error": "Erreur",
   "emptyGroup": "Aucun groupe trouvé",
-  "pleaseDoNot": "Veuillez ne pas contenir de caractères spéciaux"
+  "pleaseDoNot": "Veuillez ne pas contenir de caractères spéciaux",
+  "checkInNoti": "a fait check-in à",
+  "sendMessageNoti": "a envoyé le message dans"
 }

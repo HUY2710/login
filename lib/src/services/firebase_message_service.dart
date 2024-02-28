@@ -8,7 +8,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 
+import '../config/di/di.dart';
+import '../config/navigation/app_router.dart';
 import '../global/global.dart';
+import '../shared/extension/context_extension.dart';
 import '../shared/helpers/env_params.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -159,8 +162,10 @@ class FirebaseMessageService implements NotificationService {
 
   @override
   Future<void> sendChatNotification(String groupId, String groupName) async {
-    final message = 'Username has sent the message in $groupName';
-    await _sendMessage(groupId, 'Cycle Sharing', message);
+    final message =
+        '${Global.instance.user?.userName} ${getIt<AppRouter>().navigatorKey.currentContext!.l10n.sendMessageNoti} $groupName';
+    await _sendMessage(groupId,
+        Global.instance.packageInfo?.appName ?? 'Cycle Sharing', message);
   }
 
   @override
@@ -169,14 +174,17 @@ class FirebaseMessageService implements NotificationService {
       required bool enter,
       required String message,
       BuildContext? context}) async {
-    await _sendMessage(groupId, 'Cycle Sharing', message);
+    await _sendMessage(groupId,
+        Global.instance.packageInfo?.appName ?? 'Cycle Sharing', message);
   }
 
   @override
   Future<void> sendCheckInNotification(
       String groupId, String address, BuildContext? context) async {
-    final message = 'Username has checkin at $address';
-    await _sendMessage(groupId, 'Cycle Sharing', message);
+    final message =
+        '${Global.instance.user?.userName} ${context?.l10n.checkInNoti} $address';
+    await _sendMessage(groupId,
+        Global.instance.packageInfo?.appName ?? 'Cycle Sharing', message);
   }
 }
 

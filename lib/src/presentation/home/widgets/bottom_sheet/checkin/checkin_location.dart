@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../../../module/iap/my_purchase_manager.dart';
 import '../../../../../config/di/di.dart';
 import '../../../../../config/navigation/app_router.dart';
+import '../../../../../data/local/shared_preferences_manager.dart';
 import '../../../../../data/models/location/location_model.dart';
 import '../../../../../data/models/places/place_model.dart';
 import '../../../../../gen/gens.dart';
@@ -229,9 +230,10 @@ class _CheckInLocationState extends State<CheckInLocation> {
     );
   }
 
-  void _checkIn({Place? item}) {
+  void _checkIn({Place? item}) async {
     final storeGroup = getIt<SelectGroupCubit>().state;
-    ChatService.instance.sendMessageLocation(
+
+    await ChatService.instance.sendMessageLocation(
       content: '',
       idGroup: storeGroup?.idGroup ?? '',
       lat: item == null
@@ -244,6 +246,9 @@ class _CheckInLocationState extends State<CheckInLocation> {
       context: context,
       isCheckin: true,
     );
+    await SharedPreferencesManager.saveTimeSeenChat(
+        Global.instance.group!.idGroup!);
+
     context.popRoute().then((value) {
       return showDialog(
           context: context,

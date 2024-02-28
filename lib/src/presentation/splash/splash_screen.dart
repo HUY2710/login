@@ -15,6 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../../../app/cubit/language_cubit.dart';
@@ -85,7 +86,7 @@ class _SplashScreenState extends State<SplashScreen> {
       await RemoteConfigManager.instance.initConfig();
       await loadAdUnitId();
       await configureAd();
-
+      Global.instance.packageInfo = await PackageInfo.fromPlatform();
       if (EasyAds.instance.hasInternet) {
         await initUpgrader();
       } else {
