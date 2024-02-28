@@ -156,5 +156,6 @@
   "success": "Success",
   "error": "Error",
   "emptyGroup": "Don't have any groups",
-  "pleaseDoNot": "Please do not contain special characters"
+  "pleaseDoNot": "Please do not contain special characters",
+  "joined": "joined"
 }

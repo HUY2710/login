@@ -32,6 +32,10 @@ abstract class NotificationService {
   /// When check in any location.
   Future<void> sendCheckInNotification(
       String groupId, String address, BuildContext? context);
+
+  /// When check in any location.
+  Future<void> sendJoinGroup(
+      String groupId, String message, BuildContext? context);
 }
 
 @singleton
@@ -176,6 +180,12 @@ class FirebaseMessageService implements NotificationService {
   Future<void> sendCheckInNotification(
       String groupId, String address, BuildContext? context) async {
     final message = 'Username has checkin at $address';
+    await _sendMessage(groupId, 'Cycle Sharing', message);
+  }
+
+  @override
+  Future<void> sendJoinGroup(
+      String groupId, String message, BuildContext? context) async {
     await _sendMessage(groupId, 'Cycle Sharing', message);
   }
 }

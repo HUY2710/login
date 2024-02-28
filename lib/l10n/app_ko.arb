@@ -156,5 +156,6 @@
   "success": "성공",
   "error": "오류",
   "emptyGroup": "어떤 그룹도 없습니다",
-  "pleaseDoNot": "특수 문자를 포함하지 마십시오"
+  "pleaseDoNot": "특수 문자를 포함하지 마십시오",
+  "joined": "참여함"
 }
