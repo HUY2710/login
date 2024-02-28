@@ -15,6 +15,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../app/cubit/loading_cubit.dart';
 import '../../../module/iap/my_purchase_manager.dart';
 import '../../config/di/di.dart';
+import '../../config/navigation/app_router.dart';
 import '../../data/models/routes/route_model.dart';
 import '../../data/models/store_user/store_user.dart';
 import '../../gen/gens.dart';
@@ -158,6 +159,7 @@ class _DirectionMapState extends State<DirectionMap> {
                       child: TravelModeIcon(
                         iconPath: Assets.icons.activity.walking.path,
                         isSelected: typeDirection == RouteTravelMode.WALK.name,
+                        title: context.l10n.walk,
                       ),
                     ),
                     GestureDetector(
@@ -171,6 +173,7 @@ class _DirectionMapState extends State<DirectionMap> {
                         iconPath: Assets.icons.activity.bicycle.path,
                         isSelected:
                             typeDirection == RouteTravelMode.BICYCLE.name,
+                        title: context.l10n.bicycle,
                       ),
                     ),
                     GestureDetector(
@@ -183,6 +186,7 @@ class _DirectionMapState extends State<DirectionMap> {
                       child: TravelModeIcon(
                         iconPath: Assets.icons.activity.car.path,
                         isSelected: typeDirection == RouteTravelMode.DRIVE.name,
+                        title: context.l10n.car,
                       ),
                     )
                   ],
@@ -205,18 +209,22 @@ class _DirectionMapState extends State<DirectionMap> {
                 title: context.l10n.getDirectionsInMap,
                 paddingVertical: 12.h,
                 heightBtn: 44.h,
-                isEnable: purchaseState.isPremium(),
+                // isEnable: purchaseState.isPremium(),
                 onTap: () async {
                   // EasyLoading.show();
-                  showLoading();
-                  try {
-                    //xử lí với premium
-                    if (purchaseState.isPremium()) {
-                      testRequest().then((value) => context.popRoute());
-                    }
-                  } catch (error) {}
-                  // EasyLoading.dismiss();
-                  hideLoading();
+                  if (!purchaseState.isPremium()) {
+                    context.pushRoute(PremiumRoute());
+                  } else {
+                    showLoading();
+                    try {
+                      //xử lí với premium
+                      if (purchaseState.isPremium()) {
+                        testRequest().then((value) => context.popRoute());
+                      }
+                    } catch (error) {}
+                    // EasyLoading.dismiss();
+                    hideLoading();
+                  }
                 },
               ),
               SizedBox(height: 16.h),
@@ -247,42 +255,58 @@ class TravelModeIcon extends StatelessWidget {
     super.key,
     required this.iconPath,
     required this.isSelected,
+    required this.title,
   });
 
   final String iconPath;
   final bool isSelected;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MyPurchaseManager, PurchaseState>(
       builder: (context, purchaseState) {
-        return Stack(
+        return Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            ShadowContainer(
-              opacityColor: 0.15,
-              colorShadow:
-                  isSelected ? const Color(0xff7B3EFF).withOpacity(0.8) : null,
-              child: Padding(
-                padding: EdgeInsets.all(20.r),
-                child: SvgPicture.asset(
-                  iconPath,
-                  height: 32.r,
-                  width: 32.r,
-                ),
-              ),
-            ),
-            if (!purchaseState.isPremium())
-              Positioned(
-                right: 0,
-                child: ShadowContainer(
-                  padding: EdgeInsets.all(6.r),
-                  child: SvgPicture.asset(
-                    Assets.icons.icPremium.path,
-                    width: 120.r,
-                    height: 12.r,
+            Stack(
+              children: [
+                ShadowContainer(
+                  opacityColor: 0.15,
+                  colorShadow: isSelected
+                      ? const Color(0xff7B3EFF).withOpacity(0.8)
+                      : null,
+                  child: Padding(
+                    padding: EdgeInsets.all(20.r),
+                    child: SvgPicture.asset(
+                      iconPath,
+                      height: 32.r,
+                      width: 32.r,
+                    ),
                   ),
                 ),
-              ),
+                if (!purchaseState.isPremium())
+                  Positioned(
+                    right: 0,
+                    child: ShadowContainer(
+                      padding: EdgeInsets.all(6.r),
+                      child: SvgPicture.asset(
+                        Assets.icons.icPremium.path,
+                        width: 120.r,
+                        height: 12.r,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            12.h.verticalSpace,
+            Text(
+              title,
+              style: TextStyle(
+                  color: Color(0xff343434),
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w500),
+            )
           ],
         );
       },

@@ -66,7 +66,7 @@ class ActionDialog extends StatelessWidget {
                     confirmText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: const Color(0xff8E52FF),
+                      color: const Color(0xffFF3B30),
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                     ),

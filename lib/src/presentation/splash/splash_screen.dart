@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:battery_plus/battery_plus.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -38,7 +39,9 @@ import '../../shared/extension/context_extension.dart';
 import '../../shared/extension/int_extension.dart';
 import '../../shared/helpers/env_params.dart';
 import '../../shared/widgets/loading/loading_indicator.dart';
+import '../../services/connectivity_service.dart';
 import '../map/cubit/select_group_cubit.dart';
+import '../place/cubit/default_places_cubit.dart';
 import 'update_dialog.dart';
 
 @RoutePage()
@@ -50,10 +53,19 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  bool _isInitialized = false;
   @override
   void initState() {
     super.initState();
-    _init();
+    _init().then((value) {
+      NetworkConnectivity.instance.myStream.listen((event) async {
+        if (event.keys.toList()[0] != ConnectivityResult.none &&
+            !_isInitialized) {
+          _isInitialized = true;
+          await _init();
+        }
+      });
+    });
   }
 
   Future<void> _init() async {
@@ -63,20 +75,23 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     initDebugger();
-    await loadEnv();
-    await Future.wait([
-      RemoteConfigManager.instance.initConfig(),
-      // initAppsflyer(),
-      // AppLovinMAX.initialize(EnvParams.appLovinKey),
-    ]);
-    await RemoteConfigManager.instance.initConfig();
-    await loadAdUnitId();
-    await configureAd();
+    if (await NetworkConnectivity.instance.initial()) {
+      await loadEnv();
+      await Future.wait([
+        RemoteConfigManager.instance.initConfig(),
+        // initAppsflyer(),
+        // AppLovinMAX.initialize(EnvParams.appLovinKey),
+      ]);
+      await RemoteConfigManager.instance.initConfig();
+      await loadAdUnitId();
+      await configureAd();
 
-    if (EasyAds.instance.hasInternet) {
-      await initUpgrader();
-    } else {
-      setInitScreen();
+      if (EasyAds.instance.hasInternet) {
+        await initUpgrader();
+      } else {
+        setInitScreen();
+      }
+      _isInitialized = true;
     }
   }
 
@@ -167,6 +182,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> setInitScreen() async {
     await getMe();
     await checkInGroup();
+    getIt<DefaultPlaceCubit>().update(defaultListPlace);
     await getIt<TrackingHistoryPlaceService>().initGroups();
     final bool isFirstLaunch =
         await SharedPreferencesManager.getIsFirstLaunch();
