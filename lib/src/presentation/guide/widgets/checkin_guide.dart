@@ -12,7 +12,7 @@ class CheckInGuide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShadowContainer(
-      maxWidth: MediaQuery.sizeOf(context).width - 80.w,
+      // maxWidth: MediaQuery.sizeOf(context).width - 80.w,
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
       child: Row(
         mainAxisSize: MainAxisSize.min,

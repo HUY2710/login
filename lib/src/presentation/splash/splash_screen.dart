@@ -365,7 +365,7 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(
-                  height: 50.r,
+                  height: 40.r,
                   width: 60.r,
                   child: const LoadingIndicator(
                     colors: [
