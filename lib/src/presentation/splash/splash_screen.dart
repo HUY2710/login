@@ -182,7 +182,6 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> setInitScreen() async {
     await getMe();
     await checkInGroup();
-    getIt<DefaultPlaceCubit>().update(defaultListPlace);
     await getIt<TrackingHistoryPlaceService>().initGroups();
     final bool isFirstLaunch =
         await SharedPreferencesManager.getIsFirstLaunch();

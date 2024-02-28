@@ -19,7 +19,7 @@ class ItemPlace extends StatelessWidget {
         children: [
           ShadowContainer(
               borderRadius: BorderRadius.circular(15.r),
-              colorShadow: const Color(0xff42474C).withOpacity(.15),
+              colorShadow: Color(place.colorPlace).withOpacity(0.45),
               blurRadius: 17,
               child: Padding(
                 padding: EdgeInsets.all(10.r),
