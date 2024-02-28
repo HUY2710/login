@@ -12,7 +12,6 @@ import 'package:marquee/marquee.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/models/store_group/store_group.dart';
-import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/colors.gen.dart';
 import '../../../global/global.dart';
@@ -69,22 +68,6 @@ class _BottomBarState extends State<BottomBar> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        BlocBuilder<SelectUserCubit, StoreUser?>(
-          bloc: getIt<SelectUserCubit>(),
-          builder: (context, state) {
-            if (state != null) {
-              return GestureDetector(
-                onTap: _goToDetailLocation,
-                child: ShadowContainer(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-                  child: SvgPicture.asset(Assets.icons.icGps.path),
-                ),
-              );
-            }
-            return const SizedBox.shrink();
-          },
-        ),
         Align(
           alignment: Alignment.centerRight,
           child: Padding(
@@ -131,97 +114,89 @@ class _BottomBarState extends State<BottomBar> {
                         true);
                   }),
               16.horizontalSpace,
-              BlocBuilder<SelectUserCubit, StoreUser?>(
-                bloc: getIt<SelectUserCubit>(),
-                builder: (context, state) {
-                  if (state == null) {
-                    return Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          showAppModalBottomSheet(
-                            context: context,
-                            builder: (context) => const GroupBottomSheet(),
-                          );
-                        },
-                        child: ShadowContainer(
-                          maxWidth: MediaQuery.sizeOf(context).width - 80.w,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 24.w, vertical: 10.h),
-                          child: BlocBuilder<SelectGroupCubit, StoreGroup?>(
-                            bloc: getIt<SelectGroupCubit>(),
-                            builder: (context, state) {
-                              return Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CircleAvatar(
-                                    backgroundColor: MyColors.primary,
-                                    backgroundImage: AssetImage(state == null
-                                        ? Assets
-                                            .images.avatars.groups.group1.path
-                                        : state.avatarGroup),
-                                    radius: 14.r,
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 12.w),
-                                      child: LayoutBuilder(
-                                          builder: (context, constraints) {
-                                        final text = state == null
-                                            ? context.l10n.newGroup
-                                            : state.groupName;
-
-                                        final painter = TextPainter(
-                                          text: TextSpan(text: text),
-                                          maxLines: 1,
-                                          textScaleFactor:
-                                              MediaQuery.of(context)
-                                                  .textScaleFactor,
-                                          textDirection: TextDirection.ltr,
-                                        );
-                                        painter.layout();
-                                        final overflow = painter.size.width >
-                                            constraints.maxWidth;
-
-                                        return overflow
-                                            ? Marquee(
-                                                text: text,
-                                                pauseAfterRound:
-                                                    const Duration(seconds: 3),
-                                                style: TextStyle(
-                                                    color:
-                                                        const Color(0xff8E52FF),
-                                                    fontSize: 16.sp,
-                                                    fontWeight:
-                                                        FontWeight.w500))
-                                            : Text(
-                                                text,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color:
-                                                        const Color(0xff8E52FF),
-                                                    fontSize: 16.sp,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              );
-                                      }),
-                                    ),
-                                  ),
-                                  const Icon(
-                                    Icons.keyboard_arrow_up_outlined,
-                                    color: MyColors.primary,
-                                  )
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                      ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    showAppModalBottomSheet(
+                      context: context,
+                      builder: (context) => const GroupBottomSheet(),
                     );
-                  }
-                  return _buildAvatar(state.avatarUrl);
-                },
+                  },
+                  child: ShadowContainer(
+                    maxWidth: MediaQuery.sizeOf(context).width - 80.w,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
+                    child: BlocBuilder<SelectGroupCubit, StoreGroup?>(
+                      bloc: getIt<SelectGroupCubit>(),
+                      builder: (context, state) {
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: MyColors.primary,
+                              backgroundImage: AssetImage(state == null
+                                  ? Assets.images.avatars.groups.group1.path
+                                  : state.avatarGroup),
+                              radius: 14.r,
+                            ),
+
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 12.w),
+                                child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      final text = state == null
+                                          ? context.l10n.newGroup
+                                          : state.groupName;
+
+                                      final painter = TextPainter(
+                                        text: TextSpan(text: text),
+                                        maxLines: 1,
+                                        textScaleFactor:
+                                        MediaQuery.of(context)
+                                            .textScaleFactor,
+                                        textDirection: TextDirection.ltr,
+                                      );
+                                      painter.layout();
+                                      final overflow = painter.size.width >
+                                          constraints.maxWidth;
+
+                                      return overflow
+                                          ? Marquee(
+                                          text: text,
+                                          pauseAfterRound:
+                                          const Duration(seconds: 3),
+                                          style: TextStyle(
+                                              color:
+                                              const Color(0xff8E52FF),
+                                              fontSize: 16.sp,
+                                              fontWeight:
+                                              FontWeight.w500))
+                                          : Text(
+                                        text,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color:
+                                            const Color(0xff8E52FF),
+                                            fontSize: 16.sp,
+                                            fontWeight:
+                                            FontWeight.w500),
+                                      );
+                                    }),
+                              ),
+                            ),
+                            const Icon(
+                              Icons.keyboard_arrow_down_rounded,
+                              color: MyColors.primary,
+                            )
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
               ),
               16.horizontalSpace,
               buildItem(Assets.icons.icSetting.path, context, false),
@@ -237,15 +212,16 @@ class _BottomBarState extends State<BottomBar> {
     return InkWell(
       onTap: () {
         //check xem có join group nào chưa
-        if (getIt<SelectGroupCubit>().state != null) {
-          if (isMessage) {
+        if (isMessage) {
+          if (getIt<SelectGroupCubit>().state != null) {
             context.pushRoute(const ChatRoute());
             return;
+          } else {
+            Fluttertoast.showToast(msg: context.l10n.joinAGroup);
+            return;
           }
-          context.pushRoute(const SettingRoute());
-        } else {
-          Fluttertoast.showToast(msg: 'Please join group first');
         }
+        context.pushRoute(const SettingRoute());
       },
       child: Container(
         height: 48.r,

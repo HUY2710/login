@@ -11,9 +11,11 @@ class CustomSwipeWidget extends StatelessWidget {
     this.firstRight,
     required this.actionRight2,
     this.actionRight1,
+    this.enable = true,
   });
   final Widget child;
   final bool? firstRight;
+  final bool enable;
   final VoidCallback? actionRight1;
   final VoidCallback actionRight2;
 
@@ -23,7 +25,6 @@ class CustomSwipeWidget extends StatelessWidget {
       key: UniqueKey(),
       closeOnScroll: false,
       endActionPane: ActionPane(
-        dragDismissible: false,
         motion: const ScrollMotion(),
         extentRatio: firstRight != null && firstRight! ? 0.5 : 0.25,
         children: [
