@@ -138,7 +138,7 @@
   "mapNormal": "Normal",
   "mapSatellite": "Satellite",
   "viewLocation": "View Location",
-  "checked": "checked",
+  "checked": "has checked in at",
   "at": "AT",
   "leave": "Leave",
   "removeThisPlace": "Remove this Place",
