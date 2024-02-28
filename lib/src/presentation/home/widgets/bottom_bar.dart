@@ -78,7 +78,8 @@ class _BottomBarState extends State<BottomBar> {
                 padding: EdgeInsets.all(10.r),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
+                  borderRadius:
+                      BorderRadius.circular(AppConstants.widgetBorderRadius.r),
                   boxShadow: [
                     BoxShadow(
                       color: const Color(0xff42474C).withOpacity(0.3),
@@ -123,7 +124,8 @@ class _BottomBarState extends State<BottomBar> {
                     );
                   },
                   child: ShadowContainer(
-                    borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
+                    borderRadius: BorderRadius.circular(
+                        AppConstants.widgetBorderRadius.r),
                     maxWidth: MediaQuery.sizeOf(context).width - 80.w,
                     padding:
                         EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
@@ -140,56 +142,51 @@ class _BottomBarState extends State<BottomBar> {
                                   : state.avatarGroup),
                               radius: 14.r,
                             ),
-
                             Expanded(
                               child: Padding(
                                 padding: EdgeInsets.only(left: 12.w),
                                 child: LayoutBuilder(
                                     builder: (context, constraints) {
-                                      final text = state == null
-                                          ? context.l10n.newGroup
-                                          : state.groupName;
+                                  final text = state == null
+                                      ? context.l10n.newGroup
+                                      : state.groupName;
 
-                                      final painter = TextPainter(
-                                        text: TextSpan(text: text),
-                                        maxLines: 1,
-                                        textScaleFactor:
-                                        MediaQuery.of(context)
-                                            .textScaleFactor,
-                                        textDirection: TextDirection.ltr,
-                                      );
-                                      painter.layout();
-                                      final overflow = painter.size.width >
-                                          constraints.maxWidth;
+                                  final painter = TextPainter(
+                                    text: TextSpan(text: text),
+                                    maxLines: 1,
+                                    textScaleFactor:
+                                        MediaQuery.of(context).textScaleFactor,
+                                    textDirection: TextDirection.ltr,
+                                  );
+                                  painter.layout();
+                                  final overflow =
+                                      painter.size.width > constraints.maxWidth;
 
-                                      return overflow
-                                          ? Marquee(
+                                  return overflow
+                                      ? Marquee(
                                           text: text,
                                           pauseAfterRound:
-                                          const Duration(seconds: 3),
+                                              const Duration(seconds: 3),
                                           style: TextStyle(
-                                              color:
-                                              const Color(0xff8E52FF),
+                                              color: const Color(0xff8E52FF),
                                               fontSize: 16.sp,
-                                              fontWeight:
-                                              FontWeight.w500))
-                                          : Text(
-                                        text,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color:
-                                            const Color(0xff8E52FF),
+                                              fontWeight: FontWeight.w500))
+                                      : Text(
+                                          text,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: const Color(0xff8E52FF),
                                             fontSize: 16.sp,
-                                            fontWeight:
-                                            FontWeight.w500),
-                                      );
-                                    }),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        );
+                                }),
                               ),
                             ),
                             const Icon(
-                              Icons.keyboard_arrow_down_rounded,
+                              Icons.keyboard_arrow_up_rounded,
                               color: MyColors.primary,
                             )
                           ],
@@ -229,7 +226,8 @@ class _BottomBarState extends State<BottomBar> {
         width: 48.r,
         padding: EdgeInsets.all(14.r),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
+          borderRadius:
+              BorderRadius.circular(AppConstants.widgetBorderRadius.r),
           gradient: const LinearGradient(colors: [
             Color(0xffB67DFF),
             Color(0xff7B3EFF),
