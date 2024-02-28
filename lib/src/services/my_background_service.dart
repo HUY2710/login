@@ -73,8 +73,10 @@ class MyBackgroundService {
 
   //lắng nghe myGroups để đăng kí và hủy thông báo
   Future<void> listenMyGroupToSubAndUnSubTopic() async {
-    fireStoreClient
-        .listenMyGroups()
+    final ids = await fireStoreClient.listIdGroup();
+    FirebaseMessageService().subscribeTopics(ids ?? []);
+
+    fireStoreClient.listenMyGroups()
         .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
       for (final change in snapshot.docChanges) {
         //hủy thông báo khi group trong listgroup của mình bị xóa (mình rời hoặc bị xóa)

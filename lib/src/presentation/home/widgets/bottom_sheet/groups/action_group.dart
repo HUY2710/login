@@ -216,16 +216,10 @@ class ActionGroupBottomSheet extends StatelessWidget {
                       //đăng kí nhận lắng nghe thông báo
                       getIt<FirebaseMessageService>()
                           .subscribeTopics([itemGroup.idGroup!]);
-                      //đăng kí nhận lắng nghe thông báo
-                      getIt<FirebaseMessageService>()
-                          .subscribeTopics(['testGroup']);
                     } else {
                       //hủy thông báo
                       getIt<FirebaseMessageService>()
                           .unSubscribeTopics([itemGroup.idGroup!]);
-                      //đăng kí nhận lắng nghe thông báo
-                      getIt<FirebaseMessageService>()
-                          .unSubscribeTopics(['testGroup']);
                     }
                     FirestoreClient.instance.updateNotifyGroupEachMember(
                       idGroup: getIt<SelectGroupCubit>().state!.idGroup!,

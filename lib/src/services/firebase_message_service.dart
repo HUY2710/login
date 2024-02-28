@@ -144,12 +144,14 @@ class FirebaseMessageService implements NotificationService {
   }
 
   Future<void> subscribeTopics(List<String> topics) async {
+    debugPrint('Subscribe list topics: $topics');
     await Future.wait(topics
         .map((e) => FirebaseMessaging.instance.subscribeToTopic(e))
         .toList());
   }
 
   Future<void> unSubscribeTopics(List<String> topics) async {
+    debugPrint('UnSubscribe list topics: $topics');
     await Future.wait(topics
         .map((e) => FirebaseMessaging.instance.unsubscribeFromTopic(e))
         .toList());
