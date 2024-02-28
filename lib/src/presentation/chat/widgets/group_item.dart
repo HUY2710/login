@@ -121,7 +121,9 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
                               ? 'Fri'
                               : 'Sat';
     } else {
-      return DateFormat('MMM d, yyyy').format(input);
+      return DateFormat('MMM d, yyyy',
+              '${Locale(getIt<LanguageCubit>().state.languageCode)}')
+          .format(input);
     }
   }
 

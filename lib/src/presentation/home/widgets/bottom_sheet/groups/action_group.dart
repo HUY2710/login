@@ -166,13 +166,13 @@ class ActionGroupBottomSheet extends StatelessWidget {
                               .then((value) => context.popRoute());
                         });
                       },
-                      confirmText: 'Leave',
+                      confirmText: context.l10n.leave,
                     ),
                   );
                 },
                 child: itemAction(
                   Assets.icons.icLoggout.svg(width: 20.r),
-                  'Leave',
+                  context.l10n.leave,
                 ),
               ),
             14.verticalSpace,
