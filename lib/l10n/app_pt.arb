@@ -156,5 +156,6 @@
   "success": "Sucesso",
   "error": "Erro",
   "emptyGroup": "Não tem nenhum grupo",
-  "pleaseDoNot": "Por favor, não contenha caracteres especiais"
+  "pleaseDoNot": "Por favor, não contenha caracteres especiais",
+  "joined": "juntou-se"
 }
