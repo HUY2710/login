@@ -156,5 +156,6 @@
   "success": "Sukses",
   "error": "Kesalahan",
   "emptyGroup": "Tidak memiliki grup",
-  "pleaseDoNot": "Tolong jangan memuat karakter khusus"
+  "pleaseDoNot": "Tolong jangan memuat karakter khusus",
+  "joined": "bergabung"
 }

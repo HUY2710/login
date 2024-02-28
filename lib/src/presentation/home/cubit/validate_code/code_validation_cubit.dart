@@ -62,6 +62,15 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
             //đăng kí nhận lắng nghe thông báo
             getIt<FirebaseMessageService>()
                 .subscribeTopics([existGroup.idGroup!]);
+            try {
+              FirebaseMessageService().sendJoinGroup(
+                  existGroup.idGroup!,
+                  '${Global.instance.user?.userName} ${context.l10n.joined} ${existGroup.groupName}',
+                  context);
+            } catch (error) {
+              debugPrint('error:$error');
+            }
+
             emit(CodeValidationState.valid(existGroup));
           }
         }

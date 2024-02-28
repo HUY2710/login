@@ -156,5 +156,6 @@
   "success": "Erfolg",
   "error": "Fehler",
   "emptyGroup": "Keine Gruppen vorhanden",
-  "pleaseDoNot": "Bitte enthalten Sie keine Sonderzeichen"
+  "pleaseDoNot": "Bitte enthalten Sie keine Sonderzeichen",
+  "joined": "beigetreten"
 }
