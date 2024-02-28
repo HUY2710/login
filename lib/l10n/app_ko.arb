@@ -143,5 +143,13 @@
   "leave": "떠나기",
   "removeThisPlace": "이 장소 제거",
   "removeThisPlaceSub": "이 장소를 그룹에서 제거하시겠습니까?",
-  "searchLocationByType": "주소, 건물 등을 입력하여 위치 검색"
+  "searchLocationByType": "주소, 건물 등을 입력하여 위치 검색",
+  "noInternetConnection": "인터넷 연결 없음",
+  "noInternetConnectionSub": "네트워크 연결을 확인하고 다시 시도하세요.",
+  "goToSettings": "설정으로 이동",
+  "walk": "걷기",
+  "bicycle": "자전거",
+  "car": "자동차",
+  "noMessageHereYet": "아직 메시지가 없어요...",
+  "noMessageSub": "대화를 시작하려면 메시지를 보내세요"
 }

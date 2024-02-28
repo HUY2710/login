@@ -16,11 +16,11 @@ class MessageEmptyScreen extends StatelessWidget {
           height: 165.h,
         ),
         Text(
-          'No messages here yet...',
+          context.l10n.noMessageHereYet,
           style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
         ),
         Text(
-          'Send a message to start your \nconversation',
+          context.l10n.noMessageSub,
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 13.sp, color: MyColors.black34),
         ),

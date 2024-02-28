@@ -6,9 +6,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../config/di/di.dart';
-import '../../../config/navigation/app_router.dart';
-import '../../../shared/widgets/dialog/no_internet_dialog.dart';
+import '../config/di/di.dart';
+import '../config/navigation/app_router.dart';
+import '../shared/widgets/dialog/no_internet_dialog.dart';
 
 class NetworkConnectivity {
   NetworkConnectivity._();
@@ -48,7 +48,7 @@ class NetworkConnectivity {
       showDialog(
           barrierDismissible: false,
           context: getIt<AppRouter>().navigatorKey.currentContext!,
-          builder: (context) => NoIternetDialog(messageError: 'No internet'));
+          builder: (context) => const NoIternetDialog());
     }
 
     return isOnline;

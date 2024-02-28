@@ -144,5 +144,14 @@
   "leave": "छोड़ें",
   "removeThisPlace": "इस स्थान को हटाएं",
   "removeThisPlaceSub": "क्या आप इसे अपने समूह से हटाने के लिए सुनिश्चित हैं?",
-  "searchLocationByType": "पता, इमारत आदि टाइप करके स्थान खोजें"
+  "searchLocationByType": "पता, इमारत आदि टाइप करके स्थान खोजें",
+  "searchLocationByType": "पता, इमारत आदि लिखकर स्थान खोजें",
+  "noInternetConnection": "कोई इंटरनेट कनेक्शन नहीं",
+  "noInternetConnectionSub": "कृपया अपना नेटवर्क कनेक्शन जांचें और पुनः प्रयास करें।",
+  "goToSettings": "सेटिंग्स पर जाएं",
+  "walk": "चलना",
+  "bicycle": "साइकिल",
+  "car": "कार",
+  "noMessageHereYet": "अभी तक यहाँ कोई संदेश नहीं है...",
+  "noMessageSub": "अपनी बातचीत शुरू करने के लिए एक संदेश भेजें"
 }

@@ -39,7 +39,7 @@ import '../../shared/extension/context_extension.dart';
 import '../../shared/extension/int_extension.dart';
 import '../../shared/helpers/env_params.dart';
 import '../../shared/widgets/loading/loading_indicator.dart';
-import '../chat/services/connectivity_service.dart';
+import '../../services/connectivity_service.dart';
 import '../map/cubit/select_group_cubit.dart';
 import 'update_dialog.dart';
 

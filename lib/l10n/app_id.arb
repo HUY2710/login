@@ -146,5 +146,13 @@
   "leave": "Tinggalkan",
   "removeThisPlace": "Hapus Tempat Ini",
   "removeThisPlaceSub": "Apakah Anda yakin untuk menghapus tempat ini dari grup Anda?",
-  "searchLocationByType": "Cari lokasi dengan mengetik alamat, gedung..." 
+  "searchLocationByType": "Cari lokasi dengan mengetik alamat, gedung...",
+  "noInternetConnection": "Tidak Ada Koneksi Internet",
+  "noInternetConnectionSub": "Harap periksa koneksi jaringan Anda dan coba lagi.",
+  "goToSettings": "Buka pengaturan",
+  "walk": "Berjalan",
+  "bicycle": "Sepeda",
+  "car": "Mobil",
+  "noMessageHereYet": "Belum ada pesan di sini...",
+  "noMessageSub": "Kirim pesan untuk memulai \npercakapan Anda"
 }

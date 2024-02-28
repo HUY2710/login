@@ -184,5 +184,13 @@
   "leave": "Quitter",
   "removeThisPlace": "Supprimer cet endroit",
   "removeThisPlaceSub": "Êtes-vous sûr de vouloir supprimer cet endroit de votre groupe ?",
-  "searchLocationByType": "Rechercher un lieu en tapant l'adresse, le bâtiment..."
+  "searchLocationByType": "Rechercher un lieu en tapant l'adresse, le bâtiment...",
+  "noInternetConnection": "Pas de connexion Internet",
+  "noInternetConnectionSub": "Veuillez vérifier votre connexion réseau et réessayer.",
+  "goToSettings": "Aller aux paramètres",
+  "walk": "Marche",
+  "bicycle": "Vélo",
+  "car": "Voiture",
+  "noMessageHereYet": "Pas encore de messages ici...",
+  "noMessageSub": "Envoyez un message pour commencer votre \nconversation"
 }

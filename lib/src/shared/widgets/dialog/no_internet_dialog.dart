@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 
+import '../../../gen/assets.gen.dart';
 import '../../extension/context_extension.dart';
 
 class NoIternetDialog extends StatelessWidget {
-  const NoIternetDialog(
-      {super.key, required this.messageError, this.cancelText});
-  final String messageError;
-  final String? cancelText;
+  const NoIternetDialog({super.key});
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -15,16 +14,29 @@ class NoIternetDialog extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          4.verticalSpace,
+          16.h.verticalSpace,
+          Assets.images.noInternet.image(width: 104.w, height: 77.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Text(
-              messageError,
+              context.l10n.noInternetConnection,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.black,
+                color: const Color(0xff343434),
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Text(
+              context.l10n.noInternetConnectionSub,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: const Color(0xff6C6C6C),
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ),
@@ -33,16 +45,16 @@ class NoIternetDialog extends StatelessWidget {
             color: Color(0xffEAEAEA),
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () => openAppSettings(),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  cancelText ?? context.l10n.cancel,
+                  context.l10n.goToSettings,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: const Color(0xffB67DFF),
-                    fontSize: 14.sp,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
                   ),
                 )

@@ -143,5 +143,13 @@
   "leave": "Leave",
   "removeThisPlace": "Remove this Place",
   "removeThisPlaceSub": "Are you sure to the remove this place from your group?",
-  "searchLocationByType": "Search location by typing address, building ..."
+  "searchLocationByType": "Search location by typing address, building ...",
+  "noInternetConnection": "No Internet Connection",
+  "noInternetConnectionSub": "Please check your network connection and try again.",
+  "goToSettings": "Go to settings",
+  "walk": "Walk",
+  "bicycle": "Bicycle",
+  "car": "Car",
+  "noMessageHereYet": "No messages here yet...",
+  "noMessageSub": "Send a message to start your \nconversation"
 }
