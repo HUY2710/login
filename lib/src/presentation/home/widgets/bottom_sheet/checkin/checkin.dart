@@ -33,7 +33,8 @@ class CheckInWidget extends StatelessWidget {
               );
             },
             child: ShadowContainer(
-              borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
+              borderRadius:
+                  BorderRadius.circular(AppConstants.widgetBorderRadius.r),
               maxWidth: MediaQuery.sizeOf(context).width - 80.w,
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
               child: Row(
@@ -54,28 +55,34 @@ class CheckInWidget extends StatelessWidget {
               ),
             ),
           ),
-          8.horizontalSpace,
+          12.horizontalSpace,
           if (!purchaseState.isPremium())
-            Center(
-              child: CustomInkWell(
-                onTap: () => context.pushRoute(const PremiumRoute()),
-                child: ShadowContainer(
-                  width: 80.r,
-                  height: 40.r,
-                  padding: const EdgeInsets.all(10),
-                  borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
-                  child: Row(
-                    children: [
-                      Assets.icons.premium.icPremiumSvg.svg(),
-                      8.horizontalSpace,
-                      Text(
-                        'PRO',
-                        style: TextStyle(
-                            color: const Color(0xff8E52FF),
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500),
-                      )
-                    ],
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: CustomInkWell(
+                  onTap: () => context.pushRoute(const PremiumRoute()),
+                  child: ShadowContainer(
+                    height: 40.r,
+                    padding: const EdgeInsets.all(10),
+                    borderRadius: BorderRadius.circular(
+                        AppConstants.widgetBorderRadius.r),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Assets.icons.premium.icPremiumSvg.svg(),
+                        8.horizontalSpace,
+                        Flexible(
+                          child: Text(
+                            'PRO',
+                            style: TextStyle(
+                                color: const Color(0xff8E52FF),
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

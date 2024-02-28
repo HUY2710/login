@@ -107,7 +107,7 @@ class CreateGroupNameScreen extends StatelessWidget {
                   onTap: () {
                     Global.instance.group ??= StoreGroup(
                       idGroup: 24.randomString(),
-                      passCode: 6.randomUpperCaseString(),
+                      passCode: 6.randomUpperCaseString().toUpperCase(),
                       groupName: ValidHelper.removeExtraSpaces(state),
                       avatarGroup: '',
                       lastMessage: MessageModel(

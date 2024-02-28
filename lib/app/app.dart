@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lifecycle_detector/flutter_lifecycle_detector.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,7 +12,6 @@ import '../src/config/theme/light/light_theme.dart';
 import '../src/data/remote/firestore_client.dart';
 import '../src/services/activity_recognition_service.dart';
 import '../src/shared/enum/language.dart';
-import '../src/shared/widgets/loading/app_loading.dart';
 import '../src/shared/widgets/loading/loading_indicator.dart';
 import 'cubit/language_cubit.dart';
 import 'cubit/loading_cubit.dart';
@@ -34,6 +32,7 @@ class _MyAppState extends State<MyApp> {
   double get designHeight => 844; //default
   @override
   void initState() {
+    FirestoreClient.instance.updateUser({'online': true});
     FlutterLifecycleDetector().onBackgroundChange.listen((isBackground) {
       FirestoreClient.instance.updateUser({'online': !isBackground});
     });

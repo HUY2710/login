@@ -81,7 +81,7 @@ class InviteCode extends StatelessWidget {
             children: [
               const SizedBox(width: 40),
               GradientText(
-                '${code.substring(0, 3)} - ${code.substring(3)}',
+                '${code.substring(0, 3)} - ${code.substring(3)}'.toUpperCase(),
                 style: TextStyle(fontSize: 34.sp, fontWeight: FontWeight.w600),
               ),
               CustomInkWell(

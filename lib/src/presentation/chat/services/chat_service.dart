@@ -178,7 +178,7 @@ class ChatService {
       result = CollectionStore.chat
           .doc(idGroup)
           .collection(CollectionStoreConstant.messages)
-          .orderBy('sentAt')
+          .orderBy('sentAt', descending: true)
           .withConverter(
               fromFirestore: (snapshot, _) {
                 MessageModel message = MessageModel.fromJson(snapshot.data()!);

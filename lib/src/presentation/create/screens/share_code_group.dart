@@ -81,7 +81,8 @@ class ShareCodeGroupScreen extends StatelessWidget with PermissionMixin {
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 30.h),
                     child: Text(
-                      '${code.substring(0, 3)}-${code.substring(3, 6)}',
+                      '${code.substring(0, 3)}-${code.substring(3, 6)}'
+                          .toUpperCase(),
                       style: TextStyle(
                         color: const Color(0xff8E52FF),
                         fontSize: 32.sp,

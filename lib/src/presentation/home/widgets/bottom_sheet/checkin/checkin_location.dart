@@ -157,7 +157,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
           _checkIn(item: item);
         } else {
           context.popRoute();
-          context.pushRoute(PremiumRoute());
+          context.pushRoute(const PremiumRoute());
         }
       },
       child: Container(
@@ -230,7 +230,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
     );
   }
 
-  void _checkIn({Place? item}) async {
+  Future<void> _checkIn({Place? item}) async {
     final storeGroup = getIt<SelectGroupCubit>().state;
 
     await ChatService.instance.sendMessageLocation(
@@ -247,7 +247,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
       isCheckin: true,
     );
     await SharedPreferencesManager.saveTimeSeenChat(
-        Global.instance.group!.idGroup!);
+        getIt<SelectGroupCubit>().state!.idGroup!);
 
     context.popRoute().then((value) {
       return showDialog(

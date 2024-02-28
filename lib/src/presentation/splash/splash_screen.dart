@@ -32,6 +32,7 @@ import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
+import '../../services/connectivity_service.dart';
 import '../../services/my_background_service.dart';
 import '../../services/tracking_history_place_service.dart';
 import '../../shared/constants/app_constants.dart';
@@ -40,9 +41,7 @@ import '../../shared/extension/context_extension.dart';
 import '../../shared/extension/int_extension.dart';
 import '../../shared/helpers/env_params.dart';
 import '../../shared/widgets/loading/loading_indicator.dart';
-import '../../services/connectivity_service.dart';
 import '../map/cubit/select_group_cubit.dart';
-import '../place/cubit/default_places_cubit.dart';
 import 'update_dialog.dart';
 
 @RoutePage()
