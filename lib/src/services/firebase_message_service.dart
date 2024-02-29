@@ -27,7 +27,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 
 abstract class NotificationService {
   /// When send a message.
-  Future<void> sendChatNotification(String groupId, String groupName);
+  Future<void> sendChatNotification(String groupName);
 
   /// When enter or left place.
   Future<void> sendPlaceNotification(
@@ -37,8 +37,7 @@ abstract class NotificationService {
       BuildContext? context});
 
   /// When check in any location.
-  Future<void> sendCheckInNotification(
-      String groupId, String address, BuildContext? context);
+  Future<void> sendCheckInNotification(String address, BuildContext? context);
 
   /// When check in any location.
   Future<void> sendJoinGroup(
@@ -162,7 +161,7 @@ class FirebaseMessageService implements NotificationService {
   }
 
   @override
-  Future<void> sendChatNotification(String groupId, String groupName) async {
+  Future<void> sendChatNotification(String groupName) async {
     final message =
         '${Global.instance.user?.userName} ${getIt<AppRouter>().navigatorKey.currentContext!.l10n.sendMessageNoti}';
     await _sendMessageByToken(groupName, message);
@@ -178,8 +177,7 @@ class FirebaseMessageService implements NotificationService {
   }
 
   @override
-  Future<void> sendCheckInNotification(
-      String groupId, String address, BuildContext? context) async {
+  Future<void> sendCheckInNotification(String address, BuildContext? context) async {
     final message =
         '${Global.instance.user?.userName} ${context?.l10n.checkInNoti} $address';
     await _sendMessageByToken(Global.instance.packageInfo?.appName ?? 'Cycle Sharing', message);

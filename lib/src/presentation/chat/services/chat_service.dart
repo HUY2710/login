@@ -103,7 +103,6 @@ class ChatService {
         ]);
         if (haveNoti) {
           getIt<FirebaseMessageService>().sendChatNotification(
-            idGroup,
             groupName,
           );
         }
@@ -154,11 +153,10 @@ class ChatService {
                 await LocationService().getCurrentAddress(LatLng(lat, long));
             if (context.mounted) {
               getIt<FirebaseMessageService>()
-                  .sendCheckInNotification(idGroup, address, context);
+                  .sendCheckInNotification(address, context);
             }
           } else {
             getIt<FirebaseMessageService>().sendChatNotification(
-              idGroup,
               groupName,
             );
           }

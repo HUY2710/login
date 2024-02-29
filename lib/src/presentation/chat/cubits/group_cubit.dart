@@ -97,7 +97,9 @@ class GroupCubit extends Cubit<GroupState> {
                 // gán vào group state
                 storeGroup =
                     storeGroup.copyWith(storeUser: storeUser, seen: seen);
-                myGroups[index] = storeGroup;
+                if (index < myGroups.length) {
+                  myGroups[index] = storeGroup;
+                }
                 emit(GroupState.success(myGroups));
               }
               if (change.type == DocumentChangeType.removed) {
