@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../shared/constants/app_constants.dart';
+
 class BtnGuide extends StatelessWidget {
   const BtnGuide(
       {super.key,
@@ -40,7 +42,8 @@ class BtnGuide extends StatelessWidget {
                   Color(0xFF7B3EFF),
                 ],
               ),
-          borderRadius: BorderRadius.circular(15.r),
+          borderRadius:
+              BorderRadius.circular(AppConstants.widgetBorderRadius.r),
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),

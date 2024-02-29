@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../shared/constants/app_constants.dart';
+
 class ItemRightGuide extends StatelessWidget {
   const ItemRightGuide({super.key, required this.pathIc});
   final String pathIc;
@@ -11,7 +13,7 @@ class ItemRightGuide extends StatelessWidget {
       padding: EdgeInsets.all(10.r),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15.r),
+        borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
         boxShadow: [
           BoxShadow(
             color: const Color(0xff42474C).withOpacity(0.3),

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../gen/gens.dart';
+import '../../../shared/constants/app_constants.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 
@@ -14,6 +15,7 @@ class CheckInGuide extends StatelessWidget {
     return ShadowContainer(
       // maxWidth: MediaQuery.sizeOf(context).width - 80.w,
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
+      borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
