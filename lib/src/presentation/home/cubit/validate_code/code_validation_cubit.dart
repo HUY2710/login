@@ -60,7 +60,7 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
 
             getIt<SelectGroupCubit>()
                 .update(existGroup.copyWith(storeMembers: listMember));
-
+            Global.instance.group = existGroup;
             //đăng kí nhận lắng nghe thông báo
             TokenManager.updateGroupNotification(false, existGroup.idGroup!);
             try {
