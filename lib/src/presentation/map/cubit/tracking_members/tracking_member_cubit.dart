@@ -145,6 +145,7 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
       if (_trackingListMember.isEmpty) {
         emit(const TrackingMemberState.success([]));
       } else {
+        Global.instance.groupMembers = _trackingListMember;
         emit(TrackingMemberState.success([..._trackingListMember]));
       }
     } else {
@@ -214,6 +215,7 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
             .indexWhere((element) => element.code == user.code);
         if (index != -1) {
           _trackingListMember[index] = user;
+          Global.instance.groupMembers = _trackingListMember;
           emit(TrackingMemberState.success([..._trackingListMember]));
         }
       }

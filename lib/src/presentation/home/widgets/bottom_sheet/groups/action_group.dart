@@ -12,6 +12,7 @@ import '../../../../../config/navigation/app_router.dart';
 import '../../../../../data/models/store_group/store_group.dart';
 import '../../../../../data/models/store_member/store_member.dart';
 import '../../../../../data/remote/firestore_client.dart';
+import '../../../../../data/remote/token_manager.dart';
 import '../../../../../gen/assets.gen.dart';
 import '../../../../../gen/colors.gen.dart';
 import '../../../../../global/global.dart';
@@ -213,12 +214,10 @@ class ActionGroupBottomSheet extends StatelessWidget {
                     //update sever
                     if (value) {
                       //đăng kí nhận lắng nghe thông báo
-                      getIt<FirebaseMessageService>()
-                          .subscribeTopics([itemGroup.idGroup!]);
+                      TokenManager.updateGroupNotification(false, itemGroup.idGroup!);
                     } else {
                       //hủy thông báo
-                      getIt<FirebaseMessageService>()
-                          .unSubscribeTopics([itemGroup.idGroup!]);
+                      TokenManager.updateGroupNotification(true, itemGroup.idGroup!);
                     }
                     FirestoreClient.instance.updateNotifyGroupEachMember(
                       idGroup: getIt<SelectGroupCubit>().state!.idGroup!,

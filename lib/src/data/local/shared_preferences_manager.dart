@@ -94,4 +94,12 @@ class SharedPreferencesManager {
   static Future<bool> getGuide() async {
     return (await _preference).getBool(PreferenceKeys.showGuide.name) ?? true;
   }
+
+  static Future<void> setFCMToken(String value) async {
+    (await _preference).setString(PreferenceKeys.fcmToken.name, value);
+  }
+
+  static Future<String> getFCMToken() async {
+    return (await _preference).getString(PreferenceKeys.fcmToken.name) ?? '';
+  }
 }

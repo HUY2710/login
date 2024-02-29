@@ -19,6 +19,7 @@ class StoreUser with _$StoreUser {
     @Default(0) int steps,
     @Default(true) bool online,
     @Default(true) bool shareLocation,
+    @Default('') String fcmToken,
     @JsonKey(includeFromJson: false, includeToJson: false) Uint8List? marker,
     @JsonKey(includeFromJson: false, includeToJson: false)
     StoreLocation? location,

@@ -11,5 +11,6 @@ enum PreferenceKeys {
   timeSeenChat,
   isWeeklyPremium,
   isMonthlyPremium,
-  showGuide
+  showGuide,
+  fcmToken
 }

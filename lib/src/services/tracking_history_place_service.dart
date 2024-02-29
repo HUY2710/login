@@ -165,7 +165,7 @@ class TrackingHistoryPlaceService {
         '${place.namePlace}';
     try {
       FirebaseMessageService().sendPlaceNotification(
-        groupId: groupId,
+        groupName: 'Place: ${place.namePlace}',
         enter: enter,
         message: message,
       );

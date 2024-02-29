@@ -15,6 +15,7 @@ class CollectionStoreConstant {
 
   static const String chat = 'chat';
   static const String messages = 'messages';
+  static const String tokens = 'tokens';
 }
 
 class CollectionStore {
@@ -43,4 +44,7 @@ class CollectionStore {
           .collection(CollectionStoreConstant.locationsCheckIn);
   static CollectionReference<Map<String, dynamic>> chat =
       FirebaseFirestore.instance.collection(CollectionStoreConstant.chat);
+
+  static CollectionReference<Map<String, dynamic>> tokens =
+  FirebaseFirestore.instance.collection(CollectionStoreConstant.tokens);
 }

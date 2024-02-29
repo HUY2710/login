@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../../../data/local/shared_preferences_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../config/di/di.dart';
+import '../../../../data/local/shared_preferences_manager.dart';
 import '../../../../data/models/store_group/store_group.dart';
 import '../../../../data/models/store_member/store_member.dart';
 import '../../../../data/remote/firestore_client.dart';
+import '../../../../data/remote/token_manager.dart';
 import '../../../../global/global.dart';
 import '../../../../services/firebase_message_service.dart';
 import '../../../../shared/extension/context_extension.dart';
@@ -61,11 +62,10 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
                 .update(existGroup.copyWith(storeMembers: listMember));
 
             //đăng kí nhận lắng nghe thông báo
-            getIt<FirebaseMessageService>()
-                .subscribeTopics([existGroup.idGroup!]);
+            TokenManager.updateGroupNotification(false, existGroup.idGroup!);
             try {
               FirebaseMessageService().sendJoinGroup(
-                  existGroup.idGroup!,
+                  existGroup.groupName,
                   '${Global.instance.user?.userName} ${context.l10n.joined} ${existGroup.groupName}',
                   context);
             } catch (error) {

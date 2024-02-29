@@ -12,6 +12,7 @@ import '../../flavors.dart';
 import '../config/di/di.dart';
 import '../data/models/store_user/store_user.dart';
 import '../data/remote/firestore_client.dart';
+import '../data/remote/token_manager.dart';
 import '../global/global.dart';
 import '../shared/helpers/map_helper.dart';
 import 'firebase_message_service.dart';
@@ -74,14 +75,13 @@ class MyBackgroundService {
   //lắng nghe myGroups để đăng kí và hủy thông báo
   Future<void> listenMyGroupToSubAndUnSubTopic() async {
     final ids = await fireStoreClient.listIdGroup();
-    FirebaseMessageService().subscribeTopics(ids ?? []);
 
     fireStoreClient.listenMyGroups()
         .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
       for (final change in snapshot.docChanges) {
         //hủy thông báo khi group trong listgroup của mình bị xóa (mình rời hoặc bị xóa)
         if (change.type == DocumentChangeType.removed) {
-          FirebaseMessageService().unSubscribeTopics([change.doc.id]);
+          TokenManager.updateGroupNotification(true, change.doc.id);
         }
       }
     });

@@ -12,6 +12,7 @@ import '../../../../data/models/store_group/store_group.dart';
 import '../../../../data/models/store_member/store_member.dart';
 import '../../../../data/models/store_message/store_message.dart';
 import '../../../../data/remote/firestore_client.dart';
+import '../../../../data/remote/token_manager.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/gens.dart';
 import '../../../../global/global.dart';
@@ -76,7 +77,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
       try {
         await FirestoreClient.instance.createGroup(newGroup);
         await SharedPreferencesManager.saveTimeSeenChat(newGroup.idGroup!);
-        getIt<FirebaseMessageService>().subscribeTopics([newGroup.idGroup!]);
+        TokenManager.updateGroupNotification(false, newGroup.idGroup!);
         if (context.mounted) {
           getIt<SelectGroupCubit>().update(newGroup);
           await context.popRoute().then(

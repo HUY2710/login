@@ -12,6 +12,7 @@ import '../../config/navigation/app_router.dart';
 import '../../data/models/store_group/store_group.dart';
 import '../../data/models/store_place/store_place.dart';
 import '../../data/models/store_user/store_user.dart';
+import '../../data/remote/token_manager.dart';
 import '../../gen/colors.gen.dart';
 import '../../global/global.dart';
 import '../../services/my_background_service.dart';
@@ -70,6 +71,7 @@ class MapScreenState extends State<MapScreen>
     super.initState();
 
     getIt<GroupCubit>().initStreamGroupChat();
+    TokenManager.updateMyFCMToken();
   }
 
   void getLocalLocation() {

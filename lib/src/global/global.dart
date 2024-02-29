@@ -15,7 +15,10 @@ class Global {
   int androidSdkVersion = 0;
   bool isExitApp = false;
   StoreUser? user;
+  String get userCode => user?.code ?? '';
   StoreGroup? group;
+  List<StoreUser> groupMembers = [];
+  List<StoreUser> get groupOtherMembers => groupMembers.where((element) => element.code != user?.code).toList();
   BitmapDescriptor? myMarker;
   LatLng currentLocation = const LatLng(0, 0);
   LatLng serverLocation = const LatLng(0, 0);

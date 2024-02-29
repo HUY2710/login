@@ -59,9 +59,6 @@ class CreateGroupAvatarScreen extends StatelessWidget {
                     //update database
                     await FirestoreClient.instance
                         .createGroup(Global.instance.group!);
-                    //đăng kí nhận lắng nghe thông báo
-                    getIt<FirebaseMessageService>()
-                        .subscribeTopics([Global.instance.group!.idGroup!]);
                     // lưu thời gian người dùng xem tin nhắn
                     await SharedPreferencesManager.saveTimeSeenChat(
                         Global.instance.group!.idGroup!);

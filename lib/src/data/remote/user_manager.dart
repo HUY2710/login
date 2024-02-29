@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../global/global.dart';
 import '../../shared/utils/logger_utils.dart';
@@ -48,5 +49,16 @@ class CurrentUserManager {
     return CollectionStore.users
         .doc(idUser ?? Global.instance.user!.code)
         .snapshots();
+  }
+
+  static Future<void> updateMyFCMToken(String token) async {
+    final code = Global.instance.user?.code;
+    Global.instance.user = Global.instance.user?.copyWith(fcmToken: token);
+    if (code == null) {
+      debugPrint('User not found');
+      return;
+    }
+    final fields = {'fcmToken': token};
+    return updateUser(code, fields);
   }
 }

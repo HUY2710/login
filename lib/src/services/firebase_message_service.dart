@@ -10,7 +10,11 @@ import 'package:injectable/injectable.dart';
 
 import '../config/di/di.dart';
 import '../config/navigation/app_router.dart';
+import '../data/local/shared_preferences_manager.dart';
+import '../data/remote/token_manager.dart';
+import '../data/remote/user_manager.dart';
 import '../global/global.dart';
+import '../presentation/map/cubit/select_group_cubit.dart';
 import '../shared/extension/context_extension.dart';
 import '../shared/helpers/env_params.dart';
 
@@ -27,7 +31,7 @@ abstract class NotificationService {
 
   /// When enter or left place.
   Future<void> sendPlaceNotification(
-      {required String groupId,
+      {required String groupName,
       required bool enter,
       required String message,
       BuildContext? context});
@@ -38,7 +42,7 @@ abstract class NotificationService {
 
   /// When check in any location.
   Future<void> sendJoinGroup(
-      String groupId, String message, BuildContext? context);
+      String groupName, String message, BuildContext? context);
 }
 
 @singleton
@@ -73,6 +77,13 @@ class FirebaseMessageService implements NotificationService {
   Future<void> startService() async {
     final FirebaseMessaging messaging = FirebaseMessaging.instance;
 
+    final token = await messaging.getToken();
+    debugPrint('FCM Token: $token');
+    await _updateFCMToken(token);
+    messaging.onTokenRefresh.listen((event) async {
+      await _updateFCMToken(event);
+    });
+
     // Show notification when application in foreground.
     if (Platform.isIOS) {
       await FirebaseMessaging.instance
@@ -104,13 +115,8 @@ class FirebaseMessageService implements NotificationService {
       final RemoteNotification? notification = message.notification;
       final AndroidNotification? android = message.notification?.android;
 
-      //kiểm tra nếu thông báo đó là từ mình thì không cần show
-      //&&message.data['key'] != Global.instance.user?.code
       if (notification != null &&
-              android != null &&
-              message.data['key'] != Global.instance.user?.code
-          //comment lại đoạn trên để test
-          ) {
+              android != null) {
         flutterLocalNotificationsPlugin?.show(
             notification.hashCode,
             notification.title,
@@ -128,6 +134,13 @@ class FirebaseMessageService implements NotificationService {
     });
 
     listenBackgroundMessage();
+  }
+
+  Future<void> _updateFCMToken(token) async {
+    final oldToken = await SharedPreferencesManager.getFCMToken();
+    if (oldToken != token) {
+      await SharedPreferencesManager.setFCMToken(token);
+    }
   }
 
   Future<void> _firebaseMessagingBackgroundHandler(
@@ -148,36 +161,20 @@ class FirebaseMessageService implements NotificationService {
     }
   }
 
-  Future<void> subscribeTopics(List<String> topics) async {
-    debugPrint('Subscribe list topics: $topics');
-    await Future.wait(topics
-        .map((e) => FirebaseMessaging.instance.subscribeToTopic(e))
-        .toList());
-  }
-
-  Future<void> unSubscribeTopics(List<String> topics) async {
-    debugPrint('UnSubscribe list topics: $topics');
-    await Future.wait(topics
-        .map((e) => FirebaseMessaging.instance.unsubscribeFromTopic(e))
-        .toList());
-  }
-
   @override
   Future<void> sendChatNotification(String groupId, String groupName) async {
     final message =
-        '${Global.instance.user?.userName} ${getIt<AppRouter>().navigatorKey.currentContext!.l10n.sendMessageNoti} $groupName';
-    await _sendMessage(groupId,
-        Global.instance.packageInfo?.appName ?? 'Cycle Sharing', message);
+        '${Global.instance.user?.userName} ${getIt<AppRouter>().navigatorKey.currentContext!.l10n.sendMessageNoti}';
+    await _sendMessageByToken(groupName, message);
   }
 
   @override
   Future<void> sendPlaceNotification(
-      {required String groupId,
+      {required String groupName,
       required bool enter,
       required String message,
       BuildContext? context}) async {
-    await _sendMessage(groupId,
-        Global.instance.packageInfo?.appName ?? 'Cycle Sharing', message);
+    await _sendMessageByToken(groupName, message);
   }
 
   @override
@@ -185,33 +182,34 @@ class FirebaseMessageService implements NotificationService {
       String groupId, String address, BuildContext? context) async {
     final message =
         '${Global.instance.user?.userName} ${context?.l10n.checkInNoti} $address';
-    await _sendMessage(groupId,
-        Global.instance.packageInfo?.appName ?? 'Cycle Sharing', message);
+    await _sendMessageByToken(Global.instance.packageInfo?.appName ?? 'Cycle Sharing', message);
   }
 
   @override
   Future<void> sendJoinGroup(
-      String groupId, String message, BuildContext? context) async {
-    await _sendMessage(groupId, 'Cycle Sharing', message);
+      String groupName, String message, BuildContext? context) async {
+    await _sendMessageByToken(groupName, message);
   }
 }
 
 extension FirebaseMessageServiceExt on FirebaseMessageService {
-  Future<void> _sendMessage(String topic, String title, String message,
+  Future<void> _sendMessageByToken(String title, String message,
       {String? dataId}) async {
+
     final url = Uri.https(EnvParams.apiUrlNotification,
-        'group-location-sharing/send-notification');
+        'group-location-sharing/send-notification-by-tokens');
     final headers = {
       'Content-Type': 'application/json',
     };
+    final tokens = await TokenManager.getGroupTokens();
     final params = {
       'title': title,
       'message': message,
-      'topic': topic,
-      'data': {'key': dataId ?? Global.instance.user?.code}
+      'tokens': tokens,
+      'data': {'key': dataId}
     };
     final response =
-        await http.post(url, headers: headers, body: json.encode(params));
+    await http.post(url, headers: headers, body: json.encode(params));
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
   }
