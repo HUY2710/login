@@ -7,6 +7,7 @@ import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/gens.dart';
+import '../../shared/constants/app_constants.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
 import '../place/cubit/default_places_cubit.dart';
@@ -133,6 +134,8 @@ class GuideScreenState extends State<GuideScreen> {
                               maxWidth: MediaQuery.sizeOf(context).width - 80.w,
                               padding: EdgeInsets.symmetric(
                                   horizontal: 24.w, vertical: 10.h),
+                              borderRadius: BorderRadius.circular(
+                                  AppConstants.widgetBorderRadius.r),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -189,8 +192,8 @@ class GuideScreenState extends State<GuideScreen> {
   void createTutorial() {
     tutorialCoachMark = TutorialCoachMark(
       targets: _createTargets(),
-      hideSkip: true,
       opacityShadow: 0.5,
+      textStyleSkip: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
       onFinish: () async {
         await SharedPreferencesManager.setGuide(false);
         if (context.mounted) {
@@ -241,7 +244,7 @@ class GuideScreenState extends State<GuideScreen> {
     return TargetFocus(
       keyTarget: key,
       shape: ShapeLightFocus.RRect,
-      radius: radius ?? 20.r,
+      radius: radius ?? 10.r,
       enableTargetTab: false,
       contents: [
         TargetContent(
@@ -254,6 +257,7 @@ class GuideScreenState extends State<GuideScreen> {
                 children: [
                   Text(
                     content,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: MyColors.black34,
                       fontSize: 15.sp,
@@ -261,14 +265,22 @@ class GuideScreenState extends State<GuideScreen> {
                     ),
                   ),
                   16.verticalSpace,
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: BtnGuide(
-                      title: context.l10n.next,
-                      onTap: () {
-                        tutorialCoachMark.next();
-                      },
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          tutorialCoachMark.finish();
+                        },
+                        child: Text(context.l10n.skip),
+                      ),
+                      BtnGuide(
+                        title: context.l10n.next,
+                        onTap: () {
+                          tutorialCoachMark.next();
+                        },
+                      )
+                    ],
                   )
                 ],
               ),

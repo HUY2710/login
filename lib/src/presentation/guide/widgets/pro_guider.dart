@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../gen/gens.dart';
+import '../../../shared/constants/app_constants.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 
 class ProGuide extends StatelessWidget {
@@ -13,7 +14,7 @@ class ProGuide extends StatelessWidget {
       width: 80.r,
       height: 40.r,
       padding: const EdgeInsets.all(10),
-      borderRadius: BorderRadius.circular(15.r),
+      borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
       child: Row(
         children: [
           Assets.icons.premium.icPremiumSvg.svg(),
