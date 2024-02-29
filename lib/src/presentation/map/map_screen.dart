@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_lifecycle_detector/flutter_lifecycle_detector.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -12,6 +13,7 @@ import '../../config/navigation/app_router.dart';
 import '../../data/models/store_group/store_group.dart';
 import '../../data/models/store_place/store_place.dart';
 import '../../data/models/store_user/store_user.dart';
+import '../../data/remote/firestore_client.dart';
 import '../../data/remote/token_manager.dart';
 import '../../gen/colors.gen.dart';
 import '../../global/global.dart';
@@ -63,6 +65,10 @@ class MapScreenState extends State<MapScreen>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    FirestoreClient.instance.updateUser({'online': true});
+    FlutterLifecycleDetector().onBackgroundChange.listen((isBackground) {
+      FirestoreClient.instance.updateUser({'online': !isBackground});
+    });
     _initStart();
     _trackingMemberCubit.initTrackingMember();
     _trackingPlacesCubit.initTrackingPlaces();
