@@ -193,7 +193,7 @@ class GuideScreenState extends State<GuideScreen> {
     tutorialCoachMark = TutorialCoachMark(
       targets: _createTargets(),
       opacityShadow: 0.5,
-      textStyleSkip: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
+      hideSkip: true,
       onFinish: () async {
         await SharedPreferencesManager.setGuide(false);
         if (context.mounted) {
