@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../global/global.dart';
 import '../services/firebase_message_service.dart';
@@ -30,8 +31,9 @@ class AppConfig with SystemUiMixin {
     ]);
     configureDependencies();
     await FirebaseMessageService().initNotification();
-    await FirebaseMessageService().startService();
-    FirebaseMessageService().listenBackgroundMessage();
+    if (await Permission.notification.isGranted) {
+      await FirebaseMessageService().startService();
+    }
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.fadingCircle
       ..maskType = EasyLoadingMaskType.custom

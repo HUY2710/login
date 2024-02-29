@@ -31,10 +31,10 @@ class ActivityRecognitionService {
     PermissionRequestResult reqResult;
     reqResult = await activityRecognition.checkPermission();
     if (reqResult == PermissionRequestResult.PERMANENTLY_DENIED) {
-      debugPrint('Permission is permanently denied.');
+      debugPrint('Activity Permission is permanently denied.');
       return false;
     } else if (reqResult == PermissionRequestResult.DENIED) {
-      debugPrint('Permission is denied.');
+      debugPrint('Activity Permission is denied.');
       return false;
     }
     return true;

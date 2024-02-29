@@ -73,10 +73,6 @@ class FirebaseMessageService implements NotificationService {
   Future<void> startService() async {
     final FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-    final NotificationSettings settings = await messaging.requestPermission();
-
-    debugPrint('User granted permission: ${settings.authorizationStatus}');
-
     // Show notification when application in foreground.
     if (Platform.isIOS) {
       await FirebaseMessaging.instance
@@ -130,6 +126,8 @@ class FirebaseMessageService implements NotificationService {
             ));
       }
     });
+
+    listenBackgroundMessage();
   }
 
   Future<void> _firebaseMessagingBackgroundHandler(

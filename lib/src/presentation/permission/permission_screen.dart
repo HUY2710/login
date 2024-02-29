@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../config/navigation/app_router.dart';
+import '../../services/activity_recognition_service.dart';
+import '../../services/firebase_message_service.dart';
 import '../../shared/cubit/value_cubit.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/mixin/permission_mixin.dart';
@@ -56,13 +58,18 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
 
                       if (state == 2) {
                         final status = await requestNotification();
+                        if (status) {
+                          await FirebaseMessageService().startService();
+                        }
                         notifyCubit.update(status);
                         showMotion.update(true);
                         typeRequest.update(3);
                       }
                       if (state == 3) {
                         final status = await requestActivityRecognition();
-                        if (status) {}
+                        if (status) {
+                          ActivityRecognitionService.instance.initActivityRecognitionService();
+                        }
                         motionCubit.update(status);
                         typeRequest.update(0); //không request nữa
 

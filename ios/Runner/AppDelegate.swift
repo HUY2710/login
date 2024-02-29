@@ -3,6 +3,7 @@ import Flutter
 import FirebaseCore
 import google_mobile_ads
 import GoogleMaps
+import UserNotifications
 //import FBAudienceNetwork
 //import UnityAds
 //import IronSource
