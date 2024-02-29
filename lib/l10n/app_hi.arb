@@ -157,7 +157,7 @@
   "error": "त्रुटि",
   "emptyGroup": "कोई समूह नहीं है",
   "pleaseDoNot": "कृपया विशेष वर्णों का उपयोग न करें",
-  "checkInNoti": "ne check-in kiya hai",
-  "sendMessageNoti": "ne sandesh bheja hai",
+  "checkInNoti": "चेकड - इन करा",
+  "sendMessageNoti": "संदेश भेजा है",
   "joined": "शामिल हो गए"
 }

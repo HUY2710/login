@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../shared/constants/app_constants.dart';
+
 class CustomItemSetting extends StatelessWidget {
   const CustomItemSetting({
     super.key,
@@ -27,7 +29,7 @@ class CustomItemSetting extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
           boxShadow: [
             BoxShadow(
               color: const Color(0xFF42474C).withOpacity(0.15),

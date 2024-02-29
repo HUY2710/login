@@ -76,6 +76,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
 
       try {
         await FirestoreClient.instance.createGroup(newGroup);
+        Global.instance.group = newGroup;
         await SharedPreferencesManager.saveTimeSeenChat(newGroup.idGroup!);
         TokenManager.updateGroupNotification(false, newGroup.idGroup!);
         if (context.mounted) {

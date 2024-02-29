@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_member/store_member.dart';
+import '../../../global/global.dart';
 import '../../../shared/cubit/value_cubit.dart';
 
 @singleton
@@ -22,7 +23,9 @@ class SelectGroupCubit extends ValueCubit<StoreGroup?> with HydratedMixin {
   @override
   StoreGroup? fromJson(Map<String, dynamic> json) {
     if (json['currentGroup'] != null) {
-      return StoreGroup.fromJson(json['currentGroup']);
+      final currentGroup = StoreGroup.fromJson(json['currentGroup']);
+      Global.instance.group = currentGroup;
+      return currentGroup;
     }
     return null;
   }

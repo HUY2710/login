@@ -8,6 +8,7 @@ import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../gen/gens.dart';
+import '../../../shared/constants/app_constants.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/language.dart';
 import '../../../shared/extension/context_extension.dart';
@@ -160,7 +161,7 @@ Widget _buildItemLanguage({
                 color: MyColors.primary,
               )
             : null,
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF9C747D).withOpacity(0.17),

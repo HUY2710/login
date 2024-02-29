@@ -203,11 +203,12 @@ extension FirebaseMessageServiceExt on FirebaseMessageService {
     final params = {
       'title': title,
       'message': message,
-      'tokens': tokens,
-      'data': {'key': dataId}
+      'tokens': tokens
     };
+    final body = json.encode(params);
+    debugPrint(body);
     final response =
-    await http.post(url, headers: headers, body: json.encode(params));
+    await http.post(url, headers: headers, body: body);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
   }
