@@ -308,6 +308,8 @@ class MapScreenState extends State<MapScreen>
             builder: (context, locationState) {
               return BlocConsumer<SelectGroupCubit, StoreGroup?>(
                 bloc: getIt<SelectGroupCubit>(),
+                listenWhen: (previous, current) =>
+                    previous?.idGroup != current?.idGroup,
                 listener: (context, state) {
                   //thoát nhóm hoặc chưa chọn nhóm
                   if (state == null) {
@@ -320,6 +322,8 @@ class MapScreenState extends State<MapScreen>
                     _trackingPlacesCubit.initTrackingPlaces();
                   }
                 },
+                buildWhen: (previous, current) =>
+                    previous?.idGroup != current?.idGroup,
                 builder: (context, state) {
                   return BlocBuilder<TrackingMemberCubit, TrackingMemberState>(
                     bloc: _trackingMemberCubit,
