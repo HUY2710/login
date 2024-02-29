@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../../../config/di/di.dart';
+import '../../../../global/global.dart';
 import '../../../../shared/constants/app_constants.dart';
 import '../../../../shared/extension/context_extension.dart';
 import '../../../../shared/widgets/containers/border_container.dart';
@@ -147,6 +148,7 @@ class GroupBottomSheet extends StatelessWidget {
                                     getIt<SelectGroupCubit>().state?.idGroup) {
                                   getIt<SelectGroupCubit>()
                                       .update(groups[index]);
+                                  Global.instance.group = groups[index];
                                 }
                               },
                               child: GroupItem(
