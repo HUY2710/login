@@ -37,9 +37,9 @@ class HistoryPlacesManager {
         .doc(historyPlace.idPlace)
         .update(historyPlace.toJson())
         .then((_) =>
-            LoggerUtils.logInfo('Create new history place: $historyPlace'))
+            LoggerUtils.logInfo('Update history place: $historyPlace'))
         .catchError((error) {
-      LoggerUtils.logError('Failed to create place: $error');
+      LoggerUtils.logError('Failed to updateHistoryPlace : $error');
       throw Exception(error);
     });
   }
