@@ -200,6 +200,9 @@ extension FirebaseMessageServiceExt on FirebaseMessageService {
       'Content-Type': 'application/json',
     };
     final tokens = await TokenManager.getGroupTokens();
+    if(tokens.isEmpty){
+      return ;
+    }
     final params = {
       'title': title,
       'message': message,
