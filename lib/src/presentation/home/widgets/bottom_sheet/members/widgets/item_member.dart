@@ -67,7 +67,9 @@ class ItemMember extends StatelessWidget {
                     4.w.horizontalSpace,
                     Expanded(
                       child: Text(
-                        user.location?.address ?? '...',
+                        user.code == Global.instance.user?.code
+                            ? Global.instance.user?.location?.address ?? '...'
+                            : user.location?.address ?? '...',
                         maxLines: 2,
                         style: TextStyle(
                             fontSize: 14.sp,
