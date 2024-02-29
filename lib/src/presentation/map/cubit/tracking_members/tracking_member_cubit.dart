@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,8 +16,6 @@ import '../../../../global/global.dart';
 import '../../../../shared/helpers/capture_widget_helper.dart';
 import '../../models/member_maker_data.dart';
 import '../select_group_cubit.dart';
-import 'isolate_tracking_location/entry_point.dart';
-import 'isolate_tracking_location/isolate_tracking_response.dart';
 
 part 'tracking_member_cubit.freezed.dart';
 part 'tracking_member_state.dart';
@@ -39,29 +36,6 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
 
   // lấy thông tin hiện tại của group mà user chọn
   final SelectGroupCubit currentGroupCubit = getIt<SelectGroupCubit>();
-
-  //sử dụng isolate
-  Isolate? _isolate;
-  // Tạo một ReceivePort để nhận kết quả từ isolate
-  final ReceivePort _receivePort = ReceivePort();
-  SendPort? _isolateSendPort;
-
-  //khởi tạo và lắng nghe các sự kiện của isolate
-  Future<void> _initAndListenIsolate() async {
-    final Completer<void> completer = Completer();
-    _isolate = await Isolate.spawn(entryPoint, _receivePort.sendPort);
-
-    //lắng nghe kết quả từ isolate
-    _receivePort.listen((message) {
-      if (message is SendPort) {
-        _isolateSendPort = message;
-        completer.complete();
-      } else if (message is IsolateTrackingResponse) {
-        emit(TrackingMemberState.success([..._trackingListMember]));
-      }
-    });
-    return completer.future;
-  }
 
   Future<void> initTrackingMember() async {
     _trackingListMember = [];
@@ -223,26 +197,6 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
     return subscription;
   }
 
-  // Future<void> getListMembers() async {
-  //   emit(const TrackingMemberState.loading());
-  //   // await _initAndListenIsolate();
-
-  //   _memberSubscription = _fireStoreClient.fetchTrackingMemberStream().listen(
-  //     (snapshot) {
-  //       for (final change in snapshot.docChanges) {
-  //         if (change.type == DocumentChangeType.added) {
-  //           final StoreUser member = StoreUser.fromJson(change.doc.data()!);
-  //           // member = member.copyWith(subscription: _listenUserUpdate(friend));
-  //           _trackingListMember.add(member);
-  //         }
-  //       }
-  //       if (_trackingListMember.isEmpty) {
-  //         emit(const TrackingMemberState.success([]));
-  //       }
-  //     },
-  //   );
-  // }
-
   void resetData() {
     emit(const TrackingMemberState.initial());
     state.mapOrNull(
@@ -269,9 +223,8 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
     _markerSubscription?.cancel();
     for (final StoreUser element in _trackingListMember) {
       element.subscriptionLocation?.cancel();
+      element.subscriptionUser?.cancel();
     }
-    _receivePort.close();
-    _isolate?.kill();
     _groupSubscription?.cancel();
   }
 }
