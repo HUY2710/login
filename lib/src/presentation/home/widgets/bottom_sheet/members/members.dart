@@ -7,6 +7,7 @@ import '../../../../../config/di/di.dart';
 import '../../../../../data/models/store_user/store_user.dart';
 import '../../../../../gen/assets.gen.dart';
 import '../../../../../global/global.dart';
+import '../../../../../shared/constants/app_constants.dart';
 import '../../../../../shared/cubit/value_cubit.dart';
 import '../../../../../shared/extension/context_extension.dart';
 import '../../../../../shared/helpers/gradient_background.dart';
@@ -97,7 +98,7 @@ class MembersBottomSheet extends StatelessWidget {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 12.r, vertical: 10.r),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(99.r),
+                                  borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
                                   gradient: gradientBackground),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -159,7 +160,7 @@ class MembersBottomSheet extends StatelessWidget {
                         }),
                         shape: MaterialStateProperty.resolveWith((states) {
                           return RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.r));
+                              borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r));
                         }),
                         shadowColor:
                             MaterialStateProperty.resolveWith((states) {
