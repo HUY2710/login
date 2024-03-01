@@ -72,7 +72,7 @@ class TrackingHistoryPlaceService {
         }
 
         listMapPlaces[listIdGroup.indexOf(idGroup)] = {idGroup: listPlaceGroup};
-        // trackingHistoryPlace();
+        trackingHistoryPlace();
       },
     );
   }

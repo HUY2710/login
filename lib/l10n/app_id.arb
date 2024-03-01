@@ -48,9 +48,7 @@
   "left": "keluar",
   "has": "memiliki",
   "next": "Berikutnya",
-  "titlePermission": "Berbagi sepeda memerlukan izin untuk menggunakan perangkat ",
   "location": "Lokasi",
-  "subLocation": "Izin lokasi diatur ke mode “selalu” untuk memungkinkan penggunaan data untuk peta dalam aplikasi, peringatan lokasi, dan berbagi lokasi dengan grup Anda.",
   "notification": "Notifikasi",
   "subNotification": "Tetap terinformasi dengan langganan, peringatan, dan pesan dari grup Anda.",
   "motionTracking": "Pelacakan Gerakan",
@@ -67,7 +65,6 @@
   "avatarGroup": "Avatar Grup",
   "save": "Simpan",
   "joinGroupCode": "Bergabung dengan grup? Masukkan kode undangan Anda",
-  "permissionsGreate": "Bagus! Sekarang, “ ubah ke selalu izinkan",
   "permissionsGreateSub": "Berbagi lokasi akan dinonaktifkan segera setelah Anda menonaktifkan izin di pengaturan",
   "change": "Ubah",
   "allow": "Izinkan",
@@ -116,7 +113,6 @@
   "ok": "Oke",
   "editAccount": "Edit Akun",
   "guideAddMember": "Undang orang-orang yang ingin Anda tambahkan ke dalam grup.",
-  "allowLocationPermission": "Izinkan “Berbagi Sepeda” untuk melacak lokasi bahkan ketika Anda tidak menggunakan aplikasi?",
   "justKeepIt": "Biarkan saat digunakan",
   "steps": "langkah-langkah",
   "noHistory": "Tidak ada riwayat",
@@ -159,5 +155,9 @@
   "pleaseDoNot": "Tolong jangan memuat karakter khusus",
   "checkInNoti": "telah check-in di",
   "sendMessageNoti": "telah mengirimkan pesan tersebut",
-  "joined": "bergabung"
+  "joined": "bergabung",
+  "titlePermission": "Berbagi grup memerlukan izin",
+  "subLocation": "Aplikasi ini mengumpulkan data lokasi untuk memungkinkan fitur memperbarui lokasi Anda bagi orang lain yang sedang melacak Anda, bahkan ketika aplikasi ditutup atau tidak digunakan.",
+  "permissionsGreate": "Bagus! Sekarang ubah ke 'Selalu izinkan'.",
+  "allowLocationPermission": "Izinkan 'Berbagi grup' mengakses lokasi Anda bahkan saat Anda tidak menggunakan aplikasi?"
 }

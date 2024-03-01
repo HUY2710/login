@@ -40,9 +40,7 @@
   "left": "parti",
   "has": "a",
   "next": "Suivant",
-  "titlePermission": "Le partage de trajets nécessite des autorisations pour utiliser le ",
   "location": "Emplacement",
-  "subLocation": "Les autorisations de localisation sont définies sur « toujours » pour permettre l''utilisation des données pour les cartes de l''application, les alertes de localisation et le partage de localisation avec votre groupe.",
   "notification": "Notification",
   "subNotification": "Restez à jour avec les abonnements, les alertes et les messages de votre groupe.",
   "motionTracking": "Suivi des mouvements",
@@ -59,7 +57,6 @@
   "avatarGroup": "Groupe d''avatar",
   "save": "Enregistrer",
   "joinGroupCode": "Vous rejoignez un groupe? Entrez votre code d''invitation",
-  "permissionsGreate": "Super! Maintenant, “ changez pour toujours autoriser",
   "permissionsGreateSub": "Le partage de la localisation sera désactivé dès que vous désactiverez l''autorisation dans les paramètres.",
   "change": "Changer",
   "allow": "Autoriser",
@@ -159,5 +156,9 @@
   "pleaseDoNot": "Veuillez ne pas contenir de caractères spéciaux",
   "checkInNoti": "a fait check-in à",
   "sendMessageNoti": "a envoyé le message",
-  "joined": "rejoint"
+  "joined": "rejoint",
+  "titlePermission": "Le partage de groupe nécessite des autorisations",
+  "subLocation": "Cette application collecte des données de localisation pour permettre la fonction de mise à jour de votre emplacement pour d'autres personnes qui vous suivent, même lorsque l'application est fermée ou non utilisée.",
+  "permissionsGreate": "Génial ! Maintenant, passez à « Toujours autoriser ».",
+  "allowLocationPermission": "Autoriser « Partage de groupe » à accéder à votre emplacement même lorsque vous n'utilisez pas l'application ?"
 }

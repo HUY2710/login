@@ -9,6 +9,7 @@ import '../../../data/models/store_user/store_user.dart';
 import '../../../data/remote/firestore_client.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/colors.gen.dart';
+import '../../../global/global.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../../shared/widgets/custom_circle_avatar.dart';
@@ -104,31 +105,32 @@ class _HistoryPlaceState extends State<HistoryPlace> {
                           ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          context.popRoute().then(
-                                (value) => showAppModalBottomSheet(
-                                  context: context,
-                                  builder: (context) => DirectionMap(
-                                    user: widget.user,
+                      if (widget.user.code != Global.instance.userCode)
+                        GestureDetector(
+                          onTap: () {
+                            context.popRoute().then(
+                                  (value) => showAppModalBottomSheet(
+                                    context: context,
+                                    builder: (context) => DirectionMap(
+                                      user: widget.user,
+                                    ),
                                   ),
-                                ),
-                              );
-                        },
-                        child: ShadowContainer(
-                          margin: EdgeInsets.only(right: 12.w),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 12.w, vertical: 6.h),
-                          child: Text(
-                            context.l10n.getRoutes,
-                            style: TextStyle(
-                              color: const Color(0xff8E52FF),
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w500,
+                                );
+                          },
+                          child: ShadowContainer(
+                            margin: EdgeInsets.only(right: 12.w),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12.w, vertical: 6.h),
+                            child: Text(
+                              context.l10n.getRoutes,
+                              style: TextStyle(
+                                color: const Color(0xff8E52FF),
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                   2.verticalSpace,

@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../config/navigation/app_router.dart';
 import '../../services/activity_recognition_service.dart';
@@ -10,6 +13,7 @@ import '../../shared/cubit/value_cubit.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../onboarding/widgets/app_button.dart';
+import 'widget/guide_first_permission.dart';
 import 'widget/permission_content.dart';
 
 @RoutePage()
@@ -29,6 +33,34 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
     //1 request location
     //2 request notification
     //3 request motion
+
+    Future<bool?> showGuidePermissionDialog(
+        VoidCallback voidCallback, BuildContext context) async {
+      final status = await showDialog(
+        context: context,
+        builder: (context) {
+          if (Platform.isIOS) {
+            return GuideFirstPermission(
+              title: 'Please share location with Group sharing',
+              subTitle: context.l10n.permissionsGreateSub,
+              backgroundColor: Colors.white.withOpacity(0.95),
+              confirmTap: () => context.popRoute(true),
+              confirmText: context.l10n.allow,
+            );
+          }
+          return GuideFirstPermission(
+            title: 'Please share location with Group sharing',
+            subTitle: context.l10n.permissionsGreateSub,
+            backgroundColor: Colors.white.withOpacity(0.95),
+            confirmTap: () => context.popRoute(true),
+            confirmText: context.l10n.allow,
+          );
+        },
+      );
+      debugPrint('status:$status');
+      return status;
+    }
+
     return Scaffold(
       body: PermissionContent(
         locationCubit: locationCubit,
@@ -47,35 +79,42 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
               bloc: typeRequest,
               builder: (context, state) {
                 return AppButton(
-                    title: context.l10n.allow,
-                    onTap: () async {
-                      if (state == 1) {
-                        final status = await requestPermissionLocation();
-                        locationCubit.update(status);
-                        showNotify.update(true);
-                        typeRequest.update(2);
+                  title: context.l10n.allow,
+                  onTap: () async {
+                    if (state == 1) {
+                      final result = await showGuidePermissionDialog(
+                          requestPermissionLocation, context);
+                      if (result == null) {
+                        return;
                       }
+                      final status = await requestPermissionLocation();
+                      locationCubit.update(status);
+                      showNotify.update(true);
+                      typeRequest.update(2);
+                    }
 
-                      if (state == 2) {
-                        final status = await requestNotification();
-                        if (status) {
-                          await FirebaseMessageService().startService();
-                        }
-                        notifyCubit.update(status);
-                        showMotion.update(true);
-                        typeRequest.update(3);
+                    if (state == 2) {
+                      final status = await requestNotification();
+                      if (status) {
+                        await FirebaseMessageService().startService();
                       }
-                      if (state == 3) {
-                        final status = await requestActivityRecognition();
-                        if (status) {
-                          ActivityRecognitionService.instance.initActivityRecognitionService();
-                        }
-                        motionCubit.update(status);
-                        typeRequest.update(0); //không request nữa
+                      notifyCubit.update(status);
+                      showMotion.update(true);
+                      typeRequest.update(3);
+                    }
+                    if (state == 3) {
+                      final status = await requestActivityRecognition();
+                      if (status) {
+                        ActivityRecognitionService.instance
+                            .initActivityRecognitionService();
+                      }
+                      motionCubit.update(status);
+                      typeRequest.update(0); //không request nữa
 
-                        context.router.replaceAll([const GuideRoute()]);
-                      }
-                    });
+                      context.router.replaceAll([const GuideRoute()]);
+                    }
+                  },
+                );
               },
             ),
             TextButton(

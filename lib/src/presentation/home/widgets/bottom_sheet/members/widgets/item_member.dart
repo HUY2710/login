@@ -10,10 +10,15 @@ import '../../../../../../global/global.dart';
 import '../../../../../../shared/extension/context_extension.dart';
 
 class ItemMember extends StatelessWidget {
-  const ItemMember({super.key, required this.isAdmin, required this.user});
+  const ItemMember(
+      {super.key,
+      required this.isAdmin,
+      required this.user,
+      required this.callBack});
 
   final bool isAdmin;
   final StoreUser user;
+  final VoidCallback callBack;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -83,7 +88,7 @@ class ItemMember extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: callBack,
             icon: Transform.rotate(
               angle: pi,
               child: Icon(

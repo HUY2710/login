@@ -40,9 +40,7 @@
   "left": "나감",
   "has": "소유함",
   "next": "다음",
-  "titlePermission": "자전거 공유에는 장치 사용 권한이 필요합니다 ",
   "location": "위치",
-  "subLocation": "위치 권한이 항상으로 설정되어 있어 앱 내 지도, 위치 알림 및 그룹과의 위치 공유에 데이터를 사용할 수 있습니다.",
   "notification": "알림",
   "subNotification": "그룹의 구독, 알림 및 메시지를 통해 최신 정보를 확인하세요.",
   "motionTracking": "동작 추적",
@@ -59,7 +57,6 @@
   "avatarGroup": "아바타 그룹",
   "save": "저장",
   "joinGroupCode": "그룹 참여 중? 초대 코드를 입력하세요",
-  "permissionsGreate": "좋아요! 이제 항상 허용으로 변경합니다",
   "permissionsGreateSub": "설정에서 권한을 비활성화하면 위치 공유가 즉시 꺼집니다.",
   "change": "변경",
   "allow": "허용",
@@ -107,7 +104,6 @@
   "allowOthersToTrackSub": "실시간 위치는 다른 사람에게 업데이트되지 않을 것입니다. 꺼내시겠습니까?",
   "ok": "확인",
   "editAccount": "계정 편집",
-  "allowLocationPermission": "“사이클 공유”에게 앱을 사용하지 않을 때도 위치를 사용할 수 있도록 허용하시겠습니까?",
   "justKeepIt": "사용 중일 때만 유지",
   "steps": "단계",
   "noHistory": "기록 없음",
@@ -159,5 +155,9 @@
   "pleaseDoNot": "특수 문자를 포함하지 마십시오",
   "checkInNoti": "에서 체크인 했습니다",
   "sendMessageNoti": "메시지를 보냈습니다",
-  "joined": "참여함"
+  "joined": "참여함",
+  "titlePermission": "그룹 공유에는 권한이 필요합니다",
+  "subLocation": "이 앱은 당신을 추적하는 다른 사람들을 위해 당신의 위치를 업데이트할 수 있도록 위치 데이터를 수집합니다. 심지어 앱이 닫혀 있거나 사용되지 않을 때도요.",
+  "permissionsGreate": "좋아요! 이제 '항상 허용'으로 변경하세요.",
+  "allowLocationPermission": "'그룹 공유'가 앱을 사용하지 않을 때도 귀하의 위치에 액세스하도록 허용하시겠습니까?"
 }

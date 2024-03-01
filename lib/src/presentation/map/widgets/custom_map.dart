@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../../flavors.dart';
 import '../../../config/di/di.dart';
 import '../../../data/models/store_location/store_location.dart';
 import '../../../data/models/store_place/store_place.dart';
@@ -139,7 +140,15 @@ class _CustomMapState extends State<CustomMap> {
               )
             : BitmapDescriptor.defaultMarker,
         onTap: user.code == Global.instance.user?.code
-            ? () {}
+            ? () {
+                if (Flavor.dev == F.appFlavor) {
+                  showAppModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => HistoryPlace(user: user),
+                  );
+                }
+              }
             : () {
                 showAppModalBottomSheet(
                   context: context,

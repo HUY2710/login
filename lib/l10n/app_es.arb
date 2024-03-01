@@ -40,9 +40,7 @@
   "left": "Salió",
   "has": "tiene",
   "next": "Siguiente",
-  "titlePermission": "El uso compartido de ciclos requiere permisos para utilizar el dispositivo ",
   "location": "Ubicación",
-  "subLocation": "Los permisos de ubicación están configurados en 'siempre' para permitir que los datos se utilicen en mapas dentro de la aplicación, alertas de ubicación y uso compartido de ubicación con tu grupo.",
   "notification": "Notificación",
   "subNotification": "Mantente al día con suscripciones, alertas y mensajes de tu grupo.",
   "motionTracking": "Seguimiento de movimiento",
@@ -59,7 +57,6 @@
   "avatarGroup": "Avatar del grupo",
   "save": "Guardar",
   "joinGroupCode": "¿Unirse a un grupo? Ingresa tu código de invitación",
-  "permissionsGreate": "¡Genial! Ahora, \"cambia a siempre permitir\"",
   "permissionsGreateSub": "El uso compartido de ubicación se desactivará tan pronto como deshabilites el permiso en la configuración.",
   "change": "Cambiar",
   "allow": "Permitir",
@@ -159,5 +156,9 @@
   "pleaseDoNot": "Por favor, no contenga caracteres especiales",
   "checkInNoti": "ha hecho check-in en",
   "sendMessageNoti": "ha enviado el mensaje",
-  "joined": "se unió"
+  "joined": "se unió",
+  "titlePermission": "La compartición de grupo requiere permisos",
+  "subLocation": "Esta aplicación recopila datos de ubicación para permitir la función de actualizar su ubicación para otros que lo están rastreando, incluso cuando la aplicación está cerrada o no está en uso.",
+  "permissionsGreate": "¡Genial! Ahora cambie a 'Permitir siempre'.",
+  "allowLocationPermission": "¿Permitir que 'Compartición de grupo' acceda a su ubicación incluso cuando no esté utilizando la aplicación?"
 }

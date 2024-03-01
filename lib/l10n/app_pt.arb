@@ -40,9 +40,7 @@
   "left": "saiu",
   "has": "possui",
   "next": "Próximo",
-  "titlePermission": "O compartilhamento de localização requer permissões para usar o dispositivo",
   "location": "Localização",
-  "subLocation": "As permissões de localização estão definidas como “sempre” para permitir que os dados sejam usados para mapas dentro do aplicativo, alertas de localização e compartilhamento de localização com seu grupo.",
   "notification": "Notificação",
   "subNotification": "Fique atualizado com assinaturas, alertas e mensagens do seu grupo.",
   "motionTracking": "Rastreamento de movimento",
@@ -59,7 +57,6 @@
   "avatarGroup": "Avatar do Grupo",
   "save": "Salvar",
   "joinGroupCode": "Entrando em um grupo? Insira seu código de convite",
-  "permissionsGreate": "Ótimo! Agora, mude para sempre permitir",
   "permissionsGreateSub": "O compartilhamento de localização será desativado assim que você desabilitar a permissão nas configurações",
   "change": "Mudar",
   "allow": "Permitir",
@@ -116,7 +113,6 @@
   "guidePro": "Atualize para Premium para recursos e benefícios exclusivos! Clique aqui para desbloquear acesso VIP.",
   "guideAddMember": "Convide as pessoas que deseja adicionar ao grupo.",
   "editAccount": "Editar Conta",
-  "allowLocationPermission": "Permitir que \"Compartilhamento de ciclo\" acesse sua localização mesmo quando você não estiver usando o aplicativo?",
   "justKeepIt": "Mantenha apenas durante o uso",
   "steps": "passos",
   "noHistory": "Sem histórico",
@@ -159,5 +155,9 @@
   "pleaseDoNot": "Por favor, não contenha caracteres especiais",
   "checkInNoti": "fez check-in em",
   "sendMessageNoti": "enviou a mensagem",
-  "joined": "juntou-se"
+  "joined": "juntou-se",
+  "titlePermission": "O compartilhamento de grupo requer permissões",
+  "subLocation": "Este aplicativo coleta dados de localização para permitir a função de atualizar sua localização para outros que estão rastreando você, mesmo quando o aplicativo está fechado ou não está em uso.",
+  "permissionsGreate": "Ótimo! Agora, mude para 'Sempre permitir'.",
+  "allowLocationPermission": "Permitir que 'Compartilhamento de grupo' acesse sua localização mesmo quando você não está usando o aplicativo?"
 }

@@ -87,7 +87,10 @@ class PlacesManager {
         .doc(idPlace)
         .update(fields)
         .then((value) => debugPrint('Update Place success'))
-        .catchError((error) => throw Exception(error));
+        .catchError((error){
+      debugPrint('Update Place error:$error');
+          throw Exception(error);
+    });
   }
 
   static Future<StorePlace?> getDetailPlace(

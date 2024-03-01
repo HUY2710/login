@@ -54,8 +54,8 @@ class BatteryBar extends StatelessWidget {
         ),
         2.horizontalSpace,
         Container(
-          width: 4.w,
-          height: 10.h,
+          width: 2.w,
+          height: 6.h,
           decoration: BoxDecoration(
             color: color,
             borderRadius:

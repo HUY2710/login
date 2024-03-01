@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -15,16 +16,13 @@ import '../../data/models/store_place/store_place.dart';
 import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../data/remote/token_manager.dart';
-import '../../gen/colors.gen.dart';
 import '../../global/global.dart';
 import '../../services/my_background_service.dart';
 import '../../shared/constants/app_constants.dart';
-import '../../shared/extension/context_extension.dart';
 import '../../shared/mixin/permission_mixin.dart';
-import '../../shared/widgets/containers/custom_container.dart';
 import '../chat/cubits/group_cubit.dart';
 import '../home/widgets/bottom_bar.dart';
-import '../permission/widget/permission_dialog.dart';
+import '../permission/widget/permission_home_ios.dart';
 import 'cubit/map_type_cubit.dart';
 import 'cubit/select_group_cubit.dart';
 import 'cubit/tracking_location/tracking_location_cubit.dart';
@@ -142,92 +140,41 @@ class MapScreenState extends State<MapScreen>
     } else {
       if (context.mounted) {
         await showDialog(
-          context: context,
-          builder: (context1) => PermissionDialog(
-            title: context.l10n.permissionsGreate,
-            subTitle: context.l10n.permissionsGreateSub,
-            confirmTap: () async {
-              context1.popRoute();
-              final rejectAlway =
-                  await Permission.locationAlways.isPermanentlyDenied;
-              if (rejectAlway) {
-                openAppSettings();
+            context: context,
+            builder: (context1) {
+              if (Platform.isIOS) {
+                return PermissionHomeIOS(
+                  confirmTap: () async {
+                    context1.popRoute();
+                    final rejectAlway =
+                        await Permission.locationAlways.isPermanentlyDenied;
+                    if (rejectAlway) {
+                      openAppSettings();
+                    }
+                    final status = await Permission.locationAlways.request();
+                    if (status.isGranted) {
+                      _listenBackGroundMode();
+                    }
+                    debugPrint('status:$status');
+                  },
+                );
               }
-              final status = await Permission.locationAlways.request();
-              if (status.isGranted) {
-                _listenBackGroundMode();
-              }
-              debugPrint('status:$status');
-            },
-            confirmText: context.l10n.change,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 10.h,
-                horizontal: 16.w,
-              ),
-              child: Stack(
-                children: [
-                  Center(
-                    child: Container(
-                      width: 213.w,
-                      height: 166.h,
-                      padding: EdgeInsets.symmetric(
-                          vertical: 14.h, horizontal: 16.w),
-                      decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.5),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.r),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xffABABAB).withOpacity(0.3),
-                            )
-                          ]),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            context.l10n.allowLocationPermission,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: MyColors.black34,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          14.verticalSpace,
-                          Text(
-                            context.l10n.justKeepIt,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: MyColors.color6C6C6C,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          8.verticalSpace,
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 14.h,
-                    left: 0,
-                    right: 0,
-                    child: CustomContainer(
-                      width: 260.w,
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      colorBg: Colors.white,
-                      child: Center(
-                        child: Text(context.l10n.changeToAlwaysAllow),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
+              return PermissionHomeIOS(
+                confirmTap: () async {
+                  context1.popRoute();
+                  final rejectAlway =
+                      await Permission.locationAlways.isPermanentlyDenied;
+                  if (rejectAlway) {
+                    openAppSettings();
+                  }
+                  final status = await Permission.locationAlways.request();
+                  if (status.isGranted) {
+                    _listenBackGroundMode();
+                  }
+                  debugPrint('status:$status');
+                },
+              );
+            });
       }
     }
   }

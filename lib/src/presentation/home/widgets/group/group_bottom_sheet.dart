@@ -144,6 +144,7 @@ class GroupBottomSheet extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
+                                context.popRoute();
                                 if (groups[index].idGroup !=
                                     getIt<SelectGroupCubit>().state?.idGroup) {
                                   getIt<SelectGroupCubit>()
