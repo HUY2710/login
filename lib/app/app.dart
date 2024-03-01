@@ -1,16 +1,19 @@
+
+import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 import '../module/iap/my_purchase_manager.dart';
 import '../src/config/di/di.dart';
 import '../src/config/navigation/app_router.dart';
 import '../src/config/observer/route_observer.dart';
 import '../src/config/theme/light/light_theme.dart';
-import '../src/services/activity_recognition_service.dart';
 import '../src/shared/enum/language.dart';
+import '../src/shared/widgets/dialog/no_internet_dialog.dart';
 import '../src/shared/widgets/loading/loading_indicator.dart';
 import 'cubit/language_cubit.dart';
 import 'cubit/loading_cubit.dart';
@@ -32,7 +35,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    ActivityRecognitionService.instance.initActivityRecognitionService();
+    // ActivityRecognitionService.instance.initActivityRecognitionService();
   }
 
   @override
@@ -67,10 +70,56 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class BodyApp extends StatelessWidget {
+class BodyApp extends StatefulWidget {
   const BodyApp({
     super.key,
   });
+
+  @override
+  State<BodyApp> createState() => _BodyAppState();
+}
+
+class _BodyAppState extends State<BodyApp> {
+  bool shownDialog = false;
+  late final StreamSubscription internetListener;
+  void listenInternet() {
+    internetListener = InternetConnection()
+        .onStatusChange
+        .listen((InternetStatus status) async {
+      switch (status) {
+        case InternetStatus.connected:
+          if (shownDialog) {
+            shownDialog = false;
+            getIt<AppRouter>().navigatorKey.currentContext!.popRoute();
+          }
+          break;
+        case InternetStatus.disconnected:
+          if (!shownDialog) {
+            shownDialog = true;
+            showDialog(
+                barrierDismissible: false,
+                context: getIt<AppRouter>().navigatorKey.currentContext!,
+                builder: (context) => const NoIternetDialog());
+          }
+          break;
+      }
+      await Future.delayed(const Duration(seconds: 3));
+    });
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      listenInternet();
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    internetListener.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

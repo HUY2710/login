@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:battery_plus/battery_plus.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:upgrader/upgrader.dart';
 
@@ -32,7 +32,6 @@ import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
-import '../../services/connectivity_service.dart';
 import '../../services/my_background_service.dart';
 import '../../services/tracking_history_place_service.dart';
 import '../../shared/constants/app_constants.dart';
@@ -53,18 +52,21 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  bool _isInitialized = false;
+  late final StreamSubscription internetListener;
   @override
   void initState() {
     super.initState();
-    _init().then((value) {
-      NetworkConnectivity.instance.myStream.listen((event) async {
-        if (event.keys.toList()[0] != ConnectivityResult.none &&
-            !_isInitialized) {
-          _isInitialized = true;
-          await _init();
-        }
-      });
+    internetListener = InternetConnection()
+        .onStatusChange
+        .listen((InternetStatus status) async {
+      switch (status) {
+        case InternetStatus.connected:
+          _init();
+          break;
+        case InternetStatus.disconnected:
+          break;
+      }
+      await Future.delayed(const Duration(seconds: 3));
     });
   }
 
@@ -75,23 +77,20 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     initDebugger();
-    if (await NetworkConnectivity.instance.initial()) {
-      await loadEnv();
-      await Future.wait([
-        RemoteConfigManager.instance.initConfig(),
-        // initAppsflyer(),
-        // AppLovinMAX.initialize(EnvParams.appLovinKey),
-      ]);
-      await RemoteConfigManager.instance.initConfig();
-      await loadAdUnitId();
-      await configureAd();
-      Global.instance.packageInfo = await PackageInfo.fromPlatform();
-      if (EasyAds.instance.hasInternet) {
-        await initUpgrader();
-      } else {
-        setInitScreen();
-      }
-      _isInitialized = true;
+    await loadEnv();
+    await Future.wait([
+      RemoteConfigManager.instance.initConfig(),
+      // initAppsflyer(),
+      // AppLovinMAX.initialize(EnvParams.appLovinKey),
+    ]);
+    await RemoteConfigManager.instance.initConfig();
+    await loadAdUnitId();
+    await configureAd();
+    Global.instance.packageInfo = await PackageInfo.fromPlatform();
+    if (EasyAds.instance.hasInternet) {
+      await initUpgrader();
+    } else {
+      setInitScreen();
     }
   }
 
@@ -325,6 +324,12 @@ class _SplashScreenState extends State<SplashScreen> {
           PreferenceKeys.userCode.name, newCode);
     });
     return storeUser;
+  }
+
+  @override
+  void dispose() {
+    internetListener.cancel();
+    super.dispose();
   }
 
   @override

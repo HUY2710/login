@@ -19,18 +19,19 @@ class Utils {
 
   static bool checkLastMessByUser(
       int index, List<QueryDocumentSnapshot<MessageModel>> chats) {
-    return index < chats.length - 1 &&
-        chats[index].data().senderId == chats[index + 1].data().senderId;
-    // &&
-    // chats[index].data().senderId == chats.last.data().senderId;
+    return chats.isNotEmpty &&
+        (index == 0 ||
+            chats[index].data().senderId != chats[index - 1].data().senderId);
   }
 
   static bool compareUserCode(
       int index, List<QueryDocumentSnapshot<MessageModel>> chats) {
-    if (index == 0) {
-      return false;
-    }
-    return chats[index - 1].data().senderId == chats[index].data().senderId;
+    // if (index == 0) {
+    //   return false;
+    // }
+    return index < chats.length - 1 &&
+        chats[index].data().senderId == chats[index + 1].data().senderId;
+    // return chats[index - 1].data().senderId == chats[index].data().senderId;
   }
 
   static Future<bool> getSeenMess(String idGroup, String lastSeen) async {
