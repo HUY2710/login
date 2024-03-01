@@ -16,7 +16,6 @@ import '../../../../data/remote/token_manager.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/gens.dart';
 import '../../../../global/global.dart';
-import '../../../../services/firebase_message_service.dart';
 import '../../../../shared/cubit/value_cubit.dart';
 import '../../../../shared/extension/context_extension.dart';
 import '../../../../shared/extension/int_extension.dart';

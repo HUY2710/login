@@ -19,9 +19,11 @@ import '../../data/remote/token_manager.dart';
 import '../../global/global.dart';
 import '../../services/my_background_service.dart';
 import '../../shared/constants/app_constants.dart';
+import '../../shared/extension/context_extension.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../chat/cubits/group_cubit.dart';
 import '../home/widgets/bottom_bar.dart';
+import '../permission/widget/permission_home_android.dart';
 import '../permission/widget/permission_home_ios.dart';
 import 'cubit/map_type_cubit.dart';
 import 'cubit/select_group_cubit.dart';
@@ -155,11 +157,10 @@ class MapScreenState extends State<MapScreen>
                     if (status.isGranted) {
                       _listenBackGroundMode();
                     }
-                    debugPrint('status:$status');
                   },
                 );
               }
-              return PermissionHomeIOS(
+              return PermissionHomeAndroid(
                 confirmTap: () async {
                   context1.popRoute();
                   final rejectAlway =
@@ -171,8 +172,8 @@ class MapScreenState extends State<MapScreen>
                   if (status.isGranted) {
                     _listenBackGroundMode();
                   }
-                  debugPrint('status:$status');
                 },
+                confirmText: context.l10n.goToSettings,
               );
             });
       }

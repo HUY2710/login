@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../gen/gens.dart';
 import '../../../../shared/extension/context_extension.dart';
 
 class ActionDialog extends StatelessWidget {

@@ -159,5 +159,20 @@
   "titlePermission": "O compartilhamento de grupo requer permissões",
   "subLocation": "Este aplicativo coleta dados de localização para permitir a função de atualizar sua localização para outros que estão rastreando você, mesmo quando o aplicativo está fechado ou não está em uso.",
   "permissionsGreate": "Ótimo! Agora, mude para 'Sempre permitir'.",
-  "allowLocationPermission": "Permitir que 'Compartilhamento de grupo' acesse sua localização mesmo quando você não está usando o aplicativo?"
+  "allowLocationPermission": "Permitir que 'Compartilhamento de grupo' acesse sua localização mesmo quando você não está usando o aplicativo?",
+  "titlePermissionHomeAndroid": "그룹 공유 앱 설정에서 위치 액세스 하위에서 '항상 허용'을 선택합니다",
+  "locationPermission": "위치 권한",
+  "allowAllTheTime": "항상 허용",
+  "allowUseApp": "앱 사용 중에만 허용",
+  "askEveryTime": "항상 묻기",
+  "deny": "거부",
+  "allowGroupSharing": "그룹 공유가 이 장치의 정확한 위치에 액세스하도록 허용",
+  "precise": "정확한",
+  "approximate": "대략적인",
+  "onlyThisTime": "이번에만",
+  "whileUseApp": "앱 사용 중일 때",
+  "pleaseShareLocation": "Por favor, compartilhe sua localização com o Compartilhamento de Grupo",
+  "allowOne": "Permitir uma vez",
+  "dontAllow": "Não permitir",
+  "allowGroupSharingLocation": "Permitir que o \"Compartilhamento de Grupo\" use sua localização?"
 }

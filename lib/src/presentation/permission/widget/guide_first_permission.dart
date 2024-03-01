@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../gen/colors.gen.dart';
+import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/containers/custom_container.dart';
 import '../../onboarding/widgets/app_button.dart';
 
@@ -78,7 +79,7 @@ class GuideFirstPermission extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Allow “Group sharing” to use your location?',
+                          context.l10n.allowGroupSharingLocation,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: MyColors.black34,
@@ -88,7 +89,7 @@ class GuideFirstPermission extends StatelessWidget {
                         ),
                         14.verticalSpace,
                         Text(
-                          'Allow one',
+                          context.l10n.allow,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: const Color(0xff9F9F9F),
@@ -100,7 +101,7 @@ class GuideFirstPermission extends StatelessWidget {
                         const Expanded(child: SizedBox.shrink()),
                         4.verticalSpace,
                         Text(
-                          "Don't Allow",
+                          context.l10n.dontAllow,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: const Color(0xff9F9F9F),
@@ -120,10 +121,10 @@ class GuideFirstPermission extends StatelessWidget {
                     width: 270.w,
                     padding: EdgeInsets.symmetric(vertical: 12.h),
                     colorBg: Colors.white,
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        'Allow while using the app',
-                        style: TextStyle(
+                        context.l10n.allowUseApp,
+                        style: const TextStyle(
                           color: Color(0xff8E52FF),
                           fontWeight: FontWeight.w500,
                         ),

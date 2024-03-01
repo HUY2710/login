@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../config/navigation/app_router.dart';
 import '../../services/activity_recognition_service.dart';
@@ -14,6 +13,7 @@ import '../../shared/extension/context_extension.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../onboarding/widgets/app_button.dart';
 import 'widget/guide_first_permission.dart';
+import 'widget/guide_first_permission_android.dart';
 import 'widget/permission_content.dart';
 
 @RoutePage()
@@ -41,23 +41,21 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
         builder: (context) {
           if (Platform.isIOS) {
             return GuideFirstPermission(
-              title: 'Please share location with Group sharing',
+              title: context.l10n.pleaseShareLocation,
               subTitle: context.l10n.permissionsGreateSub,
               backgroundColor: Colors.white.withOpacity(0.95),
               confirmTap: () => context.popRoute(true),
               confirmText: context.l10n.allow,
             );
           }
-          return GuideFirstPermission(
-            title: 'Please share location with Group sharing',
+          return GuideFirstPermissionAndroid(
+            title: context.l10n.pleaseShareLocation,
             subTitle: context.l10n.permissionsGreateSub,
-            backgroundColor: Colors.white.withOpacity(0.95),
             confirmTap: () => context.popRoute(true),
             confirmText: context.l10n.allow,
           );
         },
       );
-      debugPrint('status:$status');
       return status;
     }
 
@@ -110,8 +108,9 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
                       }
                       motionCubit.update(status);
                       typeRequest.update(0); //không request nữa
-
-                      context.router.replaceAll([const GuideRoute()]);
+                      if (!fromMapScreen && context.mounted) {
+                        context.router.replaceAll([const GuideRoute()]);
+                      }
                     }
                   },
                 );
