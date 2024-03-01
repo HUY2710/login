@@ -12,6 +12,7 @@ class PermissionDialog extends StatelessWidget {
     required this.confirmText,
     required this.subTitle,
     required this.child,
+    this.backgroundColor,
   });
 
   final String title;
@@ -19,11 +20,12 @@ class PermissionDialog extends StatelessWidget {
   final VoidCallback confirmTap;
   final Widget child;
   final String confirmText;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.white.withOpacity(0.75),
+      backgroundColor: backgroundColor ?? Colors.white.withOpacity(0.75),
       elevation: 0.0,
       content: Column(
         mainAxisSize: MainAxisSize.min,

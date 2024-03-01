@@ -29,6 +29,25 @@ class BuildListMember extends StatelessWidget {
   final List<StoreUser> listMembers;
   final ValueCubit<bool> isEditCubit;
   final Function(StoreUser user) goToUserLocation;
+
+  void tapMember(BuildContext context, StoreUser member) {
+    if (member.code == Global.instance.user?.code) {
+      goToUserLocation(Global.instance.user!);
+      context.popRoute();
+    }
+    if (member.code != Global.instance.user?.code) {
+      getIt<SelectUserCubit>().update(member);
+      goToUserLocation(member);
+      context.popRoute().then(
+            (value) => showAppModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.transparent,
+              builder: (context) => HistoryPlace(user: member),
+            ),
+          );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -88,20 +107,10 @@ class BuildListMember extends StatelessWidget {
             ),
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  goToUserLocation(member);
-                  if (member.code != Global.instance.user?.code) {
-                    getIt<SelectUserCubit>().update(member);
-                    context.popRoute().then(
-                          (value) => showAppModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) => HistoryPlace(user: member),
-                          ),
-                        );
-                  }
-                },
+                onTap: () => tapMember(context, member),
+                behavior: HitTestBehavior.opaque,
                 child: ItemMember(
+                  callBack: () => tapMember(context, member),
                   isAdmin: admin?.idUser == member.code,
                   user: member,
                 ),
