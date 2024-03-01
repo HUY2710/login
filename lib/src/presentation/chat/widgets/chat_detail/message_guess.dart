@@ -32,7 +32,7 @@ class MessageTypeGuess extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        if (!Utils.checkLastMessByUser(index, chats))
+        if (Utils.checkLastMessByUser(index, chats))
           ClipRRect(
             borderRadius: BorderRadius.circular(999),
             child: Image.asset(
@@ -62,7 +62,7 @@ class MessageTypeGuess extends StatelessWidget {
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15.r),
               topRight: Radius.circular(15.r),
-              bottomLeft: !Utils.checkLastMessByUser(index, chats)
+              bottomLeft: Utils.checkLastMessByUser(index, chats)
                   ? Radius.zero
                   : Radius.circular(15.r),
               bottomRight: Radius.circular(15.r)),
@@ -130,7 +130,7 @@ class MessageTypeGuess extends StatelessWidget {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(15.r),
                 topRight: Radius.circular(15.r),
-                bottomLeft: !Utils.checkLastMessByUser(index, chats)
+                bottomLeft: Utils.checkLastMessByUser(index, chats)
                     ? Radius.zero
                     : Radius.circular(15.r),
                 bottomRight: Radius.circular(15.r)),

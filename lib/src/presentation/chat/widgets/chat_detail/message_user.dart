@@ -29,8 +29,7 @@ class MessageTypeUser extends StatelessWidget {
                       topRight: Radius.circular(15.r),
                       bottomLeft: Radius.circular(15.r),
                       bottomRight: Utils.checkLastMessage(
-                              code: item.senderId,
-                              isLastMessage: index == chats.length - 1)
+                              code: item.senderId, isLastMessage: index == 0)
                           ? Radius.zero
                           : Radius.circular(15.r)),
                   color: const Color(0xffB98EFF)),
