@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:marquee/marquee.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -313,44 +314,71 @@ class _SettingScreenState extends State<SettingScreen> {
       onTap: () {
         // TODO: Implement for Edit username
       },
-      child: Row(
-        children: [
-          Expanded(
-            child: Row(
-              children: [
-                Hero(
-                  tag: 'editAvatar',
-                  child: CircleAvatar(
-                    radius: 28,
-                    backgroundImage:
-                        AssetImage(Global.instance.user!.avatarUrl),
-                  ),
-                ),
-                20.horizontalSpace,
-                Expanded(
-                  child: Text(
-                    Global.instance.user?.userName ?? 'User',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                )
-              ],
+      child: SizedBox(
+        height: 50.h,
+        child: Row(
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            Hero(
+              tag: 'editAvatar',
+              child: CircleAvatar(
+                radius: 28,
+                backgroundImage: AssetImage(Global.instance.user!.avatarUrl),
+              ),
             ),
-          ),
-          16.horizontalSpace,
-          GestureDetector(
-            onTap: () async {
-              final result =
-                  await context.pushRoute<bool>(const EditInfoRoute());
-              if (result != null && result) {
-                setState(() {});
-              }
-            },
-            child: Assets.icons.icEdit.svg(height: 28.h),
-          ),
-        ],
+            // 20.horizontalSpace,
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                // child: Container(
+                //   color: Colors.red,
+                //   // height: 60.h,
+                // ),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  final text = Global.instance.user?.userName ?? 'User';
+
+                  final painter = TextPainter(
+                    text: TextSpan(text: text),
+                    maxLines: 1,
+                    textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                    textDirection: TextDirection.ltr,
+                  );
+                  painter.layout();
+                  final overflow = painter.size.width > constraints.maxWidth;
+
+                  return overflow
+                      ? SizedBox.expand(
+                          child: Marquee(
+                              text: text,
+                              pauseAfterRound: const Duration(seconds: 3),
+                              style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w500)),
+                        )
+                      : Text(
+                          text,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        );
+                }),
+              ),
+            ),
+            // 16.horizontalSpace,
+            GestureDetector(
+              onTap: () async {
+                final result =
+                    await context.pushRoute<bool>(const EditInfoRoute());
+                if (result != null && result) {
+                  setState(() {});
+                }
+              },
+              child: Assets.icons.icEdit.svg(height: 28.h),
+            ),
+          ],
+        ),
       ),
     );
   }
