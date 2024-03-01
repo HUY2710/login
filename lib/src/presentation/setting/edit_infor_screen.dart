@@ -104,10 +104,11 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
         showLoading();
         await FirestoreClient.instance.updateUser({
           'avatarUrl': pathAvatarCubit.state,
-          'userName': ValidHelper.removeExtraSpaces(userNameCtrl.text)
+          'userName': ValidHelper.removeExtraSpaces(userNameCtrl.text.trim())
         });
         Global.instance.user = Global.instance.user?.copyWith(
-            avatarUrl: pathAvatarCubit.state, userName: userNameCtrl.text);
+            avatarUrl: pathAvatarCubit.state,
+            userName: userNameCtrl.text.trim());
         // EasyLoading.dismiss();
         hideLoading();
         Fluttertoast.showToast(msg: context.l10n.success)
@@ -129,7 +130,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
         child: AppButton(
           title: context.l10n.save,
           onTap: updateInfo,
-          isEnable: userNameCtrl.text.isNotEmpty,
+          isEnable: userNameCtrl.text.trim().isNotEmpty,
         ),
       ),
       body: Column(

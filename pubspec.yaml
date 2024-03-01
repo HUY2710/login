@@ -78,6 +78,7 @@ dependencies:
   marquee: ^2.2.3
   connectivity_plus: ^5.0.2
   internet_connection_checker_plus: ^2.2.0
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

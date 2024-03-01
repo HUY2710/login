@@ -211,13 +211,8 @@ class _BottomBarState extends State<BottomBar> {
       onTap: () {
         //check xem có join group nào chưa
         if (isMessage) {
-          if (getIt<SelectGroupCubit>().state != null) {
-            context.pushRoute(const ChatRoute());
-            return;
-          } else {
-            Fluttertoast.showToast(msg: context.l10n.joinAGroup);
-            return;
-          }
+          context.pushRoute(const ChatRoute());
+          return;
         }
         context.pushRoute(const SettingRoute());
       },

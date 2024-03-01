@@ -45,8 +45,7 @@ class MessageTypeUser extends StatelessWidget {
             ),
           ],
         ),
-        if (item.senderId == Global.instance.user!.code &&
-            index == chats.length - 1)
+        if (item.senderId == Global.instance.user!.code && index == 0)
           Assets.icons.icSendSuccess.svg(width: 16.r),
       ],
     );

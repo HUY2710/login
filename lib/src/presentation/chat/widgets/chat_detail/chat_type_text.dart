@@ -19,6 +19,7 @@ class ChatTextWidget extends StatefulWidget {
 class _ChatTypeWidgetState extends State<ChatTextWidget> {
   final TextEditingController textController = TextEditingController();
   final ScrollController _controller = ScrollController();
+  final ValueNotifier isShowButtonSend = ValueNotifier(false);
   bool isFirstScroll = true;
   @override
   void initState() {
@@ -26,116 +27,121 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
   }
 
   @override
-  void dispose() {
-    SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        // leadingWidth: 30.w,
-        // toolbarHeight: 98.h,
-        leading: CustomInkWell(
-            child: Padding(
-              padding: EdgeInsets.all(12.w),
-              child: Assets.icons.iconBack.svg(),
-            ),
-            onTap: () async {
-              await SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
-              if (mounted) {
-                context.popRoute().then((value) =>
-                    getIt<GroupCubit>().updateLastSeen(widget.idGroup));
-              }
-            }),
-        centerTitle: true,
-        title: Text(
-          widget.groupName,
-          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
-        ),
-      ),
-      body: widget.listUser.isNotEmpty
-          ? CustomInkWell(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: StreamBuilder(
-                          stream: ChatService.instance.streamMessageGroup(
-                              widget.idGroup, widget.listUser),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              if (snapshot.data!.docs.isEmpty) {
-                                return const MessageEmptyScreen();
-                              } else {
-                                final chats = snapshot.data!.docs;
-                                // WidgetsBinding.instance
-                                //     .addPostFrameCallback((_) {
-                                //   if (_controller.hasClients) {
-                                //     _controller.animateTo(
-                                //         _controller.position.maxScrollExtent,
-                                //         duration:
-                                //             const Duration(milliseconds: 700),
-                                //         curve: Curves.linear);
-                                //   }
-                                //   isFirstScroll = false;
-                                // });
-                                return ListView.builder(
-                                    itemCount: chats.length,
-                                    controller: _controller,
-                                    // padding: EdgeInsets.only(
-                                    //     bottom: isFirstScroll ? 20.h : 0),
-                                    reverse: true,
-                                    padding: const EdgeInsets.all(0),
-                                    itemBuilder: (context, index) {
-                                      return Column(
-                                        children: [
-                                          buildTextDay(index, chats),
-                                          if (Utils.checkIsUser(
-                                              code:
-                                                  chats[index].data().senderId))
-                                            MessageTypeUser(
-                                              chats: chats,
-                                              index: index,
-                                            )
-                                          else
-                                            MessageTypeGuess(
-                                              chats: chats,
-                                              index: index,
-                                            )
-                                        ],
-                                      );
-                                    });
-                              }
-                            }
-                            return const SizedBox();
-                          }),
-                    ),
-                  ),
-                  12.h.verticalSpace,
-                  buildInput(),
-                ],
+    return WillPopScope(
+      onWillPop: () async {
+        await SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
+        if (mounted) {
+          context.popRoute().then(
+              (value) => getIt<GroupCubit>().updateLastSeen(widget.idGroup));
+        }
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
+          // leadingWidth: 30.w,
+          // toolbarHeight: 98.h,
+          leading: CustomInkWell(
+              child: Padding(
+                padding: EdgeInsets.all(12.w),
+                child: Assets.icons.iconBack.svg(),
               ),
-            )
-          : Center(
-              child: SizedBox(
-                height: 100.r,
-                width: 100.r,
-                child: const LoadingIndicator(
-                  colors: [
-                    Color.fromARGB(255, 113, 63, 207),
-                    Color(0xffB78CFF),
-                    Color(0xffD2B0FF)
+              onTap: () async {
+                await SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
+                if (mounted) {
+                  context.popRoute().then((value) =>
+                      getIt<GroupCubit>().updateLastSeen(widget.idGroup));
+                }
+              }),
+          centerTitle: true,
+          title: Text(
+            widget.groupName,
+            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
+          ),
+        ),
+        body: widget.listUser.isNotEmpty
+            ? CustomInkWell(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: StreamBuilder(
+                            stream: ChatService.instance.streamMessageGroup(
+                                widget.idGroup, widget.listUser),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                if (snapshot.data!.docs.isEmpty) {
+                                  return const MessageEmptyScreen();
+                                } else {
+                                  final chats = snapshot.data!.docs;
+                                  // WidgetsBinding.instance
+                                  //     .addPostFrameCallback((_) {
+                                  //   if (_controller.hasClients) {
+                                  //     _controller.animateTo(
+                                  //         _controller.position.maxScrollExtent,
+                                  //         duration:
+                                  //             const Duration(milliseconds: 700),
+                                  //         curve: Curves.linear);
+                                  //   }
+                                  //   isFirstScroll = false;
+                                  // });
+                                  return ListView.builder(
+                                      itemCount: chats.length,
+                                      controller: _controller,
+                                      // padding: EdgeInsets.only(
+                                      //     bottom: isFirstScroll ? 20.h : 0),
+                                      reverse: true,
+                                      padding: const EdgeInsets.all(0),
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                          children: [
+                                            buildTextDay(index, chats),
+                                            if (Utils.checkIsUser(
+                                                code: chats[index]
+                                                    .data()
+                                                    .senderId))
+                                              MessageTypeUser(
+                                                chats: chats,
+                                                index: index,
+                                              )
+                                            else
+                                              MessageTypeGuess(
+                                                chats: chats,
+                                                index: index,
+                                              )
+                                          ],
+                                        );
+                                      });
+                                }
+                              }
+                              return const SizedBox();
+                            }),
+                      ),
+                    ),
+                    12.h.verticalSpace,
+                    buildInput(),
                   ],
-                  indicatorType: Indicator.ballScaleMultiple,
+                ),
+              )
+            : Center(
+                child: SizedBox(
+                  height: 100.r,
+                  width: 100.r,
+                  child: const LoadingIndicator(
+                    colors: [
+                      Color.fromARGB(255, 113, 63, 207),
+                      Color(0xffB78CFF),
+                      Color(0xffD2B0FF)
+                    ],
+                    indicatorType: Indicator.ballScaleMultiple,
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 
@@ -160,7 +166,6 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
   }
 
   Container buildInput() {
-    final ValueNotifier isShowButtonSend = ValueNotifier(false);
     return Container(
       height: 88.h,
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -170,9 +175,6 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
         children: [
           GestureDetector(
             onTap: () async {
-              // context
-              //     .read<ChatTypeCubit>()
-              //     .update(const ChatTypeState(type: TypeChat.location));
               ChatService.instance.sendMessageLocation(
                 content: '',
                 idGroup: widget.idGroup,
@@ -203,7 +205,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
               child: TextField(
             controller: textController,
             onChanged: (value) {
-              if (value.isEmpty) {
+              if (value.trimLeft().trimRight().isEmpty) {
                 isShowButtonSend.value = false;
               } else {
                 isShowButtonSend.value = true;
@@ -218,7 +220,9 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
                             onPressed: () async {
                               if (textController.text.isNotEmpty) {
                                 await getIt<GroupCubit>().sendMessage(
-                                  content: textController.text,
+                                  content: textController.text
+                                      .trimLeft()
+                                      .trimRight(),
                                   idGroup: widget.idGroup,
                                   groupName: widget.groupName,
                                 );
