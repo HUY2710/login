@@ -159,5 +159,20 @@
   "titlePermission": "Berbagi grup memerlukan izin",
   "subLocation": "Aplikasi ini mengumpulkan data lokasi untuk memungkinkan fitur memperbarui lokasi Anda bagi orang lain yang sedang melacak Anda, bahkan ketika aplikasi ditutup atau tidak digunakan.",
   "permissionsGreate": "Bagus! Sekarang ubah ke 'Selalu izinkan'.",
-  "allowLocationPermission": "Izinkan 'Berbagi grup' mengakses lokasi Anda bahkan saat Anda tidak menggunakan aplikasi?"
+  "allowLocationPermission": "Izinkan 'Berbagi grup' mengakses lokasi Anda bahkan saat Anda tidak menggunakan aplikasi?",
+  "titlePermissionHomeAndroid": "Di pengaturan aplikasi Berbagi Grup, pilih 'Izinkan selalu' di bawah akses lokasi",
+  "locationPermission": "Izin lokasi",
+  "allowAllTheTime": "Izinkan selalu",
+  "allowUseApp": "Izinkan hanya saat menggunakan aplikasi",
+  "askEveryTime": "Tanyakan setiap saat",
+  "deny": "Tolak",
+  "allowGroupSharing": "Izinkan Berbagi Grup mengakses lokasi presisi perangkat ini",
+  "precise": "Presisi",
+  "approximate": "Aproksimasi",
+  "onlyThisTime": "Hanya kali ini",
+  "whileUseApp": "Saat menggunakan aplikasi",
+  "pleaseShareLocation": "Mohon bagikan lokasi Anda dengan Berbagi Grup",
+  "allowOne": "Izinkan sekali",
+  "dontAllow": "Tidak diizinkan",
+  "allowGroupSharingLocation": "Izinkan \"Berbagi Grup\" menggunakan lokasi Anda?"
 }

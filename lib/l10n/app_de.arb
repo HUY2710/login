@@ -159,5 +159,20 @@
   "pleaseDoNot": "Bitte enthalten Sie keine Sonderzeichen",
   "checkInNoti": "hat eingecheckt bei",
   "sendMessageNoti": "hat die Nachricht gesendet",
-  "joined": "beigetreten"
+  "joined": "beigetreten",
+  "titlePermissionHomeAndroid": "In den App-Einstellungen für die Gruppenfreigabe wählen Sie unter Standortzugriff „Immer erlauben“ aus.",
+  "locationPermission": "Standortberechtigung",
+  "allowAllTheTime": "Immer erlauben",
+  "allowUseApp": "Nur während der Nutzung der App erlauben",
+  "askEveryTime": "Immer fragen",
+  "deny": "Ablehnen",
+  "allowGroupSharing": "Erlauben Sie der Gruppenfreigabe den Zugriff auf den genauen Standort dieses Geräts",
+  "precise": "Genau",
+  "approximate": "Ungefähr",
+  "onlyThisTime": "Nur dieses Mal",
+  "whileUseApp": "Während der Nutzung der App",
+  "pleaseShareLocation": "Bitte teilen Sie Ihren Standort mit der Gruppenfreigabe",
+  "allowOne": "Einmal erlauben",
+  "dontAllow": "Nicht zulassen",
+  "allowGroupSharingLocation": "Erlauben Sie \"Gruppenfreigabe\", Ihren Standort zu verwenden?"
 }

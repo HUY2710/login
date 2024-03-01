@@ -15,7 +15,6 @@ import '../data/remote/firestore_client.dart';
 import '../data/remote/token_manager.dart';
 import '../global/global.dart';
 import '../shared/helpers/map_helper.dart';
-import 'firebase_message_service.dart';
 import 'location_service.dart';
 import 'tracking_history_place_service.dart';
 
@@ -76,7 +75,8 @@ class MyBackgroundService {
   Future<void> listenMyGroupToSubAndUnSubTopic() async {
     final ids = await fireStoreClient.listIdGroup();
 
-    fireStoreClient.listenMyGroups()
+    fireStoreClient
+        .listenMyGroups()
         .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
       for (final change in snapshot.docChanges) {
         //hủy thông báo khi group trong listgroup của mình bị xóa (mình rời hoặc bị xóa)

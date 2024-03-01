@@ -12,9 +12,7 @@ import '../config/di/di.dart';
 import '../config/navigation/app_router.dart';
 import '../data/local/shared_preferences_manager.dart';
 import '../data/remote/token_manager.dart';
-import '../data/remote/user_manager.dart';
 import '../global/global.dart';
-import '../presentation/map/cubit/select_group_cubit.dart';
 import '../shared/extension/context_extension.dart';
 import '../shared/helpers/env_params.dart';
 
@@ -114,8 +112,7 @@ class FirebaseMessageService implements NotificationService {
       final RemoteNotification? notification = message.notification;
       final AndroidNotification? android = message.notification?.android;
 
-      if (notification != null &&
-              android != null) {
+      if (notification != null && android != null) {
         flutterLocalNotificationsPlugin?.show(
             notification.hashCode,
             notification.title,
@@ -177,10 +174,12 @@ class FirebaseMessageService implements NotificationService {
   }
 
   @override
-  Future<void> sendCheckInNotification(String address, BuildContext? context) async {
+  Future<void> sendCheckInNotification(
+      String address, BuildContext? context) async {
     final message =
         '${Global.instance.user?.userName} ${context?.l10n.checkInNoti} $address';
-    await _sendMessageByToken(Global.instance.packageInfo?.appName ?? 'Cycle Sharing', message);
+    await _sendMessageByToken(
+        Global.instance.packageInfo?.appName ?? 'Cycle Sharing', message);
   }
 
   @override
@@ -191,27 +190,20 @@ class FirebaseMessageService implements NotificationService {
 }
 
 extension FirebaseMessageServiceExt on FirebaseMessageService {
-  Future<void> _sendMessageByToken(String title, String message,
-      {String? dataId}) async {
-
+  Future<void> _sendMessageByToken(String title, String message) async {
     final url = Uri.https(EnvParams.apiUrlNotification,
         'group-location-sharing/send-notification-by-tokens');
     final headers = {
       'Content-Type': 'application/json',
     };
     final tokens = await TokenManager.getGroupTokens();
-    if(tokens.isEmpty){
-      return ;
+    if (tokens.isEmpty) {
+      return;
     }
-    final params = {
-      'title': title,
-      'message': message,
-      'tokens': tokens
-    };
+    final params = {'title': title, 'message': message, 'tokens': tokens};
     final body = json.encode(params);
     debugPrint(body);
-    final response =
-    await http.post(url, headers: headers, body: body);
+    final response = await http.post(url, headers: headers, body: body);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
   }

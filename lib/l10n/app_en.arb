@@ -159,5 +159,20 @@
   "pleaseDoNot": "Please do not contain special characters",
   "checkInNoti": "has checkin at",
   "sendMessageNoti": "has sent the message",
-  "joined": "joined"
+  "joined": "joined",
+  "titlePermissionHomeAndroid": "In the Group Sharing app settings, select 'Allow all the time' under location access",
+  "locationPermission": "Location permission",
+  "allowAllTheTime": "Allow all the time",
+  "allowUseApp": "Allow only while using app",
+  "askEveryTime": "Ask every time",
+  "deny": "Deny",
+  "allowGroupSharing": "Allow Group Sharing access this device’s precise location",
+  "precise": "Precise",
+  "approximate": "Approximate",
+  "onlyThisTime": "Only this time",
+  "whileUseApp": "While using the app",
+  "pleaseShareLocation": "Please share location with Group sharing",
+  "allowOne": "Allow once",
+  "dontAllow": "Don’t Allow",
+  "allowGroupSharingLocation": "Allow “Group sharing” to use your location?"
 }
