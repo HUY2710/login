@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -83,6 +84,15 @@ class BodyApp extends StatelessWidget {
         // darkTheme: darkThemeData, //optional
         routerConfig: getIt<AppRouter>().config(
           navigatorObservers: () => [MainRouteObserver()],
+          deepLinkBuilder: (deepLink) {
+            debugPrint('DEEPLINK===>');
+            debugPrint(deepLink.path);
+            if (deepLink.path.startsWith('/code')) {
+              return DeepLink([JoinGroupRoute()]);
+            } else {
+              return DeepLink.defaultPath;
+            }
+          }
         ),
         builder: (context, child) {
           return Stack(

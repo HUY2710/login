@@ -84,7 +84,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                         },
                         style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.all(0))),
+                                EdgeInsets.zero)),
                         child: Text(
                           context.l10n.skip,
                           style: TextStyle(

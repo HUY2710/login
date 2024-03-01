@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../gen/assets.gen.dart';
+import '../../../shared/constants/app_constants.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -72,7 +73,7 @@ class AppButton extends StatelessWidget {
                       Color(0xFFD9C0FF),
                     ],
                   )),
-          borderRadius: BorderRadius.circular(15.r),
+          borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
         ),
         child: Stack(
           children: [
