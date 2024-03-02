@@ -87,9 +87,9 @@ class PlacesManager {
         .doc(idPlace)
         .update(fields)
         .then((value) => debugPrint('Update Place success'))
-        .catchError((error){
+        .catchError((error) {
       debugPrint('Update Place error:$error');
-          throw Exception(error);
+      throw Exception(error);
     });
   }
 

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import '../../../../../../app/cubit/loading_cubit.dart';
 import '../../../../../data/remote/firestore_client.dart';
+import '../../../../../data/remote/notification_place_manager.dart';
 import '../../../../../global/global.dart';
 import '../../../../map/cubit/select_group_cubit.dart';
 import '../../../../place/cubit/default_places_cubit.dart';
@@ -59,6 +60,8 @@ class PlacesBottomSheet extends StatelessWidget {
             context.popRoute();
             showLoading();
             await FirestoreClient.instance.removePlace(
+                getIt<SelectGroupCubit>().state!.idGroup!, idPlace);
+            NotificationPlaceManager.removeAllNotificationPlace(
                 getIt<SelectGroupCubit>().state!.idGroup!, idPlace);
             getIt<TrackingPlacesCubit>().removePlace(idPlace);
             hideLoading();

@@ -8,8 +8,10 @@ import '../../../app/cubit/loading_cubit.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../data/models/store_location/store_location.dart';
+import '../../data/models/store_notification_place/store_notification_place.dart';
 import '../../data/models/store_place/store_place.dart';
 import '../../data/remote/firestore_client.dart';
+import '../../data/remote/notification_place_manager.dart';
 import '../../gen/assets.gen.dart';
 import '../../gen/colors.gen.dart';
 import '../../global/global.dart';
@@ -158,6 +160,30 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
 
                                           if (getIt<SelectGroupCubit>().state !=
                                               null) {
+                                            await FirestoreClient.instance
+                                                .createPlace(
+                                              getIt<SelectGroupCubit>()
+                                                  .state!
+                                                  .idGroup!,
+                                              newPlace,
+                                            );
+                                            getIt<SelectGroupCubit>()
+                                                .state
+                                                ?.storeMembers
+                                                ?.forEach((member) {
+                                              NotificationPlaceManager
+                                                  .createNotificationPlace(
+                                                idGroup:
+                                                    getIt<SelectGroupCubit>()
+                                                        .state!
+                                                        .idGroup!,
+                                                idPlace: newPlace.idPlace!,
+                                                idDocNotification:
+                                                    member.idUser!,
+                                                storeNotificationPlace:
+                                                    const StoreNotificationPlace(),
+                                              );
+                                            });
                                             await FirestoreClient.instance
                                                 .createPlace(
                                               getIt<SelectGroupCubit>()

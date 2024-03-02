@@ -16,6 +16,8 @@ class CollectionStoreConstant {
   static const String chat = 'chat';
   static const String messages = 'messages';
   static const String tokens = 'tokens';
+  static const String notificationPlace =
+      'notificationPlaces'; //mỗi place thì mỗi user cần có thông tin leave && arrived// update lại
 }
 
 class CollectionStore {
@@ -46,5 +48,9 @@ class CollectionStore {
       FirebaseFirestore.instance.collection(CollectionStoreConstant.chat);
 
   static CollectionReference<Map<String, dynamic>> tokens =
-  FirebaseFirestore.instance.collection(CollectionStoreConstant.tokens);
+      FirebaseFirestore.instance.collection(CollectionStoreConstant.tokens);
+
+  static CollectionReference<Map<String, dynamic>> notificationPlaces =
+      FirebaseFirestore.instance
+          .collection(CollectionStoreConstant.notificationPlace);
 }
