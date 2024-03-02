@@ -31,6 +31,7 @@ import 'cubit/tracking_location/tracking_location_cubit.dart';
 import 'cubit/tracking_members/tracking_member_cubit.dart';
 import 'cubit/tracking_places/tracking_places_cubit.dart';
 import 'cubit/tracking_routes/tracking_routes_cubit.dart';
+import 'cubit/user_map_visibility/user_map_visibility_cubit.dart';
 import 'widgets/custom_map.dart';
 import 'widgets/float_right_app_bar.dart';
 import 'widgets/member_marker_list.dart';
@@ -268,6 +269,7 @@ class MapScreenState extends State<MapScreen>
                   } else {
                     _trackingMemberCubit.initTrackingMember();
                     _trackingPlacesCubit.initTrackingPlaces();
+                    getIt<UserMapVisibilityCubit>().updateList([]);
                   }
                 },
                 buildWhen: (previous, current) =>
@@ -323,8 +325,8 @@ class MapScreenState extends State<MapScreen>
           ),
           Positioned(
             bottom: 55.h,
-            left: 0,
-            right: 0,
+            left: 16.w,
+            right: 16.w,
             child: BottomBar(
               locationListenCubit: _trackingLocationCubit,
               mapController: _mapController,

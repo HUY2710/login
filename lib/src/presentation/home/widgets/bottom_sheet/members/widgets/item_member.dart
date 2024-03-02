@@ -40,11 +40,13 @@ class ItemMember extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
-                      user.userName,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                    Flexible(
+                      child: Text(
+                        user.userName,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     8.w.horizontalSpace,

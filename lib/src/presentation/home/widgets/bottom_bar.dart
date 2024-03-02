@@ -12,6 +12,7 @@ import 'package:marquee/marquee.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/models/store_group/store_group.dart';
+import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/colors.gen.dart';
 import '../../../global/global.dart';
@@ -21,11 +22,12 @@ import '../../../shared/widgets/containers/shadow_container.dart';
 import '../../chat/cubits/group_cubit.dart';
 import '../../chat/cubits/group_state.dart';
 import '../../map/cubit/select_group_cubit.dart';
-import '../../map/cubit/select_user_cubit.dart';
 import '../../map/cubit/tracking_location/tracking_location_cubit.dart';
 import '../../map/cubit/tracking_members/tracking_member_cubit.dart';
+import '../../map/cubit/user_map_visibility/user_map_visibility_cubit.dart';
 import 'bottom_sheet/show_bottom_sheet_home.dart';
 import 'group/group_bottom_sheet.dart';
+import 'visibility_member_map.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({
@@ -52,11 +54,10 @@ class _BottomBarState extends State<BottomBar> {
     super.initState();
   }
 
-  Future<void> _goToDetailLocation() async {
+  Future<void> _goToDetailLocation({LatLng? locationUser}) async {
     //test
-    getIt<SelectUserCubit>().update(null);
     final CameraPosition newPosition = CameraPosition(
-      target: Global.instance.currentLocation,
+      target: locationUser ?? Global.instance.currentLocation,
       zoom: AppConstants.defaultCameraZoomLevel,
     );
     _googleMapController
@@ -68,38 +69,59 @@ class _BottomBarState extends State<BottomBar> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding: EdgeInsets.only(right: 16.w),
-            child: GestureDetector(
-              onTap: _goToDetailLocation,
-              child: Container(
-                padding: EdgeInsets.all(10.r),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius:
-                      BorderRadius.circular(AppConstants.widgetBorderRadius.r),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xff42474C).withOpacity(0.3),
-                      blurRadius: 17,
-                    )
-                  ],
-                ),
-                child: SvgPicture.asset(
-                  Assets.icons.icGps.path,
-                  height: 20.r,
-                  width: 20.r,
+        Row(
+          children: [
+            Expanded(
+              child: BlocBuilder<UserMapVisibilityCubit, List<StoreUser>?>(
+                bloc: getIt<UserMapVisibilityCubit>(),
+                builder: (context, state) {
+                  if (state == null ||
+                      state.isEmpty ||
+                      getIt<SelectGroupCubit>().state == null) {
+                    return const SizedBox();
+                  }
+                  return VisibilityMemberMap(
+                    users: state,
+                    key: ValueKey(state),
+                    moveToUser: (location) =>
+                        _goToDetailLocation(locationUser: location),
+                  );
+                },
+              ),
+            ),
+            16.horizontalSpace,
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: _goToDetailLocation,
+                child: Container(
+                  height: 48.r,
+                  width: 48.r,
+                  padding: EdgeInsets.all(10.r),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(
+                        AppConstants.widgetBorderRadius.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xff42474C).withOpacity(0.3),
+                        blurRadius: 17,
+                      )
+                    ],
+                  ),
+                  child: SvgPicture.asset(
+                    Assets.icons.icGps.path,
+                    height: 20.r,
+                    width: 20.r,
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
         18.verticalSpace,
-        Container(
+        SizedBox(
           height: 48.h,
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

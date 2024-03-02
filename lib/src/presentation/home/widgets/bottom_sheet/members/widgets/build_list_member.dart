@@ -13,7 +13,6 @@ import '../../../../../../global/global.dart';
 import '../../../../../../shared/cubit/value_cubit.dart';
 import '../../../../../../shared/extension/context_extension.dart';
 import '../../../../../map/cubit/select_group_cubit.dart';
-import '../../../../../map/cubit/select_user_cubit.dart';
 import '../../../../../place/history_place/history_place.dart';
 import '../../../dialog/action_dialog.dart';
 import '../../show_bottom_sheet_home.dart';
@@ -36,7 +35,6 @@ class BuildListMember extends StatelessWidget {
       context.popRoute();
     }
     if (member.code != Global.instance.user?.code) {
-      getIt<SelectUserCubit>().update(member);
       goToUserLocation(member);
       context.popRoute().then(
             (value) => showAppModalBottomSheet(

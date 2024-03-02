@@ -94,14 +94,19 @@ class _HistoryPlaceState extends State<HistoryPlace> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 95.w),
-                        child: Text(
-                          widget.user.userName,
-                          style: TextStyle(
-                            color: MyColors.black34,
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w500,
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 95.w),
+                          child: Flexible(
+                            child: Text(
+                              widget.user.userName,
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: MyColors.black34,
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ),
                         ),
                       ),

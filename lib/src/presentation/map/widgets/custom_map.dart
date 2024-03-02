@@ -17,6 +17,7 @@ import '../cubit/select_group_cubit.dart';
 import '../cubit/tracking_location/tracking_location_cubit.dart';
 import '../cubit/tracking_members/tracking_member_cubit.dart';
 import '../cubit/tracking_places/tracking_places_cubit.dart';
+import '../cubit/user_map_visibility/user_map_visibility_cubit.dart';
 
 class CustomMap extends StatefulWidget {
   const CustomMap({
@@ -109,7 +110,34 @@ class _CustomMapState extends State<CustomMap> {
         )
       },
       zoomControlsEnabled: false,
-      onCameraIdle: () async {},
+      onCameraIdle: () async {
+        final mapController = await widget.mapController.future;
+        mapController.getVisibleRegion().then((visibleRegion) async {
+          widget.trackingMemberState.maybeWhen(
+            orElse: () {},
+            initial: () {},
+            success: (List<StoreUser> members) {
+              final List<StoreUser> temp =
+                  List.from(getIt<UserMapVisibilityCubit>().state ?? []);
+              for (final member in members) {
+                final memberExists = temp.contains(member); //
+                final LatLng latLngMember = LatLng(
+                    member.location?.lat ?? 0, member.location?.lng ?? 0);
+                if (!visibleRegion.contains(latLngMember)) {
+                  if (!memberExists) {
+                    temp.add(member);
+                  }
+                } else {
+                  if (memberExists) {
+                    temp.remove(member);
+                  }
+                }
+              }
+              getIt<UserMapVisibilityCubit>().updateList([...temp]);
+            },
+          );
+        });
+      },
       compassEnabled: false,
       mapType: widget.mapType,
       myLocationButtonEnabled: false,
@@ -177,5 +205,31 @@ class _CustomMapState extends State<CustomMap> {
   void _onMapCreated(GoogleMapController controller) {
     widget.mapController.complete(controller);
     controller.setMapStyle(mapStyle);
+
+    controller.getVisibleRegion().then((visibleRegion) async {
+      widget.trackingMemberState.maybeWhen(
+        orElse: () {},
+        initial: () {},
+        success: (List<StoreUser> members) {
+          final List<StoreUser> temp =
+              List.from(getIt<UserMapVisibilityCubit>().state ?? []);
+          for (final member in members) {
+            final memberExists = temp.contains(member); //
+            final LatLng latLngMember =
+                LatLng(member.location?.lat ?? 0, member.location?.lng ?? 0);
+            if (!visibleRegion.contains(latLngMember)) {
+              if (!memberExists) {
+                temp.add(member);
+              }
+            } else {
+              if (memberExists) {
+                temp.remove(member);
+              }
+            }
+          }
+          getIt<UserMapVisibilityCubit>().updateList([...temp]);
+        },
+      );
+    });
   }
 }
