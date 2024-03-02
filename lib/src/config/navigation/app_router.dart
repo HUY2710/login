@@ -8,6 +8,7 @@ import '../../presentation/create/screens/create_group_avatar_screen.dart';
 import '../../presentation/create/screens/create_group_name_screen.dart';
 import '../../presentation/create/screens/create_user_avatar_screen.dart';
 import '../../presentation/create/screens/create_username_screen.dart';
+import '../../presentation/create/screens/join_group_qr_code.dart';
 import '../../presentation/create/screens/join_group_screen.dart';
 import '../../presentation/create/screens/share_code_group.dart';
 import '../../presentation/guide/guide_screen.dart';
@@ -53,6 +54,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: MapTypeRoute.page),
         AutoRoute(page: EditInfoRoute.page),
         AutoRoute(page: GuideRoute.page),
+        AutoRoute(page: JoinQrCodeRoute.page)
       ];
 
   AutoRoute routeWithFadeTransition(

@@ -5,17 +5,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../config/di/di.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../../shared/extension/context_extension.dart';
 import '../../../../shared/helpers/gradient_background.dart';
 import '../../../../shared/widgets/custom_inkwell.dart';
+import '../../../../shared/widgets/custom_tab_bar.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../../shared/widgets/my_drag.dart';
+import '../../../create/cubit/code_type_cubit.dart';
 
 class InviteCode extends StatelessWidget {
-  const InviteCode({super.key, required this.code});
+  InviteCode({super.key, required this.code});
   final String code;
+  final CodeTypeCubit codeTypeCubit = getIt<CodeTypeCubit>();
   Future<void> shareCode(BuildContext context, String code) async {
     try {
       EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
@@ -33,6 +37,7 @@ class InviteCode extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         const MyDrag(),
+        // TabBarWidget(codeTypeCubit: ,)
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -123,6 +128,54 @@ class InviteCode extends StatelessWidget {
           ),
         ),
         50.verticalSpace,
+      ],
+    );
+  }
+}
+
+class TabBarWidget extends StatefulWidget {
+  const TabBarWidget({super.key, required this.codeTypeCubit});
+
+  final CodeTypeCubit codeTypeCubit;
+
+  @override
+  State<TabBarWidget> createState() => _BuildTabBarState();
+}
+
+class _BuildTabBarState extends State<TabBarWidget>
+    with TickerProviderStateMixin {
+  late TabController tabController;
+
+  @override
+  void initState() {
+    tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomTabBar(
+      controller: tabController,
+      onTap: (index) {
+        if (index == 0) {
+          widget.codeTypeCubit.update(CodeType.code);
+        } else {
+          widget.codeTypeCubit.update(CodeType.qrCode);
+        }
+      },
+      tabs: [
+        Text(
+          'Code',
+          style: TextStyle(
+            fontSize: 12.sp,
+          ),
+        ),
+        Text(
+          'Qr code',
+          style: TextStyle(
+            fontSize: 12.sp,
+          ),
+        ),
       ],
     );
   }

@@ -701,5 +701,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access to scan QR codes</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Used to save processed photo in to your library</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to get photo for QR code</string>
 </dict>
 </plist>
