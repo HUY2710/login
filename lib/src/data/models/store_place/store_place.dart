@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../store_notification_place/store_notification_place.dart';
+
 part 'store_place.freezed.dart';
 part 'store_place.g.dart';
 
@@ -15,10 +17,9 @@ class StorePlace with _$StorePlace {
     required int colorPlace,
     @Default(100) double radius,
     @JsonKey(includeFromJson: false, includeToJson: false) Uint8List? marker,
-    @Default(true) bool onNotify,
-    @Default(false) bool isSendLeaved,
-    @Default(false) bool isSendArrived,
     @JsonKey(includeFromJson: false, includeToJson: false) String? idPlace,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    StoreNotificationPlace? myNotificationPlace,
   }) = _StorePlace;
 
   factory StorePlace.fromJson(Map<String, dynamic> json) =>

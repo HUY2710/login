@@ -154,7 +154,6 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                                             namePlace: nameLocationCtrl.text,
                                             location: state?.toJson(),
                                             radius: currentRadius,
-                                            onNotify: onNotify,
                                             colorPlace: selectColor,
                                           );
 
@@ -167,10 +166,8 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                                                   .idGroup!,
                                               newPlace,
                                             );
-                                            getIt<SelectGroupCubit>()
-                                                .state
-                                                ?.storeMembers
-                                                ?.forEach((member) {
+                                            for (final member in Global
+                                                .instance.groupMembers) {
                                               NotificationPlaceManager
                                                   .createNotificationPlace(
                                                 idGroup:
@@ -178,19 +175,11 @@ class _AddPlaceBottomSheetState extends State<AddPlaceBottomSheet> {
                                                         .state!
                                                         .idGroup!,
                                                 idPlace: newPlace.idPlace!,
-                                                idDocNotification:
-                                                    member.idUser!,
+                                                idDocNotification: member.code,
                                                 storeNotificationPlace:
                                                     const StoreNotificationPlace(),
                                               );
-                                            });
-                                            await FirestoreClient.instance
-                                                .createPlace(
-                                              getIt<SelectGroupCubit>()
-                                                  .state!
-                                                  .idGroup!,
-                                              newPlace,
-                                            );
+                                            }
                                           }
                                           if (widget.place != null) {
                                             final List<StorePlace> updatedList =
