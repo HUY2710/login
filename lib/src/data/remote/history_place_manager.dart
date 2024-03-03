@@ -18,7 +18,7 @@ class HistoryPlacesManager {
         .collection(CollectionStoreConstant.historyPlacesOfUser)
         .doc(Global.instance.user?.code) //lấy iduser để làm doc
         .collection(CollectionStoreConstant.historyPlaces)
-        .doc(24.randomString())
+        .doc(historyPlace.idHistoryPlace ?? 24.randomString())
         .set(historyPlace.toJson())
         .then((_) =>
             LoggerUtils.logInfo('Create new history place: $historyPlace'))
@@ -30,14 +30,15 @@ class HistoryPlacesManager {
 
   static Future<void> updateHistoryPlace(
       {required String idGroup,
-      required StoreHistoryPlace historyPlace}) async {
+      required StoreHistoryPlace historyPlace,
+      Map<String, dynamic>? field}) async {
     CollectionStore.groups
         .doc(idGroup)
         .collection(CollectionStoreConstant.historyPlacesOfUser)
         .doc(Global.instance.user?.code) //lấy iduser để làm doc
         .collection(CollectionStoreConstant.historyPlaces)
         .doc(historyPlace.idHistoryPlace)
-        .update(historyPlace.toJson())
+        .update(field ?? historyPlace.toJson())
         .then((_) => LoggerUtils.logInfo('Update history place: $historyPlace'))
         .catchError((error) {
       LoggerUtils.logError('Failed to updateHistoryPlace : $error');
@@ -83,10 +84,12 @@ class HistoryPlacesManager {
       await Future.forEach(result.docs, (doc) async {
         final Map<String, dynamic> data = doc.data();
         StoreHistoryPlace historyPlace = StoreHistoryPlace.fromJson(data);
+        if (historyPlace.idPlace != '') {
+          final place = await PlacesManager.getDetailPlace(
+              idGroup: idGroup, idPlace: historyPlace.idPlace);
+          historyPlace = historyPlace.copyWith(place: place);
+        }
 
-        final place = await PlacesManager.getDetailPlace(
-            idGroup: idGroup, idPlace: historyPlace.idPlace);
-        historyPlace = historyPlace.copyWith(place: place);
         historyPlaces.add(historyPlace);
       });
 
