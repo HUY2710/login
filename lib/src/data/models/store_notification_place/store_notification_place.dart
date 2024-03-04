@@ -4,13 +4,13 @@ part 'store_notification_place.freezed.dart';
 part 'store_notification_place.g.dart';
 
 @freezed
-class StoreNotificationPlacePlace with _$StoreNotificationPlacePlace {
-  const factory StoreNotificationPlacePlace({
+class StoreNotificationPlace with _$StoreNotificationPlace {
+  const factory StoreNotificationPlace({
     @Default(false) bool isSendLeaved,
     @Default(false) bool isSendArrived,
     @JsonKey(includeFromJson: false, includeToJson: false) String? idUser,
-  }) = _StoreNotificationPlacePlace;
+  }) = _StoreNotificationPlace;
 
-  factory StoreNotificationPlacePlace.fromJson(Map<String, dynamic> json) =>
-      _$StoreNotificationPlacePlaceFromJson(json);
+  factory StoreNotificationPlace.fromJson(Map<String, dynamic> json) =>
+      _$StoreNotificationPlaceFromJson(json);
 }

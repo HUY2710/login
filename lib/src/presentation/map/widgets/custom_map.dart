@@ -121,6 +121,9 @@ class _CustomMapState extends State<CustomMap> {
                   List.from(getIt<UserMapVisibilityCubit>().state ?? []);
               for (final member in members) {
                 final memberExists = temp.contains(member); //
+                if (member.location == null) {
+                  return;
+                }
                 final LatLng latLngMember = LatLng(
                     member.location?.lat ?? 0, member.location?.lng ?? 0);
                 if (!visibleRegion.contains(latLngMember)) {

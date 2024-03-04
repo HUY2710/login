@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../data/models/store_history_place/store_history_place.dart';
 import '../../../gen/colors.gen.dart';
+import '../../../gen/gens.dart';
 import '../../../shared/helpers/time_helper.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 
@@ -23,7 +24,9 @@ class ItemHistoryPlace extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(10.r),
             child: SvgPicture.asset(
-              historyPlace.place!.iconPlace,
+              historyPlace.idPlace == ''
+                  ? Assets.icons.icPlace.path
+                  : historyPlace.place!.iconPlace,
               colorFilter:
                   const ColorFilter.mode(Color(0xff7B3EFF), BlendMode.srcIn),
             ),
@@ -35,7 +38,9 @@ class ItemHistoryPlace extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              historyPlace.place!.namePlace,
+              historyPlace.nameDefault != ''
+                  ? historyPlace.nameDefault ?? ''
+                  : historyPlace.place!.namePlace,
               style: TextStyle(
                 fontSize: 16.sp,
                 color: MyColors.black34,

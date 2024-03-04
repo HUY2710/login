@@ -7,8 +7,10 @@ import '../config/di/di.dart';
 import '../config/navigation/app_router.dart';
 import '../data/local/shared_preferences_manager.dart';
 import '../data/models/store_history_place/store_history_place.dart';
+import '../data/models/store_notification_place/store_notification_place.dart';
 import '../data/models/store_place/store_place.dart';
 import '../data/remote/firestore_client.dart';
+import '../data/remote/notification_place_manager.dart';
 import '../global/global.dart';
 import '../shared/extension/context_extension.dart';
 import '../shared/helpers/map_helper.dart';
@@ -48,12 +50,17 @@ class TrackingHistoryPlaceService {
     //lắng nghe list place của từng group
     final List<StorePlace> listPlaceGroup = [];
     fireStoreClient.listenRealtimePlacesChanges(idGroup).listen(
-      (QuerySnapshot<Map<String, dynamic>> snapshotPlace) {
+      (QuerySnapshot<Map<String, dynamic>> snapshotPlace) async {
         for (final change in snapshotPlace.docChanges) {
           //place được thêm
           if (change.type == DocumentChangeType.added) {
             StorePlace place = StorePlace.fromJson(change.doc.data()!);
             place = place.copyWith(idPlace: change.doc.id);
+            final StoreNotificationPlace? myNotifyPlace =
+                await NotificationPlaceManager.myNotificationPlace(
+                    idGroup, place.idPlace!);
+            place = place.copyWith(myNotificationPlace: myNotifyPlace);
+
             listPlaceGroup.add(place);
           }
           //place bị xóa
@@ -64,10 +71,15 @@ class TrackingHistoryPlaceService {
 
           if (change.type == DocumentChangeType.modified) {
             StorePlace place = StorePlace.fromJson(change.doc.data()!);
-            place = place.copyWith(idPlace: change.doc.id);
+
+            place = place.copyWith(
+              idPlace: change.doc.id,
+            );
+
             final index = listPlaceGroup
                 .indexWhere((element) => element.idPlace == place.idPlace);
-            listPlaceGroup[index] = place;
+            listPlaceGroup[index] = place.copyWith(
+                myNotificationPlace: listPlaceGroup[index].myNotificationPlace);
           }
         }
 
@@ -78,7 +90,6 @@ class TrackingHistoryPlaceService {
   }
 
   Future<void> trackingHistoryPlace() async {
-    debugPrint('listMapPlaces:${listMapPlaces.length}');
     listMapPlaces.asMap().forEach((index, mapPlace) {
       for (final places in mapPlace.values) {
         places?.forEach((place) async {
@@ -105,7 +116,7 @@ class TrackingHistoryPlaceService {
     }
     debugPrint('place:$place');
 
-    if (inRadius && !place.isSendArrived) {
+    if (inRadius && !place.myNotificationPlace!.isSendArrived) {
       if (!isSpam) {
         await _sendNotificationAndMarkAsSent(
           place: place,
@@ -120,48 +131,55 @@ class TrackingHistoryPlaceService {
       if (places != null && places.isNotEmpty) {
         final index = places.indexWhere((e) => e.idPlace == place.idPlace);
         if (index != -1) {
-          places[index] = places[index]
-              .copyWith(isSendArrived: inRadius, isSendLeaved: !inRadius);
+          places[index] = places[index].copyWith(
+            myNotificationPlace: const StoreNotificationPlace(
+              isSendArrived: true,
+            ),
+          );
           listMapPlaces[listIdGroup.indexOf(groupId)] = {groupId: places};
         }
       }
-      debugPrint(
-          'listMapPlaces:${listMapPlaces[listIdGroup.indexOf(groupId)]}');
-    } else if (!inRadius && place.isSendArrived && !place.isSendLeaved) {
-      if (!isSpam) {
+    } else if (!inRadius &&
+        place.myNotificationPlace!.isSendArrived &&
+        !place.myNotificationPlace!.isSendLeaved) {
+      if (!inRadius &&
+          place.myNotificationPlace!.isSendArrived &&
+          !place.myNotificationPlace!.isSendLeaved &&
+          !isSpam) {
         await _sendNotificationAndMarkAsSent(
           place: place,
           groupId: groupId,
           enter: inRadius,
         );
-      }
-
-      //sau khi rời thì lưu lại time lần cuối rời place đó...để trường hợp user spam đi ra đi vào
-      //lấy idPlace đó để làm key
-      await SharedPreferencesManager.setString(
-        place.idPlace!,
-        DateTime.now().toIso8601String(),
-      );
-      //update local
-      final List<StorePlace>? places =
-          listMapPlaces[listIdGroup.indexOf(groupId)].values.first;
-      if (places != null && places.isNotEmpty) {
-        final index = places.indexWhere((e) => e.idPlace == place.idPlace);
-        places[index] = places[index]
-            .copyWith(isSendArrived: inRadius, isSendLeaved: !inRadius);
-        listMapPlaces[listIdGroup.indexOf(groupId)] = {groupId: places};
-        debugPrint(
-            'listMapPlaces:${listMapPlaces[listIdGroup.indexOf(groupId)]}');
+        //sau khi rời thì lưu lại time lần cuối rời place đó...để trường hợp user spam đi ra đi vào
+        //lấy idPlace đó để làm key
+        await SharedPreferencesManager.setString(
+          place.idPlace!,
+          DateTime.now().toIso8601String(),
+        );
+        //update local
+        final List<StorePlace>? places =
+            listMapPlaces[listIdGroup.indexOf(groupId)].values.first;
+        if (places != null && places.isNotEmpty) {
+          final index = places.indexWhere((e) => e.idPlace == place.idPlace);
+          places[index] = places[index].copyWith(
+            myNotificationPlace: const StoreNotificationPlace(
+              isSendLeaved: true,
+            ),
+          );
+          listMapPlaces[listIdGroup.indexOf(groupId)] = {groupId: places};
+        }
       }
     }
   }
 
-  Future<void> _sendNotificationAndMarkAsSent(
-      {required StorePlace place,
-      required String groupId,
-      required bool enter}) async {
+  Future<void> _sendNotificationAndMarkAsSent({
+    required StorePlace place,
+    required String groupId,
+    required bool enter,
+  }) async {
     final message =
-        '${Global.instance.user?.userName} ${context?.l10n ?? 'has'} ${enter ? context?.l10n.enter ?? 'enter' : context?.l10n.enter ?? 'left'} '
+        '${Global.instance.user?.userName} ${context?.l10n.has ?? 'has'} ${enter ? context?.l10n.enter ?? 'enter' : context?.l10n.enter ?? 'left'} '
         '${place.namePlace}';
     try {
       FirebaseMessageService().sendPlaceNotification(
@@ -169,10 +187,15 @@ class TrackingHistoryPlaceService {
         enter: enter,
         message: message,
       );
-      await fireStoreClient.updatePlace(groupId, place.idPlace!, {
-        'isSendArrived': enter,
-        'isSendLeaved': !enter,
-      });
+      //nếu enter == true => isSendArrived =true => đã gửi thông báo khi đến
+      //nếu enter ==false => isSendLeaved = true => đã gửi thông báo khi rời
+
+      await NotificationPlaceManager.updateNotificationPlace(
+        groupId,
+        place.idPlace!,
+        StoreNotificationPlace(isSendArrived: enter, isSendLeaved: !enter)
+            .toJson(),
+      );
 
       //đi vào place
       if (enter) {

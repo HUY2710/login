@@ -15,6 +15,7 @@ class StoreHistoryPlace with _$StoreHistoryPlace {
     @JsonKey(includeFromJson: false, includeToJson: false)
     String? idHistoryPlace,
     @JsonKey(includeToJson: false, includeFromJson: false) StorePlace? place,
+    String? nameDefault,
   }) = _StoreHistoryPlace;
 
   factory StoreHistoryPlace.fromJson(Map<String, dynamic> json) =>

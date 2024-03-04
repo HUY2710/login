@@ -7,7 +7,11 @@ import '../../../../config/di/di.dart';
 import '../../../../data/local/shared_preferences_manager.dart';
 import '../../../../data/models/store_group/store_group.dart';
 import '../../../../data/models/store_member/store_member.dart';
+import '../../../../data/models/store_notification_place/store_notification_place.dart';
+import '../../../../data/models/store_place/store_place.dart';
 import '../../../../data/remote/firestore_client.dart';
+import '../../../../data/remote/notification_place_manager.dart';
+import '../../../../data/remote/places_manager.dart';
 import '../../../../data/remote/token_manager.dart';
 import '../../../../global/global.dart';
 import '../../../../services/firebase_message_service.dart';
@@ -30,6 +34,9 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
       //kiểm tra xem có tồn tại group đó hay không
       final StoreGroup? existGroup =
           await client.isExistGroup(code.toUpperCase());
+      if (existGroup?.idGroup == null) {
+        return;
+      }
       //có thể là không tồn tại group hoặc nhập sai passCode
       if (existGroup == null) {
         emit(
@@ -61,8 +68,24 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
             getIt<SelectGroupCubit>()
                 .update(existGroup.copyWith(storeMembers: listMember));
             Global.instance.group = existGroup;
+
             //đăng kí nhận lắng nghe thông báo
             TokenManager.updateGroupNotification(false, existGroup.idGroup!);
+
+            //lấy toàn bộ place của group đó -> tạo từng notificationPlace của từng place
+            final List<StorePlace> storePlaces =
+                await PlacesManager.getListStorePlace(existGroup.idGroup!);
+
+            //sau khi có thì tiến hành thêm  cái notificationPlace của user đế check trạng thái gửi thông báo của từng place user
+            for (final place in storePlaces) {
+              NotificationPlaceManager.createNotificationPlace(
+                idGroup: existGroup.idGroup!,
+                idPlace: place.idPlace!,
+                idDocNotification: Global.instance.userCode,
+                storeNotificationPlace: const StoreNotificationPlace(),
+              );
+            }
+
             try {
               FirebaseMessageService().sendJoinGroup(
                   existGroup.groupName,

@@ -23,4 +23,16 @@ class TimerHelper {
       return false;
     }
   }
+
+  static bool checkHourTime(DateTime time, int hour) {
+    final DateTime currentTime = DateTime.now();
+    final Duration difference = currentTime.difference(time);
+
+    final bool isDifference = difference.inHours > hour;
+    if (isDifference) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
