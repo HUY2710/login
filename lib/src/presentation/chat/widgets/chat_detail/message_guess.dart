@@ -76,8 +76,8 @@ class MessageTypeGuess extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
-                    width: 1.sw * 0.4,
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 1.sw * 0.4),
                     child: Text(
                       chats[index].data().userName!,
                       maxLines: 1,
@@ -88,9 +88,10 @@ class MessageTypeGuess extends StatelessWidget {
                           letterSpacing: -0.15),
                     ),
                   ),
-                  40.horizontalSpace,
+                  const SizedBox(width: 40),
                 ],
               ),
+              40.horizontalSpace,
               Text(
                 chats[index].data().content,
                 style: TextStyle(

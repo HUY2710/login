@@ -119,6 +119,8 @@ class _JoinQrCodeScreenState extends State<JoinQrCodeScreen>
                                 resultQrCode, context);
                           }
                         }
+                      } else {
+                        qrController!.resumeCamera();
                       }
                     },
                     icon: Assets.icons.icUpload.svg(

@@ -9,6 +9,7 @@ import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../data/models/store_group/store_group.dart';
 import '../../data/models/store_member/store_member.dart';
+import '../../data/models/store_message/store_message.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
 import '../../shared/extension/context_extension.dart';
@@ -104,16 +105,22 @@ class _ChatScreenState extends State<ChatScreen> {
                             builder: (context, searchState) {
                               if (textController.text.isNotEmpty) {
                                 if (searchState.isEmpty) {
-                                  return Padding(
-                                      padding: const EdgeInsets.only(top: 30),
-                                      child: Center(
-                                        child: GradientText(
-                                          context.l10n.noGroups,
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ));
+                                  return Expanded(
+                                    child: Center(
+                                      child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Assets.images.groupEmpty.image(),
+                                            22.h.verticalSpace,
+                                            Text(
+                                              context.l10n.thereAreNoResults,
+                                              style: TextStyle(
+                                                  fontSize: 13.sp,
+                                                  color: Colors.black),
+                                            )
+                                          ]),
+                                    ),
+                                  );
                                 }
                               }
                               return Expanded(
@@ -163,13 +170,17 @@ class _ChatScreenState extends State<ChatScreen> {
     final String content = group.lastMessage!.content;
 
     if (content.isEmpty) {
-      if (group.lastMessage!.lat == null || group.lastMessage!.long == null) {
-        return (group.storeUser!.code == userCode)
-            ? '${context.l10n.you} ${context.l10n.createdGroup}'
-            : '$userName ${context.l10n.createGroup}';
-      } else {
+      if (group.lastMessage!.messageType == MessageType.location) {
         return (group.storeUser!.code == userCode)
             ? '${context.l10n.you} ${context.l10n.sendLocation}'
+            : '$userName ${context.l10n.sendLocation}';
+      } else if (group.lastMessage!.messageType == MessageType.checkIn) {
+        return (group.storeUser!.code == userCode)
+            ? '${context.l10n.you} ${context.l10n.checkIn.toLowerCase()}'
+            : '$userName ${context.l10n.checkIn.toLowerCase()}';
+      } else {
+        return (group.storeUser!.code == userCode)
+            ? '${context.l10n.you} ${context.l10n.createdGroup}'
             : '$userName ${context.l10n.createGroup}';
       }
     } else {

@@ -246,8 +246,8 @@ class _CheckInLocationState extends State<CheckInLocation> {
       context: context,
       isCheckin: true,
     );
-    await SharedPreferencesManager.saveTimeSeenChat(
-        getIt<SelectGroupCubit>().state!.idGroup!);
+    // await SharedPreferencesManager.saveTimeSeenChat(
+    //     getIt<SelectGroupCubit>().state!.idGroup!);
 
     context.popRoute().then((value) {
       return showDialog(

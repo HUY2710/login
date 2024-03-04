@@ -35,14 +35,13 @@ class ItemMember extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    SizedBox(
-                      width: 150.w,
+                    Flexible(
                       child: Text(
                         user.userName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: TextStyle(
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w500,
                         ),
                       ),

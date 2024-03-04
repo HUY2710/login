@@ -159,5 +159,6 @@
   "pleaseDoNot": "Please do not contain special characters",
   "checkInNoti": "has checkin at",
   "sendMessageNoti": "has sent the message",
-  "joined": "joined"
+  "joined": "joined",
+  "thereAreNoResults": "There are no results for your search"
 }
