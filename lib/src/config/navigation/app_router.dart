@@ -56,7 +56,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: MapTypeRoute.page),
         AutoRoute(page: EditInfoRoute.page),
         AutoRoute(page: GuideRoute.page),
-        AutoRoute(page: JoinQrCodeRoute.page)
+        AutoRoute(page: JoinQrCodeRoute.page),
         AutoRoute(page: AddPlaceRoute.page),
       ];
 

@@ -174,5 +174,6 @@
   "pleaseShareLocation": "Tolong bagikan izin lokasi dengan berbagi grup",
   "allowOne": "Izinkan sekali",
   "dontAllow": "Tidak diizinkan",
-  "allowGroupSharingLocation": "Izinkan \"Berbagi Grup\" menggunakan lokasi Anda?"
+  "allowGroupSharingLocation": "Izinkan \"Berbagi Grup\" menggunakan lokasi Anda?",
+  "thereAreNoResults": "Tidak ada hasil untuk pencarian Anda"
 }

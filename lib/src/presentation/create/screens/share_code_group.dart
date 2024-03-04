@@ -4,6 +4,7 @@ import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
@@ -196,7 +197,17 @@ class _ShareCodeGroupScreenState extends State<ShareCodeGroupScreen>
   Future<void> _saveImage() async {
     final result = await widgetToBytes(repaintKey: repaintKey);
     if (result != null) {
-      await ImageGallerySaver.saveImage(result);
+      try {
+        await ImageGallerySaver.saveImage(result);
+        if (context.mounted) {
+          Fluttertoast.showToast(
+              msg: '${context.l10n.save} ${context.l10n.success}');
+        }
+      } catch (error) {
+        if (context.mounted) {
+          Fluttertoast.showToast(msg: '${context.l10n.save} $error');
+        }
+      }
     }
   }
 }

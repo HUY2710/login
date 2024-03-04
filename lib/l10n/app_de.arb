@@ -174,5 +174,6 @@
   "pleaseShareLocation": "Bitte teilen Sie die Standortberechtigung mit der Gruppenfreigabe",
   "allowOne": "Einmal erlauben",
   "dontAllow": "Nicht zulassen",
-  "allowGroupSharingLocation": "Erlauben Sie \"Gruppenfreigabe\", Ihren Standort zu verwenden?"
+  "allowGroupSharingLocation": "Erlauben Sie \"Gruppenfreigabe\", Ihren Standort zu verwenden?",
+  "thereAreNoResults": "Es gibt keine Ergebnisse für Ihre Suche"
 }

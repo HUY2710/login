@@ -115,8 +115,8 @@ class _SettingScreenState extends State<SettingScreen> {
       ),
       multiChild: Column(
         children: [
-          _buildRateUsSetting(),
-          _buildDivider(),
+          // _buildRateUsSetting(),
+          // _buildDivider(),
           _buildPrivacyPolicySetting(),
           _buildDivider(),
           _buildShareSetting(context),

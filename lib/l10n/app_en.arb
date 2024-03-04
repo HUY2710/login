@@ -174,7 +174,6 @@
   "pleaseShareLocation": "Please share location permission with Group sharing",
   "allowOne": "Allow once",
   "dontAllow": "Don’t Allow",
-  "allowGroupSharingLocation": "Allow “Group sharing” to use your location?"
-  "joined": "joined",
+  "allowGroupSharingLocation": "Allow “Group sharing” to use your location?",
   "thereAreNoResults": "There are no results for your search"
 }

@@ -174,5 +174,6 @@
   "pleaseShareLocation": "Veuillez partager la permission de localisation avec le partage de groupe",
   "allowOne": "Autoriser une fois",
   "dontAllow": "Ne pas autoriser",
-  "allowGroupSharingLocation": "Autoriser \"Partage de groupe\" à utiliser votre emplacement ?"
+  "allowGroupSharingLocation": "Autoriser \"Partage de groupe\" à utiliser votre emplacement ?",
+  "thereAreNoResults": "Il n'y a aucun résultat pour votre recherche"
 }

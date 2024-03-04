@@ -174,5 +174,6 @@
   "pleaseShareLocation": "Por favor, comparte el permiso de ubicación con la compartición de grupo",
   "allowOne": "Permitir una vez",
   "dontAllow": "No permitir",
-  "allowGroupSharingLocation": "¿Permitir que \"Compartir en grupo\" use tu ubicación?"
+  "allowGroupSharingLocation": "¿Permitir que \"Compartir en grupo\" use tu ubicación?",
+  "thereAreNoResults": "No hay resultados para tu búsqueda"
 }

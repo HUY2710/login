@@ -174,5 +174,6 @@
   "pleaseShareLocation": "कृपया स्थान साझा करें समूह साझा करने के साथ",
   "allowOne": "एक बार अनुमति दें",
   "dontAllow": "अनुमति न दें",
-  "allowGroupSharingLocation": "\"समूह साझा\" को आपके स्थान का उपयोग करने दें?"
+  "allowGroupSharingLocation": "\"समूह साझा\" को आपके स्थान का उपयोग करने दें?",
+  "thereAreNoResults": "आपके खोज के लिए कोई परिणाम नहीं हैं"
 }
