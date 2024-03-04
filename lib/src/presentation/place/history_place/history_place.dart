@@ -97,15 +97,13 @@ class _HistoryPlaceState extends State<HistoryPlace> {
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.only(left: 95.w),
-                          child: Flexible(
-                            child: Text(
-                              widget.user.userName,
-                              maxLines: 1,
-                              style: TextStyle(
-                                color: MyColors.black34,
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
+                          child: Text(
+                            widget.user.userName,
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: MyColors.black34,
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),

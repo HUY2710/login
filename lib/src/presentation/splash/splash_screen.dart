@@ -350,30 +350,42 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Expanded(
               child: Center(
-                child: Stack(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Assets.images.splash.image(
-                      frameBuilder:
-                          (context, child, frame, wasSynchronouslyLoaded) {
-                        if (frame != 0) {
-                          return 145.verticalSpace;
-                        }
-                        return child;
-                      },
+                    Stack(
+                      children: [
+                        Assets.images.splash.image(
+                          frameBuilder:
+                              (context, child, frame, wasSynchronouslyLoaded) {
+                            if (frame != 0) {
+                              return 145.verticalSpace;
+                            }
+                            return child;
+                          },
+                        ),
+                        Positioned(
+                          left: 70.w,
+                          top: 110.h,
+                          child: Assets.lottie.loadingSplash.lottie(
+                            width: 60.r,
+                          ),
+                        ),
+                        Positioned(
+                          right: 90.w,
+                          top: 100.h,
+                          child: Assets.lottie.loadingSplash.lottie(
+                            width: 100.r,
+                          ),
+                        )
+                      ],
                     ),
-                    Positioned(
-                      left: 70.w,
-                      top: 110.h,
-                      child: Assets.lottie.loadingSplash.lottie(
-                        width: 60.r,
-                      ),
-                    ),
-                    Positioned(
-                      right: 90.w,
-                      top: 100.h,
-                      child: Assets.lottie.loadingSplash.lottie(
-                        width: 100.r,
-                      ),
+                    Text(
+                      context.l10n.app_title,
+                      style: TextStyle(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
                     )
                   ],
                 ),
@@ -383,8 +395,8 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(
-                  height: 40.r,
-                  width: 60.r,
+                  height: 30.r,
+                  width: 50.r,
                   child: const LoadingIndicator(
                     colors: [
                       Color.fromARGB(255, 113, 63, 207),
@@ -394,7 +406,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     indicatorType: Indicator.ballPulse,
                   ),
                 ),
-                24.verticalSpace,
+                20.verticalSpace,
                 if (Platform.isAndroid)
                   Text(
                     context.l10n.thisActionCanContainAds,
