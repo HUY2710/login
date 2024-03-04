@@ -50,7 +50,7 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
           }
           return GuideFirstPermissionAndroid(
             title: context.l10n.pleaseShareLocation,
-            subTitle: context.l10n.permissionsGreateSub,
+            subTitle: context.l10n.subLocation,
             confirmTap: () => context.popRoute(true),
             confirmText: context.l10n.allow,
           );
