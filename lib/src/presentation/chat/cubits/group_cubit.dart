@@ -57,6 +57,7 @@ class GroupCubit extends Cubit<GroupState> {
   }
 
   Future<void> initStreamGroupChat() async {
+    myGroups.clear();
     _userStream = ChatService.instance.getUser2().listen((userSnapshot) async {
       if (userSnapshot.docs.isEmpty) {
         emit(const GroupState.initial());
@@ -66,8 +67,7 @@ class GroupCubit extends Cubit<GroupState> {
         final List<String> myListIdGroup =
             userSnapshot.docs.map((e) => e.id).toList();
         idsMyGroup = myListIdGroup.map((e) => e).toList();
-        // clear gourp trước khi lắng nghe vì dữ liệu trả về có cả các group cũ
-        myGroups.clear();
+
         //lấy thông tin group
         _groupStream = chatService
             .getMyGroupChat2(idsMyGroup)

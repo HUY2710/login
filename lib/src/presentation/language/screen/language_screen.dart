@@ -54,12 +54,12 @@ class _LanguageScreenState extends State<LanguageScreen> {
           title: Text(
             context.l10n.language,
             style: TextStyle(
-              fontSize: 20.sp,
+              fontSize: 22.sp,
               fontWeight: FontWeight.w500,
               color: const Color(0xFF343434),
             ),
           ),
-          centerTitle: true,
+          centerTitle: false,
           actions: (widget.isFirst == null || widget.isFirst == false)
               ? []
               : [_buildAcceptButton()],
@@ -188,7 +188,16 @@ Widget _buildItemLanguage({
               ),
             ),
           ),
-          if (isSelected) Assets.icons.icChecked.svg(height: 24.h),
+          if (isSelected)
+            Radio(
+              value: true,
+              groupValue: true,
+              onChanged: (val) {},
+              visualDensity: const VisualDensity(
+                horizontal: VisualDensity.minimumDensity,
+                vertical: VisualDensity.minimumDensity,
+              ),
+            ),
         ],
       ),
     ),

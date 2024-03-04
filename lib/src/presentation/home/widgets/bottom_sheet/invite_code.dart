@@ -1,20 +1,30 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../config/di/di.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../../shared/extension/context_extension.dart';
 import '../../../../shared/helpers/gradient_background.dart';
+import '../../../../shared/mixin/widget_mixi.dart';
 import '../../../../shared/widgets/custom_inkwell.dart';
+import '../../../../shared/widgets/custom_tab_bar.dart';
 import '../../../../shared/widgets/gradient_text.dart';
 import '../../../../shared/widgets/my_drag.dart';
+import '../../../create/cubit/code_type_cubit.dart';
 
-class InviteCode extends StatelessWidget {
-  const InviteCode({super.key, required this.code});
+class InviteCode extends StatelessWidget with WidgetMixin {
+  InviteCode({super.key, required this.code});
   final String code;
+  final CodeTypeCubit codeTypeCubit = getIt<CodeTypeCubit>();
+  final GlobalKey repaintKey = GlobalKey();
   Future<void> shareCode(BuildContext context, String code) async {
     try {
       EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
@@ -28,34 +38,131 @@ class InviteCode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<CodeTypeCubit, CodeType>(
+      bloc: codeTypeCubit,
+      builder: (context, state) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const MyDrag(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(width: 80),
+                Text(
+                  context.l10n.inviteCode,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color: MyColors.black34,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    context.popRoute();
+                  },
+                  child: GradientText(
+                    context.l10n.done,
+                    style:
+                        TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ],
+            ),
+            20.h.verticalSpace,
+            TabBarWidget(codeTypeCubit: codeTypeCubit),
+            38.h.verticalSpace,
+            AnimatedCrossFade(
+                firstChild: buildCodeTabView(context),
+                secondChild: buildTabQrCodeView(context),
+                crossFadeState: codeTypeCubit.state == CodeType.code
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond,
+                duration: const Duration(milliseconds: 300)),
+            32.verticalSpace,
+            GestureDetector(
+              onTap: () => shareCode(context, code),
+              child: Container(
+                width: 260.w,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.r),
+                    gradient: gradientBackground),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Assets.icons.icShareLocation
+                        .svg(width: 24.r, color: Colors.white),
+                    8.horizontalSpace,
+                    Text(
+                      context.l10n.shareCode,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            50.verticalSpace,
+          ],
+        );
+      },
+    );
+  }
+
+  Column buildTabQrCodeView(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const MyDrag(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(width: 80),
-            Text(
-              context.l10n.inviteCode,
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
-                color: MyColors.black34,
+        DecoratedBox(
+          decoration: BoxDecoration(
+              border: Border.all(
+                color: const Color(0xffEAEAEA),
               ),
+              borderRadius: BorderRadius.circular(20.r)),
+          child: RepaintBoundary(
+            key: repaintKey,
+            child: QrImageView(
+              backgroundColor: Colors.white,
+              data: code,
+              size: 172.r,
             ),
-            TextButton(
-              onPressed: () {
-                context.popRoute();
-              },
-              child: GradientText(
-                context.l10n.done,
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
-              ),
-            ),
-          ],
+          ),
         ),
-        50.h.verticalSpace,
+        16.h.verticalSpace,
+        SizedBox(
+          width: 172.r,
+          child: FilledButton.icon(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.r),
+                        side: const BorderSide(color: Color(0xffEAEAEA)))),
+              ),
+              onPressed: () async {
+                _saveImage();
+              },
+              icon: Assets.icons.icSave.svg(
+                  colorFilter: const ColorFilter.mode(
+                      Color(0xff8E52FF), BlendMode.srcIn)),
+              label: const Text(
+                'Save picture',
+                style: TextStyle(
+                  color: Color(0xff8E52FF),
+                ),
+              )),
+        )
+      ],
+    );
+  }
+
+  Widget buildCodeTabView(BuildContext context) {
+    return Column(
+      children: [
         SizedBox(
           width: 249.w,
           child: Text(
@@ -86,39 +193,69 @@ class InviteCode extends StatelessWidget {
               ),
               CustomInkWell(
                 child: Assets.icons.icCopy.svg(width: 24.r),
-                onTap: () {},
+                onTap: () async {
+                  await Clipboard.setData(
+                      ClipboardData(text: code.toUpperCase()));
+                },
               )
             ],
           ),
         ),
-        32.verticalSpace,
-        GestureDetector(
-          onTap: () => shareCode(context, code),
-          child: Container(
-            width: 260.w,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.r),
-                gradient: gradientBackground),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Assets.icons.icShareLocation
-                    .svg(width: 24.r, color: Colors.white),
-                8.horizontalSpace,
-                Text(
-                  context.l10n.shareCode,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600),
-                )
-              ],
-            ),
+      ],
+    );
+  }
+
+  Future<void> _saveImage() async {
+    final result = await widgetToBytes(repaintKey: repaintKey);
+    if (result != null) {
+      await ImageGallerySaver.saveImage(result);
+    }
+  }
+}
+
+class TabBarWidget extends StatefulWidget {
+  const TabBarWidget({super.key, required this.codeTypeCubit});
+
+  final CodeTypeCubit codeTypeCubit;
+
+  @override
+  State<TabBarWidget> createState() => _BuildTabBarState();
+}
+
+class _BuildTabBarState extends State<TabBarWidget>
+    with TickerProviderStateMixin {
+  late TabController tabController;
+
+  @override
+  void initState() {
+    tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomTabBar(
+      controller: tabController,
+      onTap: (index) {
+        if (index == 0) {
+          widget.codeTypeCubit.update(CodeType.code);
+        } else {
+          widget.codeTypeCubit.update(CodeType.qrCode);
+        }
+      },
+      tabs: [
+        Text(
+          'Code',
+          style: TextStyle(
+            fontSize: 12.sp,
           ),
         ),
-        50.verticalSpace,
+        Text(
+          'Qr code',
+          style: TextStyle(
+            fontSize: 12.sp,
+          ),
+        ),
       ],
     );
   }

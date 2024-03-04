@@ -43,8 +43,10 @@ class ItemMember extends StatelessWidget {
                     Flexible(
                       child: Text(
                         user.userName,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w500,
                         ),
                       ),

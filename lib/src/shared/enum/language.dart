@@ -26,7 +26,7 @@ enum Language {
     languageCode: 'de',
   ),
   indonesia(
-    languageName: 'Indonesia',
+    languageName: 'Indonesian',
     languageCode: 'id',
   ),
   korean(

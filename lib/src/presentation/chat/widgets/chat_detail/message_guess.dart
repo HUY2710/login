@@ -76,16 +76,22 @@ class MessageTypeGuess extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    chats[index].data().userName!,
-                    style: TextStyle(
-                        color: const Color(0xff8E52FF),
-                        fontSize: 12.sp,
-                        letterSpacing: -0.15),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 1.sw * 0.4),
+                    child: Text(
+                      chats[index].data().userName!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          color: const Color(0xff8E52FF),
+                          fontSize: 12.sp,
+                          letterSpacing: -0.15),
+                    ),
                   ),
-                  40.horizontalSpace,
+                  const SizedBox(width: 40),
                 ],
               ),
+              40.horizontalSpace,
               Text(
                 chats[index].data().content,
                 style: TextStyle(

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -25,17 +26,28 @@ class ContentPageWidget extends StatelessWidget {
           height: 90.h,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
-            child: Text(
+            child: AutoSizeText(
               title,
               textAlign: TextAlign.center,
+              maxLines: 2,
               style: TextStyle(
                 color: const Color(0xFF343434),
                 fontSize: 20.sp,
                 overflow: TextOverflow.ellipsis,
                 fontWeight: FontWeight.w500,
               ),
-              maxLines: 2,
             ),
+            // child: Text(
+            //   title,
+            //   textAlign: TextAlign.center,
+            //   style: TextStyle(
+            //     color: const Color(0xFF343434),
+            //     fontSize: 18.sp,
+            //     overflow: TextOverflow.ellipsis,
+            //     fontWeight: FontWeight.w500,
+            //   ),
+            //   maxLines: 2,
+            // ),
           ),
         ),
       ],

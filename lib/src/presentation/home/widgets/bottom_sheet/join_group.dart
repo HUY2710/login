@@ -7,6 +7,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../../app/cubit/loading_cubit.dart';
 import '../../../../config/di/di.dart';
+import '../../../../config/navigation/app_router.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../../shared/extension/context_extension.dart';
 import '../../../../shared/widgets/my_drag.dart';
@@ -178,7 +179,21 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
                   },
                 );
               },
-            )
+            ),
+            Text(
+              'Enter the invitation code to join the group',
+              style: TextStyle(color: const Color(0xff343434), fontSize: 13.sp),
+            ),
+            TextButton(
+                onPressed: () => context.pushRoute(const JoinQrCodeRoute()),
+                child: Text(
+                  'Join with QR code',
+                  style: TextStyle(
+                      fontSize: 16.sp,
+                      color: Color(0xff8E52FF),
+                      fontWeight: FontWeight.w500),
+                )),
+            20.h.verticalSpace,
           ],
         ),
       ),

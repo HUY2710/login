@@ -82,6 +82,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
           getIt<SelectGroupCubit>().update(newGroup);
           await context.popRoute().then(
                 (value) => showBottomSheetTypeOfHome(
+                  isScrollControlled: true,
                   context: context,
                   child: InviteCode(
                     code: newGroup.passCode,

@@ -18,11 +18,11 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:upgrader/upgrader.dart';
 
-import '../../../app/cubit/language_cubit.dart';
 import '../../../flavors.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
 import '../../../module/admob/model/ad_unit_id/ad_unit_id_model.dart';
 import '../../../module/admob/utils/inter_ad_util.dart';
+import '../../../module/iap/my_purchase_manager.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../config/observer/bloc_observer.dart';
@@ -39,6 +39,7 @@ import '../../shared/enum/preference_keys.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/extension/int_extension.dart';
 import '../../shared/helpers/env_params.dart';
+import '../../shared/mixin/permission_mixin.dart';
 import '../../shared/widgets/loading/loading_indicator.dart';
 import '../map/cubit/select_group_cubit.dart';
 import 'update_dialog.dart';
@@ -51,7 +52,7 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with PermissionMixin {
   late final StreamSubscription internetListener;
   @override
   void initState() {
@@ -184,12 +185,22 @@ class _SplashScreenState extends State<SplashScreen> {
     await getIt<TrackingHistoryPlaceService>().initGroups();
     final bool isFirstLaunch =
         await SharedPreferencesManager.getIsFirstLaunch();
+    final bool isPermissionAllow = await checkPermissionLocation();
+    final isPremium = getIt<MyPurchaseManager>().state.isPremium();
     if (mounted) {
       if (isFirstLaunch) {
         AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
       } else {
-        final language = context.read<LanguageCubit>().state;
-        AutoRouter.of(context).replace(OnBoardingRoute(language: language));
+        if (isPremium) {
+          if (!isPermissionAllow) {
+            AutoRouter.of(context)
+                .replace(PermissionRoute(fromMapScreen: false));
+          } else {
+            AutoRouter.of(context).replace(HomeRoute());
+          }
+        } else {
+          AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
+        }
       }
     }
   }
