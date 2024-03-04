@@ -1,24 +1,23 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import '../../../../../../app/cubit/loading_cubit.dart';
-import '../../../../../data/remote/firestore_client.dart';
-import '../../../../../data/remote/notification_place_manager.dart';
-import '../../../../../global/global.dart';
-import '../../../../map/cubit/select_group_cubit.dart';
-import '../../../../place/cubit/default_places_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../app/cubit/loading_cubit.dart';
 import '../../../../../config/di/di.dart';
+import '../../../../../config/navigation/app_router.dart';
 import '../../../../../data/models/store_place/store_place.dart';
+import '../../../../../data/remote/firestore_client.dart';
+import '../../../../../data/remote/notification_place_manager.dart';
+import '../../../../../global/global.dart';
 import '../../../../../shared/extension/context_extension.dart';
 import '../../../../../shared/widgets/containers/custom_container.dart';
 import '../../../../../shared/widgets/custom_my_slidable.dart';
 import '../../../../../shared/widgets/my_drag.dart';
+import '../../../../map/cubit/select_group_cubit.dart';
 import '../../../../map/cubit/tracking_places/tracking_places_cubit.dart';
-import '../../../../place/add_place.dart';
+import '../../../../place/cubit/default_places_cubit.dart';
 import '../../dialog/action_dialog.dart';
-import '../show_bottom_sheet_home.dart';
 import 'widgets/item_place.dart';
 
 class PlacesBottomSheet extends StatelessWidget {
@@ -143,16 +142,7 @@ class PlacesBottomSheet extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             child: GestureDetector(
               onTap: () {
-                showAppModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) => Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: const AddPlaceBottomSheet(),
-                  ),
-                );
+                context.pushRoute(AddPlaceRoute());
               },
               child: Row(
                 children: [
@@ -186,18 +176,7 @@ class PlacesBottomSheet extends StatelessWidget {
                     final item = state[index];
                     return CustomSwipeWidget(
                       actionRight1: () {
-                        showAppModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => Padding(
-                            padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom,
-                            ),
-                            child: AddPlaceBottomSheet(
-                              place: item,
-                            ),
-                          ),
-                        );
+                        context.pushRoute(AddPlaceRoute(place: item));
                       },
                       actionRight2: () async {
                         removeDefaultItemPlace(context, state, item);
@@ -235,19 +214,10 @@ class PlacesBottomSheet extends StatelessWidget {
                             enable: places[index].idCreator ==
                                 Global.instance.user?.code,
                             actionRight1: () {
-                              showAppModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                builder: (context) => Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom,
-                                  ),
-                                  child: AddPlaceBottomSheet(
-                                    place: places[index],
-                                    defaultPlace: false,
-                                  ),
+                              context.pushRoute(
+                                AddPlaceRoute(
+                                  place: places[index],
+                                  defaultPlace: false,
                                 ),
                               );
                             },
