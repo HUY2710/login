@@ -1,6 +1,6 @@
 {
   "@@locale": "id",
-  "app_title": "Dasar Flutter",
+  "app_title": "Berbagi Kelompok",
   "language": "Bahasa",
   "thisActionCanContainAds": "Tindakan ini mungkin berisi iklan",
   "people": "Orang",
@@ -171,7 +171,7 @@
   "approximate": "Aproksimasi",
   "onlyThisTime": "Hanya kali ini",
   "whileUseApp": "Saat menggunakan aplikasi",
-  "pleaseShareLocation": "Mohon bagikan lokasi Anda dengan Berbagi Grup",
+  "pleaseShareLocation": "Tolong bagikan izin lokasi dengan berbagi grup",
   "allowOne": "Izinkan sekali",
   "dontAllow": "Tidak diizinkan",
   "allowGroupSharingLocation": "Izinkan \"Berbagi Grup\" menggunakan lokasi Anda?"

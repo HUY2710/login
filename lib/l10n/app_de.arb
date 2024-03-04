@@ -1,6 +1,6 @@
 {
   "@@locale": "de",
-  "app_title": "Flutter Base",
+  "app_title": "Gruppenfreigabe",
   "language": "Sprache",
   "thisActionCanContainAds": "Diese Aktion kann Werbung enthalten",
   "people": "Menschen",
@@ -171,7 +171,7 @@
   "approximate": "Ungefähr",
   "onlyThisTime": "Nur dieses Mal",
   "whileUseApp": "Während der Nutzung der App",
-  "pleaseShareLocation": "Bitte teilen Sie Ihren Standort mit der Gruppenfreigabe",
+  "pleaseShareLocation": "Bitte teilen Sie die Standortberechtigung mit der Gruppenfreigabe",
   "allowOne": "Einmal erlauben",
   "dontAllow": "Nicht zulassen",
   "allowGroupSharingLocation": "Erlauben Sie \"Gruppenfreigabe\", Ihren Standort zu verwenden?"

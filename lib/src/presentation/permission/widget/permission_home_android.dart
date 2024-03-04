@@ -34,8 +34,21 @@ class PermissionHomeAndroid extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: MyColors.black34,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+          12.verticalSpace,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Text(
+              context.l10n.subLocation,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: MyColors.black34,
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ),

@@ -114,6 +114,7 @@ flutter:
     - assets/images/markers/
     - assets/images/map_types/
     - assets/images/chat/
+    - assets/images/places/
     - assets/ad_unit_id/dev/
     - assets/ad_unit_id/prod/
     - .env
