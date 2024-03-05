@@ -6,7 +6,9 @@ import 'package:injectable/injectable.dart';
 
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
+import '../../../data/remote/firestore_client.dart';
 import '../../../data/remote/member_manager.dart';
+import '../../../shared/helpers/logger_utils.dart';
 import '../services/chat_service.dart';
 import '../utils/util.dart';
 import 'group_state.dart';
@@ -134,5 +136,84 @@ class GroupCubit extends Cubit<GroupState> {
         });
       }
     });
+  }
+
+  Future<void> initListenGroup() async {
+    chatService.getUser2().listen((groupOfUser) async {
+      if (groupOfUser.docs.isEmpty) {
+        emit(const GroupState.initial());
+      } else {
+        for (final groupChange in groupOfUser.docChanges) {
+          switch (groupChange.type) {
+            case DocumentChangeType.added:
+              StoreGroup? storeGroup = await FirestoreClient.instance
+                  .getDetailGroup(groupChange.doc.id);
+              logger.e(storeGroup);
+              if (storeGroup != null) {
+                storeGroup = storeGroup.copyWith(
+                    groupSubscription: _listenGroupUpdate(storeGroup));
+              }
+              break;
+            case DocumentChangeType.modified:
+              break;
+            case DocumentChangeType.removed:
+              break;
+            default:
+          }
+        }
+      }
+    });
+  }
+
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _listenGroupUpdate(
+      StoreGroup storeGroup) {
+    final subscription = chatService
+        .streamGroupChat(storeGroup.idGroup!)
+        .listen((snapshot) async {
+      for (final groupSnap in snapshot.docChanges) {
+        final listIdUser =
+            await ChatService.instance.getListIdUserFromLastMessage();
+        //lấy ra thông tin user từ các lasstMessage của group
+        listStoreUser = await chatService.getUserFromListId(listIdUser);
+        switch (groupSnap.type) {
+          case DocumentChangeType.modified:
+            final index =
+                myGroups.indexWhere((e) => e.idGroup == groupSnap.doc.id);
+
+            StoreGroup storeGroup = StoreGroup.fromJson(groupSnap.doc.data()!);
+            // lấy ra thông tin user từ collection Users
+            final storeUser = listStoreUser.firstWhere(
+              (storeUser) => storeUser.code == storeGroup.lastMessage!.senderId,
+            );
+            // kiểm tra thời gian đã xem từ local
+            final seen = await Utils.getSeenMess(
+                groupSnap.doc.id, storeGroup.lastMessage!.sentAt);
+            // gán vào group state
+            storeGroup = storeGroup.copyWith(storeUser: storeUser, seen: seen);
+            if (index < myGroups.length) {
+              myGroups[index] = storeGroup;
+            }
+            break;
+          case DocumentChangeType.added:
+            emit(GroupState.loading());
+            storeGroup = storeGroup.copyWith(
+              storeUser: listStoreUser.firstWhere(
+                (storeUser) =>
+                    storeUser.code == storeGroup.lastMessage!.senderId,
+              ),
+            );
+            myGroups.add(storeGroup);
+            emit(GroupState.success(myGroups));
+            break;
+          case DocumentChangeType.removed:
+          // final index =
+          //     myGroups.indexWhere((e) => e.idGroup == groupSnap.doc.id);
+          // myGroups.removeAt(index);
+          // break;
+          default:
+        }
+      }
+    });
+    return subscription;
   }
 }

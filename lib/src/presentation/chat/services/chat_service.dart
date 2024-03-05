@@ -211,4 +211,8 @@ class ChatService {
         .collection(CollectionStoreConstant.myGroups)
         .snapshots();
   }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamGroupChat(String idGroup) {
+    return CollectionStore.groups.where(idGroup).snapshots();
+  }
 }
