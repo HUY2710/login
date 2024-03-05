@@ -65,7 +65,7 @@ class CreateUsernameScreen extends StatelessWidget {
                         final validName =
                             ValidHelper.containsSpecialCharacters(value);
                         if (!validName) {
-                          userNameCubit.update(value);
+                          userNameCubit.update(value.trimLeft().trimRight());
                         } else {
                           Fluttertoast.showToast(msg: context.l10n.pleaseDoNot);
                         }
@@ -108,9 +108,9 @@ class CreateUsernameScreen extends StatelessWidget {
                 builder: (context, state) {
                   return AppButton(
                     title: context.l10n.continueText,
-                    isEnable: state.isNotEmpty,
+                    isEnable: state.trimLeft().trimRight().isNotEmpty,
                     onTap: () {
-                      changedUsername(userNameCtrl.text);
+                      changedUsername(userNameCtrl.text.trimLeft().trimRight());
                       context.pushRoute(CreateUserAvatarRoute());
                     },
                     isShowIcon: true,

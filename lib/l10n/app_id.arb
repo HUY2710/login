@@ -179,5 +179,6 @@
   "code": "Kode",
   "qrCode": "Kode QR",
   "savePicture": "Simpan Gambar",
-  "uploadPhoto": "Unggah Foto"
+  "uploadPhoto": "Unggah Foto",
+  "joinGroupQr": "Bergabung dengan kode QR"
 }

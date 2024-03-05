@@ -180,5 +180,6 @@
   "code": "कोड",
   "qrCode": "क्यूआर कोड",
   "savePicture": "तस्वीर सहेजें",
-  "uploadPhoto": "तस्वीर अपलोड करें"
+  "uploadPhoto": "तस्वीर अपलोड करें",
+  "joinGroupQr": "QR कोड के साथ शामिल हों"
 }
