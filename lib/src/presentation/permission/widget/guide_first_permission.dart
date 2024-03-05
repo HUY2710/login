@@ -54,86 +54,83 @@ class GuideFirstPermission extends StatelessWidget {
             ),
           ),
           36.verticalSpace,
-          Padding(
-            padding: const EdgeInsets.symmetric(),
-            child: Stack(
-              children: [
-                Center(
-                  child: Container(
-                    width: 213.w,
-                    height: 166.h,
-                    padding:
-                        EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
-                    decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.5),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10.r),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xffABABAB).withOpacity(0.3),
-                          )
-                        ]),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          context.l10n.allowGroupSharingLocation,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: MyColors.black34,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        14.verticalSpace,
-                        Text(
-                          context.l10n.allow,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: const Color(0xff9F9F9F),
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        4.verticalSpace,
-                        const Expanded(child: SizedBox.shrink()),
-                        4.verticalSpace,
-                        Text(
-                          context.l10n.dontAllow,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: const Color(0xff9F9F9F),
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 40.h,
-                  left: 0,
-                  right: 0,
-                  child: CustomContainer(
-                    width: 270.w,
-                    padding: EdgeInsets.symmetric(vertical: 12.h),
-                    colorBg: Colors.white,
-                    child: Center(
-                      child: Text(
-                        context.l10n.allowUseApp,
-                        style: const TextStyle(
-                          color: Color(0xff8E52FF),
+          Stack(
+            children: [
+              Center(
+                child: Container(
+                  width: 213.w,
+                  height: 166.h,
+                  padding:
+                      EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.5),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.r),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xffABABAB).withOpacity(0.3),
+                        )
+                      ]),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        context.l10n.allowGroupSharingLocation,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: MyColors.black34,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
+                      14.verticalSpace,
+                      Text(
+                        context.l10n.allow,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff9F9F9F),
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      4.verticalSpace,
+                      const Expanded(child: SizedBox.shrink()),
+                      4.verticalSpace,
+                      Text(
+                        context.l10n.dontAllow,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff9F9F9F),
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 40.h,
+                left: 0,
+                right: 0,
+                child: CustomContainer(
+                  width: 270.w,
+                  padding: EdgeInsets.symmetric(vertical: 12.h),
+                  colorBg: Colors.white,
+                  child: Center(
+                    child: Text(
+                      context.l10n.allowUseApp,
+                      style: const TextStyle(
+                        color: Color(0xff8E52FF),
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
           24.verticalSpace,
           Padding(

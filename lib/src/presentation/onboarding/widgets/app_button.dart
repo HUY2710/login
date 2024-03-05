@@ -73,20 +73,18 @@ class AppButton extends StatelessWidget {
                       Color(0xFFD9C0FF),
                     ],
                   )),
-          borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
+          borderRadius:
+              BorderRadius.circular(AppConstants.widgetBorderRadius.r),
         ),
         child: Stack(
           children: [
             Align(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.w),
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    color: _getTextColor() ?? Colors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.sp,
-                  ),
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: _getTextColor() ?? Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16.sp,
                 ),
               ),
             ),

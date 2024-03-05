@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../data/local/avatar/avatar_repository.dart';
 import '../../../../data/models/avatar/avatar_model.dart';
 import '../../../../shared/cubit/value_cubit.dart';
+import '../../../../shared/extension/context_extension.dart';
 
 class AvatarDialog extends StatelessWidget {
   const AvatarDialog({
@@ -47,7 +48,7 @@ class AvatarDialog extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Close'),
+          child: Text(context.l10n.ok),
         ),
       ],
     );

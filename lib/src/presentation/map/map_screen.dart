@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../data/models/store_group/store_group.dart';
+import '../../data/models/store_location/store_location.dart';
 import '../../data/models/store_place/store_place.dart';
 import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/firestore_client.dart';
@@ -259,7 +260,7 @@ class MapScreenState extends State<MapScreen>
                 bloc: getIt<SelectGroupCubit>(),
                 listenWhen: (previous, current) =>
                     previous?.idGroup != current?.idGroup,
-                listener: (context, state) {
+                listener: (context, state) async {
                   //thoát nhóm hoặc chưa chọn nhóm
                   if (state == null) {
                     _trackingMemberCubit.disposeGroupSubscription();
@@ -275,8 +276,64 @@ class MapScreenState extends State<MapScreen>
                 buildWhen: (previous, current) =>
                     previous?.idGroup != current?.idGroup,
                 builder: (context, state) {
-                  return BlocBuilder<TrackingMemberCubit, TrackingMemberState>(
+                  return BlocConsumer<TrackingMemberCubit, TrackingMemberState>(
                     bloc: _trackingMemberCubit,
+                    listener: (context, state) async {
+                      final mapController = await _mapController.future;
+                      mapController
+                          .getVisibleRegion()
+                          .then((visibleRegion) async {
+                        state.maybeWhen(
+                          orElse: () {},
+                          initial: () {},
+                          success: (List<StoreUser> members) {
+                            final List<StoreUser> temp = List.from(
+                                getIt<UserMapVisibilityCubit>().state ?? []);
+                            for (final member in members) {
+                              StoreUser tempMember = member;
+                              final memberExists = temp.indexWhere(
+                                  (element) => element.code == member.code);
+                              if (member.location == null &&
+                                  member.code != Global.instance.userCode) {
+                                return;
+                              }
+
+                              final LatLng latLngMember = LatLng(
+                                  member.location?.lat ?? 0,
+                                  member.location?.lng ?? 0);
+                              if (!visibleRegion.contains(
+                                  member.code == Global.instance.userCode
+                                      ? Global.instance.currentLocation
+                                      : latLngMember)) {
+                                if (memberExists == -1) {
+                                  if (member.code == Global.instance.userCode) {
+                                    tempMember = member.copyWith(
+                                      location: StoreLocation(
+                                        address: '',
+                                        lat: Global
+                                            .instance.currentLocation.latitude,
+                                        lng: Global
+                                            .instance.currentLocation.longitude,
+                                        updatedAt: DateTime.now(),
+                                      ),
+                                    );
+                                    temp.add(tempMember);
+                                  } else {
+                                    temp.add(member);
+                                  }
+                                }
+                              } else {
+                                if (memberExists != -1) {
+                                  temp.removeAt(memberExists);
+                                }
+                              }
+                            }
+                            getIt<UserMapVisibilityCubit>()
+                                .updateList([...temp]);
+                          },
+                        );
+                      });
+                    },
                     builder: (context, trackingMemberState) {
                       return BlocBuilder<MapTypeCubit, MapType>(
                         bloc: _mapTypeCubit,

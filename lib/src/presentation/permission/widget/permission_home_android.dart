@@ -48,7 +48,7 @@ class PermissionHomeAndroid extends StatelessWidget {
               style: TextStyle(
                 color: MyColors.black34,
                 fontSize: 13.sp,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -95,13 +95,17 @@ class PermissionHomeAndroid extends StatelessWidget {
                           color: Color(0xff9F9F9F),
                         ),
                         8.horizontalSpace,
-                        Text(
-                          context.l10n.allowUseApp,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: const Color(0xff9F9F9F),
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w500,
+                        Flexible(
+                          child: Text(
+                            context.l10n.allowUseApp,
+                            textAlign: TextAlign.start,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: const Color(0xff9F9F9F),
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ],
@@ -195,7 +199,6 @@ class PermissionHomeAndroid extends StatelessWidget {
             child: AppButton(
               title: confirmText,
               onTap: confirmTap,
-              widthBtn: 200.w,
             ),
           ),
         ],
