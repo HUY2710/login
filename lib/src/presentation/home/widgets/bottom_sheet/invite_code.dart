@@ -246,28 +246,7 @@ class _BuildTabBarState extends State<TabBarWidget>
   @override
   Widget build(BuildContext context) {
     return CustomTabBar(
-      controller: tabController,
-      onTap: (index) {
-        if (index == 0) {
-          widget.codeTypeCubit.update(CodeType.code);
-        } else {
-          widget.codeTypeCubit.update(CodeType.qrCode);
-        }
-      },
-      tabs: [
-        Text(
-          context.l10n.code,
-          style: TextStyle(
-            fontSize: 12.sp,
-          ),
-        ),
-        Text(
-          context.l10n.qrCode,
-          style: TextStyle(
-            fontSize: 12.sp,
-          ),
-        ),
-      ],
+      cubit: widget.codeTypeCubit,
     );
   }
 }
