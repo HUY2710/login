@@ -16,6 +16,7 @@ import '../../../../data/remote/token_manager.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../../gen/gens.dart';
 import '../../../../global/global.dart';
+import '../../../../shared/constants/app_constants.dart';
 import '../../../../shared/cubit/value_cubit.dart';
 import '../../../../shared/extension/context_extension.dart';
 import '../../../../shared/extension/int_extension.dart';
@@ -137,7 +138,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20).r,
+        borderRadius: BorderRadius.circular(AppConstants.containerBorder.r),
       ),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Column(

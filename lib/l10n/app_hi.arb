@@ -181,5 +181,7 @@
   "qrCode": "क्यूआर कोड",
   "savePicture": "तस्वीर सहेजें",
   "uploadPhoto": "तस्वीर अपलोड करें",
-  "joinGroupQr": "QR कोड के साथ शामिल हों"
+  "joinGroupQr": "QR कोड के साथ शामिल हों",
+  "invalidQrCode": "अवैध QR कोड",
+  "pleaseCheckQrCode": "कृपया अपना QR कोड फिर से जाँचें"
 }

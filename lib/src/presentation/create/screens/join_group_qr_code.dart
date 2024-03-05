@@ -127,7 +127,7 @@ class _JoinQrCodeScreenState extends State<JoinQrCodeScreen>
                         colorFilter: const ColorFilter.mode(
                             Colors.white, BlendMode.srcIn)),
                     label: Text(
-                      'Upload photo',
+                      context.l10n.uploadPhoto,
                       style: TextStyle(
                           fontSize: 13.sp, fontWeight: FontWeight.w500),
                     )),
@@ -196,17 +196,19 @@ class _JoinQrCodeScreenState extends State<JoinQrCodeScreen>
                     qrController!.resumeCamera();
                   },
                   child: Text(
-                    'OK',
+                    context.l10n.ok,
                     style: TextStyle(
                         fontSize: 13.sp,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xff8E52FF)),
+                        color: const Color(0xff8E52FF)),
                   ))
             ],
             content: Column(
               children: [
                 Text(
-                  messageError == null ? 'Invalid QR code' : 'Error',
+                  messageError == null
+                      ? context.l10n.invalidQrCode
+                      : context.l10n.error,
                   style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w500,
@@ -214,8 +216,9 @@ class _JoinQrCodeScreenState extends State<JoinQrCodeScreen>
                 ),
                 8.verticalSpace,
                 Text(
-                  messageError ?? 'Please check your QR code again',
-                  style: TextStyle(fontSize: 13.sp, color: Color(0xff6C6C6C)),
+                  messageError ?? context.l10n.pleaseCheckQrCode,
+                  style: TextStyle(
+                      fontSize: 13.sp, color: const Color(0xff6C6C6C)),
                 ),
               ],
             )),

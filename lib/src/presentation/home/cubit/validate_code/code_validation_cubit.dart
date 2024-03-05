@@ -35,6 +35,9 @@ class CodeValidationCubit extends Cubit<CodeValidationState> {
       final StoreGroup? existGroup =
           await client.isExistGroup(code.toUpperCase());
       if (existGroup?.idGroup == null) {
+        emit(
+          CodeValidationState.inValid(context.l10n.codeIsValid),
+        );
         return;
       }
       //có thể là không tồn tại group hoặc nhập sai passCode

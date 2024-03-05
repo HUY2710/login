@@ -180,5 +180,7 @@
   "qrCode": "Code QR",
   "savePicture": "Enregistrer l'image",
   "uploadPhoto": "Télécharger une photo",
-  "joinGroupQr": "Rejoindre avec un code QR"
+  "joinGroupQr": "Rejoindre avec un code QR",
+  "invalidQrCode": "Code QR invalide",
+  "pleaseCheckQrCode": "Veuillez vérifier à nouveau votre code QR"
 }
