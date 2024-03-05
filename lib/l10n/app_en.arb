@@ -175,5 +175,9 @@
   "allowOne": "Allow once",
   "dontAllow": "Don’t Allow",
   "allowGroupSharingLocation": "Allow “Group sharing” to use your location?",
-  "thereAreNoResults": "There are no results for your search"
+  "thereAreNoResults": "There are no results for your search",
+  "code": "Code",
+  "qrCode": "QR code",
+  "savePicture": "Save Picture",
+  "uploadPhoto": "Upload photo" 
 }

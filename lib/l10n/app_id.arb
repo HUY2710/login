@@ -175,5 +175,9 @@
   "allowOne": "Izinkan sekali",
   "dontAllow": "Tidak diizinkan",
   "allowGroupSharingLocation": "Izinkan \"Berbagi Grup\" menggunakan lokasi Anda?",
-  "thereAreNoResults": "Tidak ada hasil untuk pencarian Anda"
+  "thereAreNoResults": "Tidak ada hasil untuk pencarian Anda",
+  "code": "Kode",
+  "qrCode": "Kode QR",
+  "savePicture": "Simpan Gambar",
+  "uploadPhoto": "Unggah Foto"
 }

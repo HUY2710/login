@@ -175,5 +175,10 @@
   "allowOne": "एक बार अनुमति दें",
   "dontAllow": "अनुमति न दें",
   "allowGroupSharingLocation": "\"समूह साझा\" को आपके स्थान का उपयोग करने दें?",
-  "thereAreNoResults": "आपके खोज के लिए कोई परिणाम नहीं हैं"
+  "thereAreNoResults": "आपके खोज के लिए कोई परिणाम नहीं हैं",
+  "thereAreNoResults": "आपके खोज के लिए कोई परिणाम नहीं हैं",
+  "code": "कोड",
+  "qrCode": "क्यूआर कोड",
+  "savePicture": "तस्वीर सहेजें",
+  "uploadPhoto": "तस्वीर अपलोड करें"
 }

@@ -175,5 +175,9 @@
   "allowOne": "Permitir una vez",
   "dontAllow": "No permitir",
   "allowGroupSharingLocation": "¿Permitir que \"Compartir en grupo\" use tu ubicación?",
-  "thereAreNoResults": "No hay resultados para tu búsqueda"
+  "thereAreNoResults": "No hay resultados para tu búsqueda",
+  "code": "Código",
+  "qrCode": "Código QR",
+  "savePicture": "Guardar imagen",
+  "uploadPhoto": "Subir foto"
 }

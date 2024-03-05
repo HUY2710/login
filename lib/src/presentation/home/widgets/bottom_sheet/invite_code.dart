@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
@@ -144,14 +145,14 @@ class InviteCode extends StatelessWidget with WidgetMixin {
                         side: const BorderSide(color: Color(0xffEAEAEA)))),
               ),
               onPressed: () async {
-                _saveImage();
+                _saveImage(context);
               },
               icon: Assets.icons.icSave.svg(
                   colorFilter: const ColorFilter.mode(
                       Color(0xff8E52FF), BlendMode.srcIn)),
-              label: const Text(
-                'Save picture',
-                style: TextStyle(
+              label: Text(
+                context.l10n.savePicture,
+                style: const TextStyle(
                   color: Color(0xff8E52FF),
                 ),
               )),
@@ -205,10 +206,20 @@ class InviteCode extends StatelessWidget with WidgetMixin {
     );
   }
 
-  Future<void> _saveImage() async {
+  Future<void> _saveImage(BuildContext context) async {
     final result = await widgetToBytes(repaintKey: repaintKey);
     if (result != null) {
-      await ImageGallerySaver.saveImage(result);
+      try {
+        await ImageGallerySaver.saveImage(result);
+        if (context.mounted) {
+          Fluttertoast.showToast(
+              msg: '${context.l10n.save} ${context.l10n.success}');
+        }
+      } catch (error) {
+        if (context.mounted) {
+          Fluttertoast.showToast(msg: '${context.l10n.save} $error');
+        }
+      }
     }
   }
 }
@@ -245,13 +256,13 @@ class _BuildTabBarState extends State<TabBarWidget>
       },
       tabs: [
         Text(
-          'Code',
+          context.l10n.code,
           style: TextStyle(
             fontSize: 12.sp,
           ),
         ),
         Text(
-          'Qr code',
+          context.l10n.qrCode,
           style: TextStyle(
             fontSize: 12.sp,
           ),

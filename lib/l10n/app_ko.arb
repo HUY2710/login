@@ -175,5 +175,9 @@
   "allowOne": "한 번 허용",
   "dontAllow": "허용하지 않음",
   "allowGroupSharingLocation": "\"그룹 공유\"가 위치를 사용하도록 허용하시겠습니까?",
-  "thereAreNoResults": "당신의 검색에 대한 결과가 없습니다"
+  "thereAreNoResults": "당신의 검색에 대한 결과가 없습니다",
+  "code": "코드",
+  "qrCode": "QR 코드",
+  "savePicture": "사진 저장",
+  "uploadPhoto": "사진 업로드"
 }

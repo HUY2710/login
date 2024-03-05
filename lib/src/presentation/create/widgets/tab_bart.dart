@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/custom_tab_bar.dart';
 import '../cubit/code_type_cubit.dart';
 
@@ -36,13 +37,13 @@ class _BuildTabBarState extends State<BuildTabBar>
       },
       tabs: [
         Text(
-          'Code',
+          context.l10n.code,
           style: TextStyle(
             fontSize: 12.sp,
           ),
         ),
         Text(
-          'Qr code',
+          context.l10n.qrCode,
           style: TextStyle(
             fontSize: 12.sp,
           ),

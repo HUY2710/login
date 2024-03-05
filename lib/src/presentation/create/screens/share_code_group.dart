@@ -147,9 +147,9 @@ class _ShareCodeGroupScreenState extends State<ShareCodeGroupScreen>
               icon: Assets.icons.icSave.svg(
                   colorFilter: const ColorFilter.mode(
                       Color(0xff8E52FF), BlendMode.srcIn)),
-              label: const Text(
-                'Save picture',
-                style: TextStyle(
+              label: Text(
+                context.l10n.savePicture,
+                style: const TextStyle(
                   color: Color(0xff8E52FF),
                 ),
               )),
