@@ -11,7 +11,7 @@ class ProGuide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShadowContainer(
-      width: 80.r,
+      width: 90.r,
       height: 40.r,
       padding: const EdgeInsets.all(10),
       borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
@@ -19,12 +19,14 @@ class ProGuide extends StatelessWidget {
         children: [
           Assets.icons.premium.icPremiumSvg.svg(),
           8.horizontalSpace,
-          Text(
-            'PRO',
-            style: TextStyle(
-                color: const Color(0xff8E52FF),
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500),
+          Expanded(
+            child: Text(
+              'PRO',
+              style: TextStyle(
+                  color: const Color(0xff8E52FF),
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500),
+            ),
           )
         ],
       ),

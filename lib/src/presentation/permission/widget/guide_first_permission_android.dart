@@ -53,7 +53,7 @@ class GuideFirstPermissionAndroid extends StatelessWidget {
               style: TextStyle(
                 color: MyColors.color6C6C6C,
                 fontSize: 12.sp,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
