@@ -63,7 +63,7 @@ class CreateGroupNameScreen extends StatelessWidget {
                         final validName =
                             ValidHelper.containsSpecialCharacters(value);
                         if (!validName) {
-                          groupNameCubit.update(value);
+                          groupNameCubit.update(value.trimLeft().trimRight());
                         } else {
                           groupNameCubit.update('');
                         }
@@ -103,7 +103,7 @@ class CreateGroupNameScreen extends StatelessWidget {
               builder: (context, state) {
                 return AppButton(
                   title: context.l10n.continueText,
-                  isEnable: state.isNotEmpty,
+                  isEnable: state.trimLeft().trimRight().isNotEmpty,
                   onTap: () {
                     Global.instance.group ??= StoreGroup(
                       idGroup: 24.randomString(),

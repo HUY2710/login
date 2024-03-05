@@ -179,5 +179,6 @@
   "code": "코드",
   "qrCode": "QR 코드",
   "savePicture": "사진 저장",
-  "uploadPhoto": "사진 업로드"
+  "uploadPhoto": "사진 업로드",
+  "joinGroupQr": "QR 코드로 참여하기"
 }

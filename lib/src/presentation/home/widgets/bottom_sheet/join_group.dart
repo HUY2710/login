@@ -181,16 +181,16 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
               },
             ),
             Text(
-              'Enter the invitation code to join the group',
+              context.l10n.joinGroupSub,
               style: TextStyle(color: const Color(0xff343434), fontSize: 13.sp),
             ),
             TextButton(
                 onPressed: () => context.pushRoute(const JoinQrCodeRoute()),
                 child: Text(
-                  'Join with QR code',
+                  context.l10n.joinGroupQr,
                   style: TextStyle(
                       fontSize: 16.sp,
-                      color: Color(0xff8E52FF),
+                      color: const Color(0xff8E52FF),
                       fontWeight: FontWeight.w500),
                 )),
             20.h.verticalSpace,

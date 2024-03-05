@@ -179,5 +179,6 @@
   "code": "Código",
   "qrCode": "Código QR",
   "savePicture": "Guardar imagen",
-  "uploadPhoto": "Subir foto"
+  "uploadPhoto": "Subir foto",
+  "joinGroupQr": "Unirse con código QR"
 }
