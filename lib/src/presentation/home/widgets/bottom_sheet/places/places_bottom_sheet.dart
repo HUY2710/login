@@ -4,8 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../app/cubit/loading_cubit.dart';
+import '../../../../../../app/cubit/time_show_inter_cubit.dart';
+import '../../../../../../module/admob/app_ad_id_manager.dart';
+import '../../../../../../module/admob/enum/ad_remote_key.dart';
+import '../../../../../../module/admob/utils/inter_ad_util.dart';
 import '../../../../../config/di/di.dart';
 import '../../../../../config/navigation/app_router.dart';
+import '../../../../../config/remote_config.dart';
 import '../../../../../data/models/store_place/store_place.dart';
 import '../../../../../data/remote/firestore_client.dart';
 import '../../../../../data/remote/notification_place_manager.dart';
@@ -141,8 +146,17 @@ class PlacesBottomSheet extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             child: GestureDetector(
-              onTap: () {
-                context.pushRoute(AddPlaceRoute());
+              onTap: () async {
+                final bool isShowInterAd = RemoteConfigManager.instance
+                    .isShowAd(AdRemoteKeys.inter_add_place);
+                if (isShowInterAd && getIt<TimeShowInterCubit>().state) {
+                  getIt<TimeShowInterCubit>().reset();
+                  await InterAdUtil.instance.showInterAd(
+                      id: getIt<AppAdIdManager>().adUnitId.interAddPlace);
+                }
+                if (context.mounted) {
+                  context.pushRoute(AddPlaceRoute());
+                }
               },
               child: Row(
                 children: [
@@ -175,8 +189,20 @@ class PlacesBottomSheet extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final item = state[index];
                     return CustomSwipeWidget(
-                      actionRight1: () {
-                        context.pushRoute(AddPlaceRoute(place: item));
+                      actionRight1: () async {
+                        final bool isShowInterAd = RemoteConfigManager.instance
+                            .isShowAd(AdRemoteKeys.inter_add_place);
+                        if (isShowInterAd &&
+                            getIt<TimeShowInterCubit>().state) {
+                          getIt<TimeShowInterCubit>().reset();
+                          await InterAdUtil.instance.showInterAd(
+                              id: getIt<AppAdIdManager>()
+                                  .adUnitId
+                                  .interAddPlace);
+                        }
+                        if (context.mounted) {
+                          context.pushRoute(AddPlaceRoute(place: item));
+                        }
                       },
                       actionRight2: () async {
                         removeDefaultItemPlace(context, state, item);
@@ -213,13 +239,26 @@ class PlacesBottomSheet extends StatelessWidget {
                           return CustomSwipeWidget(
                             enable: places[index].idCreator ==
                                 Global.instance.user?.code,
-                            actionRight1: () {
-                              context.pushRoute(
-                                AddPlaceRoute(
-                                  place: places[index],
-                                  defaultPlace: false,
-                                ),
-                              );
+                            actionRight1: () async {
+                              final bool isShowInterAd = RemoteConfigManager
+                                  .instance
+                                  .isShowAd(AdRemoteKeys.inter_add_place);
+                              if (isShowInterAd &&
+                                  getIt<TimeShowInterCubit>().state) {
+                                getIt<TimeShowInterCubit>().reset();
+                                await InterAdUtil.instance.showInterAd(
+                                    id: getIt<AppAdIdManager>()
+                                        .adUnitId
+                                        .interAddPlace);
+                              }
+                              if (context.mounted) {
+                                context.pushRoute(
+                                  AddPlaceRoute(
+                                    place: places[index],
+                                    defaultPlace: false,
+                                  ),
+                                );
+                              }
                             },
                             actionRight2: () {
                               removePlace(context, places[index].idPlace!);

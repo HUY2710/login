@@ -6,6 +6,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../app/cubit/loading_cubit.dart';
+import '../../../module/admob/app_ad_id_manager.dart';
+import '../../../module/admob/enum/ad_remote_key.dart';
+import '../../../module/admob/utils/inter_ad_util.dart';
+import '../../config/di/di.dart';
+import '../../config/remote_config.dart';
 import '../../data/local/avatar/avatar_repository.dart';
 import '../../data/models/avatar/avatar_model.dart';
 import '../../data/remote/firestore_client.dart';
@@ -111,8 +116,17 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
             userName: userNameCtrl.text.trim());
         // EasyLoading.dismiss();
         hideLoading();
-        Fluttertoast.showToast(msg: context.l10n.success)
-            .then((value) => context.popRoute(true));
+        Fluttertoast.showToast(msg: context.l10n.success).then((value) async {
+          final bool isShowInterAd = RemoteConfigManager.instance
+              .isShowAd(AdRemoteKeys.inter_edit_profile);
+          if (isShowInterAd) {
+            await InterAdUtil.instance
+                .showInterAd(id: getIt<AppAdIdManager>().adUnitId.interMessage);
+          }
+          if (context.mounted) {
+            context.popRoute(true);
+          }
+        });
       } catch (error) {
         // EasyLoading.dismiss();
         hideLoading();

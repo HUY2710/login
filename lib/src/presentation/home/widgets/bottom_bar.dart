@@ -9,8 +9,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:marquee/marquee.dart';
 
+import '../../../../module/admob/app_ad_id_manager.dart';
+import '../../../../module/admob/enum/ad_remote_key.dart';
+import '../../../../module/admob/utils/inter_ad_util.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
+import '../../../config/remote_config.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
@@ -230,13 +234,23 @@ class _BottomBarState extends State<BottomBar> {
   Widget buildItem(String path, BuildContext context, bool isMessage,
       {bool? avatar}) {
     return InkWell(
-      onTap: () {
-        //check xem có join group nào chưa
+      onTap: () async {
         if (isMessage) {
-          context.pushRoute(const ChatRoute());
-          return;
+          final bool isShowInterAd =
+              RemoteConfigManager.instance.isShowAd(AdRemoteKeys.inter_message);
+          if (isShowInterAd) {
+            await InterAdUtil.instance
+                .showInterAd(id: getIt<AppAdIdManager>().adUnitId.interMessage);
+          }
+
+          if (context.mounted) {
+            context.pushRoute(const ChatRoute());
+            return;
+          }
         }
-        context.pushRoute(const SettingRoute());
+        if (context.mounted) {
+          context.pushRoute(const SettingRoute());
+        }
       },
       child: Container(
         height: 48.r,
