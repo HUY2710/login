@@ -1,7 +1,14 @@
 {
-  "ad_open": "ca-app-pub-3940256099942544/9257395921",
-  "inter": "ca-app-pub-3940256099942544/1033173712",
-  "banner": "ca-app-pub-3940256099942544/9214589741",
-  "native": "ca-app-pub-3940256099942544/2247696110",
-  "collapse_banner": "ca-app-pub-3940256099942544/2014213617"
+  "appopen_resume": "ca-app-pub-3940256099942544/9257395921",
+  "inter_splash": "ca-app-pub-3940256099942544/1033173712",
+  "native_language": "ca-app-pub-3940256099942544/2247696110",
+  "native_language_setting": "ca-app-pub-3940256099942544/3986624511",
+  "inter_intro": "ca-app-pub-3940256099942544/1033173712",
+  "banner_collapse_home": "ca-app-pub-3940256099942544/2014213617",
+  "banner_all": "ca-app-pub-3940256099942544/9214589741",
+  "inter_message": "ca-app-pub-3940256099942544/1033173712",
+  "inter_add_place": "ca-app-pub-3940256099942544/1033173712",
+  "native_map": "ca-app-pub-3940256099942544/2247696110",
+  "inter_edit_profile": "ca-app-pub-3940256099942544/1033173712",
+  "native_edit": "ca-app-pub-3940256099942544/2247696110"
 }

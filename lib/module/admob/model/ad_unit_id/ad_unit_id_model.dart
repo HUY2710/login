@@ -7,11 +7,18 @@ part 'ad_unit_id_model.g.dart';
 abstract class AdUnitIdModel with _$AdUnitIdModel {
   @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
   const factory AdUnitIdModel({
-    required String adOpen,
-    required String inter,
-    required String banner,
-    required String native,
-    required String collapseBanner,
+    required String interSplash,
+    required String appopenResume,
+    required String nativeLanguage,
+    required String nativeLanguageSetting,
+    required String interIntro,
+    required String bannerCollapseHome,
+    required String bannerAll,
+    required String interMessage,
+    required String interAddPlace,
+    required String nativeMap,
+    required String interEditProfile,
+    required String nativeEdit,
   }) = _AdUnitIdModel;
 
   factory AdUnitIdModel.fromJson(Map<String, dynamic> json) =>

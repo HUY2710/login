@@ -59,18 +59,17 @@ class RemoteConfigManager {
   }
 
   bool globalShowAd() {
-    return willShowAd &&
-        _items
-            .firstWhere(
-              (ConfigItem e) => e.key == AdRemoteKeys.show,
-              orElse: () => ConfigItem(false, AdRemoteKeys.show),
-            )
-            .value;
+    return willShowAd && _remoteConfig.getBool(AdRemoteKeys.show.platformKey);
   }
 
   bool isShowAd(AdRemoteKeys key) {
     return globalShowAd() &&
-        _items.firstWhere((ConfigItem element) => element.key == key).value;
+        _items
+            .firstWhere(
+              (ConfigItem element) => element.key == key,
+              orElse: () => ConfigItem(false, key),
+            )
+            .value;
   }
 
   void _getConfigValue() {
@@ -82,7 +81,7 @@ class RemoteConfigManager {
   }
 
   bool isForceUpdate() {
-    return _remoteConfig.getBool(RemoteKeys.forceUpdate.name);
+    return _remoteConfig.getBool(RemoteKeys.forceUpdate.platformKey);
   }
 
   bool isShowSkipIntroButton() =>
