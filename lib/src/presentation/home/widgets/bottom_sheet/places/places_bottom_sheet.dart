@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../app/cubit/loading_cubit.dart';
-import '../../../../../../app/cubit/time_show_inter_cubit.dart';
 import '../../../../../../module/admob/app_ad_id_manager.dart';
 import '../../../../../../module/admob/enum/ad_remote_key.dart';
 import '../../../../../../module/admob/utils/inter_ad_util.dart';
@@ -149,8 +148,7 @@ class PlacesBottomSheet extends StatelessWidget {
               onTap: () async {
                 final bool isShowInterAd = RemoteConfigManager.instance
                     .isShowAd(AdRemoteKeys.inter_add_place);
-                if (isShowInterAd && getIt<TimeShowInterCubit>().state) {
-                  getIt<TimeShowInterCubit>().reset();
+                if (isShowInterAd) {
                   await InterAdUtil.instance.showInterAd(
                       id: getIt<AppAdIdManager>().adUnitId.interAddPlace);
                 }
@@ -192,9 +190,7 @@ class PlacesBottomSheet extends StatelessWidget {
                       actionRight1: () async {
                         final bool isShowInterAd = RemoteConfigManager.instance
                             .isShowAd(AdRemoteKeys.inter_add_place);
-                        if (isShowInterAd &&
-                            getIt<TimeShowInterCubit>().state) {
-                          getIt<TimeShowInterCubit>().reset();
+                        if (isShowInterAd) {
                           await InterAdUtil.instance.showInterAd(
                               id: getIt<AppAdIdManager>()
                                   .adUnitId
@@ -243,9 +239,7 @@ class PlacesBottomSheet extends StatelessWidget {
                               final bool isShowInterAd = RemoteConfigManager
                                   .instance
                                   .isShowAd(AdRemoteKeys.inter_add_place);
-                              if (isShowInterAd &&
-                                  getIt<TimeShowInterCubit>().state) {
-                                getIt<TimeShowInterCubit>().reset();
+                              if (isShowInterAd) {
                                 await InterAdUtil.instance.showInterAd(
                                     id: getIt<AppAdIdManager>()
                                         .adUnitId
