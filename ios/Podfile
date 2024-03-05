@@ -54,7 +54,8 @@ post_install do |installer|
         ## Add this line
          'PERMISSION_LOCATION=1',
          'PERMISSION_NOTIFICATIONS=1',
-         'PERMISSION_APP_TRACKING_TRANSPARENCY=1'
+         'PERMISSION_APP_TRACKING_TRANSPARENCY=1',
+         'PERMISSION_SENSORS=1'
        ]
       end
   end

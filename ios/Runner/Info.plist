@@ -704,10 +704,10 @@
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>This app needs camera access to scan QR codes</string>
+	<string>Used to scan QR Code for join group feature.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Used to save processed photo in to your library</string>
+	<string>Used to save QR Code and share for your group member.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Used to get photo for QR code</string>
+	<string>Used to get QR Code photo when you need scaning and join new group.</string>
 </dict>
 </plist>
