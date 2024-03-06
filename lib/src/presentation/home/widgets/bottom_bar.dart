@@ -144,7 +144,8 @@ class _BottomBarState extends State<BottomBar> {
                             ? Assets.icons.icChatActive.path
                             : Assets.icons.icMessage.path,
                         context,
-                        true),
+                        true,
+                        hasData: getIt<GroupCubit>().myGroups.length >= 2),
                   );
                 },
               ),
@@ -241,14 +242,19 @@ class _BottomBarState extends State<BottomBar> {
     );
   }
 
-  Widget buildItem(String path, BuildContext context, bool isMessage,
-      {bool? avatar}) {
+  Widget buildItem(
+    String path,
+    BuildContext context,
+    bool isMessage, {
+    bool? avatar,
+    bool hasData = false,
+  }) {
     return InkWell(
       onTap: () async {
         if (isMessage) {
           final bool isShowInterAd =
               RemoteConfigManager.instance.isShowAd(AdRemoteKeys.inter_message);
-          if (isShowInterAd) {
+          if (isShowInterAd && hasData) {
             await InterAdUtil.instance
                 .showInterAd(id: getIt<AppAdIdManager>().adUnitId.interMessage);
           }
