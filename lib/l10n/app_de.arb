@@ -180,5 +180,7 @@
   "qrCode": "QR-Code",
   "savePicture": "Bild speichern",
   "uploadPhoto": "Foto hochladen",
-  "joinGroupQr": "Beitreten mit QR-Code"
+  "joinGroupQr": "Beitreten mit QR-Code",
+  "invalidQrCode": "Ungültiger QR-Code",
+  "pleaseCheckQrCode": "Bitte überprüfen Sie Ihren QR-Code erneut"
 }
