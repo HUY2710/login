@@ -3,6 +3,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../module/admob/enum/ad_remote_key.dart';
 import '../../module/admob/enum/remote_key.dart';
+import '../../module/iap/my_purchase_manager.dart';
+import 'di/di.dart';
 
 class ConfigItem {
   ConfigItem(this.value, this.key);
@@ -59,6 +61,9 @@ class RemoteConfigManager {
   }
 
   bool globalShowAd() {
+    if (getIt<MyPurchaseManager>().state.isPremium()) {
+      return false;
+    }
     return willShowAd && _remoteConfig.getBool(AdRemoteKeys.show.platformKey);
   }
 
