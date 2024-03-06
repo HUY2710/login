@@ -130,16 +130,24 @@ class _BottomBarState extends State<BottomBar> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               BlocBuilder<GroupCubit, GroupState>(
-                  bloc: getIt<GroupCubit>(),
-                  builder: (context, state) {
-                    return buildItem(
+                bloc: getIt<GroupCubit>(),
+                builder: (context, state) {
+                  return BlocListener<GroupCubit, GroupState>(
+                    bloc: getIt<GroupCubit>(),
+                    listener: (context, state) {},
+                    listenWhen: (previous, current) {
+                      return previous != current;
+                    },
+                    child: buildItem(
                         !getIt<GroupCubit>().myGroups.every((element) =>
                                 element.seen == false || element.seen == null)
                             ? Assets.icons.icChatActive.path
                             : Assets.icons.icMessage.path,
                         context,
-                        true);
-                  }),
+                        true),
+                  );
+                },
+              ),
               16.horizontalSpace,
               Expanded(
                 child: GestureDetector(

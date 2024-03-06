@@ -1,81 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CustomTabBar extends StatelessWidget {
-  const CustomTabBar({
-    super.key,
-    required this.controller,
-    required this.tabs,
-    this.onTap,
-    this.isScrollable = true,
-  });
+import '../../presentation/create/cubit/code_type_cubit.dart';
+import '../constants/app_constants.dart';
+import '../extension/context_extension.dart';
+import '../helpers/gradient_background.dart';
+import 'custom_inkwell.dart';
 
-  final TabController controller;
-  final List<Widget> tabs;
-  final void Function(int index)? onTap;
-  final bool isScrollable;
+class CustomTabBar extends StatelessWidget {
+  const CustomTabBar({super.key, required this.cubit});
+
+  final CodeTypeCubit cubit;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 44.h,
+      width: 170.w,
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15.r),
-          border: Border.all(color: const Color(0xffEAEAEA))),
-      child: _TabBar(
-        controller: controller,
-        tabs: tabs,
-        onTap: onTap,
-        isScrollable: isScrollable,
+        borderRadius: BorderRadius.circular(AppConstants.containerBorder.r),
+        border: Border.all(
+          color: const Color(0xffEAEAEA),
+        ),
+      ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            children: [
+              AnimatedPositioned(
+                height: constraints.maxHeight,
+                duration: const Duration(milliseconds: 300),
+                left:
+                    cubit.state == CodeType.code ? 0 : constraints.maxWidth / 2,
+                child: Container(
+                  height: constraints.maxHeight,
+                  width: constraints.maxWidth / 2,
+                  decoration: BoxDecoration(
+                    gradient: gradientBackground,
+                    borderRadius:
+                        BorderRadius.circular(AppConstants.containerBorder.r),
+                  ),
+                ),
+              ),
+              Align(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    buildCodeButton(context, constraints.maxWidth / 2,
+                        constraints.maxHeight),
+                    buildQrCodeButton(context, constraints.maxWidth / 2,
+                        constraints.maxHeight)
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
-}
 
-class _TabBar extends TabBar {
-  const _TabBar({
-    required super.tabs,
-    required super.controller,
-    super.isScrollable = true,
-    super.onTap,
-  });
-
-  @override
-  TabBarIndicatorSize? get indicatorSize => TabBarIndicatorSize.tab;
-
-  @override
-  Decoration? get indicator => BoxDecoration(
-        borderRadius: BorderRadius.circular(15.r),
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xffB67DFF),
-            Color(0xff7B3EFF),
-          ],
+  Widget buildQrCodeButton(BuildContext context, double width, double height) {
+    return CustomInkWell(
+        child: Container(
+          alignment: Alignment.center,
+          width: width,
+          height: height,
+          child: Text(
+            context.l10n.qrCode,
+            style: TextStyle(
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w500,
+                color: cubit.state == CodeType.code
+                    ? const Color(0XFFCCADFF)
+                    : Colors.white),
+          ),
         ),
-        // boxShadow: const [
-        //   BoxShadow(
-        //     color: Color(0x1F000000),
-        //     blurRadius: 3,
-        //     spreadRadius: 1,
-        //     offset: Offset(0, 2),
-        //   ),
-        // ],
-      );
+        onTap: () => cubit.update(CodeType.qrCode));
+  }
 
-  @override
-  EdgeInsetsGeometry? get labelPadding =>
-      EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h);
-
-  @override
-  Color? get labelColor => Colors.white;
-
-  @override
-  TextStyle? get labelStyle =>
-      TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500);
-
-  @override
-  Color? get unselectedLabelColor => const Color(0xffCCADFF);
-
-  @override
-  Color? get dividerColor => Colors.transparent;
+  Widget buildCodeButton(BuildContext context, double width, double height) {
+    return CustomInkWell(
+        child: Container(
+          alignment: Alignment.center,
+          width: width,
+          height: height,
+          child: Text(
+            context.l10n.code,
+            style: TextStyle(
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w500,
+                color: cubit.state == CodeType.code
+                    ? Colors.white
+                    : const Color(0XFFCCADFF)),
+          ),
+        ),
+        onTap: () => cubit.update(CodeType.code));
+  }
 }

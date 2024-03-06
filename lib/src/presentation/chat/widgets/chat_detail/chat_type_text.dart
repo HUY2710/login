@@ -16,7 +16,8 @@ class ChatTextWidget extends StatefulWidget {
   State<ChatTextWidget> createState() => _ChatTypeWidgetState();
 }
 
-class _ChatTypeWidgetState extends State<ChatTextWidget> {
+class _ChatTypeWidgetState extends State<ChatTextWidget>
+    with AutoRouteAwareStateMixin {
   final TextEditingController textController = TextEditingController();
   final ScrollController _controller = ScrollController();
   final ValueNotifier isShowButtonSend = ValueNotifier(false);
@@ -27,108 +28,97 @@ class _ChatTypeWidgetState extends State<ChatTextWidget> {
   }
 
   @override
+  Future<void> didPop() async {
+    await SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
+    getIt<GroupCubit>().updateLastSeen(widget.idGroup);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        await SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
-        if (mounted) {
-          context.popRoute().then(
-              (value) => getIt<GroupCubit>().updateLastSeen(widget.idGroup));
-        }
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          surfaceTintColor: Colors.transparent,
-          // leadingWidth: 30.w,
-          // toolbarHeight: 98.h,
-          leading: CustomInkWell(
-              child: Padding(
-                padding: EdgeInsets.all(12.w),
-                child: Assets.icons.iconBack.svg(),
-              ),
-              onTap: () async {
-                await SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
-                if (mounted) {
-                  context.popRoute().then((value) =>
-                      getIt<GroupCubit>().updateLastSeen(widget.idGroup));
-                }
-              }),
-          centerTitle: true,
-          title: Text(
-            widget.groupName,
-            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
-          ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        // leadingWidth: 30.w,
+        // toolbarHeight: 98.h,
+        leading: CustomInkWell(
+            child: Padding(
+              padding: EdgeInsets.all(12.w),
+              child: Assets.icons.iconBack.svg(),
+            ),
+            onTap: () => context.popRoute()),
+        centerTitle: true,
+        title: Text(
+          widget.groupName,
+          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
         ),
-        body: widget.listUser.isNotEmpty
-            ? CustomInkWell(
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: StreamBuilder(
-                            stream: ChatService.instance.streamMessageGroup(
-                                widget.idGroup, widget.listUser),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                if (snapshot.data!.docs.isEmpty) {
-                                  return const MessageEmptyScreen();
-                                } else {
-                                  final chats = snapshot.data!.docs;
-                                  return ListView.builder(
-                                      itemCount: chats.length,
-                                      controller: _controller,
-                                      reverse: true,
-                                      padding: const EdgeInsets.all(0),
-                                      itemBuilder: (context, index) {
-                                        return Column(
-                                          children: [
-                                            buildTextDay(index, chats),
-                                            if (Utils.checkIsUser(
-                                                code: chats[index]
-                                                    .data()
-                                                    .senderId))
-                                              MessageTypeUser(
-                                                chats: chats,
-                                                index: index,
-                                              )
-                                            else
-                                              MessageTypeGuess(
-                                                chats: chats,
-                                                index: index,
-                                              )
-                                          ],
-                                        );
-                                      });
-                                }
+      ),
+      body: widget.listUser.isNotEmpty
+          ? CustomInkWell(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: StreamBuilder(
+                          stream: ChatService.instance.streamMessageGroup(
+                              widget.idGroup, widget.listUser),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data!.docs.isEmpty) {
+                                return const MessageEmptyScreen();
+                              } else {
+                                final chats = snapshot.data!.docs;
+                                return ListView.builder(
+                                    itemCount: chats.length,
+                                    controller: _controller,
+                                    reverse: true,
+                                    padding: const EdgeInsets.all(0),
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        children: [
+                                          buildTextDay(index, chats),
+                                          if (Utils.checkIsUser(
+                                              code:
+                                                  chats[index].data().senderId))
+                                            MessageTypeUser(
+                                              chats: chats,
+                                              index: index,
+                                            )
+                                          else
+                                            MessageTypeGuess(
+                                              chats: chats,
+                                              index: index,
+                                            )
+                                        ],
+                                      );
+                                    });
                               }
-                              return const SizedBox();
-                            }),
-                      ),
+                            }
+                            return const SizedBox();
+                          }),
                     ),
-                    12.h.verticalSpace,
-                    buildInput(),
-                  ],
-                ),
-              )
-            : Center(
-                child: SizedBox(
-                  height: 100.r,
-                  width: 100.r,
-                  child: const LoadingIndicator(
-                    colors: [
-                      Color.fromARGB(255, 113, 63, 207),
-                      Color(0xffB78CFF),
-                      Color(0xffD2B0FF)
-                    ],
-                    indicatorType: Indicator.ballScaleMultiple,
                   ),
+                  12.h.verticalSpace,
+                  buildInput(),
+                ],
+              ),
+            )
+          : Center(
+              child: SizedBox(
+                height: 100.r,
+                width: 100.r,
+                child: const LoadingIndicator(
+                  colors: [
+                    Color.fromARGB(255, 113, 63, 207),
+                    Color(0xffB78CFF),
+                    Color(0xffD2B0FF)
+                  ],
+                  indicatorType: Indicator.ballScaleMultiple,
                 ),
               ),
-      ),
+            ),
     );
   }
 

@@ -81,6 +81,7 @@ class MapScreenState extends State<MapScreen>
     getLocalLocation();
     super.initState();
 
+    // getIt<GroupCubit>().initStreamGroupChat();
     getIt<GroupCubit>().initStreamGroupChat();
     TokenManager.updateMyFCMToken();
   }

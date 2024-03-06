@@ -122,8 +122,12 @@ mixin PermissionMixin {
   }
 
   Future<bool> requestActivityRecognition() async {
-    final PermissionStatus activityRecognition =
-        await Permission.activityRecognition.request();
+    PermissionStatus activityRecognition;
+    if (Platform.isIOS) {
+      activityRecognition = await Permission.sensors.request();
+    } else {
+      activityRecognition = await Permission.activityRecognition.request();
+    }
     return activityRecognition.isGranted;
   }
 }

@@ -266,7 +266,7 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1510;
+				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					331C8080294A63A400263BE5 = {
@@ -570,7 +570,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 1.0.1;
+				FLUTTER_BUILD_NAME = 1.0.2;
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -855,7 +855,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "Runner/RunnerDebug-dev.entitlements";
 				DEVELOPMENT_TEAM = 4J8WSCVQ98;
-				FLUTTER_BUILD_NAME = 1.0.1;
+				FLUTTER_BUILD_NAME = 1.0.2;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MAP_KEY = AIzaSyCYnWDOViEVKZtwnzfcJdnULH_bD2YPCWU;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tinhvu.cycle-sharing.dev";
@@ -870,7 +870,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 971D0B357FCC017D1C6A02B5 /* Pods-Runner.profile-dev.xcconfig */;
 			buildSettings = {
-				FLUTTER_BUILD_NAME = 1.0.1;
+				FLUTTER_BUILD_NAME = 1.0.2;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MAP_KEY = "";
 				PRODUCT_NAME = Runner;
@@ -884,7 +884,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 21AC2A6C5FA44E8A882FBC45 /* Pods-Runner.release-dev.xcconfig */;
 			buildSettings = {
-				FLUTTER_BUILD_NAME = 1.0.1;
+				FLUTTER_BUILD_NAME = 1.0.2;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MAP_KEY = AIzaSyCYnWDOViEVKZtwnzfcJdnULH_bD2YPCWU;
 				PRODUCT_NAME = Runner;
@@ -901,7 +901,7 @@
 				BUNDLE_NAME = "Group Sharing";
 				CODE_SIGN_ENTITLEMENTS = "Runner/RunnerDebug-prod.entitlements";
 				DEVELOPMENT_TEAM = 4J8WSCVQ98;
-				FLUTTER_BUILD_NAME = 1.0.1;
+				FLUTTER_BUILD_NAME = 1.0.2;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MAP_KEY = "AIzaSyAc-Ox2Go4sw0pM3KVL19yT61qk4haC0jA";
 				PRODUCT_BUNDLE_IDENTIFIER = com.locationsharing.livelocation.grouplocationshare.sendlocation;
@@ -916,7 +916,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 369B4D98E8E6D4FCCC9CFB7A /* Pods-Runner.profile-prod.xcconfig */;
 			buildSettings = {
-				FLUTTER_BUILD_NAME = 1.0.1;
+				FLUTTER_BUILD_NAME = 1.0.2;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MAP_KEY = "";
 				PRODUCT_NAME = Runner;
@@ -935,7 +935,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4J8WSCVQ98;
-				FLUTTER_BUILD_NAME = 1.0.1;
+				FLUTTER_BUILD_NAME = 1.0.2;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MAP_KEY = "AIzaSyAc-Ox2Go4sw0pM3KVL19yT61qk4haC0jA";
 				PRODUCT_BUNDLE_IDENTIFIER = com.locationsharing.livelocation.grouplocationshare.sendlocation;
@@ -1241,7 +1241,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 1.0.1;
+				FLUTTER_BUILD_NAME = 1.0.2;
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1269,7 +1269,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 1.0.1;
+				FLUTTER_BUILD_NAME = 1.0.2;
 				INFOPLIST_FILE = Runner/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
