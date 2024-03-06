@@ -157,7 +157,7 @@
   "sendMessageNoti": "telah mengirimkan pesan tersebut",
   "joined": "bergabung",
   "titlePermission": "Berbagi grup memerlukan izin",
-  "subLocation": "Aplikasi ini mengumpulkan data lokasi untuk memungkinkan fitur memperbarui lokasi Anda bagi orang lain yang sedang melacak Anda, bahkan ketika aplikasi ditutup atau tidak digunakan.",
+  "subLocation": "Aplikasi ini mengumpulkan data lokasi untuk memperbarui lokasi Anda secara real-time dan membantu teman atau keluarga Anda melacak Anda untuk menjaga Anda tetap aman, bahkan ketika aplikasi ditutup atau tidak digunakan.",
   "permissionsGreate": "Bagus! Sekarang ubah ke 'Selalu izinkan'.",
   "allowLocationPermission": "Izinkan 'Berbagi grup' mengakses lokasi Anda bahkan saat Anda tidak menggunakan aplikasi?",
   "titlePermissionHomeAndroid": "Di pengaturan aplikasi Berbagi Grup, pilih 'Izinkan selalu' di bawah akses lokasi",

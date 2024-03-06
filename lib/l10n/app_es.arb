@@ -157,7 +157,7 @@
   "sendMessageNoti": "ha enviado el mensaje",
   "joined": "se unió",
   "titlePermission": "La compartición de grupo requiere permisos",
-  "subLocation": "Esta aplicación recopila datos de ubicación para permitir la función de actualizar su ubicación para otros que lo están rastreando, incluso cuando la aplicación está cerrada o no está en uso.",
+  "subLocation": "Esta aplicación recopila datos de ubicación para actualizar su ubicación en tiempo real y ayudar a sus amigos o familiares a rastrearlo para mantenerlo seguro, incluso cuando la aplicación está cerrada o no se está utilizando.",
   "permissionsGreate": "¡Genial! Ahora cambie a 'Permitir siempre'.",
   "allowLocationPermission": "¿Permitir que 'Compartición de grupo' acceda a su ubicación incluso cuando no esté utilizando la aplicación?",
   "titlePermissionHomeAndroid": "En la configuración de la aplicación de Compartir en grupo, seleccione 'Permitir siempre' en el acceso a la ubicación",

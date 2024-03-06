@@ -18,7 +18,7 @@ flavors:
     app:
       name: "Group Location"
     android:
-      applicationId: "com.locationsharing.livelocation.grouplocationshare.sendlocation"
+      applicationId: "com.locationsharing.livelocation.grouplocationsharing"
       icon: "assets/images/logo/rounded_logo.png"
       firebase:
         config: "android/app/src/prod/google-services.json"

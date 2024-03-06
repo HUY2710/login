@@ -49,7 +49,7 @@
   "has": "hat",
   "next": "Weiter",
   "titlePermission": "Gruppenfreigabe erfordert Berechtigungen",
-  "subLocation": "Diese App sammelt Standortdaten, um die Funktion zum Aktualisieren Ihres Standorts für andere zu ermöglichen, die Sie verfolgen, selbst wenn die App geschlossen oder nicht in Benutzung ist.",
+  "subLocation": "Diese App sammelt Standortdaten, um Ihren Standort in Echtzeit zu aktualisieren und Ihren Freunden oder Ihrer Familie zu helfen, Sie sicher zu verfolgen, auch wenn die App geschlossen ist oder nicht verwendet wird.",
   "permissionsGreate": "Großartig! Ändern Sie nun zu „Immer zulassen“.",
   "allowLocationPermission": "Erlauben Sie „Gruppenfreigabe“, auch Ihren Standort zu erfassen, selbst wenn Sie die App nicht verwenden?",
   "location": "Ort",

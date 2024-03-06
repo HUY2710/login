@@ -42,7 +42,7 @@
   "next": "Next",
   "titlePermission": "Group sharing requires permissions",
   "location": "Location",
-  "subLocation": "This app collects location data to enable feature update your location for others, who are tracking you, even when the app is closed or not in use.",
+  "subLocation": "This app collects location data to update your location in real-time and helps your friends or family track to make you safe, even when the app is closed or not in use.",
   "notification": "Notification",
   "subNotification": "Stay up to date with subscriptions, alerts and messages from your group.",
   "motionTracking": "Motion tracking",
@@ -179,7 +179,7 @@
   "code": "Code",
   "qrCode": "QR code",
   "savePicture": "Save Picture",
-  "uploadPhoto": "Upload photo" ,
+  "uploadPhoto": "Upload photo",
   "joinGroupQr": "Join with QR code",
   "invalidQrCode": "Invalid QR code",
   "pleaseCheckQrCode": "Please check your QR code again"
