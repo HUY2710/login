@@ -67,6 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
             style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
           ),
         ),
+        resizeToAvoidBottomInset: false,
         body: BlocBuilder<GroupCubit, GroupState>(
           bloc: getIt<GroupCubit>(),
           // listener: (context, state) {
