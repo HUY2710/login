@@ -18,14 +18,12 @@ class HomeScreen extends StatelessWidget {
 
   final Map<String, double>? latLng;
   Widget _buildAd() {
-    final bool isShow = RemoteConfigManager.instance
-        .isShowAd(AdRemoteKeys.banner_collapse_home);
     return BlocBuilder<BannerCollapseAdCubit, bool>(
       bloc: getIt<BannerCollapseAdCubit>(),
       builder: (context, state) {
         return Visibility(
           maintainState: true,
-          visible: state && isShow,
+          visible: state,
           child: MyBannerAd(
             id: getIt<AppAdIdManager>().adUnitId.bannerCollapseHome,
             isCollapsible: true,
@@ -37,13 +35,16 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isShow = RemoteConfigManager.instance
+        .isShowAd(AdRemoteKeys.banner_collapse_home);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      bottomNavigationBar: _buildAd(),
+      bottomNavigationBar: isShow ? _buildAd() : null,
       body: Stack(
         children: [
           MapScreen(
             latLng: latLng,
+            showAd: isShow,
           ),
           Positioned(
             top: ScreenUtil().statusBarHeight == 0

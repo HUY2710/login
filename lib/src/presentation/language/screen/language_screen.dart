@@ -58,6 +58,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 56.h,
+          elevation: 0,
+          scrolledUnderElevation: 0,
           leading: (widget.isFirst == null || widget.isFirst == false)
               ? Center(
                   child: GestureDetector(

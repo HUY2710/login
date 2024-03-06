@@ -13,6 +13,7 @@ import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/extension/context_extension.dart';
+import '../../home/cubit/banner_collapse_cubit.dart';
 import '../../home/widgets/bottom_sheet/invite_code.dart';
 import '../../home/widgets/bottom_sheet/members/members.dart';
 import '../../home/widgets/bottom_sheet/places/places_bottom_sheet.dart';
@@ -68,10 +69,16 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
                       Fluttertoast.showToast(msg: context.l10n.joinAGroup);
                       return;
                     }
-                  : () => showAppModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (context) => InviteCode(code: state.passCode)),
+                  : () {
+                      getIt<BannerCollapseAdCubit>().update(false);
+                      showAppModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) =>
+                              InviteCode(code: state.passCode)).then(
+                        (value) => getIt<BannerCollapseAdCubit>().update(true),
+                      );
+                    },
               Assets.icons.icAddMember.path,
             );
           },
@@ -83,6 +90,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
               Fluttertoast.showToast(msg: context.l10n.joinAGroup);
               return;
             }
+            getIt<BannerCollapseAdCubit>().update(false);
             showAppModalBottomSheet(
               context: context,
               builder: (context) {
@@ -91,7 +99,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
                   goToUserLocation: (user) => _goToMemberLocation(user),
                 );
               },
-            );
+            ).then((value) => getIt<BannerCollapseAdCubit>().update(true));
           },
           Assets.icons.icPeople.path,
         ),
@@ -101,11 +109,12 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
             Fluttertoast.showToast(msg: context.l10n.joinAGroup);
             return;
           }
+          getIt<BannerCollapseAdCubit>().update(false);
           showAppModalBottomSheet(
             context: context,
             isScrollControlled: true,
             builder: (context) => const PlacesBottomSheet(),
-          );
+          ).then((value) => getIt<BannerCollapseAdCubit>().update(true));
         }, Assets.icons.icPlace.path),
       ],
     );
@@ -118,7 +127,8 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
         padding: EdgeInsets.all(10.r),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
+          borderRadius:
+              BorderRadius.circular(AppConstants.widgetBorderRadius.r),
           boxShadow: [
             BoxShadow(
               color: const Color(0xff42474C).withOpacity(0.3),

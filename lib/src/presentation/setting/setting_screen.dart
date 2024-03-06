@@ -10,7 +10,13 @@ import 'package:marquee/marquee.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../app/cubit/native_ad_status_cubit.dart';
+import '../../../module/admob/app_ad_id_manager.dart';
+import '../../../module/admob/enum/ad_remote_key.dart';
+import '../../../module/admob/widget/ads/banner_ad.dart';
+import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
+import '../../config/remote_config.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
@@ -63,10 +69,27 @@ class _SettingScreenState extends State<SettingScreen> {
     }
   }
 
+  Widget? buildAd() {
+    final bool isShow =
+        RemoteConfigManager.instance.isShowAd(AdRemoteKeys.banner_all);
+    return BlocBuilder<NativeAdStatusCubit, bool>(
+      builder: (context, state) {
+        return Visibility(
+          maintainState: true,
+          visible: state && isShow,
+          child: MyBannerAd(
+            id: getIt<AppAdIdManager>().adUnitId.bannerAll,
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: context.l10n.settings),
+      bottomNavigationBar: buildAd(),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),

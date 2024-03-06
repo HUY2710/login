@@ -90,6 +90,9 @@ class _SplashScreenState extends State<SplashScreen> with PermissionMixin {
     await loadAdUnitId();
     await configureAd();
     Global.instance.packageInfo = await PackageInfo.fromPlatform();
+    await getMe();
+    await checkInGroup();
+    await getIt<TrackingHistoryPlaceService>().initGroups();
     if (EasyAds.instance.hasInternet) {
       await initUpgrader();
     } else {
@@ -185,9 +188,6 @@ class _SplashScreenState extends State<SplashScreen> with PermissionMixin {
   }
 
   Future<void> setInitScreen() async {
-    await getMe();
-    await checkInGroup();
-    await getIt<TrackingHistoryPlaceService>().initGroups();
     final bool isFirstLaunch =
         await SharedPreferencesManager.getIsFirstLaunch();
     final bool isPermissionAllow = await checkPermissionLocation();

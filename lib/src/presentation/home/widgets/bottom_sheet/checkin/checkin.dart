@@ -6,12 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../../../module/iap/my_purchase_manager.dart';
+import '../../../../../config/di/di.dart';
 import '../../../../../config/navigation/app_router.dart';
 import '../../../../../gen/assets.gen.dart';
 import '../../../../../shared/constants/app_constants.dart';
 import '../../../../../shared/extension/context_extension.dart';
 import '../../../../../shared/widgets/containers/shadow_container.dart';
 import '../../../../../shared/widgets/custom_inkwell.dart';
+import '../../../cubit/banner_collapse_cubit.dart';
 import '../show_bottom_sheet_home.dart';
 import 'checkin_location.dart';
 
@@ -27,10 +29,11 @@ class CheckInWidget extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
+              getIt<BannerCollapseAdCubit>().update(false);
               showAppModalBottomSheet(
                 context: context,
                 builder: (context) => const CheckInLocation(),
-              );
+              ).then((value) => getIt<BannerCollapseAdCubit>().update(true));
             },
             child: ShadowContainer(
               borderRadius:

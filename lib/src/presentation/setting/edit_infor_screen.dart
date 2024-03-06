@@ -6,9 +6,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../app/cubit/loading_cubit.dart';
+import '../../../app/cubit/native_ad_status_cubit.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
 import '../../../module/admob/enum/ad_remote_key.dart';
 import '../../../module/admob/utils/inter_ad_util.dart';
+import '../../../module/admob/widget/ads/small_native_ad.dart';
 import '../../config/di/di.dart';
 import '../../config/remote_config.dart';
 import '../../data/local/avatar/avatar_repository.dart';
@@ -120,8 +122,8 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
           final bool isShowInterAd = RemoteConfigManager.instance
               .isShowAd(AdRemoteKeys.inter_edit_profile);
           if (isShowInterAd) {
-            await InterAdUtil.instance
-                .showInterAd(id: getIt<AppAdIdManager>().adUnitId.interMessage);
+            await InterAdUtil.instance.showInterAd(
+                id: getIt<AppAdIdManager>().adUnitId.interMessage, time: 0);
           }
           if (context.mounted) {
             context.popRoute(true);
@@ -133,6 +135,22 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
         Fluttertoast.showToast(msg: context.l10n.error);
       }
     }
+  }
+
+  Widget buildAd() {
+    final bool isShow =
+        RemoteConfigManager.instance.isShowAd(AdRemoteKeys.native_edit);
+    return BlocBuilder<NativeAdStatusCubit, bool>(
+      builder: (context, state) {
+        return Visibility(
+          maintainState: true,
+          visible: state && isShow,
+          child: SmallNativeAd(
+            unitId: getIt<AppAdIdManager>().adUnitId.nativeEdit,
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -147,61 +165,65 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
           isEnable: userNameCtrl.text.trim().isNotEmpty,
         ),
       ),
-      body: Column(
-        children: [
-          70.verticalSpace,
-          Stack(
-            children: [
-              BlocBuilder<ValueCubit<String>, String>(
-                bloc: pathAvatarCubit,
-                builder: (context, state) {
-                  return Hero(
-                    tag: 'editAvatar',
-                    child: CircleAvatar(
-                      radius: 75,
-                      backgroundImage: AssetImage(state),
-                    ),
-                  );
-                },
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    showDialogAvatar();
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            30.verticalSpace,
+            Stack(
+              children: [
+                BlocBuilder<ValueCubit<String>, String>(
+                  bloc: pathAvatarCubit,
+                  builder: (context, state) {
+                    return Hero(
+                      tag: 'editAvatar',
+                      child: CircleAvatar(
+                        radius: 75,
+                        backgroundImage: AssetImage(state),
+                      ),
+                    );
                   },
-                  child: ShadowContainer(
-                    padding: EdgeInsets.all(8.r),
-                    child: SvgPicture.asset(Assets.icons.icEdit.path),
-                  ),
                 ),
-              )
-            ],
-          ),
-          36.verticalSpace,
-          ShadowContainer(
-            padding: EdgeInsets.symmetric(vertical: 14.h),
-            margin: EdgeInsets.symmetric(horizontal: 16.w),
-            borderRadius: BorderRadius.all(Radius.circular(20.r)),
-            colorShadow: const Color(0xff9C747D).withOpacity(0.17),
-            child: TextField(
-              controller: userNameCtrl,
-              cursorColor: MyColors.primary,
-              textAlign: TextAlign.center,
-              onChanged: (value) {
-                setState(() {
-                  userNameCtrl.text = value;
-                });
-              },
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                filled: false,
-                isDense: true,
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialogAvatar();
+                    },
+                    child: ShadowContainer(
+                      padding: EdgeInsets.all(8.r),
+                      child: SvgPicture.asset(Assets.icons.icEdit.path),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            36.verticalSpace,
+            ShadowContainer(
+              padding: EdgeInsets.symmetric(vertical: 14.h),
+              margin: EdgeInsets.symmetric(horizontal: 16.w),
+              borderRadius: BorderRadius.all(Radius.circular(20.r)),
+              colorShadow: const Color(0xff9C747D).withOpacity(0.17),
+              child: TextField(
+                controller: userNameCtrl,
+                cursorColor: MyColors.primary,
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  setState(() {
+                    userNameCtrl.text = value;
+                  });
+                },
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  filled: false,
+                  isDense: true,
+                ),
               ),
             ),
-          ),
-        ],
+            6.verticalSpace,
+            buildAd()
+          ],
+        ),
       ),
     );
   }

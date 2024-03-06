@@ -23,6 +23,7 @@ import '../../../../../shared/extension/context_extension.dart';
 import '../../../../../shared/widgets/main_switch.dart';
 import '../../../../../shared/widgets/my_drag.dart';
 import '../../../../map/cubit/select_group_cubit.dart';
+import '../../../cubit/banner_collapse_cubit.dart';
 import '../../../cubit/my_list_group/my_list_group_cubit.dart';
 import '../../dialog/action_dialog.dart';
 import '../create_edit_group.dart';
@@ -81,21 +82,23 @@ class ActionGroupBottomSheet extends StatelessWidget {
                         .navigatorKey
                         .currentContext!
                         .popRoute()
-                        .then(
-                          (value) => showAppModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (context) => Padding(
-                              padding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom,
-                              ),
-                              child: CreateEditGroup(
-                                detailGroup: itemGroup,
-                              ),
-                            ),
+                        .then((value) {
+                      getIt<BannerCollapseAdCubit>().update(false);
+                      showAppModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) => Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom,
                           ),
-                        );
+                          child: CreateEditGroup(
+                            detailGroup: itemGroup,
+                          ),
+                        ),
+                      ).then(
+                        (value) => getIt<BannerCollapseAdCubit>().update(false),
+                      );
+                    });
                   });
                 },
                 child: itemAction(
@@ -214,10 +217,12 @@ class ActionGroupBottomSheet extends StatelessWidget {
                     //update sever
                     if (value) {
                       //đăng kí nhận lắng nghe thông báo
-                      TokenManager.updateGroupNotification(false, itemGroup.idGroup!);
+                      TokenManager.updateGroupNotification(
+                          false, itemGroup.idGroup!);
                     } else {
                       //hủy thông báo
-                      TokenManager.updateGroupNotification(true, itemGroup.idGroup!);
+                      TokenManager.updateGroupNotification(
+                          true, itemGroup.idGroup!);
                     }
                     FirestoreClient.instance.updateNotifyGroupEachMember(
                       idGroup: getIt<SelectGroupCubit>().state!.idGroup!,

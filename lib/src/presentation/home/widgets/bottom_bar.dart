@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:marquee/marquee.dart';
 
@@ -29,6 +28,7 @@ import '../../map/cubit/select_group_cubit.dart';
 import '../../map/cubit/tracking_location/tracking_location_cubit.dart';
 import '../../map/cubit/tracking_members/tracking_member_cubit.dart';
 import '../../map/cubit/user_map_visibility/user_map_visibility_cubit.dart';
+import '../cubit/banner_collapse_cubit.dart';
 import 'bottom_sheet/show_bottom_sheet_home.dart';
 import 'group/group_bottom_sheet.dart';
 import 'visibility_member_map.dart';
@@ -144,10 +144,12 @@ class _BottomBarState extends State<BottomBar> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
+                    getIt<BannerCollapseAdCubit>().update(false);
                     showAppModalBottomSheet(
                       context: context,
                       builder: (context) => const GroupBottomSheet(),
-                    );
+                    ).then(
+                        (value) => getIt<BannerCollapseAdCubit>().update(true));
                   },
                   child: ShadowContainer(
                     borderRadius: BorderRadius.circular(

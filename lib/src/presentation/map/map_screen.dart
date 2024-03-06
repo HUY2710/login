@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_lifecycle_detector/flutter_lifecycle_detector.dart';
@@ -23,6 +24,7 @@ import '../../shared/constants/app_constants.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../chat/cubits/group_cubit.dart';
+import '../home/cubit/banner_collapse_cubit.dart';
 import '../home/widgets/bottom_bar.dart';
 import '../permission/widget/permission_home_android.dart';
 import '../permission/widget/permission_home_ios.dart';
@@ -39,9 +41,10 @@ import 'widgets/member_marker_list.dart';
 import 'widgets/place_mark_list.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key, this.latLng});
+  const MapScreen({super.key, this.latLng, required this.showAd});
 
   final Map<String, double>? latLng;
+  final bool showAd;
 
   @override
   State<MapScreen> createState() => MapScreenState();
@@ -143,6 +146,7 @@ class MapScreenState extends State<MapScreen>
       _listenBackGroundMode();
     } else {
       if (context.mounted) {
+        getIt<BannerCollapseAdCubit>().update(false);
         await showDialog(
             context: context,
             builder: (context1) {
@@ -168,6 +172,8 @@ class MapScreenState extends State<MapScreen>
                   final rejectAlway =
                       await Permission.locationAlways.isPermanentlyDenied;
                   if (rejectAlway) {
+                    EasyAds.instance.appLifecycleReactor
+                        ?.setIsExcludeScreen(true);
                     openAppSettings();
                   }
                   final status = await Permission.locationAlways.request();
@@ -177,7 +183,7 @@ class MapScreenState extends State<MapScreen>
                 },
                 confirmText: context.l10n.goToSettings,
               );
-            });
+            }).then((value) => getIt<BannerCollapseAdCubit>().update(true));
       }
     }
   }
@@ -194,205 +200,199 @@ class MapScreenState extends State<MapScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Align(
-              child: BlocBuilder<TrackingMemberCubit, TrackingMemberState>(
-                bloc: _trackingMemberCubit,
-                builder: (context, state) {
-                  return state.maybeWhen(
-                    orElse: () => const SizedBox(),
-                    initial: () {
-                      return const SizedBox();
-                    },
-                    success: (List<StoreUser> users) {
-                      debugPrint('listUser:${users.length}');
-                      if (users.isNotEmpty) {
-                        return MemberMarkerList(
-                          key: ValueKey(getIt<SelectGroupCubit>().state),
-                          trackingMemberCubit: _trackingMemberCubit,
-                        );
-                      }
-                      return const SizedBox();
-                    },
-                  );
-                  // return MemberMarkerList(
-                  //   key: ValueKey(getIt<SelectGroupCubit>().state),
-                  //   trackingMemberCubit: _trackingMemberCubit,
-                  // );
-                },
-              ),
+    debugPrint('height:$kBottomNavigationBarHeight');
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Align(
+            child: BlocBuilder<TrackingMemberCubit, TrackingMemberState>(
+              bloc: _trackingMemberCubit,
+              builder: (context, state) {
+                return state.maybeWhen(
+                  orElse: () => const SizedBox(),
+                  initial: () {
+                    return const SizedBox();
+                  },
+                  success: (List<StoreUser> users) {
+                    debugPrint('listUser:${users.length}');
+                    if (users.isNotEmpty) {
+                      return MemberMarkerList(
+                        key: ValueKey(getIt<SelectGroupCubit>().state),
+                        trackingMemberCubit: _trackingMemberCubit,
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                );
+              },
             ),
           ),
-          Positioned.fill(
-            child: Align(
-              child: BlocBuilder<TrackingPlacesCubit, TrackingPlacesState>(
-                bloc: _trackingPlacesCubit,
-                builder: (context, state) {
-                  return state.maybeWhen(
-                    orElse: () => const SizedBox(),
-                    initial: () {
-                      return const SizedBox();
-                    },
-                    success: (List<StorePlace> places) {
-                      if (places.isNotEmpty) {
-                        return PlacesMarkerList(
-                          trackingPlacesCubit: _trackingPlacesCubit,
-                        );
-                      }
-                      return const SizedBox();
-                    },
-                  );
-                },
-              ),
+        ),
+        Positioned.fill(
+          child: Align(
+            child: BlocBuilder<TrackingPlacesCubit, TrackingPlacesState>(
+              bloc: _trackingPlacesCubit,
+              builder: (context, state) {
+                return state.maybeWhen(
+                  orElse: () => const SizedBox(),
+                  initial: () {
+                    return const SizedBox();
+                  },
+                  success: (List<StorePlace> places) {
+                    if (places.isNotEmpty) {
+                      return PlacesMarkerList(
+                        trackingPlacesCubit: _trackingPlacesCubit,
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                );
+              },
             ),
           ),
-          Positioned.fill(
-            child: Container(color: Colors.white),
-          ),
-          BlocConsumer<TrackingLocationCubit, TrackingLocationState>(
-            bloc: _trackingLocationCubit,
-            listener: _listenLocationCubit,
-            builder: (context, locationState) {
-              return BlocConsumer<SelectGroupCubit, StoreGroup?>(
-                bloc: getIt<SelectGroupCubit>(),
-                listenWhen: (previous, current) =>
-                    previous?.idGroup != current?.idGroup,
-                listener: (context, state) async {
-                  //thoát nhóm hoặc chưa chọn nhóm
-                  if (state == null) {
-                    _trackingMemberCubit.disposeGroupSubscription();
-                    _trackingMemberCubit.disposeMarkerSubscription();
-                    _trackingMemberCubit.resetData();
-                    _trackingPlacesCubit.resetData();
-                  } else {
-                    _trackingMemberCubit.initTrackingMember();
-                    _trackingPlacesCubit.initTrackingPlaces();
-                    getIt<UserMapVisibilityCubit>().updateList([]);
-                  }
-                },
-                buildWhen: (previous, current) =>
-                    previous?.idGroup != current?.idGroup,
-                builder: (context, state) {
-                  return BlocConsumer<TrackingMemberCubit, TrackingMemberState>(
-                    bloc: _trackingMemberCubit,
-                    listener: (context, state) async {
-                      final mapController = await _mapController.future;
-                      mapController
-                          .getVisibleRegion()
-                          .then((visibleRegion) async {
-                        state.maybeWhen(
-                          orElse: () {},
-                          initial: () {},
-                          success: (List<StoreUser> members) {
-                            final List<StoreUser> temp = List.from(
-                                getIt<UserMapVisibilityCubit>().state ?? []);
-                            for (final member in members) {
-                              StoreUser tempMember = member;
-                              final memberExists = temp.indexWhere(
-                                  (element) => element.code == member.code);
-                              if (member.location == null &&
-                                  member.code != Global.instance.userCode) {
-                                return;
-                              }
+        ),
+        Positioned.fill(
+          child: Container(color: Colors.white),
+        ),
+        BlocConsumer<TrackingLocationCubit, TrackingLocationState>(
+          bloc: _trackingLocationCubit,
+          listener: _listenLocationCubit,
+          builder: (context, locationState) {
+            return BlocConsumer<SelectGroupCubit, StoreGroup?>(
+              bloc: getIt<SelectGroupCubit>(),
+              listenWhen: (previous, current) =>
+                  previous?.idGroup != current?.idGroup,
+              listener: (context, state) async {
+                //thoát nhóm hoặc chưa chọn nhóm
+                if (state == null) {
+                  _trackingMemberCubit.disposeGroupSubscription();
+                  _trackingMemberCubit.disposeMarkerSubscription();
+                  _trackingMemberCubit.resetData();
+                  _trackingPlacesCubit.resetData();
+                } else {
+                  _trackingMemberCubit.initTrackingMember();
+                  _trackingPlacesCubit.initTrackingPlaces();
+                  getIt<UserMapVisibilityCubit>().updateList([]);
+                }
+              },
+              buildWhen: (previous, current) =>
+                  previous?.idGroup != current?.idGroup,
+              builder: (context, state) {
+                return BlocConsumer<TrackingMemberCubit, TrackingMemberState>(
+                  bloc: _trackingMemberCubit,
+                  listener: (context, state) async {
+                    final mapController = await _mapController.future;
+                    mapController
+                        .getVisibleRegion()
+                        .then((visibleRegion) async {
+                      state.maybeWhen(
+                        orElse: () {},
+                        initial: () {},
+                        success: (List<StoreUser> members) {
+                          final List<StoreUser> temp = List.from(
+                              getIt<UserMapVisibilityCubit>().state ?? []);
+                          for (final member in members) {
+                            StoreUser tempMember = member;
+                            final memberExists = temp.indexWhere(
+                                (element) => element.code == member.code);
+                            if (member.location == null &&
+                                member.code != Global.instance.userCode) {
+                              return;
+                            }
 
-                              final LatLng latLngMember = LatLng(
-                                  member.location?.lat ?? 0,
-                                  member.location?.lng ?? 0);
-                              if (!visibleRegion.contains(
-                                  member.code == Global.instance.userCode
-                                      ? Global.instance.currentLocation
-                                      : latLngMember)) {
-                                if (memberExists == -1) {
-                                  if (member.code == Global.instance.userCode) {
-                                    tempMember = member.copyWith(
-                                      location: StoreLocation(
-                                        address: '',
-                                        lat: Global
-                                            .instance.currentLocation.latitude,
-                                        lng: Global
-                                            .instance.currentLocation.longitude,
-                                        updatedAt: DateTime.now(),
-                                      ),
-                                    );
-                                    temp.add(tempMember);
-                                  } else {
-                                    temp.add(member);
-                                  }
+                            final LatLng latLngMember = LatLng(
+                                member.location?.lat ?? 0,
+                                member.location?.lng ?? 0);
+                            if (!visibleRegion.contains(
+                                member.code == Global.instance.userCode
+                                    ? Global.instance.currentLocation
+                                    : latLngMember)) {
+                              if (memberExists == -1) {
+                                if (member.code == Global.instance.userCode) {
+                                  tempMember = member.copyWith(
+                                    location: StoreLocation(
+                                      address: '',
+                                      lat: Global
+                                          .instance.currentLocation.latitude,
+                                      lng: Global
+                                          .instance.currentLocation.longitude,
+                                      updatedAt: DateTime.now(),
+                                    ),
+                                  );
+                                  temp.add(tempMember);
+                                } else {
+                                  temp.add(member);
                                 }
-                              } else {
-                                if (memberExists != -1) {
-                                  temp.removeAt(memberExists);
-                                }
+                              }
+                            } else {
+                              if (memberExists != -1) {
+                                temp.removeAt(memberExists);
                               }
                             }
-                            getIt<UserMapVisibilityCubit>()
-                                .updateList([...temp]);
-                          },
-                        );
-                      });
-                    },
-                    builder: (context, trackingMemberState) {
-                      return BlocBuilder<MapTypeCubit, MapType>(
-                        bloc: _mapTypeCubit,
-                        builder: (context, MapType mapTypeState) {
-                          return BlocBuilder<TrackingPlacesCubit,
-                              TrackingPlacesState>(
-                            bloc: _trackingPlacesCubit,
-                            builder: (context, trackingPlacesState) {
-                              return BlocBuilder<TrackingRoutesCubit,
-                                  Set<Polyline>?>(
-                                bloc: getIt<TrackingRoutesCubit>(),
-                                builder: (context, polylinesState) {
-                                  return CustomMap(
-                                    defaultLocation: _defaultLocation,
-                                    trackingLocationState: locationState,
-                                    mapController: _mapController,
-                                    mapType: mapTypeState,
-                                    marker: marker,
-                                    trackingMemberState: trackingMemberState,
-                                    trackingPlacesState: trackingPlacesState,
-                                    polylines: polylinesState,
-                                  );
-                                },
-                              );
-                            },
-                          );
+                          }
+                          getIt<UserMapVisibilityCubit>().updateList([...temp]);
                         },
                       );
-                    },
-                  );
-                },
-              );
-            },
+                    });
+                  },
+                  builder: (context, trackingMemberState) {
+                    return BlocBuilder<MapTypeCubit, MapType>(
+                      bloc: _mapTypeCubit,
+                      builder: (context, MapType mapTypeState) {
+                        return BlocBuilder<TrackingPlacesCubit,
+                            TrackingPlacesState>(
+                          bloc: _trackingPlacesCubit,
+                          builder: (context, trackingPlacesState) {
+                            return BlocBuilder<TrackingRoutesCubit,
+                                Set<Polyline>?>(
+                              bloc: getIt<TrackingRoutesCubit>(),
+                              builder: (context, polylinesState) {
+                                return CustomMap(
+                                  defaultLocation: _defaultLocation,
+                                  trackingLocationState: locationState,
+                                  mapController: _mapController,
+                                  mapType: mapTypeState,
+                                  marker: marker,
+                                  trackingMemberState: trackingMemberState,
+                                  trackingPlacesState: trackingPlacesState,
+                                  polylines: polylinesState,
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          },
+        ),
+        Positioned(
+          top: ScreenUtil().statusBarHeight == 0
+              ? 20.h
+              : ScreenUtil().statusBarHeight,
+          right: 16.w,
+          bottom: 0,
+          child: FloatRightAppBar(
+            locationListenCubit: _trackingLocationCubit,
+            trackingMemberCubit: _trackingMemberCubit,
+            mapController: _mapController,
           ),
-          Positioned(
-            top: ScreenUtil().statusBarHeight == 0
-                ? 20.h
-                : ScreenUtil().statusBarHeight,
-            right: 16.w,
-            bottom: 0,
-            child: FloatRightAppBar(
-              locationListenCubit: _trackingLocationCubit,
-              trackingMemberCubit: _trackingMemberCubit,
-              mapController: _mapController,
-            ),
+        ),
+        Positioned(
+          bottom: widget.showAd ? 10.h : 50.h,
+          left: 16.w,
+          right: 16.w,
+          child: BottomBar(
+            locationListenCubit: _trackingLocationCubit,
+            mapController: _mapController,
+            trackingMemberCubit: _trackingMemberCubit,
+            moveToLocationUser: _moveToCurrentLocation,
           ),
-          Positioned(
-            bottom: 55.h,
-            left: 16.w,
-            right: 16.w,
-            child: BottomBar(
-              locationListenCubit: _trackingLocationCubit,
-              mapController: _mapController,
-              trackingMemberCubit: _trackingMemberCubit,
-              moveToLocationUser: _moveToCurrentLocation,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
