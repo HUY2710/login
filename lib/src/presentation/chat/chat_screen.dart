@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../app/cubit/language_cubit.dart';
+import '../../../module/admob/widget/ads/build_banner_ad.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../data/models/store_group/store_group.dart';
@@ -85,76 +86,82 @@ class _ChatScreenState extends State<ChatScreen> {
                     bloc: getIt<GroupCubit>(),
                     listenWhen: (previous, current) => previous != current,
                     listener: (context, state) {},
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          12.h.verticalSpace,
-                          InputSearch(textController: textController),
-                          30.h.verticalSpace,
-                          Text(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        12.h.verticalSpace,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: InputSearch(textController: textController),
+                        ),
+                        30.h.verticalSpace,
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: Text(
                             context.l10n.group,
                             style: TextStyle(
                                 color: MyColors.black34,
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w500),
                           ),
-                          10.h.verticalSpace,
-                          BlocBuilder<SearchGroupCubit, List<StoreGroup>>(
-                            builder: (context, searchState) {
-                              if (textController.text.isNotEmpty) {
-                                if (searchState.isEmpty) {
-                                  return Expanded(
-                                    child: Center(
-                                      child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Assets.images.groupEmpty.image(),
-                                            22.h.verticalSpace,
-                                            Text(
-                                              context.l10n.thereAreNoResults,
-                                              style: TextStyle(
-                                                  fontSize: 13.sp,
-                                                  color: Colors.black),
-                                            )
-                                          ]),
-                                    ),
-                                  );
-                                }
+                        ),
+                        10.h.verticalSpace,
+                        BlocBuilder<SearchGroupCubit, List<StoreGroup>>(
+                          builder: (context, searchState) {
+                            if (textController.text.isNotEmpty) {
+                              if (searchState.isEmpty) {
+                                return Expanded(
+                                  child: Center(
+                                    child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Assets.images.groupEmpty.image(),
+                                          22.h.verticalSpace,
+                                          Text(
+                                            context.l10n.thereAreNoResults,
+                                            style: TextStyle(
+                                                fontSize: 13.sp,
+                                                color: Colors.black),
+                                          )
+                                        ]),
+                                  ),
+                                );
                               }
-                              return Expanded(
-                                child: ListView.separated(
-                                    itemBuilder: (context, index) {
-                                      final groupItem =
-                                          textController.text.isNotEmpty
-                                              ? searchState[index]
-                                              : groups[index];
-                                      return GroupItem(
-                                        userName: groupItem.storeUser!.userName,
-                                        message: convertLastMessage(groupItem),
-                                        time: groupItem.lastMessage!.sentAt,
-                                        avatar: groupItem.avatarGroup,
-                                        groupName: groupItem.groupName,
-                                        idGroup: groupItem.idGroup ?? '',
-                                        seen: groupItem.seen ?? false,
-                                        isAdmin: isAdmin(groupItem),
-                                      );
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return const Divider(
-                                        thickness: 1,
-                                        color: Color(0xffEAEAEA),
-                                      );
-                                    },
-                                    itemCount: textController.text.isNotEmpty
-                                        ? searchState.length
-                                        : groups.length),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                            }
+                            return Expanded(
+                              child: ListView.separated(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 16.w),
+                                  itemBuilder: (context, index) {
+                                    final groupItem =
+                                        textController.text.isNotEmpty
+                                            ? searchState[index]
+                                            : groups[index];
+                                    return GroupItem(
+                                      userName: groupItem.storeUser!.userName,
+                                      message: convertLastMessage(groupItem),
+                                      time: groupItem.lastMessage!.sentAt,
+                                      avatar: groupItem.avatarGroup,
+                                      groupName: groupItem.groupName,
+                                      idGroup: groupItem.idGroup ?? '',
+                                      seen: groupItem.seen ?? false,
+                                      isAdmin: isAdmin(groupItem),
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return const Divider(
+                                      thickness: 1,
+                                      color: Color(0xffEAEAEA),
+                                    );
+                                  },
+                                  itemCount: textController.text.isNotEmpty
+                                      ? searchState.length
+                                      : groups.length),
+                            );
+                          },
+                        ),
+                        if (groups.isNotEmpty) const BuildBannerWidget()
+                      ],
                     ),
                   );
                 });
