@@ -79,7 +79,7 @@ class MapScreenState extends State<MapScreen>
     super.initState();
 
     // getIt<GroupCubit>().initStreamGroupChat();
-    getIt<GroupCubit>().initListenGroup();
+    getIt<GroupCubit>().initStreamGroupChat();
     TokenManager.updateMyFCMToken();
   }
 

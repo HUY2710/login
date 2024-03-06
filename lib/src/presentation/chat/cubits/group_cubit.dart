@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../data/models/store_group/store_group.dart';
+import '../../../data/models/store_message/store_message.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../data/remote/firestore_client.dart';
-import '../../../data/remote/member_manager.dart';
-import '../../../shared/helpers/logger_utils.dart';
+import '../../../global/global.dart';
 import '../services/chat_service.dart';
 import '../utils/util.dart';
 import 'group_state.dart';
@@ -20,12 +20,6 @@ class GroupCubit extends Cubit<GroupState> {
   final ChatService chatService = ChatService.instance;
 
   final List<StoreGroup> myGroups = [];
-
-  List<String> idsMyGroup = [];
-  List<StoreUser> listStoreUser = [];
-
-  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _groupStream;
-  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _userStream;
 
   Future<void> sendMessage(
       {required String content,
@@ -45,175 +39,89 @@ class GroupCubit extends Cubit<GroupState> {
     StoreGroup temp = myGroups[index];
     temp = myGroups[index].copyWith(seen: false);
     myGroups[index] = temp;
+    sortGroup();
     emit(GroupState.success(myGroups));
   }
 
-  Future<void> initStreamUser() async {
-    _userStream = chatService.getUser2().listen((user) {
-      if (user.docs.isNotEmpty) {
-        final List<String> myListIdGroup = user.docs.map((e) => e.id).toList();
-
-        idsMyGroup = myListIdGroup.map((e) => e).toList();
-      }
-    });
-  }
-
   Future<void> initStreamGroupChat() async {
-    _userStream = ChatService.instance.getUser2().listen((userSnapshot) async {
-      if (userSnapshot.docs.isEmpty) {
-        emit(const GroupState.initial());
-      } else {
-        //get all my group of user
-        // lấy ra tất cả các id group trong myGroup collection user
-        final List<String> myListIdGroup =
-            userSnapshot.docs.map((e) => e.id).toList();
-        idsMyGroup = myListIdGroup.map((e) => e).toList();
-        myGroups.clear();
-        //lấy thông tin group
-        _groupStream = chatService
-            .getMyGroupChat2(idsMyGroup)
-            .listen((QuerySnapshot<Map<String, dynamic>> snapshot) async {
-          //lấy ra id của user trong collection Group
-          final listIdUser =
-              await ChatService.instance.getListIdUserFromLastMessage();
-          //lấy ra thông tin user từ các lasstMessage của group
-          listStoreUser = await chatService.getUserFromListId(listIdUser);
-          if (snapshot.docs.isNotEmpty) {
-            for (final change in snapshot.docChanges) {
-              if (change.type == DocumentChangeType.modified) {
-                emit(const GroupState.loading());
-                // lấy ra index của group đang bị thay đổi dưới local
-                final index =
-                    myGroups.indexWhere((e) => e.idGroup == change.doc.id);
-
-                StoreGroup storeGroup = StoreGroup.fromJson(change.doc.data()!);
-                // lấy ra thông tin user từ collection Users
-                final storeUser = listStoreUser.firstWhere(
-                  (storeUser) =>
-                      storeUser.code == storeGroup.lastMessage!.senderId,
-                );
-                // kiểm tra thời gian đã xem từ local
-                final seen = await Utils.getSeenMess(
-                    change.doc.id, storeGroup.lastMessage!.sentAt);
-                // gán vào group state
-                storeGroup =
-                    storeGroup.copyWith(storeUser: storeUser, seen: seen);
-                if (index < myGroups.length) {
-                  myGroups[index] = storeGroup;
-                }
-                emit(GroupState.success(myGroups));
-              }
-              if (change.type == DocumentChangeType.removed) {
-                emit(const GroupState.loading());
-                final index =
-                    myGroups.indexWhere((e) => e.idGroup == change.doc.id);
-                myGroups.removeAt(index);
-                emit(GroupState.success(myGroups));
-              }
-              if (change.type == DocumentChangeType.added) {
-                emit(const GroupState.loading());
-                StoreGroup storeGroup = StoreGroup.fromJson(change.doc.data()!);
-                final memberOfGroup =
-                    await MemberManager.getListMemberOfGroup(change.doc.id);
-                storeGroup = storeGroup.copyWith(
-                    storeUser: listStoreUser.firstWhere(
-                      (storeUser) =>
-                          storeUser.code == storeGroup.lastMessage!.senderId,
-                    ),
-                    storeMembers: memberOfGroup);
-                myGroups.add(storeGroup);
-                emit(GroupState.success(myGroups));
-              }
-            }
-            if (myGroups.isEmpty) {
-              emit(const GroupState.initial());
-            } else {
-              emit(GroupState.success(myGroups));
-            }
-          } else {
-            emit(const GroupState.initial());
-          }
-        });
-      }
-    });
-  }
-
-  Future<void> initListenGroup() async {
+    myGroups.clear();
     chatService.getUser2().listen((groupOfUser) async {
       if (groupOfUser.docs.isEmpty) {
         emit(const GroupState.initial());
       } else {
+        // lắng nghe mygroup trong collection user
         for (final groupChange in groupOfUser.docChanges) {
+          StoreGroup? storeGroup =
+              await FirestoreClient.instance.getDetailGroup(groupChange.doc.id);
           switch (groupChange.type) {
             case DocumentChangeType.added:
-              StoreGroup? storeGroup = await FirestoreClient.instance
-                  .getDetailGroup(groupChange.doc.id);
-              logger.e(storeGroup);
               if (storeGroup != null) {
                 storeGroup = storeGroup.copyWith(
                     groupSubscription: _listenGroupUpdate(storeGroup));
+                myGroups.add(storeGroup);
               }
               break;
-            case DocumentChangeType.modified:
-              break;
             case DocumentChangeType.removed:
+              if (storeGroup != null) {
+                final index = myGroups
+                    .indexWhere((group) => group.idGroup == groupChange.doc.id);
+                myGroups.removeAt(index);
+              }
               break;
             default:
           }
+        }
+        if (myGroups.isEmpty) {
+          emit(const GroupState.initial());
+        } else {
+          sortGroup();
+          emit(GroupState.success(myGroups));
         }
       }
     });
   }
 
-  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _listenGroupUpdate(
-      StoreGroup storeGroup) {
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>?
+      _listenGroupUpdate(StoreGroup storeGroup) {
     final subscription = chatService
         .streamGroupChat(storeGroup.idGroup!)
         .listen((snapshot) async {
-      for (final groupSnap in snapshot.docChanges) {
-        final listIdUser =
-            await ChatService.instance.getListIdUserFromLastMessage();
-        //lấy ra thông tin user từ các lasstMessage của group
-        listStoreUser = await chatService.getUserFromListId(listIdUser);
-        switch (groupSnap.type) {
-          case DocumentChangeType.modified:
-            final index =
-                myGroups.indexWhere((e) => e.idGroup == groupSnap.doc.id);
-
-            StoreGroup storeGroup = StoreGroup.fromJson(groupSnap.doc.data()!);
-            // lấy ra thông tin user từ collection Users
-            final storeUser = listStoreUser.firstWhere(
-              (storeUser) => storeUser.code == storeGroup.lastMessage!.senderId,
-            );
-            // kiểm tra thời gian đã xem từ local
-            final seen = await Utils.getSeenMess(
-                groupSnap.doc.id, storeGroup.lastMessage!.sentAt);
-            // gán vào group state
-            storeGroup = storeGroup.copyWith(storeUser: storeUser, seen: seen);
-            if (index < myGroups.length) {
-              myGroups[index] = storeGroup;
-            }
-            break;
-          case DocumentChangeType.added:
-            emit(GroupState.loading());
-            storeGroup = storeGroup.copyWith(
-              storeUser: listStoreUser.firstWhere(
-                (storeUser) =>
-                    storeUser.code == storeGroup.lastMessage!.senderId,
-              ),
-            );
-            myGroups.add(storeGroup);
-            emit(GroupState.success(myGroups));
-            break;
-          case DocumentChangeType.removed:
-          // final index =
-          //     myGroups.indexWhere((e) => e.idGroup == groupSnap.doc.id);
-          // myGroups.removeAt(index);
-          // break;
-          default:
-        }
+      // lấy ra group thay đổi
+      final StoreGroup storeGroupTemp = StoreGroup.fromJson(snapshot.data()!);
+      //lấy ra thông tin user từ tin nhắn cuối cùng trong collection group
+      final StoreUser? storeUser = await FirestoreClient.instance
+          .getUser(storeGroupTemp.lastMessage!.senderId);
+      bool seen = false;
+      // người dùng check in thì không kiểm tra đã gửi hay chưa
+      if (storeGroupTemp.lastMessage!.senderId == Global.instance.userCode &&
+          storeGroupTemp.lastMessage!.messageType == MessageType.checkIn) {
+        seen = storeGroup.seen ?? false;
+      } else {
+        seen = await Utils.getSeenMess(
+            storeGroup.idGroup!, storeGroupTemp.lastMessage!.sentAt);
+      }
+      // cập nhật store user, seen và last message cho group
+      storeGroup = storeGroup.copyWith(
+        storeUser: storeUser,
+        seen: seen,
+        lastMessage: storeGroupTemp.lastMessage,
+      );
+      //lấy ra index của group thay đổi dưới local
+      final index = myGroups.indexWhere((e) => e.idGroup == snapshot.id);
+      if (index < myGroups.length) {
+        //cập nhật list group
+        emit(const GroupState.loading());
+        myGroups[index] = storeGroup;
+        // sắp xếp theo group có tin nhắn cuối cùng muộn nhất
+        sortGroup();
+        emit(GroupState.success(myGroups));
       }
     });
     return subscription;
+  }
+
+  void sortGroup() {
+    myGroups
+        .sort((a, b) => b.lastMessage!.sentAt.compareTo(a.lastMessage!.sentAt));
   }
 }

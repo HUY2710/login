@@ -91,7 +91,7 @@ class ChatService {
       final message = MessageModel(
           content: content,
           senderId: user?.code ?? '',
-          sentAt: DateTime.now().toString());
+          sentAt: DateTime.now().toIso8601String());
       try {
         Future.wait([
           CollectionStore.chat
@@ -132,7 +132,7 @@ class ChatService {
       final message = MessageModel(
           content: content,
           senderId: user?.code ?? '',
-          sentAt: DateTime.now().toString(),
+          sentAt: DateTime.now().toIso8601String(),
           lat: lat,
           long: long,
           messageType: isCheckin ? MessageType.checkIn : MessageType.location);
@@ -212,7 +212,8 @@ class ChatService {
         .snapshots();
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> streamGroupChat(String idGroup) {
-    return CollectionStore.groups.where(idGroup).snapshots();
+  Stream<DocumentSnapshot<Map<String, dynamic>>> streamGroupChat(
+      String idGroup) {
+    return CollectionStore.groups.doc(idGroup).snapshots();
   }
 }

@@ -59,8 +59,6 @@ class ChatDetailScreen extends StatefulWidget implements AutoRouteWrapper {
 
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
   List<StoreUser> listUser = [];
-  BitmapDescriptor? marker;
-  final TextEditingController textController = TextEditingController();
 
   @override
   void initState() {
