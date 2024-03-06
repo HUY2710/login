@@ -82,9 +82,9 @@ class ActionGroupBottomSheet extends StatelessWidget {
                         .navigatorKey
                         .currentContext!
                         .popRoute()
-                        .then((value) {
+                        .then((value) async {
                       getIt<BannerCollapseAdCubit>().update(false);
-                      showAppModalBottomSheet(
+                      await showAppModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
                         builder: (context) => Padding(
@@ -96,7 +96,7 @@ class ActionGroupBottomSheet extends StatelessWidget {
                           ),
                         ),
                       ).then(
-                        (value) => getIt<BannerCollapseAdCubit>().update(false),
+                        (value) => getIt<BannerCollapseAdCubit>().update(true),
                       );
                     });
                   });

@@ -49,8 +49,15 @@ class MapTypeScreen extends StatelessWidget {
           return Visibility(
             maintainState: true,
             visible: state && isShow,
-            child: SmallNativeAd(
-              unitId: getIt<AppAdIdManager>().adUnitId.nativeMap,
+            child: Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                  top: BorderSide(color: MyColors.primary),
+                ),
+              ),
+              child: SmallNativeAd(
+                unitId: getIt<AppAdIdManager>().adUnitId.nativeMap,
+              ),
             ),
           );
         },

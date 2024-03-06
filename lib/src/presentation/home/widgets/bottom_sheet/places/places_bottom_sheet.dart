@@ -21,6 +21,7 @@ import '../../../../../shared/widgets/my_drag.dart';
 import '../../../../map/cubit/select_group_cubit.dart';
 import '../../../../map/cubit/tracking_places/tracking_places_cubit.dart';
 import '../../../../place/cubit/default_places_cubit.dart';
+import '../../../cubit/banner_collapse_cubit.dart';
 import '../../dialog/action_dialog.dart';
 import 'widgets/item_place.dart';
 
@@ -153,6 +154,7 @@ class PlacesBottomSheet extends StatelessWidget {
                       id: getIt<AppAdIdManager>().adUnitId.interAddPlace);
                 }
                 if (context.mounted) {
+                  getIt<BannerCollapseAdCubit>().update(true);
                   context.pushRoute(AddPlaceRoute());
                 }
               },
@@ -197,6 +199,7 @@ class PlacesBottomSheet extends StatelessWidget {
                                   .interAddPlace);
                         }
                         if (context.mounted) {
+                          getIt<BannerCollapseAdCubit>().update(true);
                           context.pushRoute(AddPlaceRoute(place: item));
                         }
                       },
@@ -246,6 +249,7 @@ class PlacesBottomSheet extends StatelessWidget {
                                         .interAddPlace);
                               }
                               if (context.mounted) {
+                                getIt<BannerCollapseAdCubit>().update(true);
                                 context.pushRoute(
                                   AddPlaceRoute(
                                     place: places[index],

@@ -13,6 +13,7 @@ import '../../../../shared/widgets/containers/linear_container.dart';
 import '../../../../shared/widgets/custom_inkwell.dart';
 import '../../../../shared/widgets/my_drag.dart';
 import '../../../map/cubit/select_group_cubit.dart';
+import '../../cubit/banner_collapse_cubit.dart';
 import '../../cubit/my_list_group/my_list_group_cubit.dart';
 import '../bottom_sheet/create_edit_group.dart';
 import '../bottom_sheet/join_group.dart';
@@ -57,6 +58,8 @@ class GroupBottomSheet extends StatelessWidget {
                                 child: const CreateEditGroup(),
                               );
                             });
+
+                        getIt<BannerCollapseAdCubit>().update(true);
                       }
                     },
                     child: LinearContainer(
@@ -84,9 +87,11 @@ class GroupBottomSheet extends StatelessWidget {
                       await context.popRoute();
                       if (context.mounted) {
                         showAppModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (context) => const JoinGroupWidget());
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) => const JoinGroupWidget())
+                            .then((value) =>
+                                getIt<BannerCollapseAdCubit>().update(true));
                       }
                     },
                     child: BorderContainer(

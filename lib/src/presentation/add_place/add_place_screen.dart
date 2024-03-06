@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../app/cubit/loading_cubit.dart';
+import '../../../module/admob/widget/ads/build_banner_ad.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../data/models/store_location/store_location.dart';
@@ -124,81 +125,89 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: context.l10n.addPlaces),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 36.h, left: 16.w, right: 16.w),
-        child: BlocBuilder<SelectPlaceCubit, StoreLocation?>(
-          bloc: selectPlaceCubit,
-          builder: (context, state) {
-            return AppButton(
-              title: context.l10n.done,
-              onTap: nameLocationCtrl.text.isNotEmpty &&
-                      addressLocationCtrl.text.isNotEmpty
-                  ? () async {
-                      try {
-                        context.popRoute();
-                        showLoading();
-                        if (widget.defaultPlace) {
-                          //chỉnh sửa và tạo mới 1 cái place
-                          final StorePlace newPlace = StorePlace(
-                            idCreator: Global.instance.user!.code,
-                            idPlace: 24.randomString(),
-                            iconPlace: icPlaceCubit.state,
-                            namePlace: nameLocationCtrl.text,
-                            location: state?.toJson(),
-                            radius: currentRadius,
-                            colorPlace: selectColor,
-                          );
-
-                          if (getIt<SelectGroupCubit>().state != null) {
-                            await FirestoreClient.instance.createPlace(
-                              getIt<SelectGroupCubit>().state!.idGroup!,
-                              newPlace,
-                            );
-                            for (final member in Global.instance.groupMembers) {
-                              await NotificationPlaceManager
-                                  .createNotificationPlace(
-                                idGroup:
-                                    getIt<SelectGroupCubit>().state!.idGroup!,
-                                idPlace: newPlace.idPlace!,
-                                idDocNotification: member.code,
-                                storeNotificationPlace:
-                                    const StoreNotificationPlace(),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(bottom: 20.h, left: 16.w, right: 16.w),
+            child: BlocBuilder<SelectPlaceCubit, StoreLocation?>(
+              bloc: selectPlaceCubit,
+              builder: (context, state) {
+                return AppButton(
+                  title: context.l10n.done,
+                  onTap: nameLocationCtrl.text.isNotEmpty &&
+                          addressLocationCtrl.text.isNotEmpty
+                      ? () async {
+                          try {
+                            context.popRoute();
+                            showLoading();
+                            if (widget.defaultPlace) {
+                              //chỉnh sửa và tạo mới 1 cái place
+                              final StorePlace newPlace = StorePlace(
+                                idCreator: Global.instance.user!.code,
+                                idPlace: 24.randomString(),
+                                iconPlace: icPlaceCubit.state,
+                                namePlace: nameLocationCtrl.text,
+                                location: state?.toJson(),
+                                radius: currentRadius,
+                                colorPlace: selectColor,
                               );
+
+                              if (getIt<SelectGroupCubit>().state != null) {
+                                await FirestoreClient.instance.createPlace(
+                                  getIt<SelectGroupCubit>().state!.idGroup!,
+                                  newPlace,
+                                );
+                                for (final member
+                                    in Global.instance.groupMembers) {
+                                  await NotificationPlaceManager
+                                      .createNotificationPlace(
+                                    idGroup: getIt<SelectGroupCubit>()
+                                        .state!
+                                        .idGroup!,
+                                    idPlace: newPlace.idPlace!,
+                                    idDocNotification: member.code,
+                                    storeNotificationPlace:
+                                        const StoreNotificationPlace(),
+                                  );
+                                }
+                              }
+                              if (widget.place != null) {
+                                final List<StorePlace> updatedList = List.from(
+                                    getIt<DefaultPlaceCubit>().state ?? []);
+                                updatedList.remove(widget.place);
+                                getIt<DefaultPlaceCubit>().update(updatedList);
+                              }
+                            } else {
+                              //update
+                              tempPlace = tempPlace?.copyWith(
+                                iconPlace: icPlaceCubit.state,
+                                namePlace: nameLocationCtrl.text,
+                                location: state?.toJson(),
+                                radius: currentRadius,
+                                colorPlace: selectColor,
+                              );
+                              if (tempPlace != null) {
+                                await FirestoreClient.instance.updatePlace(
+                                  getIt<SelectGroupCubit>().state!.idGroup!,
+                                  tempPlace!.idPlace!,
+                                  tempPlace!.toJson(),
+                                );
+                              }
                             }
-                          }
-                          if (widget.place != null) {
-                            final List<StorePlace> updatedList = List.from(
-                                getIt<DefaultPlaceCubit>().state ?? []);
-                            updatedList.remove(widget.place);
-                            getIt<DefaultPlaceCubit>().update(updatedList);
-                          }
-                        } else {
-                          //update
-                          tempPlace = tempPlace?.copyWith(
-                            iconPlace: icPlaceCubit.state,
-                            namePlace: nameLocationCtrl.text,
-                            location: state?.toJson(),
-                            radius: currentRadius,
-                            colorPlace: selectColor,
-                          );
-                          if (tempPlace != null) {
-                            await FirestoreClient.instance.updatePlace(
-                              getIt<SelectGroupCubit>().state!.idGroup!,
-                              tempPlace!.idPlace!,
-                              tempPlace!.toJson(),
-                            );
+
+                            hideLoading();
+                          } catch (error) {
+                            debugPrint('error:$error');
                           }
                         }
-
-                        hideLoading();
-                      } catch (error) {
-                        debugPrint('error:$error');
-                      }
-                    }
-                  : () {},
-            );
-          },
-        ),
+                      : () {},
+                );
+              },
+            ),
+          ),
+          const BuildBannerWidget()
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(

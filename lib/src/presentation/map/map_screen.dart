@@ -158,6 +158,8 @@ class MapScreenState extends State<MapScreen>
                     final rejectAlway =
                         await Permission.locationAlways.isPermanentlyDenied;
                     if (rejectAlway) {
+                      EasyAds.instance.appLifecycleReactor
+                          ?.setIsExcludeScreen(true);
                       openAppSettings();
                     }
                     final status = await Permission.locationAlways.request();

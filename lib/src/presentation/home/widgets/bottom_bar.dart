@@ -151,13 +151,13 @@ class _BottomBarState extends State<BottomBar> {
               16.horizontalSpace,
               Expanded(
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     getIt<BannerCollapseAdCubit>().update(false);
-                    showAppModalBottomSheet(
+                    await showAppModalBottomSheet(
                       context: context,
                       builder: (context) => const GroupBottomSheet(),
-                    ).then(
-                        (value) => getIt<BannerCollapseAdCubit>().update(true));
+                    );
+                    getIt<BannerCollapseAdCubit>().update(true);
                   },
                   child: ShadowContainer(
                     borderRadius: BorderRadius.circular(

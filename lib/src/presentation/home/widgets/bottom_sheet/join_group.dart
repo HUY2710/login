@@ -11,6 +11,7 @@ import '../../../../config/navigation/app_router.dart';
 import '../../../../gen/colors.gen.dart';
 import '../../../../shared/extension/context_extension.dart';
 import '../../../../shared/widgets/my_drag.dart';
+import '../../cubit/banner_collapse_cubit.dart';
 import '../../cubit/validate_code/code_validation_cubit.dart';
 
 class JoinGroupWidget extends StatefulWidget {
@@ -24,6 +25,7 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
   final CodeValidationCubit codeValidCubit = getIt<CodeValidationCubit>();
   @override
   Widget build(BuildContext context) {
+    getIt<BannerCollapseAdCubit>().update(false);
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: Padding(

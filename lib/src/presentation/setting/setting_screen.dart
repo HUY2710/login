@@ -26,6 +26,7 @@ import '../../shared/cubit/value_cubit.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/widgets/custom_appbar.dart';
 import '../../shared/widgets/main_switch.dart';
+import '../home/cubit/banner_collapse_cubit.dart';
 import '../home/widgets/dialog/action_dialog.dart';
 import 'widgets/custom_item_setting.dart';
 
@@ -291,6 +292,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     value: state,
                     onChanged: (value) async {
                       if (!value) {
+                        getIt<BannerCollapseAdCubit>().update(false);
                         showDialog(
                           context: context,
                           builder: (context1) => ActionDialog(
@@ -309,7 +311,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                 }
                               },
                               confirmText: context.l10n.ok),
-                        );
+                        ).then((value) =>
+                            getIt<BannerCollapseAdCubit>().update(true));
                       } else {
                         try {
                           await FirestoreClient.instance

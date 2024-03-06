@@ -221,7 +221,15 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
               ),
             ),
             6.verticalSpace,
-            buildAd()
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
+              child: ShadowContainer(
+                borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                    child: buildAd()),
+              ),
+            )
           ],
         ),
       ),
