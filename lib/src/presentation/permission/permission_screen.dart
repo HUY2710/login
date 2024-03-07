@@ -45,7 +45,7 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
               subTitle: context.l10n.permissionsGreateSub,
               backgroundColor: Colors.white.withOpacity(0.95),
               confirmTap: () => context.popRoute(true),
-              confirmText: context.l10n.allow,
+              confirmText: context.l10n.continueText,
             );
           }
           return GuideFirstPermissionAndroid(
@@ -77,7 +77,7 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
               bloc: typeRequest,
               builder: (context, state) {
                 return AppButton(
-                  title: context.l10n.allow,
+                  title: context.l10n.continueText,
                   onTap: () async {
                     if (state == 1) {
                       final result = await showGuidePermissionDialog(
