@@ -157,7 +157,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
           _checkIn(item: item);
         } else {
           context.popRoute();
-          context.pushRoute(const PremiumRoute());
+          context.pushRoute(PremiumRoute());
         }
       },
       child: Container(

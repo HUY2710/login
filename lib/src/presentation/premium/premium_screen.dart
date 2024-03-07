@@ -18,7 +18,10 @@ import 'widgets/carouse_slider.dart';
 
 @RoutePage()
 class PremiumScreen extends StatefulWidget {
-  const PremiumScreen({super.key});
+
+  const PremiumScreen({super.key, this.fromStart = false});
+
+  final bool fromStart;
 
   @override
   State<PremiumScreen> createState() => _PremiumScreenState();
@@ -81,6 +84,9 @@ class _PremiumScreenState extends State<PremiumScreen> {
                         purchaseState.getProductGroup(productKeyWeekly);
                     final monthlyProduct =
                         purchaseState.getProductGroup(productKeyMonthly);
+                    if (weeklyProduct.isEmpty || monthlyProduct.isEmpty) {
+                      return const SizedBox();
+                    }
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       mainAxisSize: MainAxisSize.min,
@@ -159,7 +165,45 @@ class _PremiumScreenState extends State<PremiumScreen> {
         ));
   }
 
+  Positioned buildFirstCloseButton(BuildContext context) {
+    return Positioned(
+      top: ScreenUtil().statusBarHeight + 16,
+      left: 16.w,
+      child: CustomInkWell(
+          child: Container(
+            height: 30.r,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30.r),
+                color: MyColors.primary.withOpacity(0.6)),
+            child: Row(
+              children: [
+                Container(
+                  width: 20.r,
+                  height: 20.r,
+                  decoration: BoxDecoration(
+                     borderRadius: BorderRadius.circular(30.r),
+                color: Colors.white),
+                  child: Icon(
+                    Icons.close,
+                    size: 14.r,
+                  ),
+                ),
+                8.horizontalSpace,
+                Text(context.l10n.useLimitedVersion, style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white
+                ))
+              ],
+            ),
+          ),
+          onTap: () => context.popRoute()),
+    );
+  }
+
   Positioned buildButtonClose(BuildContext context) {
+    return buildFirstCloseButton(context);
     return Positioned(
       top: ScreenUtil().statusBarHeight + 16,
       left: 16.w,

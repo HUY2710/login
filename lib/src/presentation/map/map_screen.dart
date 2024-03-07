@@ -69,6 +69,7 @@ class MapScreenState extends State<MapScreen>
 
   @override
   void initState() {
+    context.pushRoute(PremiumRoute(fromStart: true));
     WidgetsBinding.instance.addObserver(this);
     FirestoreClient.instance.updateUser({'online': true});
     FlutterLifecycleDetector().onBackgroundChange.listen((isBackground) {

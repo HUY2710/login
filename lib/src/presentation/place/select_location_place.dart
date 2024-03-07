@@ -249,7 +249,7 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
                     if (statePurchase.isPremium()) {
                       showModalSearchPlace();
                     } else {
-                      context.pushRoute(const PremiumRoute());
+                      context.pushRoute(PremiumRoute());
                     }
                   },
                   child: Row(

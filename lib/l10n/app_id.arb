@@ -182,5 +182,6 @@
   "uploadPhoto": "Unggah Foto",
   "joinGroupQr": "Bergabung dengan kode QR",
   "invalidQrCode": "Kode QR tidak valid",
-  "pleaseCheckQrCode": "Harap periksa kembali kode QR Anda"
+  "pleaseCheckQrCode": "Harap periksa kembali kode QR Anda",
+  "useLimitedVersion": "Lanjutkan dengan Versi Terbatas"
 }

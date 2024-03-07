@@ -182,5 +182,6 @@
   "uploadPhoto": "사진 업로드",
   "joinGroupQr": "QR 코드로 참여하기",
   "invalidQrCode": "유효하지 않은 QR 코드",
-  "pleaseCheckQrCode": "QR 코드를 다시 확인해주세요"
+  "pleaseCheckQrCode": "QR 코드를 다시 확인해주세요",
+  "useLimitedVersion": "한정판으로 계속하기"
 }

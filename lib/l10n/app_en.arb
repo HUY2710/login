@@ -182,5 +182,6 @@
   "uploadPhoto": "Upload photo" ,
   "joinGroupQr": "Join with QR code",
   "invalidQrCode": "Invalid QR code",
-  "pleaseCheckQrCode": "Please check your QR code again"
+  "pleaseCheckQrCode": "Please check your QR code again",
+  "useLimitedVersion": "Continue with Limited Version"
 }

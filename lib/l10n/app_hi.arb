@@ -183,5 +183,6 @@
   "uploadPhoto": "तस्वीर अपलोड करें",
   "joinGroupQr": "QR कोड के साथ शामिल हों",
   "invalidQrCode": "अवैध QR कोड",
-  "pleaseCheckQrCode": "कृपया अपना QR कोड फिर से जाँचें"
+  "pleaseCheckQrCode": "कृपया अपना QR कोड फिर से जाँचें",
+  "useLimitedVersion": "सीमित संस्करण के साथ जारी रखें"
 }

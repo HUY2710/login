@@ -64,7 +64,7 @@ class CheckInWidget extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: CustomInkWell(
-                  onTap: () => context.pushRoute(const PremiumRoute()),
+                  onTap: () => context.pushRoute(PremiumRoute()),
                   child: ShadowContainer(
                     height: 40.r,
                     padding: const EdgeInsets.all(10),
