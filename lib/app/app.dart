@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -132,17 +131,16 @@ class _BodyAppState extends State<BodyApp> {
         theme: lightThemeData,
         // darkTheme: darkThemeData, //optional
         routerConfig: getIt<AppRouter>().config(
-          navigatorObservers: () => [MainRouteObserver()],
-          deepLinkBuilder: (deepLink) {
-            debugPrint('DEEPLINK===>');
-            debugPrint(deepLink.path);
-            if (deepLink.path.startsWith('/code')) {
-              return DeepLink([JoinGroupRoute()]);
-            } else {
-              return DeepLink.defaultPath;
-            }
-          }
-        ),
+            navigatorObservers: () => [MainRouteObserver()],
+            deepLinkBuilder: (deepLink) {
+              debugPrint('DEEPLINK===>');
+              debugPrint(deepLink.path);
+              if (deepLink.path.startsWith('/code')) {
+                return DeepLink([JoinGroupRoute()]);
+              } else {
+                return DeepLink.defaultPath;
+              }
+            }),
         builder: (context, child) {
           return Stack(
             children: [
