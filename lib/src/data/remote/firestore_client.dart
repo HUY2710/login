@@ -131,20 +131,25 @@ class FirestoreClient {
 
   //xóa group
   Future<bool> deleteGroup(StoreGroup group) async {
-    //đầu tiên là xóa group
-    final result = await GroupsManager.deleteGroup(group);
-    //tiếp theo là xóa idGroup trong myGroup
-    await deleteIdGroupInMyGroup(group);
-    //tiếp theo là xóa toàn bộ member
-    await MemberManager.deleteMemberDocument(group.idGroup!);
+    bool result = false;
+    Future.wait([
+      //tiếp theo là xóa idGroup trong myGroup
+      deleteIdGroupInMyGroup(group),
+      //đầu tiên là xóa group
+      GroupsManager.deleteGroup(group).then((value) => result = value),
+      //tiếp theo là xóa toàn bộ member
+      MemberManager.deleteMemberDocument(group.idGroup!),
+    ]);
+
     return result;
   }
 
   //xóa user ra khỏi nhóm hoặc user tự thoát nhóm
   Future<void> leaveGroup(String idGroup, String idUser) async {
-    await GroupsManager.leaveGroup(idGroup: idGroup, idUser: idUser);
-    await GroupsManager.removeIdGroupOfMyGroup(
-        idGroup: idGroup, idUser: idUser);
+    Future.wait([
+      GroupsManager.removeIdGroupOfMyGroup(idGroup: idGroup, idUser: idUser),
+      GroupsManager.leaveGroup(idGroup: idGroup, idUser: idUser),
+    ]);
     return;
   }
 

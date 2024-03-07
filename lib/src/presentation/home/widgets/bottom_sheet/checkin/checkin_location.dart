@@ -9,7 +9,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../../../module/iap/my_purchase_manager.dart';
 import '../../../../../config/di/di.dart';
 import '../../../../../config/navigation/app_router.dart';
-import '../../../../../data/local/shared_preferences_manager.dart';
 import '../../../../../data/models/location/location_model.dart';
 import '../../../../../data/models/places/place_model.dart';
 import '../../../../../gen/gens.dart';

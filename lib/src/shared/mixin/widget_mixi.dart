@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+
+import '../../global/global.dart';
 
 mixin WidgetMixin {
   Future<Uint8List?> widgetToBytes({
@@ -35,5 +38,21 @@ mixin WidgetMixin {
         await image.toByteData(format: ui.ImageByteFormat.png);
     final Uint8List? pngBytes = byteData?.buffer.asUint8List();
     return pngBytes;
+  }
+
+  String saveToCacheDirectory(
+    Uint8List bytes, {
+    String? filename,
+  }) {
+    final String directory = Global.instance.temporaryPath;
+    return directory + _saveFile(filename, directory, bytes);
+  }
+
+  String _saveFile(String? filename, String directoryPath, Uint8List bytes) {
+    filename ??= DateTime.now().millisecondsSinceEpoch.toString();
+    final String fullName = '$filename.png';
+    final File file = File('$directoryPath/$fullName');
+    file.writeAsBytesSync(bytes);
+    return '/$fullName';
   }
 }

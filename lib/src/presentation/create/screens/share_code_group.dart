@@ -50,12 +50,20 @@ class _ShareCodeGroupScreenState extends State<ShareCodeGroupScreen>
                   try {
                     EasyAds.instance.appLifecycleReactor
                         ?.setIsExcludeScreen(true);
-                    final box = context.findRenderObject() as RenderBox?;
-                    await Share.shareWithResult(
-                      widget.code,
-                      sharePositionOrigin:
-                          box!.localToGlobal(Offset.zero) & box.size,
-                    );
+                    if (codeTypeCubit.state == CodeType.code) {
+                      final box = context.findRenderObject() as RenderBox?;
+                      await Share.shareWithResult(
+                        widget.code,
+                        sharePositionOrigin:
+                            box!.localToGlobal(Offset.zero) & box.size,
+                      );
+                    } else {
+                      final resultBytes =
+                          await widgetToBytes(repaintKey: repaintKey);
+                      await Share.shareXFiles(
+                          [XFile(saveToCacheDirectory(resultBytes!))],
+                          text: context.l10n.qrCode);
+                    }
                   } finally {}
                 },
               ),
@@ -126,13 +134,13 @@ class _ShareCodeGroupScreenState extends State<ShareCodeGroupScreen>
             child: QrImageView(
               backgroundColor: Colors.white,
               data: widget.code,
-              size: 172.r,
+              size: 172.w,
             ),
           ),
         ),
         16.h.verticalSpace,
         SizedBox(
-          width: 172.r,
+          width: 172.w,
           child: FilledButton.icon(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.white),

@@ -110,16 +110,19 @@ class MapScreenState extends State<MapScreen>
   Future<void> _initStart() async {
     final bool statusLocation = await checkPermissionLocation();
     if (!statusLocation) {
+      getIt<BannerCollapseAdCubit>().update(false);
       await navigateToPermission();
       final bool checkAgain = await checkPermissionLocation();
       if (checkAgain) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+          getIt<BannerCollapseAdCubit>().update(true);
           _init();
         });
       }
     } else {
       //exist permission
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+        getIt<BannerCollapseAdCubit>().update(true);
         _init();
       });
     }

@@ -67,7 +67,7 @@ class CheckInWidget extends StatelessWidget {
                   onTap: () => context.pushRoute(PremiumRoute()),
                   child: ShadowContainer(
                     height: 40.r,
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     borderRadius: BorderRadius.circular(
                         AppConstants.widgetBorderRadius.r),
                     child: Row(

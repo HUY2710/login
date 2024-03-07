@@ -51,10 +51,10 @@ class GroupCubit extends Cubit<GroupState> {
       } else {
         // lắng nghe mygroup trong collection user
         for (final groupChange in groupOfUser.docChanges) {
-          StoreGroup? storeGroup =
-              await FirestoreClient.instance.getDetailGroup(groupChange.doc.id);
           switch (groupChange.type) {
             case DocumentChangeType.added:
+              StoreGroup? storeGroup = await FirestoreClient.instance
+                  .getDetailGroup(groupChange.doc.id);
               if (storeGroup != null) {
                 storeGroup = storeGroup.copyWith(
                     groupSubscription: _listenGroupUpdate(storeGroup));
@@ -62,17 +62,18 @@ class GroupCubit extends Cubit<GroupState> {
               }
               break;
             case DocumentChangeType.removed:
-              if (storeGroup != null) {
-                final index = myGroups
-                    .indexWhere((group) => group.idGroup == groupChange.doc.id);
-                myGroups.removeAt(index);
-              }
+              // StoreGroup? storeGroup = await FirestoreClient.instance
+              //     .getDetailGroup(groupChange.doc.id);
+              final index = myGroups
+                  .indexWhere((group) => group.idGroup == groupChange.doc.id);
+              myGroups[index].groupSubscription?.cancel();
+              myGroups.removeAt(index);
               break;
             default:
           }
         }
         if (myGroups.isEmpty) {
-          emit(const GroupState.initial());
+          emit(const GroupState.success([]));
         } else {
           sortGroup();
           emit(GroupState.success(myGroups));
