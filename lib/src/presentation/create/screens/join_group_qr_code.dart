@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart'
     as google_mlkit_barcode_scanning;
 import 'package:image_picker/image_picker.dart';
@@ -18,7 +19,11 @@ import '../../home/cubit/validate_code/code_validation_cubit.dart';
 
 @RoutePage()
 class JoinQrCodeScreen extends StatefulWidget {
-  const JoinQrCodeScreen({super.key});
+  const JoinQrCodeScreen({
+    super.key,
+    this.fromHomeScreen = false,
+  });
+  final bool fromHomeScreen;
 
   @override
   State<JoinQrCodeScreen> createState() => _JoinQrCodeScreenState();
@@ -45,14 +50,22 @@ class _JoinQrCodeScreenState extends State<JoinQrCodeScreen>
               await _buildDialogQrCodeEmpty(context, messageError: error);
             },
             valid: (group) async {
-              await SharedPreferencesManager.saveIsCreateInfoFistTime(false);
-              final bool statusLocation = await checkPermissionLocation();
-              if (!statusLocation && context.mounted) {
-                getIt<AppRouter>()
-                    .replaceAll([PermissionRoute(fromMapScreen: false)]);
+              if (widget.fromHomeScreen) {
+                context.popRoute();
+                Fluttertoast.showToast(
+                    msg:
+                        '${context.l10n.joinGroup} ${context.l10n.success.toLowerCase()}');
                 return;
-              } else if (context.mounted) {
-                getIt<AppRouter>().replaceAll([HomeRoute()]);
+              } else {
+                await SharedPreferencesManager.saveIsCreateInfoFistTime(false);
+                final bool statusLocation = await checkPermissionLocation();
+                if (!statusLocation && context.mounted) {
+                  getIt<AppRouter>()
+                      .replaceAll([PermissionRoute(fromMapScreen: false)]);
+                  return;
+                } else if (context.mounted) {
+                  getIt<AppRouter>().replaceAll([HomeRoute()]);
+                }
               }
             },
           );

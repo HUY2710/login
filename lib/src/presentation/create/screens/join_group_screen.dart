@@ -157,7 +157,7 @@ class JoinGroupScreen extends StatelessWidget with PermissionMixin {
                 },
               ),
               TextButton(
-                  onPressed: () => context.pushRoute(const JoinQrCodeRoute()),
+                  onPressed: () => context.pushRoute(JoinQrCodeRoute()),
                   child: Text(
                     context.l10n.joinGroupQr,
                     style: TextStyle(

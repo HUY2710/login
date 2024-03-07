@@ -187,7 +187,8 @@ class _JoinGroupWidgetState extends State<JoinGroupWidget> {
               style: TextStyle(color: const Color(0xff343434), fontSize: 13.sp),
             ),
             TextButton(
-                onPressed: () => context.pushRoute(const JoinQrCodeRoute()),
+                onPressed: () =>
+                    context.pushRoute(JoinQrCodeRoute(fromHomeScreen: true)),
                 child: Text(
                   context.l10n.joinGroupQr,
                   style: TextStyle(

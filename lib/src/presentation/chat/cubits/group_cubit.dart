@@ -47,6 +47,10 @@ class GroupCubit extends Cubit<GroupState> {
     myGroups.clear();
     chatService.getUser2().listen((groupOfUser) async {
       if (groupOfUser.docs.isEmpty) {
+        for (final group in myGroups) {
+          group.groupSubscription?.cancel();
+        }
+        myGroups.clear();
         emit(const GroupState.initial());
       } else {
         // lắng nghe mygroup trong collection user
@@ -62,21 +66,22 @@ class GroupCubit extends Cubit<GroupState> {
               }
               break;
             case DocumentChangeType.removed:
-              // StoreGroup? storeGroup = await FirestoreClient.instance
-              //     .getDetailGroup(groupChange.doc.id);
+              final StoreGroup? storeGroup = await FirestoreClient.instance
+                  .getDetailGroup(groupChange.doc.id);
               final index = myGroups
-                  .indexWhere((group) => group.idGroup == groupChange.doc.id);
+                  .indexWhere((group) => group.idGroup == storeGroup!.idGroup);
               myGroups[index].groupSubscription?.cancel();
-              myGroups.removeAt(index);
+              myGroups
+                  .removeWhere((group) => group.idGroup == storeGroup!.idGroup);
               break;
             default:
           }
         }
         if (myGroups.isEmpty) {
-          emit(const GroupState.success([]));
+          emit(GroupState.success([]));
         } else {
           sortGroup();
-          emit(GroupState.success(myGroups));
+          emit(GroupState.success([...myGroups]));
         }
       }
     });
@@ -106,6 +111,8 @@ class GroupCubit extends Cubit<GroupState> {
         storeUser: storeUser,
         seen: seen,
         lastMessage: storeGroupTemp.lastMessage,
+        groupName: storeGroupTemp.groupName,
+        avatarGroup: storeGroupTemp.avatarGroup,
       );
       //lấy ra index của group thay đổi dưới local
       final index = myGroups.indexWhere((e) => e.idGroup == snapshot.id);
@@ -115,7 +122,7 @@ class GroupCubit extends Cubit<GroupState> {
         myGroups[index] = storeGroup;
         // sắp xếp theo group có tin nhắn cuối cùng muộn nhất
         sortGroup();
-        emit(GroupState.success(myGroups));
+        emit(GroupState.success([...myGroups]));
       }
     });
     return subscription;
