@@ -57,7 +57,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
       create: (context) => ValueCubit<Language>(currentLanguage),
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 56.h,
+          toolbarHeight: 67.h,
           elevation: 0,
           scrolledUnderElevation: 0,
           leading: (widget.isFirst == null || widget.isFirst == false)
