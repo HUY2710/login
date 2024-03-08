@@ -1,14 +1,17 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iap/flutter_iap.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../module/iap/my_purchase_manager.dart';
 import '../../../module/iap/product_id.dart';
 import '../../config/di/di.dart';
 import '../../gen/gens.dart';
+import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/gradient_background.dart';
@@ -18,7 +21,6 @@ import 'widgets/carouse_slider.dart';
 
 @RoutePage()
 class PremiumScreen extends StatefulWidget {
-
   const PremiumScreen({super.key, this.fromStart = false});
 
   final bool fromStart;
@@ -28,6 +30,8 @@ class PremiumScreen extends StatefulWidget {
 }
 
 class _PremiumScreenState extends State<PremiumScreen> {
+  bool isSelectedWeek = true;
+
   Future<void> _launchUrl(String url) async {
     // EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
     if (!await launchUrl(
@@ -63,7 +67,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     // transform: GradientRotation(274 * (pi / 180)),
                   )),
                 ),
-                buildButtonClose(context),
                 buildTextTitle(),
                 buildImageBackground(),
                 Positioned.fill(
@@ -87,37 +90,29 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     if (weeklyProduct.isEmpty || monthlyProduct.isEmpty) {
                       return const SizedBox();
                     }
+
+                    final weekPrice =
+                        weeklyProduct.first.productDetails.rawPrice;
+                    final monthPrice =
+                        monthlyProduct.first.productDetails.rawPrice;
+                    final saved =
+                        (weekPrice - (monthPrice / 4)) * 100 / weekPrice;
+
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const CarouseSliderPremium(),
-                        20.h.verticalSpace,
-                        buildIndicator(),
-                        40.h.verticalSpace,
-                        Text(
-                          context.l10n.try3days,
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            color: const Color(0xff7D7D7D),
-                          ),
-                        ),
-                        Text(
-                          '${context.l10n.then} ${weeklyProduct.first.price}${context.l10n.weekTime}',
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w500,
-                            color: const Color(0xff343434),
-                          ),
-                        ),
                         16.h.verticalSpace,
-                        buildButtonSubmit(item: weeklyProduct),
+                        buildIndicator(),
+                        24.h.verticalSpace,
+                        buildButtonWeek(item: weeklyProduct),
                         8.h.verticalSpace,
-                        buildDivider(),
-                        8.h.verticalSpace,
-                        buildButtonMonth(item: monthlyProduct),
+                        buildButtonMonth(item: monthlyProduct, save: saved),
                         12.h.verticalSpace,
-                        buildRestoreButton(),
+                        buildButtonContinue(weeklyProduct.first, monthlyProduct.first),
+                        8.verticalSpace,
+                        buildFirstCloseButton(context),
                         30.h.verticalSpace,
                         buildRowTextButton(),
                         10.h.verticalSpace,
@@ -133,14 +128,14 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
   Positioned buildTextTitle() {
     return Positioned.fromRect(
-      rect: Rect.fromLTWH(16.w, 0, 1.sw * 0.65, 1.sh * 0.23),
+      rect: Rect.fromLTWH(16.w, -30.h, 1.sw * 0.65, 1.sh * 0.23),
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Text(
           context.l10n.premiumTitle,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 24.sp,
+            fontSize: 28.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -165,123 +160,56 @@ class _PremiumScreenState extends State<PremiumScreen> {
         ));
   }
 
-  Positioned buildFirstCloseButton(BuildContext context) {
-    return Positioned(
-      top: ScreenUtil().statusBarHeight + 16,
-      left: 16.w,
-      child: CustomInkWell(
-          child: Container(
-            height: 30.r,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.r),
-                color: MyColors.primary.withOpacity(0.6)),
-            child: Row(
-              children: [
-                Container(
-                  width: 20.r,
-                  height: 20.r,
-                  decoration: BoxDecoration(
-                     borderRadius: BorderRadius.circular(30.r),
-                color: Colors.white),
-                  child: Icon(
-                    Icons.close,
-                    size: 14.r,
-                  ),
-                ),
-                8.horizontalSpace,
-                Text(context.l10n.useLimitedVersion, style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white
-                ))
-              ],
-            ),
-          ),
-          onTap: () => context.popRoute()),
-    );
-  }
-
-  Positioned buildButtonClose(BuildContext context) {
-    return buildFirstCloseButton(context);
-    return Positioned(
-      top: ScreenUtil().statusBarHeight + 16,
-      left: 16.w,
-      child: CustomInkWell(
-          child: Container(
-            width: 28.r,
-            height: 28.r,
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: MyColors.primary.withOpacity(0.4)),
-            child: Icon(
-              Icons.close,
-              size: 18.r,
-              color: Colors.white70,
-            ),
-          ),
-          onTap: () => context.popRoute()),
-    );
-  }
-
-  Padding buildDivider() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 30.w),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              height: 1,
-              // width: double.infinity,
-              color: const Color(0xffE9E6ED),
-            ),
-          ),
-          9.w.horizontalSpace,
-          Text(
-            'or',
-            style: TextStyle(fontSize: 13.sp, color: const Color(0xff7D7D7D)),
-          ),
-          9.w.horizontalSpace,
-          Expanded(
-            child: Container(
-              height: 1,
-              // width: double.infinity,
-              color: const Color(0xffE9E6ED),
-            ),
-          ),
-        ],
-      ),
-    );
+  CustomInkWell buildFirstCloseButton(BuildContext context) {
+    return CustomInkWell(
+        child: Text(context.l10n.useLimitedVersion,
+            style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+                color: Colors.black54)),
+        onTap: () => context.popRoute());
   }
 
   Row buildRowTextButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        TextButton(
-            onPressed: () {
-              _launchUrl(UrlConstants.urlTerms);
-            },
-            child: Text(
-              context.l10n.term,
+        Row(
+          children: [
+            TextButton(
+                onPressed: () {
+                  _launchUrl(UrlConstants.urlTerms);
+                },
+                child: Text(
+                  context.l10n.term,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    decoration: TextDecoration.underline,
+                    color: const Color(0xff7D7D7D),
+                  ),
+                )),
+            Text(
+              '|',
               style: TextStyle(
                 fontSize: 12.sp,
-                decoration: TextDecoration.underline,
                 color: const Color(0xff7D7D7D),
               ),
-            )),
-        TextButton(
-            onPressed: () {
-              _launchUrl(UrlConstants.urlPOLICY);
-            },
-            child: Text(
-              context.l10n.privacy,
-              style: TextStyle(
-                fontSize: 12.sp,
-                decoration: TextDecoration.underline,
-                color: const Color(0xff7D7D7D),
-              ),
-            ))
+            ),
+            TextButton(
+                onPressed: () {
+                  _launchUrl(UrlConstants.urlPOLICY);
+                },
+                child: Text(
+                  context.l10n.privacy,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    decoration: TextDecoration.underline,
+                    color: const Color(0xff7D7D7D),
+                  ),
+                ))
+          ],
+        ),
+        buildRestoreButton()
       ],
     );
   }
@@ -291,7 +219,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
       onPressed: () => getIt<MyPurchaseManager>().restorePurchases(),
       icon: Assets.icons.premium.icRestore.svg(),
       label: Text(
-        context.l10n.restorePurchase,
+        'Restore',
         style: TextStyle(fontSize: 13.sp, color: const Color(0Xff8E52FF)),
       ),
       style: ButtonStyle(
@@ -300,50 +228,184 @@ class _PremiumScreenState extends State<PremiumScreen> {
     );
   }
 
-  CustomInkWell buildButtonMonth({required List<PurchasableProduct> item}) {
+  CustomInkWell buildButtonMonth(
+      {required List<PurchasableProduct> item, required double save}) {
+    final isSelected = !isSelectedWeek;
+    final monthlyProduct = item.first;
+    final formatter = NumberFormat.simpleCurrency(
+      name: monthlyProduct.productDetails.currencyCode,
+    );
+    final monthPricePerWeek =
+        formatter.format(monthlyProduct.productDetails.rawPrice / 4);
     return CustomInkWell(
         child: Container(
           width: double.infinity,
           margin: EdgeInsets.symmetric(horizontal: 16.w),
-          padding: EdgeInsets.symmetric(vertical: 17.h),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           alignment: Alignment.center,
           decoration: BoxDecoration(
               // gradient: gradientBackground,
-              border: Border.all(width: 2, color: const Color(0xffB67DFF)),
-              borderRadius: BorderRadius.circular(15.r)),
-          child: Text(
-            '${item.first.price}/${context.l10n.monthly}',
-            style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
-                color: const Color(0xff8E52FF)),
+              border: Border.all(width: 2, color: isSelected ? const Color(0xffB67DFF) : const Color(0xffB67DFF).withOpacity(0.3)),
+              borderRadius:
+                  BorderRadius.circular(AppConstants.widgetBorderRadius.r)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        context.l10n.monthly,
+                        style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                            color: isSelected ? const Color(0xff8E52FF) : Colors.grey),
+                      ),
+                      8.horizontalSpace,
+                      Text('$monthPricePerWeek/week',
+                          style: TextStyle(
+                              fontSize: 12.sp, fontWeight: FontWeight.w500))
+                    ],
+                  ),
+                  4.verticalSpace,
+                  Row(
+                    children: [
+                      Text(
+                        'Billed monthly, total',
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic, fontSize: 12.sp),
+                      ),
+                      4.horizontalSpace,
+                      Text(item.first.price,
+                          style: const TextStyle(fontWeight: FontWeight.w500))
+                    ],
+                  )
+                ],
+              ),
+              if (isSelected)
+                Radio(
+                  activeColor: const Color(0xff8E52FF),
+                  value: true,
+                  groupValue: true,
+                  onChanged: (val) {},
+                  visualDensity: const VisualDensity(
+                    horizontal: VisualDensity.minimumDensity,
+                    vertical: VisualDensity.minimumDensity,
+                  ),
+                ),
+            ],
           ),
         ),
         onTap: () {
-          getIt<MyPurchaseManager>().buy(item.first);
+          if (!isSelectedWeek) {
+            return;
+          }
+          setState(() {
+            isSelectedWeek = false;
+          });
         });
   }
 
-  Widget buildButtonSubmit({required List<PurchasableProduct> item}) {
+  CustomInkWell buildButtonWeek({required List<PurchasableProduct> item}) {
+    final isSelected = isSelectedWeek;
     return CustomInkWell(
         child: Container(
           width: double.infinity,
           margin: EdgeInsets.symmetric(horizontal: 16.w),
-          padding: EdgeInsets.symmetric(vertical: 17.h),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              gradient: gradientBackground,
-              borderRadius: BorderRadius.circular(15.r)),
-          child: Text(
-            context.l10n.startFree,
-            style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
-                color: Colors.white),
+              border: Border.all(width: 2, color: isSelected ? const Color(0xffB67DFF) : const Color(0xffB67DFF).withOpacity(0.3)),
+              borderRadius:
+                  BorderRadius.circular(AppConstants.widgetBorderRadius.r)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Weekly',
+                    style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: isSelected ? const Color(0xff8E52FF) : Colors.grey),
+                  ),
+                  4.verticalSpace,
+                  Row(
+                    children: [
+                      Text(
+                        'Billed weekly only',
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic, fontSize: 12.sp),
+                      ),
+                      4.horizontalSpace,
+                      Text(item.first.price,
+                          style: TextStyle(
+                              fontSize: 12.sp, fontWeight: FontWeight.w500))
+                    ],
+                  )
+                ],
+              ),
+              if (isSelected)
+                Radio(
+                  activeColor: const Color(0xff8E52FF),
+                  value: true,
+                  groupValue: true,
+                  onChanged: (val) {},
+                  visualDensity: const VisualDensity(
+                    horizontal: VisualDensity.minimumDensity,
+                    vertical: VisualDensity.minimumDensity,
+                  ),
+                ),
+            ],
           ),
         ),
         onTap: () {
-          getIt<MyPurchaseManager>().buy(item.first);
+          if (isSelectedWeek) {
+            return;
+          }
+          setState(() {
+            isSelectedWeek = true;
+          });
+        });
+  }
+
+  Widget buildButtonContinue(PurchasableProduct weekly, PurchasableProduct monthly) {
+    return CustomInkWell(
+        child: Container(
+          width: double.infinity,
+          margin: EdgeInsets.symmetric(horizontal: 16.w),
+          padding: EdgeInsets.symmetric(vertical: 8.h),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              gradient: gradientBackground,
+              borderRadius:
+                  BorderRadius.circular(AppConstants.widgetBorderRadius.r)),
+          child: Column(
+            children: [
+              Text(
+                context.l10n.continueText,
+                style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+              ),
+              Text(
+                'You can cancel any time',
+                style: TextStyle(
+                    fontSize: 12.sp,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white),
+              )
+            ],
+          ),
+        ),
+        onTap: () {
+          final item = isSelectedWeek ? weekly : monthly;
+          getIt<MyPurchaseManager>().buy(item);
         });
   }
 
