@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import '../src/config/di/di.dart';
 import '../src/config/navigation/app_router.dart';
 import '../src/config/observer/route_observer.dart';
 import '../src/config/theme/light/light_theme.dart';
+import '../src/presentation/home/cubit/banner_collapse_cubit.dart';
 import '../src/shared/enum/language.dart';
 import '../src/shared/widgets/dialog/no_internet_dialog.dart';
 import '../src/shared/widgets/loading/loading_indicator.dart';
@@ -95,10 +97,15 @@ class _BodyAppState extends State<BodyApp> {
         case InternetStatus.disconnected:
           if (!shownDialog) {
             shownDialog = true;
+            context.read<NativeAdStatusCubit>().update(false);
+            getIt<BannerCollapseAdCubit>().update(false);
             showDialog(
                 barrierDismissible: false,
                 context: getIt<AppRouter>().navigatorKey.currentContext!,
-                builder: (context) => const NoIternetDialog());
+                builder: (context) => const NoIternetDialog()).then((_) {
+              context.read<NativeAdStatusCubit>().update(true);
+              getIt<BannerCollapseAdCubit>().update(true);
+            });
           }
           break;
       }

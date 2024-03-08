@@ -71,6 +71,7 @@ class MapScreenState extends State<MapScreen>
   void initState() {
     // context.pushRoute(PremiumRoute(fromStart: true));
     EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+    EasyAds.instance.initCollapsibleBannerAd();
     WidgetsBinding.instance.addObserver(this);
     FirestoreClient.instance.updateUser({'online': true});
     FlutterLifecycleDetector().onBackgroundChange.listen((isBackground) {
@@ -91,6 +92,7 @@ class MapScreenState extends State<MapScreen>
   @override
   void didPopNext() {
     WidgetsBinding.instance.addObserver(this);
+    EasyAds.instance.initCollapsibleBannerAd();
     EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
     super.didPopNext();
   }
@@ -98,6 +100,7 @@ class MapScreenState extends State<MapScreen>
   @override
   void didPushNext() {
     WidgetsBinding.instance.removeObserver(this);
+    EasyAds.instance.disposeCollapsibleBannerAd();
     EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(false);
     super.didPushNext();
   }

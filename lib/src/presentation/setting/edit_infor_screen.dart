@@ -155,13 +155,20 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: context.l10n.editAccount),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
-        child: AppButton(
-          title: context.l10n.save,
-          onTap: updateInfo,
-          isEnable: userNameCtrl.text.trim().isNotEmpty,
-        ),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+            child: AppButton(
+              title: context.l10n.save,
+              onTap: updateInfo,
+              isEnable: userNameCtrl.text.trim().isNotEmpty,
+            ),
+          ),
+          5.h.verticalSpace,
+          buildAd()
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -218,16 +225,16 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                 ),
               ),
             ),
-            6.verticalSpace,
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
-              child: ShadowContainer(
-                borderRadius: BorderRadius.all(Radius.circular(10.r)),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(10.r)),
-                    child: buildAd()),
-              ),
-            )
+            // 6.verticalSpace,
+            // Padding(
+            //   padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
+            //   child: ShadowContainer(
+            //     borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            //     child: ClipRRect(
+            //         borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            //         child: buildAd()),
+            //   ),
+            // )
           ],
         ),
       ),
