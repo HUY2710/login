@@ -31,15 +31,15 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-#  pod 'GoogleMobileAdsMediationFacebook'
-#  pod 'FBAudienceNetwork'
-#  pod 'GoogleMobileAdsMediationAppLovin'
-#  pod 'GoogleMobileAdsMediationMintegral'
+  pod 'GoogleMobileAdsMediationFacebook'
+  pod 'FBAudienceNetwork'
+  pod 'GoogleMobileAdsMediationAppLovin'
+  pod 'GoogleMobileAdsMediationMintegral'
 
-#  pod 'GoogleMobileAdsMediationPangle'
-#  pod 'GoogleMobileAdsMediationUnity'
-#  pod 'GoogleMobileAdsMediationIronSource'
-#  pod 'GoogleMobileAdsMediationVungle'
+  pod 'GoogleMobileAdsMediationPangle'
+  pod 'GoogleMobileAdsMediationUnity'
+  pod 'GoogleMobileAdsMediationIronSource'
+  pod 'GoogleMobileAdsMediationVungle'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
