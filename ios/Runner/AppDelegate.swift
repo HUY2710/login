@@ -4,9 +4,9 @@ import FirebaseCore
 import google_mobile_ads
 import GoogleMaps
 import UserNotifications
-//import FBAudienceNetwork
-//import UnityAds
-//import IronSource
+import FBAudienceNetwork
+import UnityAds
+import IronSource
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -21,22 +21,23 @@ import UserNotifications
         GeneratedPluginRegistrant.register(with: self)
         //    FirebaseApp.configure()
         registerAdFactory()
+        setupAdsMediation()
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
     private func setupAdsMediation() {
         // meta ads
-//        FBAdSettings.setAdvertiserTrackingEnabled(true)
-//        // unity ads
-//        let gdprMetaData = UADSMetaData()
-//        gdprMetaData.set("gdpr.consent", value: true)
-//        gdprMetaData.commit()
-//        let ccpaMetaData = UADSMetaData()
-//        ccpaMetaData.set("privacy.consent", value: true)
-//        ccpaMetaData.commit()
-//        // ironSource
-//        IronSource.setConsent(true)
-//        IronSource.setMetaDataWithKey("do_not_sell", value: "YES")
+        FBAdSettings.setAdvertiserTrackingEnabled(true)
+        // unity ads
+        let gdprMetaData = UADSMetaData()
+        gdprMetaData.set("gdpr.consent", value: true)
+        gdprMetaData.commit()
+        let ccpaMetaData = UADSMetaData()
+        ccpaMetaData.set("privacy.consent", value: true)
+        ccpaMetaData.commit()
+        // ironSource
+        IronSource.setConsent(true)
+        IronSource.setMetaDataWithKey("do_not_sell", value: "YES")
     }
     
     private func registerAdFactory() {
