@@ -197,7 +197,7 @@ class GuideScreenState extends State<GuideScreen> {
       onFinish: () async {
         await SharedPreferencesManager.setGuide(false);
         if (context.mounted) {
-          AutoRouter.of(context).replace(HomeRoute());
+          AutoRouter.of(context).replace(PremiumRoute(fromStart: true));
         }
       },
       onClickTarget: (target) {

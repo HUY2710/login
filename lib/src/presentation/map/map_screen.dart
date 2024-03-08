@@ -51,7 +51,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class MapScreenState extends State<MapScreen>
-    with WidgetsBindingObserver, PermissionMixin {
+    with WidgetsBindingObserver, PermissionMixin, AutoRouteAwareStateMixin {
   LatLng _defaultLocation = const LatLng(0, 0);
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
@@ -69,7 +69,8 @@ class MapScreenState extends State<MapScreen>
 
   @override
   void initState() {
-    context.pushRoute(PremiumRoute(fromStart: true));
+    // context.pushRoute(PremiumRoute(fromStart: true));
+    EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
     WidgetsBinding.instance.addObserver(this);
     FirestoreClient.instance.updateUser({'online': true});
     FlutterLifecycleDetector().onBackgroundChange.listen((isBackground) {
@@ -85,6 +86,20 @@ class MapScreenState extends State<MapScreen>
     // getIt<GroupCubit>().initStreamGroupChat();
     getIt<GroupCubit>().initStreamGroupChat();
     TokenManager.updateMyFCMToken();
+  }
+
+  @override
+  void didPopNext() {
+    WidgetsBinding.instance.addObserver(this);
+    EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+    super.didPopNext();
+  }
+
+  @override
+  void didPushNext() {
+    WidgetsBinding.instance.removeObserver(this);
+    EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(false);
+    super.didPushNext();
   }
 
   void getLocalLocation() {
@@ -108,24 +123,45 @@ class MapScreenState extends State<MapScreen>
   }
 
   Future<void> _initStart() async {
-    final bool statusLocation = await checkPermissionLocation();
-    if (!statusLocation) {
-      getIt<BannerCollapseAdCubit>().update(false);
-      await navigateToPermission();
-      final bool checkAgain = await checkPermissionLocation();
+    getIt<BannerCollapseAdCubit>().update(false);
+    final PermissionStatus statusLocation = await checkPermissionLocation();
+    if (!statusLocation.isGranted) {
+      bool checkAgain = false;
+      if (statusLocation.isPermanentlyDenied) {
+        EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+        await openAppSettings();
+        checkAgain = await requestPermissionLocation();
+      } else {
+        checkAgain = await requestPermissionLocation();
+      }
       if (checkAgain) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-          getIt<BannerCollapseAdCubit>().update(true);
           _init();
         });
       }
     } else {
-      //exist permission
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-        getIt<BannerCollapseAdCubit>().update(true);
         _init();
       });
     }
+
+    // if (!statusLocation) {
+    //   getIt<BannerCollapseAdCubit>().update(false);
+    //   await navigateToPermission();
+    //   final bool checkAgain = await checkPermissionLocation();
+    //   if (checkAgain) {
+    //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    //       getIt<BannerCollapseAdCubit>().update(true);
+    //       _init();
+    //     });
+    //   }
+    // } else {
+    //   //exist permission
+    //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    //     getIt<BannerCollapseAdCubit>().update(true);
+    //     _init();
+    //   });
+    // }
   }
 
   Future<void> _init() async {
@@ -202,6 +238,7 @@ class MapScreenState extends State<MapScreen>
     final always = await Permission.locationAlways.status.isGranted;
     if (always) {
       getIt<MyBackgroundService>().initialize();
+      getIt<BannerCollapseAdCubit>().update(true);
     }
   }
 
@@ -419,6 +456,7 @@ class MapScreenState extends State<MapScreen>
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
+    EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
     if (state == AppLifecycleState.resumed) {}
   }
 

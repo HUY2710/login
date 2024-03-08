@@ -17,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../../../flavors.dart';
@@ -190,7 +191,7 @@ class _SplashScreenState extends State<SplashScreen> with PermissionMixin {
   Future<void> setInitScreen() async {
     final bool isFirstLaunch =
         await SharedPreferencesManager.getIsFirstLaunch();
-    final bool isPermissionAllow = await checkPermissionLocation();
+    final bool isPermissionAllow = await checkPermissionLocation().isGranted;
     final isPremium = getIt<MyPurchaseManager>().state.isPremium();
     if (mounted) {
       if (isFirstLaunch) {

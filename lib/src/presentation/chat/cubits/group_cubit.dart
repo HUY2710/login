@@ -48,7 +48,7 @@ class GroupCubit extends Cubit<GroupState> {
     chatService.getUser2().listen((groupOfUser) async {
       if (groupOfUser.docs.isEmpty) {
         for (final group in myGroups) {
-          group.groupSubscription?.cancel();
+          await group.groupSubscription?.cancel();
         }
         myGroups.clear();
         emit(const GroupState.initial());
@@ -70,7 +70,7 @@ class GroupCubit extends Cubit<GroupState> {
                   .getDetailGroup(groupChange.doc.id);
               final index = myGroups
                   .indexWhere((group) => group.idGroup == storeGroup!.idGroup);
-              myGroups[index].groupSubscription?.cancel();
+              await myGroups[index].groupSubscription?.cancel();
               myGroups
                   .removeWhere((group) => group.idGroup == storeGroup!.idGroup);
               break;
@@ -92,39 +92,42 @@ class GroupCubit extends Cubit<GroupState> {
     final subscription = chatService
         .streamGroupChat(storeGroup.idGroup!)
         .listen((snapshot) async {
+      if (snapshot.exists) {
+        final StoreGroup storeGroupTemp = StoreGroup.fromJson(snapshot.data()!);
+        //lấy ra thông tin user từ tin nhắn cuối cùng trong collection group
+        final StoreUser? storeUser = await FirestoreClient.instance
+            .getUser(storeGroupTemp.lastMessage!.senderId);
+        bool seen = false;
+        // người dùng check in thì không kiểm tra đã gửi hay chưa
+        if (storeGroupTemp.lastMessage!.senderId == Global.instance.userCode &&
+            storeGroupTemp.lastMessage!.messageType == MessageType.checkIn) {
+          seen = storeGroup.seen ?? false;
+        } else {
+          seen = await Utils.getSeenMess(
+              storeGroup.idGroup!, storeGroupTemp.lastMessage!.sentAt);
+        }
+        // cập nhật store user, seen và last message cho group
+        storeGroup = storeGroup.copyWith(
+          storeUser: storeUser,
+          seen: seen,
+          lastMessage: storeGroupTemp.lastMessage,
+          groupName: storeGroupTemp.groupName,
+          avatarGroup: storeGroupTemp.avatarGroup,
+        );
+        //lấy ra index của group thay đổi dưới local
+        final index = myGroups.indexWhere((e) => e.idGroup == snapshot.id);
+        if (index < myGroups.length) {
+          //cập nhật list group
+          emit(const GroupState.loading());
+          myGroups[index] = storeGroup;
+          // sắp xếp theo group có tin nhắn cuối cùng muộn nhất
+          sortGroup();
+          emit(GroupState.success([...myGroups]));
+        }
+      }
       // lấy ra group thay đổi
-      final StoreGroup storeGroupTemp = StoreGroup.fromJson(snapshot.data()!);
-      //lấy ra thông tin user từ tin nhắn cuối cùng trong collection group
-      final StoreUser? storeUser = await FirestoreClient.instance
-          .getUser(storeGroupTemp.lastMessage!.senderId);
-      bool seen = false;
-      // người dùng check in thì không kiểm tra đã gửi hay chưa
-      if (storeGroupTemp.lastMessage!.senderId == Global.instance.userCode &&
-          storeGroupTemp.lastMessage!.messageType == MessageType.checkIn) {
-        seen = storeGroup.seen ?? false;
-      } else {
-        seen = await Utils.getSeenMess(
-            storeGroup.idGroup!, storeGroupTemp.lastMessage!.sentAt);
-      }
-      // cập nhật store user, seen và last message cho group
-      storeGroup = storeGroup.copyWith(
-        storeUser: storeUser,
-        seen: seen,
-        lastMessage: storeGroupTemp.lastMessage,
-        groupName: storeGroupTemp.groupName,
-        avatarGroup: storeGroupTemp.avatarGroup,
-      );
-      //lấy ra index của group thay đổi dưới local
-      final index = myGroups.indexWhere((e) => e.idGroup == snapshot.id);
-      if (index < myGroups.length) {
-        //cập nhật list group
-        emit(const GroupState.loading());
-        myGroups[index] = storeGroup;
-        // sắp xếp theo group có tin nhắn cuối cùng muộn nhất
-        sortGroup();
-        emit(GroupState.success([...myGroups]));
-      }
     });
+
     return subscription;
   }
 

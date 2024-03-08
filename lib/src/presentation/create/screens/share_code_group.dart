@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -61,15 +62,16 @@ class _ShareCodeGroupScreenState extends State<ShareCodeGroupScreen>
                       final resultBytes =
                           await widgetToBytes(repaintKey: repaintKey);
                       await Share.shareXFiles(
-                          [XFile(saveToCacheDirectory(resultBytes!))],
-                          text: context.l10n.qrCode);
+                        [XFile(saveToCacheDirectory(resultBytes!))],
+                      );
                     }
                   } finally {}
                 },
               ),
               TextButton(
                 onPressed: () async {
-                  final bool statusLocation = await checkPermissionLocation();
+                  final bool statusLocation =
+                      await checkPermissionLocation().isGranted;
                   if (!statusLocation && context.mounted) {
                     getIt<AppRouter>()
                         .replaceAll([PermissionRoute(fromMapScreen: false)]);
