@@ -14,6 +14,7 @@ import '../../../../../data/models/places/place_model.dart';
 import '../../../../../gen/gens.dart';
 import '../../../../../global/global.dart';
 import '../../../../../services/http_service.dart';
+import '../../../../../shared/constants/app_constants.dart';
 import '../../../../../shared/extension/context_extension.dart';
 import '../../../../../shared/helpers/map_helper.dart';
 import '../../../../../shared/widgets/custom_inkwell.dart';
@@ -116,7 +117,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
       height: isPremium ? 1.sh * 0.5 : 1.sh * 0.3,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20).r,
+        borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius).r,
       ),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 0.h),
       child: Column(
@@ -163,7 +164,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
         padding: EdgeInsets.all(16.r),
         margin: const EdgeInsets.symmetric(vertical: 2),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.r),
+            borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
             color: Colors.white,
             boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)]),
         child: Row(
@@ -198,7 +199,7 @@ class _CheckInLocationState extends State<CheckInLocation> {
       child: Container(
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.r),
+            borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
             color: Colors.white,
             boxShadow: const [
               BoxShadow(color: Colors.black12, blurRadius: 10)

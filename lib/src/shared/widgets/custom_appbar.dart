@@ -15,12 +15,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.textColor,
     this.leadingColor,
     this.padding,
+    this.trailing
   });
   final String? title;
   final TextStyle? style;
   final Color? textColor;
   final EdgeInsetsGeometry? padding;
   final Color? leadingColor;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       leadingWidth: 44.w,
       scrolledUnderElevation: 0,
+      actions: trailing != null ? [trailing!] : [],
       leading: Padding(
         padding: EdgeInsets.only(left: 16.w),
         child: GestureDetector(

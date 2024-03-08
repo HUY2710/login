@@ -51,7 +51,7 @@
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<true/>
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-4973559944609228~2433291331</string>
+	<string>ca-app-pub-6172905758741898~7523343125</string>
 	<key>GMSServiceKey</key>
 	<string>$(MAP_KEY)</string>
 	<key>LSApplicationQueriesSchemes</key>
