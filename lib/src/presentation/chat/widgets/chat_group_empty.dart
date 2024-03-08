@@ -28,23 +28,23 @@ class GroupChatEmpty extends StatelessWidget {
             ),
           ),
           24.verticalSpace,
-          CustomInkWell(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                decoration: BoxDecoration(
-                  gradient: gradientBackground,
-                  borderRadius: BorderRadius.circular(15.sp),
-                ),
-                child: Text(
-                  context.l10n.addNewMember,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-              onTap: () {})
+          // CustomInkWell(
+          //     child: Container(
+          //       padding:
+          //           const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          //       decoration: BoxDecoration(
+          //         gradient: gradientBackground,
+          //         borderRadius: BorderRadius.circular(15.sp),
+          //       ),
+          //       child: Text(
+          //         context.l10n.addNewMember,
+          //         style: TextStyle(
+          //             color: Colors.white,
+          //             fontSize: 14.sp,
+          //             fontWeight: FontWeight.w500),
+          //       ),
+          //     ),
+          //     onTap: () {})
         ],
       ),
     );

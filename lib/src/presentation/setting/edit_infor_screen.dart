@@ -118,21 +118,19 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
             userName: userNameCtrl.text.trim());
         // EasyLoading.dismiss();
         hideLoading();
-        Fluttertoast.showToast(msg: context.l10n.success).then((value) async {
-          final bool isShowInterAd = RemoteConfigManager.instance
-              .isShowAd(AdRemoteKeys.inter_edit_profile);
-          if (isShowInterAd) {
-            await InterAdUtil.instance.showInterAd(
-                id: getIt<AppAdIdManager>().adUnitId.interMessage, time: 0);
-          }
-          if (context.mounted) {
-            context.popRoute(true);
-          }
-        });
+        final bool isShowInterAd = RemoteConfigManager.instance
+            .isShowAd(AdRemoteKeys.inter_edit_profile);
+        if (isShowInterAd) {
+          await InterAdUtil.instance.showInterAd(
+              id: getIt<AppAdIdManager>().adUnitId.interMessage, time: 0);
+        }
+        if (context.mounted) {
+          context.popRoute(true);
+        }
       } catch (error) {
         // EasyLoading.dismiss();
         hideLoading();
-        Fluttertoast.showToast(msg: context.l10n.error);
+        // Fluttertoast.showToast(msg: context.l10n.error);
       }
     }
   }

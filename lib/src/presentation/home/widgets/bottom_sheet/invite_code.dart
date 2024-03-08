@@ -37,8 +37,9 @@ class InviteCode extends StatelessWidget with WidgetMixin {
         );
       } else {
         final resultBytes = await widgetToBytes(repaintKey: repaintKey);
-        await Share.shareXFiles([XFile(saveToCacheDirectory(resultBytes!))],
-            text: context.l10n.qrCode);
+        await Share.shareXFiles(
+          [XFile(saveToCacheDirectory(resultBytes!))],
+        );
       }
     } catch (e) {}
   }
@@ -79,13 +80,10 @@ class InviteCode extends StatelessWidget with WidgetMixin {
             20.h.verticalSpace,
             TabBarWidget(codeTypeCubit: codeTypeCubit),
             38.h.verticalSpace,
-            AnimatedCrossFade(
-                firstChild: buildCodeTabView(context),
-                secondChild: buildTabQrCodeView(context),
-                crossFadeState: codeTypeCubit.state == CodeType.code
-                    ? CrossFadeState.showFirst
-                    : CrossFadeState.showSecond,
-                duration: const Duration(milliseconds: 300)),
+            if (codeTypeCubit.state == CodeType.code)
+              buildCodeTabView(context)
+            else
+              buildTabQrCodeView(context),
             32.verticalSpace,
             GestureDetector(
               onTap: () => shareCode(context, code),

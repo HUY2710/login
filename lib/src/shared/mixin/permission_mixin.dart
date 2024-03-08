@@ -68,10 +68,10 @@ mixin PermissionMixin {
     return status;
   }
 
-  Future<bool> checkPermissionLocation() async {
+  Future<PermissionStatus> checkPermissionLocation() async {
     final PermissionStatus locationStatus =
         await Permission.locationWhenInUse.status;
-    return locationStatus.isGranted;
+    return locationStatus;
   }
 
   Future<bool> requestPermissionLocation() async {

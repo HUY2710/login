@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../module/iap/my_purchase_manager.dart';
 import '../../../module/iap/product_id.dart';
 import '../../config/di/di.dart';
+import '../../config/navigation/app_router.dart';
 import '../../gen/gens.dart';
 import '../../shared/constants/url_constants.dart';
 import '../../shared/extension/context_extension.dart';
@@ -18,7 +19,6 @@ import 'widgets/carouse_slider.dart';
 
 @RoutePage()
 class PremiumScreen extends StatefulWidget {
-
   const PremiumScreen({super.key, this.fromStart = false});
 
   final bool fromStart;
@@ -174,7 +174,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
             height: 30.r,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.r),
+                borderRadius: BorderRadius.circular(30.r),
                 color: MyColors.primary.withOpacity(0.6)),
             child: Row(
               children: [
@@ -182,23 +182,29 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   width: 20.r,
                   height: 20.r,
                   decoration: BoxDecoration(
-                     borderRadius: BorderRadius.circular(30.r),
-                color: Colors.white),
+                      borderRadius: BorderRadius.circular(30.r),
+                      color: Colors.white),
                   child: Icon(
                     Icons.close,
                     size: 14.r,
                   ),
                 ),
                 8.horizontalSpace,
-                Text(context.l10n.useLimitedVersion, style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white
-                ))
+                Text(context.l10n.useLimitedVersion,
+                    style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white))
               ],
             ),
           ),
-          onTap: () => context.popRoute()),
+          onTap: () {
+            if (widget.fromStart) {
+              AutoRouter.of(context).replace(HomeRoute());
+            } else {
+              context.popRoute();
+            }
+          }),
     );
   }
 
