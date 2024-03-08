@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../module/iap/my_purchase_manager.dart';
 import '../../../module/iap/product_id.dart';
 import '../../config/di/di.dart';
+import '../../config/navigation/app_router.dart';
 import '../../gen/gens.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
@@ -167,7 +168,13 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
                 color: Colors.black54)),
-        onTap: () => context.popRoute());
+        onTap: () {
+          if (widget.fromStart) {
+            AutoRouter.of(context).replace(HomeRoute());
+          } else {
+            context.popRoute();
+          }
+        });
   }
 
   Row buildRowTextButton() {
