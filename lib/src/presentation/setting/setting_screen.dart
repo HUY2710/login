@@ -108,26 +108,29 @@ class _SettingScreenState extends State<SettingScreen> {
                   children: [
                     _buildHideMyLocationSetting(),
                     _buildDivider(),
-                    Padding(padding: EdgeInsets.symmetric(vertical: 16.h), child: GestureDetector(
-                      onTap: () => context.pushRoute(const MapTypeRoute()),
-                      child: Row(
-                        children: [
-                          Assets.icons.icMap.svg(height: 24.h),
-                          12.horizontalSpace,
-                          Expanded(
-                            child: Text(
-                              context.l10n.mapType,
-                              style: TextStyle(
-                                fontSize: 13.sp,
-                                fontWeight: FontWeight.w400,
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.h),
+                      child: GestureDetector(
+                        onTap: () => context.pushRoute(const MapTypeRoute()),
+                        child: Row(
+                          children: [
+                            Assets.icons.icMap.svg(height: 24.h),
+                            12.horizontalSpace,
+                            Expanded(
+                              child: Text(
+                                context.l10n.mapType,
+                                style: TextStyle(
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
-                          ),
-                          16.horizontalSpace,
-                          Assets.icons.icNext.svg(height: 24.h),
-                        ],
+                            16.horizontalSpace,
+                            Assets.icons.icNext.svg(height: 24.h),
+                          ],
+                        ),
                       ),
-                    ),),
+                    ),
                     _buildDivider(),
                     _buildLanguageSetting(),
                   ],
@@ -212,37 +215,40 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Widget _buildRateUsSetting() {
-    return GestureDetector(
-      // onTap: () => showRatingDialog(fromSetting: true),
-      onTap: () async {
-        if (await InAppReview.instance.isAvailable()) {
-          await InAppReview.instance.requestReview();
-        } else {
-          InAppReview.instance.openStoreListing(
-            appStoreId: AppConstants.appIOSId,
-          );
-        }
-      },
-      behavior: HitTestBehavior.translucent,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Row(
-          children: [
-            Assets.icons.icRate.svg(height: 24.h),
-            12.horizontalSpace,
-            Expanded(
-              child: Text(
-                context.l10n.rateUs,
-                style: TextStyle(
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w400,
-                ),
+    final bool checkVisibleRate = RemoteConfigManager.instance.isShowRate();
+    return checkVisibleRate
+        ? GestureDetector(
+            // onTap: () => showRatingDialog(fromSetting: true),
+            onTap: () async {
+              if (await InAppReview.instance.isAvailable()) {
+                await InAppReview.instance.requestReview();
+              } else {
+                InAppReview.instance.openStoreListing(
+                  appStoreId: AppConstants.appIOSId,
+                );
+              }
+            },
+            behavior: HitTestBehavior.translucent,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              child: Row(
+                children: [
+                  Assets.icons.icRate.svg(height: 24.h),
+                  12.horizontalSpace,
+                  Expanded(
+                    child: Text(
+                      context.l10n.rateUs,
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          )
+        : const SizedBox.shrink();
   }
 
   Widget _buildDivider() {
@@ -253,15 +259,43 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Widget _buildLanguageSetting() {
-    return Padding(padding: EdgeInsets.symmetric(vertical: 16.h), child: GestureDetector(
-      onTap: () => context.pushRoute(LanguageRoute()),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.h),
+      child: GestureDetector(
+        onTap: () => context.pushRoute(LanguageRoute()),
+        child: Row(
+          children: [
+            Assets.icons.icLanguage.svg(height: 24.h),
+            12.horizontalSpace,
+            Expanded(
+              child: Text(
+                context.l10n.language,
+                style: TextStyle(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            16.horizontalSpace,
+            Assets.icons.icNext.svg(height: 24.h),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHideMyLocationSetting() {
+    final ValueCubit<bool> allowTrackingCubit =
+        ValueCubit(Global.instance.user!.shareLocation);
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.h),
       child: Row(
         children: [
-          Assets.icons.icLanguage.svg(height: 24.h),
+          Assets.icons.icHideLocation.svg(height: 24.h),
           12.horizontalSpace,
           Expanded(
             child: Text(
-              context.l10n.language,
+              context.l10n.allowOthersToTrack,
               style: TextStyle(
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w400,
@@ -269,74 +303,52 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
           ),
           16.horizontalSpace,
-          Assets.icons.icNext.svg(height: 24.h),
+          BlocBuilder<ValueCubit<bool>, bool>(
+            bloc: allowTrackingCubit,
+            builder: (context, state) {
+              return MainSwitch(
+                value: state,
+                onChanged: (value) async {
+                  if (!value) {
+                    getIt<BannerCollapseAdCubit>().update(false);
+                    showDialog(
+                      context: context,
+                      builder: (context1) => ActionDialog(
+                          title: context.l10n.allowOthersToTrack,
+                          subTitle: context.l10n.allowOthersToTrackSub,
+                          confirmTap: () async {
+                            try {
+                              await FirestoreClient.instance
+                                  .updateUser({'shareLocation': value});
+                              allowTrackingCubit.update(value);
+                              Global.instance.user = Global.instance.user
+                                  ?.copyWith(shareLocation: value);
+                              context1.popRoute();
+                            } catch (error) {
+                              debugPrint('error:$error');
+                            }
+                          },
+                          confirmText: context.l10n.ok),
+                    ).then(
+                        (value) => getIt<BannerCollapseAdCubit>().update(true));
+                  } else {
+                    try {
+                      await FirestoreClient.instance
+                          .updateUser({'shareLocation': value});
+                      allowTrackingCubit.update(value);
+                      Global.instance.user =
+                          Global.instance.user?.copyWith(shareLocation: value);
+                    } catch (error) {
+                      debugPrint('error:$error');
+                    }
+                  }
+                },
+              );
+            },
+          )
         ],
       ),
-    ),);
-  }
-
-  Widget _buildHideMyLocationSetting() {
-    final ValueCubit<bool> allowTrackingCubit =
-        ValueCubit(Global.instance.user!.shareLocation);
-    return Padding(padding: EdgeInsets.symmetric(vertical: 16.h), child: Row(
-      children: [
-        Assets.icons.icHideLocation.svg(height: 24.h),
-        12.horizontalSpace,
-        Expanded(
-          child: Text(
-            context.l10n.allowOthersToTrack,
-            style: TextStyle(
-              fontSize: 13.sp,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ),
-        16.horizontalSpace,
-        BlocBuilder<ValueCubit<bool>, bool>(
-          bloc: allowTrackingCubit,
-          builder: (context, state) {
-            return MainSwitch(
-              value: state,
-              onChanged: (value) async {
-                if (!value) {
-                  getIt<BannerCollapseAdCubit>().update(false);
-                  showDialog(
-                    context: context,
-                    builder: (context1) => ActionDialog(
-                        title: context.l10n.allowOthersToTrack,
-                        subTitle: context.l10n.allowOthersToTrackSub,
-                        confirmTap: () async {
-                          try {
-                            await FirestoreClient.instance
-                                .updateUser({'shareLocation': value});
-                            allowTrackingCubit.update(value);
-                            Global.instance.user = Global.instance.user
-                                ?.copyWith(shareLocation: value);
-                            context1.popRoute();
-                          } catch (error) {
-                            debugPrint('error:$error');
-                          }
-                        },
-                        confirmText: context.l10n.ok),
-                  ).then((value) =>
-                      getIt<BannerCollapseAdCubit>().update(true));
-                } else {
-                  try {
-                    await FirestoreClient.instance
-                        .updateUser({'shareLocation': value});
-                    allowTrackingCubit.update(value);
-                    Global.instance.user = Global.instance.user
-                        ?.copyWith(shareLocation: value);
-                  } catch (error) {
-                    debugPrint('error:$error');
-                  }
-                }
-              },
-            );
-          },
-        )
-      ],
-    ),);
+    );
   }
 
   Widget _buildUsernameEditSetting() {

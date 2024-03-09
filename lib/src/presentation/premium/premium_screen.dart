@@ -82,7 +82,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
                         child: Text('Not avaiable'),
                       );
                     }
-
                     final weeklyProduct =
                         purchaseState.getProductGroup(productKeyWeekly);
                     final monthlyProduct =

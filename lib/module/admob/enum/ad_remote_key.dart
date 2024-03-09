@@ -13,7 +13,8 @@ enum AdRemoteKeys {
   inter_add_place,
   native_map,
   inter_edit_profile,
-  native_edit
+  native_edit,
+  show_rate,
 }
 
 extension AdKeyNames on AdRemoteKeys {
