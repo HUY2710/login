@@ -210,7 +210,7 @@ class _DirectionMapState extends State<DirectionMap> {
                 onTap: () async {
                   // EasyLoading.show();
                   if (!purchaseState.isPremium()) {
-                    context.pushRoute(const PremiumRoute());
+                    context.pushRoute(PremiumRoute());
                   } else {
                     showLoading();
                     try {

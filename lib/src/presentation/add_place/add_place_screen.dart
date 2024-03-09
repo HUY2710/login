@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../app/cubit/loading_cubit.dart';
+import '../../../module/admob/widget/ads/build_banner_ad.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../data/models/store_location/store_location.dart';
@@ -114,6 +115,74 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
     });
   }
 
+  Future<void> _addPlace(StoreLocation? state) async {
+    if (nameLocationCtrl.text.isEmpty || addressLocationCtrl.text.isEmpty) {
+      return;
+    }
+    try {
+      context.popRoute();
+      showLoading();
+      if (widget.defaultPlace) {
+        //chỉnh sửa và tạo mới 1 cái place
+        final StorePlace newPlace = StorePlace(
+          idCreator: Global.instance.user!.code,
+          idPlace: 24.randomString(),
+          iconPlace: icPlaceCubit.state,
+          namePlace: nameLocationCtrl.text,
+          location: state?.toJson(),
+          radius: currentRadius,
+          colorPlace: selectColor,
+        );
+
+        if (getIt<SelectGroupCubit>().state != null) {
+          await FirestoreClient.instance.createPlace(
+            getIt<SelectGroupCubit>().state!.idGroup!,
+            newPlace,
+          );
+          for (final member
+          in Global.instance.groupMembers) {
+            await NotificationPlaceManager
+                .createNotificationPlace(
+              idGroup: getIt<SelectGroupCubit>()
+                  .state!
+                  .idGroup!,
+              idPlace: newPlace.idPlace!,
+              idDocNotification: member.code,
+              storeNotificationPlace:
+              const StoreNotificationPlace(),
+            );
+          }
+        }
+        if (widget.place != null) {
+          final List<StorePlace> updatedList = List.from(
+              getIt<DefaultPlaceCubit>().state ?? []);
+          updatedList.remove(widget.place);
+          getIt<DefaultPlaceCubit>().update(updatedList);
+        }
+      } else {
+        //update
+        tempPlace = tempPlace?.copyWith(
+          iconPlace: icPlaceCubit.state,
+          namePlace: nameLocationCtrl.text,
+          location: state?.toJson(),
+          radius: currentRadius,
+          colorPlace: selectColor,
+        );
+        if (tempPlace != null) {
+          await FirestoreClient.instance.updatePlace(
+            getIt<SelectGroupCubit>().state!.idGroup!,
+            tempPlace!.idPlace!,
+            tempPlace!.toJson(),
+          );
+        }
+      }
+
+      hideLoading();
+    } catch (error) {
+      debugPrint('error:$error');
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -123,83 +192,27 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: context.l10n.addPlaces),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 36.h, left: 16.w, right: 16.w),
-        child: BlocBuilder<SelectPlaceCubit, StoreLocation?>(
+      appBar: CustomAppBar(title: context.l10n.addPlaces,
+        trailing: BlocBuilder<SelectPlaceCubit, StoreLocation?>(
           bloc: selectPlaceCubit,
           builder: (context, state) {
-            return AppButton(
-              title: context.l10n.done,
-              onTap: nameLocationCtrl.text.isNotEmpty &&
-                      addressLocationCtrl.text.isNotEmpty
-                  ? () async {
-                      try {
-                        context.popRoute();
-                        showLoading();
-                        if (widget.defaultPlace) {
-                          //chỉnh sửa và tạo mới 1 cái place
-                          final StorePlace newPlace = StorePlace(
-                            idCreator: Global.instance.user!.code,
-                            idPlace: 24.randomString(),
-                            iconPlace: icPlaceCubit.state,
-                            namePlace: nameLocationCtrl.text,
-                            location: state?.toJson(),
-                            radius: currentRadius,
-                            colorPlace: selectColor,
-                          );
-
-                          if (getIt<SelectGroupCubit>().state != null) {
-                            await FirestoreClient.instance.createPlace(
-                              getIt<SelectGroupCubit>().state!.idGroup!,
-                              newPlace,
-                            );
-                            for (final member in Global.instance.groupMembers) {
-                              await NotificationPlaceManager
-                                  .createNotificationPlace(
-                                idGroup:
-                                    getIt<SelectGroupCubit>().state!.idGroup!,
-                                idPlace: newPlace.idPlace!,
-                                idDocNotification: member.code,
-                                storeNotificationPlace:
-                                    const StoreNotificationPlace(),
-                              );
-                            }
-                          }
-                          if (widget.place != null) {
-                            final List<StorePlace> updatedList = List.from(
-                                getIt<DefaultPlaceCubit>().state ?? []);
-                            updatedList.remove(widget.place);
-                            getIt<DefaultPlaceCubit>().update(updatedList);
-                          }
-                        } else {
-                          //update
-                          tempPlace = tempPlace?.copyWith(
-                            iconPlace: icPlaceCubit.state,
-                            namePlace: nameLocationCtrl.text,
-                            location: state?.toJson(),
-                            radius: currentRadius,
-                            colorPlace: selectColor,
-                          );
-                          if (tempPlace != null) {
-                            await FirestoreClient.instance.updatePlace(
-                              getIt<SelectGroupCubit>().state!.idGroup!,
-                              tempPlace!.idPlace!,
-                              tempPlace!.toJson(),
-                            );
-                          }
-                        }
-
-                        hideLoading();
-                      } catch (error) {
-                        debugPrint('error:$error');
-                      }
-                    }
-                  : () {},
+            return InkWell(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.r),
+                child: Text(
+                  context.l10n.done,
+                  style: TextStyle(
+                      color: MyColors.primary,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 17.r
+                  ),
+                ),
+              ),
+              onTap: () => _addPlace(state),
             );
           },
-        ),
-      ),
+        ),),
+      bottomNavigationBar: const BuildBannerWidget(),
       body: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -210,7 +223,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(20.r)),
+              borderRadius: BorderRadius.all(Radius.circular(AppConstants.widgetBorderRadius.r)),
               child: Stack(
                 children: [
                   BlocConsumer<ValueCubit<String>, String>(
@@ -326,7 +339,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                                     vertical: 10.h, horizontal: 16.w),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.all(
-                                    Radius.circular(15.r),
+                                    Radius.circular(AppConstants.widgetBorderRadius.r),
                                   ),
                                   border: Border.all(
                                       color: state == pathIcPlaces[index]

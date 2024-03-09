@@ -4,7 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../../app/cubit/native_ad_status_cubit.dart';
+import '../../../../module/admob/app_ad_id_manager.dart';
+import '../../../../module/admob/enum/ad_remote_key.dart';
+import '../../../../module/admob/widget/ads/small_native_ad.dart';
 import '../../../config/di/di.dart';
+import '../../../config/remote_config.dart';
 import '../../../gen/gens.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
@@ -36,10 +41,34 @@ class MapTypeScreen extends StatelessWidget {
       ),
     ];
 
+    Widget buildAd() {
+      final bool isShow =
+          RemoteConfigManager.instance.isShowAd(AdRemoteKeys.native_map);
+      return BlocBuilder<NativeAdStatusCubit, bool>(
+        builder: (context, state) {
+          return Visibility(
+            maintainState: true,
+            visible: state && isShow,
+            child: Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                  top: BorderSide(color: MyColors.primary),
+                ),
+              ),
+              child: SmallNativeAd(
+                unitId: getIt<AppAdIdManager>().adUnitId.nativeMap,
+              ),
+            ),
+          );
+        },
+      );
+    }
+
     final MapTypeCubit mapTypeCubit = getIt<MapTypeCubit>();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(title: context.l10n.mapType),
+      bottomNavigationBar: buildAd(),
       body: BlocBuilder<MapTypeCubit, MapType>(
         bloc: mapTypeCubit,
         builder: (context, state) {
@@ -59,7 +88,7 @@ class MapTypeScreen extends StatelessWidget {
                   colorShadow: const Color(0xff9C747D).withOpacity(0.17),
                   borderRadius: BorderRadius.all(Radius.circular(20.r)),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(18.r)),
+                    borderRadius: BorderRadius.all(Radius.circular(20.r)),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [

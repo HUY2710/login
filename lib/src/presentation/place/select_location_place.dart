@@ -15,6 +15,7 @@ import '../../data/models/store_location/store_location.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
 import '../../services/location_service.dart';
+import '../../shared/constants/app_constants.dart';
 import '../../shared/cubit/value_cubit.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
@@ -182,7 +183,7 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
                   onTap: () => context.popRoute(),
                   child: ShadowContainer(
                     padding: EdgeInsets.all(6.r),
-                    borderRadius: BorderRadius.all(Radius.circular(15.r)),
+                    borderRadius: BorderRadius.all(Radius.circular(AppConstants.widgetBorderRadius.r)),
                     child: SvgPicture.asset(
                       Assets.icons.iconBack.path,
                       width: 28.r,
@@ -195,7 +196,7 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
                   child: ShadowContainer(
                     padding:
                         EdgeInsets.symmetric(vertical: 10.h, horizontal: 16.w),
-                    borderRadius: BorderRadius.all(Radius.circular(15.r)),
+                    borderRadius: BorderRadius.all(Radius.circular(AppConstants.widgetBorderRadius.r)),
                     child: BlocBuilder<ValueCubit<String>, String>(
                       bloc: addressCubit,
                       builder: (context, state) {
@@ -227,7 +228,7 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
                   },
                   child: ShadowContainer(
                     padding: EdgeInsets.all(6.r),
-                    borderRadius: BorderRadius.all(Radius.circular(15.r)),
+                    borderRadius: BorderRadius.all(Radius.circular(AppConstants.widgetBorderRadius.r)),
                     child: SvgPicture.asset(
                       Assets.icons.icChecked.path,
                       width: 28.r,
@@ -249,7 +250,7 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
                     if (statePurchase.isPremium()) {
                       showModalSearchPlace();
                     } else {
-                      context.pushRoute(const PremiumRoute());
+                      context.pushRoute(PremiumRoute());
                     }
                   },
                   child: Row(
@@ -258,7 +259,7 @@ class _SelectLocationPlaceScreenState extends State<SelectLocationPlaceScreen> {
                         child: ShadowContainer(
                           padding: EdgeInsets.symmetric(
                               vertical: 12.h, horizontal: 16.w),
-                          borderRadius: BorderRadius.all(Radius.circular(15.r)),
+                          borderRadius: BorderRadius.all(Radius.circular(AppConstants.widgetBorderRadius.r)),
                           child: Row(
                             children: [
                               SvgPicture.asset(

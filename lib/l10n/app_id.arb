@@ -182,5 +182,13 @@
   "uploadPhoto": "Unggah Foto",
   "joinGroupQr": "Bergabung dengan kode QR",
   "invalidQrCode": "Kode QR tidak valid",
-  "pleaseCheckQrCode": "Harap periksa kembali kode QR Anda"
+  "pleaseCheckQrCode": "Harap periksa kembali kode QR Anda",
+  "useLimitedVersion": "Lanjutkan dengan Versi Terbatas",
+  "useLimitedVersion": "Lanjutkan dengan Versi Terbatas",
+  "restore": "Pulihkan",
+  "week": "Minggu",
+  "billedMonthlyTotal": "Dibebankan bulanan, total",
+  "weekly": "Mingguan",
+  "billedWeeklyOnly": "Dibebankan mingguan saja",
+  "youCanCancelAnyTime": "Anda dapat membatalkan kapan saja"
 }

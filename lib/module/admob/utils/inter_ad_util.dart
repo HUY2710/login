@@ -11,17 +11,18 @@ class InterAdUtil {
 
   static InterAdUtil instance = InterAdUtil._();
   bool _canShow = true;
+  bool _canShowInter = true;
 
-  Future<void> showInterAd({
-    required String id,
-    VoidCallback? onShowed,
-    VoidCallback? onFailed,
-    VoidCallback? onNoInternet,
-    VoidCallback? adDismissed,
-  }) async {
-    if (_canShow) {
-      _canShow = false;
-      await EasyAds.instance.showSplashInterstitialAd(
+  Future<void> showInterAd(
+      {required String id,
+      VoidCallback? onShowed,
+      VoidCallback? onFailed,
+      VoidCallback? onNoInternet,
+      VoidCallback? adDismissed,
+      int? time}) async {
+    if (_canShowInter) {
+      _canShowInter = false;
+      await EasyAds.instance.showInterstitialAd(
         getIt<AppRouter>().navigatorKey.currentContext!,
         adId: id,
         onShowed: () {
@@ -38,9 +39,9 @@ class InterAdUtil {
         },
       );
       Timer(
-        const Duration(seconds: 15),
+        Duration(seconds: time ?? 20),
         () {
-          _canShow = true;
+          _canShowInter = true;
         },
       );
     }

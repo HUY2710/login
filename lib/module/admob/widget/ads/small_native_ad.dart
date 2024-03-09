@@ -23,17 +23,14 @@ class SmallNativeAd extends StatelessWidget {
       AdButtonPosition.bottom =>
         getIt<AppAdIdManager>().bottomSmallNativeFactory,
     };
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: ColoredBox(
-        color: Colors.white,
-        child: EasyNativeAd(
-          factoryId: factoryId,
-          adId: unitId,
-          height: 140,
-          loadingWidget: SmallAdLoading(
-            buttonPosition: buttonPosition,
-          ),
+    return ColoredBox(
+      color: Colors.white,
+      child: EasyNativeAd(
+        factoryId: factoryId,
+        adId: unitId,
+        height: 140,
+        loadingWidget: SmallAdLoading(
+          buttonPosition: buttonPosition,
         ),
       ),
     );

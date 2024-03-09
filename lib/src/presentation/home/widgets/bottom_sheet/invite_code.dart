@@ -29,11 +29,18 @@ class InviteCode extends StatelessWidget with WidgetMixin {
   Future<void> shareCode(BuildContext context, String code) async {
     try {
       EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
-      final box = context.findRenderObject() as RenderBox?;
-      await Share.shareWithResult(
-        code,
-        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-      );
+      if (codeTypeCubit.state == CodeType.code) {
+        final box = context.findRenderObject() as RenderBox?;
+        await Share.shareWithResult(
+          code,
+          sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+        );
+      } else {
+        final resultBytes = await widgetToBytes(repaintKey: repaintKey);
+        await Share.shareXFiles(
+          [XFile(saveToCacheDirectory(resultBytes!))],
+        );
+      }
     } catch (e) {}
   }
 
@@ -73,13 +80,10 @@ class InviteCode extends StatelessWidget with WidgetMixin {
             20.h.verticalSpace,
             TabBarWidget(codeTypeCubit: codeTypeCubit),
             38.h.verticalSpace,
-            AnimatedCrossFade(
-                firstChild: buildCodeTabView(context),
-                secondChild: buildTabQrCodeView(context),
-                crossFadeState: codeTypeCubit.state == CodeType.code
-                    ? CrossFadeState.showFirst
-                    : CrossFadeState.showSecond,
-                duration: const Duration(milliseconds: 300)),
+            if (codeTypeCubit.state == CodeType.code)
+              buildCodeTabView(context)
+            else
+              buildTabQrCodeView(context),
             32.verticalSpace,
             GestureDetector(
               onTap: () => shareCode(context, code),
@@ -129,13 +133,13 @@ class InviteCode extends StatelessWidget with WidgetMixin {
             child: QrImageView(
               backgroundColor: Colors.white,
               data: code,
-              size: 172.r,
+              size: 172.w,
             ),
           ),
         ),
         16.h.verticalSpace,
         SizedBox(
-          width: 172.r,
+          width: 172.w,
           child: FilledButton.icon(
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.white),

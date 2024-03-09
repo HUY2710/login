@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../constants/app_constants.dart';
 import '../../extension/context_extension.dart';
 
 class MainTextFormField extends StatefulWidget {
@@ -67,7 +68,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
             EdgeInsets.symmetric(horizontal: 16.w, vertical: 13.h),
         hintText: widget.hintText,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15.r),
+          borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
           borderSide: BorderSide.none,
         ),
         prefixIconConstraints: BoxConstraints(maxWidth: 150.r),

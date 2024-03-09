@@ -4,8 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../app/cubit/language_cubit.dart';
+import '../../../../module/admob/app_ad_id_manager.dart';
+import '../../../../module/admob/enum/ad_remote_key.dart';
+import '../../../../module/admob/widget/ads/large_native_ad.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
+import '../../../config/remote_config.dart';
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../gen/gens.dart';
 import '../../../shared/constants/app_constants.dart';
@@ -27,6 +31,25 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
+  Widget? _buildAd() {
+    final bool isShow =
+        RemoteConfigManager.instance.isShowAd(AdRemoteKeys.native_language);
+    if (!isShow) {
+      return null;
+    }
+    if (widget.isFirst ?? true) {
+      return LargeNativeAd(
+        unitId: getIt<AppAdIdManager>().adUnitId.nativeLanguage,
+        remoteKey: AdRemoteKeys.native_language,
+      );
+    } else {
+      return LargeNativeAd(
+        unitId: getIt<AppAdIdManager>().adUnitId.nativeLanguageSetting,
+        remoteKey: AdRemoteKeys.native_language_setting,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Language currentLanguage = context.read<LanguageCubit>().state;
@@ -35,6 +58,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 56.h,
+          elevation: 0,
+          scrolledUnderElevation: 0,
           leading: (widget.isFirst == null || widget.isFirst == false)
               ? Center(
                   child: GestureDetector(
@@ -64,6 +89,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
               ? []
               : [_buildAcceptButton()],
         ),
+        bottomNavigationBar: _buildAd(),
         body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 16.h),

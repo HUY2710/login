@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../config/navigation/app_router.dart';
 import '../../services/activity_recognition_service.dart';
@@ -17,9 +19,34 @@ import 'widget/guide_first_permission_android.dart';
 import 'widget/permission_content.dart';
 
 @RoutePage()
-class PermissionScreen extends StatelessWidget with PermissionMixin {
+class PermissionScreen extends StatefulWidget {
   const PermissionScreen({super.key, required this.fromMapScreen});
   final bool fromMapScreen;
+
+  @override
+  State<PermissionScreen> createState() => _PermissionScreenState();
+}
+
+class _PermissionScreenState extends State<PermissionScreen>
+    with WidgetsBindingObserver, PermissionMixin {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(false);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +72,7 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
               subTitle: context.l10n.permissionsGreateSub,
               backgroundColor: Colors.white.withOpacity(0.95),
               confirmTap: () => context.popRoute(true),
-              confirmText: context.l10n.allow,
+              confirmText: context.l10n.continueText,
             );
           }
           return GuideFirstPermissionAndroid(
@@ -77,7 +104,7 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
               bloc: typeRequest,
               builder: (context, state) {
                 return AppButton(
-                  title: context.l10n.allow,
+                  title: context.l10n.continueText,
                   onTap: () async {
                     if (state == 1) {
                       final result = await showGuidePermissionDialog(
@@ -108,7 +135,7 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
                       }
                       motionCubit.update(status);
                       typeRequest.update(0); //không request nữa
-                      if (!fromMapScreen && context.mounted) {
+                      if (!widget.fromMapScreen && context.mounted) {
                         context.router.replaceAll([const GuideRoute()]);
                       }
                     }
@@ -118,7 +145,7 @@ class PermissionScreen extends StatelessWidget with PermissionMixin {
             ),
             TextButton(
               onPressed: () {
-                if (context.mounted && !fromMapScreen) {
+                if (context.mounted && !widget.fromMapScreen) {
                   context.replaceRoute(const GuideRoute());
                 } else if (context.mounted) {
                   context.popRoute();

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:applovin_max/applovin_max.dart';
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:battery_plus/battery_plus.dart';
@@ -16,10 +17,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../../../flavors.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
+import '../../../module/admob/enum/ad_remote_key.dart';
 import '../../../module/admob/model/ad_unit_id/ad_unit_id_model.dart';
 import '../../../module/admob/utils/inter_ad_util.dart';
 import '../../../module/iap/my_purchase_manager.dart';
@@ -81,13 +84,16 @@ class _SplashScreenState extends State<SplashScreen> with PermissionMixin {
     await loadEnv();
     await Future.wait([
       RemoteConfigManager.instance.initConfig(),
-      // initAppsflyer(),
-      // AppLovinMAX.initialize(EnvParams.appLovinKey),
+      initAppsflyer(),
+      AppLovinMAX.initialize(EnvParams.appLovinKey),
     ]);
     await RemoteConfigManager.instance.initConfig();
     await loadAdUnitId();
     await configureAd();
     Global.instance.packageInfo = await PackageInfo.fromPlatform();
+    await getMe();
+    await checkInGroup();
+    await getIt<TrackingHistoryPlaceService>().initGroups();
     if (EasyAds.instance.hasInternet) {
       await initUpgrader();
     } else {
@@ -97,10 +103,12 @@ class _SplashScreenState extends State<SplashScreen> with PermissionMixin {
 
   Future<bool> showSplashInter() async {
     final Completer<bool> completer = Completer();
-    final bool isShowAd = RemoteConfigManager.instance.globalShowAd();
-    if (isShowAd) {
+
+    final bool isShowInter =
+        RemoteConfigManager.instance.isShowAd(AdRemoteKeys.inter_splash);
+    if (isShowInter) {
       await InterAdUtil.instance.showInterSplashAd(
-        id: getIt<AppAdIdManager>().adUnitId.inter,
+        id: getIt<AppAdIdManager>().adUnitId.interSplash,
         onShowed: () {
           completer.complete(true);
         },
@@ -124,12 +132,13 @@ class _SplashScreenState extends State<SplashScreen> with PermissionMixin {
 
   void initAdOpen() {
     //check show ad using Remote Config
-    const bool isOpenAppAd = true;
+    final bool isOpenAppAd =
+        RemoteConfigManager.instance.isShowAd(AdRemoteKeys.app_open_resume);
     //set up ad open
     if (isOpenAppAd) {
       EasyAds.instance.appLifecycleReactor?.setOnSplashScreen(false);
       EasyAds.instance.initAdmob(
-        appOpenAdUnitId: getIt<AppAdIdManager>().adUnitId.adOpen,
+        appOpenAdUnitId: getIt<AppAdIdManager>().adUnitId.appopenResume,
       );
     }
   }
@@ -158,9 +167,9 @@ class _SplashScreenState extends State<SplashScreen> with PermissionMixin {
 
   Future<void> onInitializedConfig() async {
     // TODO(son): Bỏ comment khi gắn ad
-    // if (RemoteConfigManager.instance.isShowAd(AdRemoteKeys.interSplash)) {
-    //   await showSplashInter();
-    // }
+    if (RemoteConfigManager.instance.isShowAd(AdRemoteKeys.inter_splash)) {
+      await showSplashInter();
+    }
     await setInitScreen();
   }
 
@@ -180,12 +189,9 @@ class _SplashScreenState extends State<SplashScreen> with PermissionMixin {
   }
 
   Future<void> setInitScreen() async {
-    await getMe();
-    await checkInGroup();
-    await getIt<TrackingHistoryPlaceService>().initGroups();
     final bool isFirstLaunch =
         await SharedPreferencesManager.getIsFirstLaunch();
-    final bool isPermissionAllow = await checkPermissionLocation();
+    final bool isPermissionAllow = await checkPermissionLocation().isGranted;
     final isPremium = getIt<MyPurchaseManager>().state.isPremium();
     if (mounted) {
       if (isFirstLaunch) {

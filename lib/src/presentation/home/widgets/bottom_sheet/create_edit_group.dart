@@ -24,6 +24,7 @@ import '../../../../shared/helpers/valid_helper.dart';
 import '../../../../shared/widgets/containers/shadow_container.dart';
 import '../../../../shared/widgets/my_drag.dart';
 import '../../../map/cubit/select_group_cubit.dart';
+import '../../cubit/banner_collapse_cubit.dart';
 import '../dialog/avatar_dialog.dart';
 import 'invite_code.dart';
 import 'show_bottom_sheet_home.dart';
@@ -135,6 +136,7 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
 
   @override
   Widget build(BuildContext context) {
+    getIt<BannerCollapseAdCubit>().update(false);
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,

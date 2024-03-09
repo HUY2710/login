@@ -2,10 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>FlutterDeepLinkingEnabled</key>
-    <true/>
-    <key>ITSAppUsesNonExemptEncryption</key>
-    <false/>
+	<key>FlutterDeepLinkingEnabled</key>
+	<true/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -29,29 +29,29 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLName</key>
-            <string>invite.com</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>invite.com</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>fbAPP-ID</string>
-                <string>groupsharing</string>
+				<string>groupsharing</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FacebookAppID</key>
-	<string>APP-ID</string>
+	<string>2176809139333271</string>
 	<key>FacebookClientToken</key>
-	<string>CLIENT-TOKEN</string>
+	<string>227dbeb6c4c8df544b2ff85429e82f7c</string>
 	<key>FacebookDisplayName</key>
 	<string>$(BUNDLE_NAME)</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<true/>
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-4973559944609228~2433291331</string>
+	<string>ca-app-pub-6172905758741898~7523343125</string>
 	<key>GMSServiceKey</key>
 	<string>$(MAP_KEY)</string>
 	<key>LSApplicationQueriesSchemes</key>

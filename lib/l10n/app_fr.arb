@@ -182,5 +182,13 @@
   "uploadPhoto": "Télécharger une photo",
   "joinGroupQr": "Rejoindre avec un code QR",
   "invalidQrCode": "Code QR invalide",
-  "pleaseCheckQrCode": "Veuillez vérifier à nouveau votre code QR"
+  "pleaseCheckQrCode": "Veuillez vérifier à nouveau votre code QR",
+  "useLimitedVersion": "Continuer avec la version limitée",
+  "useLimitedVersion": "Continuer avec la Version Limitée",
+  "restore": "Restaurer",
+  "week": "Semaine",
+  "billedMonthlyTotal": "Facturé mensuellement, total",
+  "weekly": "Hebdomadaire",
+  "billedWeeklyOnly": "Facturé uniquement chaque semaine",
+  "youCanCancelAnyTime": "Vous pouvez annuler à tout moment"
 }

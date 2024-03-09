@@ -6,6 +6,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../app/cubit/loading_cubit.dart';
+import '../../../app/cubit/native_ad_status_cubit.dart';
+import '../../../module/admob/app_ad_id_manager.dart';
+import '../../../module/admob/enum/ad_remote_key.dart';
+import '../../../module/admob/utils/inter_ad_util.dart';
+import '../../../module/admob/widget/ads/small_native_ad.dart';
+import '../../config/di/di.dart';
+import '../../config/remote_config.dart';
 import '../../data/local/avatar/avatar_repository.dart';
 import '../../data/models/avatar/avatar_model.dart';
 import '../../data/remote/firestore_client.dart';
@@ -111,83 +118,125 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
             userName: userNameCtrl.text.trim());
         // EasyLoading.dismiss();
         hideLoading();
-        Fluttertoast.showToast(msg: context.l10n.success)
-            .then((value) => context.popRoute(true));
+        final bool isShowInterAd = RemoteConfigManager.instance
+            .isShowAd(AdRemoteKeys.inter_edit_profile);
+        if (isShowInterAd) {
+          await InterAdUtil.instance.showInterAd(
+              id: getIt<AppAdIdManager>().adUnitId.interMessage, time: 0);
+        }
+        if (context.mounted) {
+          context.popRoute(true);
+        }
       } catch (error) {
         // EasyLoading.dismiss();
         hideLoading();
-        Fluttertoast.showToast(msg: context.l10n.error);
+        // Fluttertoast.showToast(msg: context.l10n.error);
       }
     }
+  }
+
+  Widget buildAd() {
+    final bool isShow =
+        RemoteConfigManager.instance.isShowAd(AdRemoteKeys.native_edit);
+    return BlocBuilder<NativeAdStatusCubit, bool>(
+      builder: (context, state) {
+        return Visibility(
+          maintainState: true,
+          visible: state && isShow,
+          child: SmallNativeAd(
+            unitId: getIt<AppAdIdManager>().adUnitId.nativeEdit,
+          ),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: context.l10n.editAccount),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
-        child: AppButton(
-          title: context.l10n.save,
-          onTap: updateInfo,
-          isEnable: userNameCtrl.text.trim().isNotEmpty,
-        ),
-      ),
-      body: Column(
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          70.verticalSpace,
-          Stack(
-            children: [
-              BlocBuilder<ValueCubit<String>, String>(
-                bloc: pathAvatarCubit,
-                builder: (context, state) {
-                  return Hero(
-                    tag: 'editAvatar',
-                    child: CircleAvatar(
-                      radius: 75,
-                      backgroundImage: AssetImage(state),
-                    ),
-                  );
-                },
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    showDialogAvatar();
-                  },
-                  child: ShadowContainer(
-                    padding: EdgeInsets.all(8.r),
-                    child: SvgPicture.asset(Assets.icons.icEdit.path),
-                  ),
-                ),
-              )
-            ],
-          ),
-          36.verticalSpace,
-          ShadowContainer(
-            padding: EdgeInsets.symmetric(vertical: 14.h),
-            margin: EdgeInsets.symmetric(horizontal: 16.w),
-            borderRadius: BorderRadius.all(Radius.circular(20.r)),
-            colorShadow: const Color(0xff9C747D).withOpacity(0.17),
-            child: TextField(
-              controller: userNameCtrl,
-              cursorColor: MyColors.primary,
-              textAlign: TextAlign.center,
-              onChanged: (value) {
-                setState(() {
-                  userNameCtrl.text = value;
-                });
-              },
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                filled: false,
-                isDense: true,
-              ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+            child: AppButton(
+              title: context.l10n.save,
+              onTap: updateInfo,
+              isEnable: userNameCtrl.text.trim().isNotEmpty,
             ),
           ),
+          5.h.verticalSpace,
+          buildAd()
         ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            30.verticalSpace,
+            Stack(
+              children: [
+                BlocBuilder<ValueCubit<String>, String>(
+                  bloc: pathAvatarCubit,
+                  builder: (context, state) {
+                    return Hero(
+                      tag: 'editAvatar',
+                      child: CircleAvatar(
+                        radius: 75,
+                        backgroundImage: AssetImage(state),
+                      ),
+                    );
+                  },
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialogAvatar();
+                    },
+                    child: ShadowContainer(
+                      padding: EdgeInsets.all(8.r),
+                      child: SvgPicture.asset(Assets.icons.icEdit.path),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            36.verticalSpace,
+            ShadowContainer(
+              padding: EdgeInsets.symmetric(vertical: 14.h),
+              margin: EdgeInsets.symmetric(horizontal: 16.w),
+              borderRadius: BorderRadius.all(Radius.circular(20.r)),
+              colorShadow: const Color(0xff9C747D).withOpacity(0.17),
+              child: TextField(
+                controller: userNameCtrl,
+                cursorColor: MyColors.primary,
+                textAlign: TextAlign.center,
+                onChanged: (value) {
+                  setState(() {
+                    userNameCtrl.text = value;
+                  });
+                },
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  filled: false,
+                  isDense: true,
+                ),
+              ),
+            ),
+            // 6.verticalSpace,
+            // Padding(
+            //   padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
+            //   child: ShadowContainer(
+            //     borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            //     child: ClipRRect(
+            //         borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            //         child: buildAd()),
+            //   ),
+            // )
+          ],
+        ),
       ),
     );
   }
