@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../app/cubit/language_cubit.dart';
 import '../../config/navigation/app_router.dart';
@@ -47,7 +48,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
       if (isCreateInfoFirstTime) {
         context.replaceRoute(CreateUsernameRoute());
       } else {
-        final bool statusLocation = await checkPermissionLocation();
+        final bool statusLocation = await checkPermissionLocation().isGranted;
         if (!statusLocation && context.mounted) {
           context.replaceRoute(PermissionRoute(fromMapScreen: false));
           return;
@@ -56,7 +57,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
           if (showGuide && context.mounted) {
             context.replaceRoute(const GuideRoute());
           } else if (context.mounted) {
-            context.replaceRoute(HomeRoute());
+            // context.replaceRoute(HomeRoute());
+            context.replaceRoute(PremiumRoute(fromStart: true));
           }
         }
       }

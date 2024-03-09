@@ -44,7 +44,7 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
     <meta-data android:name="flutterEmbedding" android:value="2" />
     <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
-      android:value="ca-app-pub-3940256099942544~3347511713" />
+      android:value="ca-app-pub-6172905758741898~1567722132" />
     <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="2176809139333271" />
     <meta-data android:name="com.facebook.sdk.ClientToken" android:value="227dbeb6c4c8df544b2ff85429e82f7c" />
     <meta-data android:name="com.google.android.gms.ads.flag.NATIVE_AD_DEBUGGER_ENABLED"

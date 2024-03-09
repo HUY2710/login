@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../gen/assets.gen.dart';
+import '../../../gen/gens.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/custom_inkwell.dart';
 import '../cubit/indicator_cubit.dart';
@@ -22,49 +23,59 @@ class _CarouseSliderPremiumState extends State<CarouseSliderPremium> {
   Widget build(BuildContext context) {
     return BlocBuilder<IndicatorCubit, int>(
       builder: (context, state) {
-        return CarouselSlider(
-          carouselController: controller,
-          items: [
-            buildItem(
-              context,
-              svgItem: Assets.icons.premium.icNoAds,
-              title: context.l10n.noAds,
-              subTitle: context.l10n.noAdsSub,
-              index: 0,
-            ),
-            buildItem(
-              context,
-              svgItem: Assets.icons.premium.icNearPlace,
-              title: context.l10n.checkInAtPlaces,
-              subTitle: context.l10n.checkInAtPlacesSub,
-              index: 1,
-            ),
-            buildItem(
-              context,
-              svgItem: Assets.icons.premium.icMember,
-              title: context.l10n.guideToGroupMembers,
-              subTitle: context.l10n.guideToGroupMembersSub,
-              index: 2,
-            ),
-            buildItem(
-              context,
-              svgItem: Assets.icons.premium.icSharePremium,
-              title: context.l10n.sendMyCurrent,
-              subTitle: context.l10n.sendMyCurrentSub,
-              index: 3,
+        return Column(
+          children: [
+            Text('All of Premium Benefits', style: TextStyle(
+              color: MyColors.primary,
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w700
+            ),),
+            16.verticalSpace,
+            CarouselSlider(
+              carouselController: controller,
+              items: [
+                buildItem(
+                  context,
+                  svgItem: Assets.icons.premium.icNoAds,
+                  title: context.l10n.noAds,
+                  subTitle: context.l10n.noAdsSub,
+                  index: 0,
+                ),
+                buildItem(
+                  context,
+                  svgItem: Assets.icons.premium.icNearPlace,
+                  title: context.l10n.checkInAtPlaces,
+                  subTitle: context.l10n.checkInAtPlacesSub,
+                  index: 1,
+                ),
+                buildItem(
+                  context,
+                  svgItem: Assets.icons.premium.icMember,
+                  title: context.l10n.guideToGroupMembers,
+                  subTitle: context.l10n.guideToGroupMembersSub,
+                  index: 2,
+                ),
+                buildItem(
+                  context,
+                  svgItem: Assets.icons.premium.icSharePremium,
+                  title: context.l10n.sendMyCurrent,
+                  subTitle: context.l10n.sendMyCurrentSub,
+                  index: 3,
+                )
+              ],
+              disableGesture: true,
+              options: CarouselOptions(
+                viewportFraction: 0.6,
+                height: 136,
+                autoPlay: true,
+                autoPlayInterval: const Duration(seconds: 2),
+                aspectRatio: 207 / 136,
+                onPageChanged: (index, reason) {
+                  context.read<IndicatorCubit>().update(index);
+                },
+              ),
             )
           ],
-          disableGesture: true,
-          options: CarouselOptions(
-            viewportFraction: 0.6,
-            height: 136,
-            autoPlay: true,
-            autoPlayInterval: const Duration(seconds: 2),
-            aspectRatio: 207 / 136,
-            onPageChanged: (index, reason) {
-              context.read<IndicatorCubit>().update(index);
-            },
-          ),
         );
       },
     );

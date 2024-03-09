@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart'
     as google_mlkit_barcode_scanning;
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../../config/di/di.dart';
@@ -30,13 +32,32 @@ class JoinQrCodeScreen extends StatefulWidget {
 }
 
 class _JoinQrCodeScreenState extends State<JoinQrCodeScreen>
-    with PermissionMixin {
+    with PermissionMixin, WidgetsBindingObserver {
   XFile? qrCodeFile;
   CodeValidationCubit codeValidationCubit = getIt<CodeValidationCubit>();
   QRViewController? qrController;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   final google_mlkit_barcode_scanning.BarcodeScanner _barcodeScanner =
       google_mlkit_barcode_scanning.BarcodeScanner();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(false);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +72,18 @@ class _JoinQrCodeScreenState extends State<JoinQrCodeScreen>
             },
             valid: (group) async {
               if (widget.fromHomeScreen) {
-                context.popRoute();
+                await context.popRoute();
+                if (context.mounted) {
+                  await context.popRoute();
+                }
                 Fluttertoast.showToast(
                     msg:
                         '${context.l10n.joinGroup} ${context.l10n.success.toLowerCase()}');
                 return;
               } else {
                 await SharedPreferencesManager.saveIsCreateInfoFistTime(false);
-                final bool statusLocation = await checkPermissionLocation();
+                final bool statusLocation =
+                    await checkPermissionLocation().isGranted;
                 if (!statusLocation && context.mounted) {
                   getIt<AppRouter>()
                       .replaceAll([PermissionRoute(fromMapScreen: false)]);
