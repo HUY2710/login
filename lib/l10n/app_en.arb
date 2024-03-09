@@ -183,5 +183,11 @@
   "joinGroupQr": "Join with QR code",
   "invalidQrCode": "Invalid QR code",
   "pleaseCheckQrCode": "Please check your QR code again",
-  "useLimitedVersion": "Continue with Limited Version"
+  "useLimitedVersion": "Continue with Limited Version",
+  "restore": "Restore",
+  "week": "Week",
+  "billedMonthlyTotal": "Billed monthly, total",
+  "weekly": "Weekly",
+  "billedWeeklyOnly": "Billed weekly only",
+  "youCanCancelAnyTime": "You can cancel any time"
 }

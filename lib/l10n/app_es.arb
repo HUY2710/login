@@ -183,5 +183,12 @@
   "joinGroupQr": "Unirse con código QR",
   "invalidQrCode": "Código QR no válido",
   "pleaseCheckQrCode": "Por favor, verifique su código QR nuevamente",
-  "useLimitedVersion": "Continuar con la versión limitada"
+  "useLimitedVersion": "Continuar con la versión limitada",
+  "useLimitedVersion": "Continuar con la Versión Limitada",
+  "restore": "Restaurar",
+  "week": "Semana",
+  "billedMonthlyTotal": "Facturado mensualmente, total",
+  "weekly": "Semanal",
+  "billedWeeklyOnly": "Solo facturado semanalmente",
+  "youCanCancelAnyTime": "Puedes cancelar en cualquier momento"
 }
