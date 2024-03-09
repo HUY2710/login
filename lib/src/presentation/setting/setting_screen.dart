@@ -223,37 +223,40 @@ class _SettingScreenState extends State<SettingScreen>
   }
 
   Widget _buildRateUsSetting() {
-    return GestureDetector(
-      // onTap: () => showRatingDialog(fromSetting: true),
-      onTap: () async {
-        if (await InAppReview.instance.isAvailable()) {
-          await InAppReview.instance.requestReview();
-        } else {
-          InAppReview.instance.openStoreListing(
-            appStoreId: AppConstants.appIOSId,
-          );
-        }
-      },
-      behavior: HitTestBehavior.translucent,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.h),
-        child: Row(
-          children: [
-            Assets.icons.icRate.svg(height: 24.h),
-            12.horizontalSpace,
-            Expanded(
-              child: Text(
-                context.l10n.rateUs,
-                style: TextStyle(
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w400,
-                ),
+    final bool checkVisibleRate = RemoteConfigManager.instance.isShowRate();
+    return checkVisibleRate
+        ? GestureDetector(
+            // onTap: () => showRatingDialog(fromSetting: true),
+            onTap: () async {
+              if (await InAppReview.instance.isAvailable()) {
+                await InAppReview.instance.requestReview();
+              } else {
+                InAppReview.instance.openStoreListing(
+                  appStoreId: AppConstants.appIOSId,
+                );
+              }
+            },
+            behavior: HitTestBehavior.translucent,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              child: Row(
+                children: [
+                  Assets.icons.icRate.svg(height: 24.h),
+                  12.horizontalSpace,
+                  Expanded(
+                    child: Text(
+                      context.l10n.rateUs,
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          )
+        : const SizedBox.shrink();
   }
 
   Widget _buildDivider() {

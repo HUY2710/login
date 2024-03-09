@@ -91,4 +91,8 @@ class RemoteConfigManager {
 
   bool isShowSkipIntroButton() =>
       _remoteConfig.getBool(RemoteKeys.showSkipIntroButton.platformKey);
+
+  bool isShowRate() {
+    return _remoteConfig.getBool(AdRemoteKeys.show_rate.platformKey);
+  }
 }
