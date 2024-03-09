@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
@@ -34,6 +36,7 @@ class _ShareCodeGroupScreenState extends State<ShareCodeGroupScreen>
     with PermissionMixin, WidgetMixin {
   final GlobalKey repaintKey = GlobalKey();
   final codeTypeCubit = getIt<CodeTypeCubit>();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
