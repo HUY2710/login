@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iap/flutter_iap.dart';
@@ -111,7 +110,8 @@ class _PremiumScreenState extends State<PremiumScreen> {
                         8.h.verticalSpace,
                         buildButtonMonth(item: monthlyProduct, save: saved),
                         12.h.verticalSpace,
-                        buildButtonContinue(weeklyProduct.first, monthlyProduct.first),
+                        buildButtonContinue(
+                            weeklyProduct.first, monthlyProduct.first),
                         8.verticalSpace,
                         buildFirstCloseButton(context),
                         30.h.verticalSpace,
@@ -226,7 +226,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
       onPressed: () => getIt<MyPurchaseManager>().restorePurchases(),
       icon: Assets.icons.premium.icRestore.svg(),
       label: Text(
-        'Restore',
+        context.l10n.restore,
         style: TextStyle(fontSize: 13.sp, color: const Color(0Xff8E52FF)),
       ),
       style: ButtonStyle(
@@ -252,7 +252,11 @@ class _PremiumScreenState extends State<PremiumScreen> {
           alignment: Alignment.center,
           decoration: BoxDecoration(
               // gradient: gradientBackground,
-              border: Border.all(width: 2, color: isSelected ? const Color(0xffB67DFF) : const Color(0xffB67DFF).withOpacity(0.3)),
+              border: Border.all(
+                  width: 2,
+                  color: isSelected
+                      ? const Color(0xffB67DFF)
+                      : const Color(0xffB67DFF).withOpacity(0.3)),
               borderRadius:
                   BorderRadius.circular(AppConstants.widgetBorderRadius.r)),
           child: Row(
@@ -268,10 +272,12 @@ class _PremiumScreenState extends State<PremiumScreen> {
                         style: TextStyle(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
-                            color: isSelected ? const Color(0xff8E52FF) : Colors.grey),
+                            color: isSelected
+                                ? const Color(0xff8E52FF)
+                                : Colors.grey),
                       ),
                       8.horizontalSpace,
-                      Text('$monthPricePerWeek/week',
+                      Text('$monthPricePerWeek/${context.l10n.week}',
                           style: TextStyle(
                               fontSize: 12.sp, fontWeight: FontWeight.w500))
                     ],
@@ -280,7 +286,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   Row(
                     children: [
                       Text(
-                        'Billed monthly, total',
+                        context.l10n.billedMonthlyTotal,
                         style: TextStyle(
                             fontStyle: FontStyle.italic, fontSize: 12.sp),
                       ),
@@ -324,7 +330,11 @@ class _PremiumScreenState extends State<PremiumScreen> {
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              border: Border.all(width: 2, color: isSelected ? const Color(0xffB67DFF) : const Color(0xffB67DFF).withOpacity(0.3)),
+              border: Border.all(
+                  width: 2,
+                  color: isSelected
+                      ? const Color(0xffB67DFF)
+                      : const Color(0xffB67DFF).withOpacity(0.3)),
               borderRadius:
                   BorderRadius.circular(AppConstants.widgetBorderRadius.r)),
           child: Row(
@@ -334,17 +344,18 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Weekly',
+                    context.l10n.weekly,
                     style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
-                        color: isSelected ? const Color(0xff8E52FF) : Colors.grey),
+                        color:
+                            isSelected ? const Color(0xff8E52FF) : Colors.grey),
                   ),
                   4.verticalSpace,
                   Row(
                     children: [
                       Text(
-                        'Billed weekly only',
+                        context.l10n.billedWeeklyOnly,
                         style: TextStyle(
                             fontStyle: FontStyle.italic, fontSize: 12.sp),
                       ),
@@ -380,7 +391,8 @@ class _PremiumScreenState extends State<PremiumScreen> {
         });
   }
 
-  Widget buildButtonContinue(PurchasableProduct weekly, PurchasableProduct monthly) {
+  Widget buildButtonContinue(
+      PurchasableProduct weekly, PurchasableProduct monthly) {
     return CustomInkWell(
         child: Container(
           width: double.infinity,
@@ -401,7 +413,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     color: Colors.white),
               ),
               Text(
-                'You can cancel any time',
+                context.l10n.youCanCancelAnyTime,
                 style: TextStyle(
                     fontSize: 12.sp,
                     fontStyle: FontStyle.italic,

@@ -183,5 +183,12 @@
   "joinGroupQr": "Beitreten mit QR-Code",
   "invalidQrCode": "Ungültiger QR-Code",
   "pleaseCheckQrCode": "Bitte überprüfen Sie Ihren QR-Code erneut",
-  "useLimitedVersion": "Fahren Sie mit der limitierten Version fort"
+  "useLimitedVersion": "Fahren Sie mit der limitierten Version fort",
+  "useLimitedVersion": "Fortfahren mit der eingeschränkten Version",
+  "restore": "Wiederherstellen",
+  "week": "Woche",
+  "billedMonthlyTotal": "Monatlich abgerechnet, insgesamt",
+  "weekly": "Wöchentlich",
+  "billedWeeklyOnly": "Nur wöchentlich abgerechnet",
+  "youCanCancelAnyTime": "Sie können jederzeit kündigen"
 }

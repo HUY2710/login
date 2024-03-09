@@ -184,5 +184,12 @@
   "joinGroupQr": "QR कोड के साथ शामिल हों",
   "invalidQrCode": "अवैध QR कोड",
   "pleaseCheckQrCode": "कृपया अपना QR कोड फिर से जाँचें",
-  "useLimitedVersion": "सीमित संस्करण के साथ जारी रखें"
+  "useLimitedVersion": "सीमित संस्करण के साथ जारी रखें",
+  "useLimitedVersion": "सीमित संस्करण के साथ जारी रखें",
+  "restore": "पुनः स्थापित करें",
+  "week": "सप्ताह",
+  "billedMonthlyTotal": "मासिक रूप से बिल किया जाता है, कुल",
+  "weekly": "साप्ताहिक",
+  "billedWeeklyOnly": "केवल साप्ताहिक बिल किया जाता है",
+  "youCanCancelAnyTime": "आप किसी भी समय रद्द कर सकते हैं"
 }

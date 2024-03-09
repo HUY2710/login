@@ -183,5 +183,12 @@
   "joinGroupQr": "QR 코드로 참여하기",
   "invalidQrCode": "유효하지 않은 QR 코드",
   "pleaseCheckQrCode": "QR 코드를 다시 확인해주세요",
-  "useLimitedVersion": "한정판으로 계속하기"
+  "useLimitedVersion": "한정판으로 계속하기",
+  "useLimitedVersion": "제한 버전으로 계속하기",
+  "restore": "복원",
+  "week": "주",
+  "billedMonthlyTotal": "매월 청구, 총액",
+  "weekly": "주간",
+  "billedWeeklyOnly": "주간만 청구됨",
+  "youCanCancelAnyTime": "언제든지 취소할 수 있습니다"
 }
