@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:marquee/marquee.dart';
 
@@ -256,8 +256,11 @@ class _BottomBarState extends State<BottomBar> {
           final bool isShowInterAd =
               RemoteConfigManager.instance.isShowAd(AdRemoteKeys.inter_message);
           if (isShowInterAd && hasData) {
-            await InterAdUtil.instance
-                .showInterAd(id: getIt<AppAdIdManager>().adUnitId.interMessage);
+            await InterAdUtil.instance.showInterAd(
+              id: getIt<AppAdIdManager>().adUnitId.interMessage,
+              adDismissed: () =>
+                  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge),
+            );
           }
 
           if (context.mounted) {

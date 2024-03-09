@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -79,6 +80,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     setState(() {
       tempPlace = widget.place;
       nameLocationCtrl.text = widget.place?.namePlace ?? '';
@@ -139,23 +141,18 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
             getIt<SelectGroupCubit>().state!.idGroup!,
             newPlace,
           );
-          for (final member
-          in Global.instance.groupMembers) {
-            await NotificationPlaceManager
-                .createNotificationPlace(
-              idGroup: getIt<SelectGroupCubit>()
-                  .state!
-                  .idGroup!,
+          for (final member in Global.instance.groupMembers) {
+            await NotificationPlaceManager.createNotificationPlace(
+              idGroup: getIt<SelectGroupCubit>().state!.idGroup!,
               idPlace: newPlace.idPlace!,
               idDocNotification: member.code,
-              storeNotificationPlace:
-              const StoreNotificationPlace(),
+              storeNotificationPlace: const StoreNotificationPlace(),
             );
           }
         }
         if (widget.place != null) {
-          final List<StorePlace> updatedList = List.from(
-              getIt<DefaultPlaceCubit>().state ?? []);
+          final List<StorePlace> updatedList =
+              List.from(getIt<DefaultPlaceCubit>().state ?? []);
           updatedList.remove(widget.place);
           getIt<DefaultPlaceCubit>().update(updatedList);
         }
@@ -192,7 +189,8 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: context.l10n.addPlaces,
+      appBar: CustomAppBar(
+        title: context.l10n.addPlaces,
         trailing: BlocBuilder<SelectPlaceCubit, StoreLocation?>(
           bloc: selectPlaceCubit,
           builder: (context, state) {
@@ -204,14 +202,14 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                   style: TextStyle(
                       color: MyColors.primary,
                       fontWeight: FontWeight.w500,
-                      fontSize: 17.r
-                  ),
+                      fontSize: 17.r),
                 ),
               ),
               onTap: () => _addPlace(state),
             );
           },
-        ),),
+        ),
+      ),
       bottomNavigationBar: const BuildBannerWidget(),
       body: Container(
         decoration: BoxDecoration(
@@ -223,7 +221,8 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(AppConstants.widgetBorderRadius.r)),
+              borderRadius: BorderRadius.all(
+                  Radius.circular(AppConstants.widgetBorderRadius.r)),
               child: Stack(
                 children: [
                   BlocConsumer<ValueCubit<String>, String>(
@@ -339,7 +338,8 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                                     vertical: 10.h, horizontal: 16.w),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.all(
-                                    Radius.circular(AppConstants.widgetBorderRadius.r),
+                                    Radius.circular(
+                                        AppConstants.widgetBorderRadius.r),
                                   ),
                                   border: Border.all(
                                       color: state == pathIcPlaces[index]

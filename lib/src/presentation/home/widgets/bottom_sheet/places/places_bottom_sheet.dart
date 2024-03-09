@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -151,7 +152,10 @@ class PlacesBottomSheet extends StatelessWidget {
                     .isShowAd(AdRemoteKeys.inter_add_place);
                 if (isShowInterAd) {
                   await InterAdUtil.instance.showInterAd(
-                      id: getIt<AppAdIdManager>().adUnitId.interAddPlace);
+                    id: getIt<AppAdIdManager>().adUnitId.interAddPlace,
+                    adDismissed: () => SystemChrome.setEnabledSystemUIMode(
+                        SystemUiMode.edgeToEdge),
+                  );
                 }
                 if (context.mounted) {
                   getIt<BannerCollapseAdCubit>().update(true);
@@ -194,9 +198,11 @@ class PlacesBottomSheet extends StatelessWidget {
                             .isShowAd(AdRemoteKeys.inter_add_place);
                         if (isShowInterAd) {
                           await InterAdUtil.instance.showInterAd(
-                              id: getIt<AppAdIdManager>()
-                                  .adUnitId
-                                  .interAddPlace);
+                            id: getIt<AppAdIdManager>().adUnitId.interAddPlace,
+                            adDismissed: () =>
+                                SystemChrome.setEnabledSystemUIMode(
+                                    SystemUiMode.edgeToEdge),
+                          );
                         }
                         if (context.mounted) {
                           getIt<BannerCollapseAdCubit>().update(true);
