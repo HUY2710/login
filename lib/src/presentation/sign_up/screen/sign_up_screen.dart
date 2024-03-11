@@ -54,9 +54,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       listener: (context, state) {
         state.maybeWhen(
           signUpSccess: () async {
-            context.pushRoute(
-              CreatePinCodeRoute(userName: controllerName.text),
-            );
+            context.pushRoute(SignInRoute());
           },
           error: (message) {
             ToastUtils.error(message);

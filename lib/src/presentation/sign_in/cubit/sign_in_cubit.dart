@@ -30,12 +30,11 @@ class SignInCubit extends Cubit<SignInState> {
       await getIt<SecureStorageManager>()
           .write(SecureStorageKeys.password.name, password);
 
-      // emit(state.copyWith(
-      //   signInStepEnum: SignInStepEnum.verifyCode,
-      //   signInStatus: SignInStatus.success,
-      //   email: email,
-      //   password: password,
-      // ));
+      emit(state.copyWith(
+        signInStatus: SignInStatus.success,
+        email: email,
+        password: password,
+      ));
     } on FirebaseException catch (e) {
       emit(
         state.copyWith(
@@ -64,5 +63,22 @@ class SignInCubit extends Cubit<SignInState> {
         isResendCode: false,
       ),
     );
+  }
+
+  Future<void> signInWithGoogle() async {
+    emit(state.copyWith(signInStatus: SignInStatus.loading));
+    try {
+      userCredential = await getIt<AuthClient>().signWithGoogle();
+      emit(state.copyWith(
+        signInStatus: SignInStatus.success,
+      ));
+    } on FirebaseException catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.message ?? '',
+          signInStatus: SignInStatus.error,
+        ),
+      );
+    }
   }
 }

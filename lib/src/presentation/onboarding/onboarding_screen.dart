@@ -82,7 +82,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                       right: 10,
                       child: TextButton(
                         onPressed: () {
-                          // navigateToNextScreen();
                           context.pushRoute(SignInRoute());
                         },
                         style: ButtonStyle(
