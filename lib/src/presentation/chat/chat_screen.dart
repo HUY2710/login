@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -14,10 +15,8 @@ import '../../data/models/store_message/store_message.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
 import '../../shared/extension/context_extension.dart';
-import '../../shared/helpers/gradient_background.dart';
 import '../../shared/widgets/containers/linear_container.dart';
 import '../../shared/widgets/custom_inkwell.dart';
-import '../../shared/widgets/gradient_text.dart';
 import 'cubits/group_cubit.dart';
 import 'cubits/group_state.dart';
 import 'cubits/search_group_cubit.dart';
@@ -38,6 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController textController = TextEditingController();
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     super.initState();
   }
 

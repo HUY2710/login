@@ -6,7 +6,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../../app/cubit/exception/exception_cubit.dart';
-import '../../../../../app/cubit/loading_cubit.dart';
 import '../../../../data/models/store_group/store_group.dart';
 import '../../../../data/remote/firestore_client.dart';
 import '../../../../global/global.dart';

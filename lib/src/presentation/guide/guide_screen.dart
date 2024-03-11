@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -9,6 +10,7 @@ import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/gens.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/extension/context_extension.dart';
+import '../../shared/mixin/permission_mixin.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
 import '../place/cubit/default_places_cubit.dart';
 import 'widgets/btn.dart';
@@ -25,7 +27,7 @@ class GuideScreen extends StatefulWidget {
   GuideScreenState createState() => GuideScreenState();
 }
 
-class GuideScreenState extends State<GuideScreen> {
+class GuideScreenState extends State<GuideScreen> with WidgetsBindingObserver {
   late TutorialCoachMark tutorialCoachMark;
 
   GlobalKey keyCheckIn = GlobalKey();
@@ -42,12 +44,26 @@ class GuideScreenState extends State<GuideScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     getIt<DefaultPlaceCubit>().update(defaultListPlace);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(milliseconds: 300));
       createTutorial();
       Future.delayed(Duration.zero, showTutorial);
     });
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(false);
+    super.dispose();
   }
 
   //check xem có null không

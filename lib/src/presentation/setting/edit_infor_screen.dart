@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -122,7 +123,10 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
             .isShowAd(AdRemoteKeys.inter_edit_profile);
         if (isShowInterAd) {
           await InterAdUtil.instance.showInterAd(
-              id: getIt<AppAdIdManager>().adUnitId.interMessage, time: 0);
+              id: getIt<AppAdIdManager>().adUnitId.interMessage,
+              time: 0,
+              adDismissed: () =>
+                  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge));
         }
         if (context.mounted) {
           context.popRoute(true);
@@ -167,7 +171,12 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
             ),
           ),
           5.h.verticalSpace,
-          buildAd()
+          ShadowContainer(
+            borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                child: buildAd()),
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -228,12 +237,12 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
             // 6.verticalSpace,
             // Padding(
             //   padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
-            //   child: ShadowContainer(
-            //     borderRadius: BorderRadius.all(Radius.circular(10.r)),
-            //     child: ClipRRect(
-            //         borderRadius: BorderRadius.all(Radius.circular(10.r)),
-            //         child: buildAd()),
-            //   ),
+            // child: ShadowContainer(
+            //   borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            //   child: ClipRRect(
+            //       borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            //       child: buildAd()),
+            // ),
             // )
           ],
         ),
