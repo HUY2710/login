@@ -171,7 +171,12 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
             ),
           ),
           5.h.verticalSpace,
-          buildAd()
+          ShadowContainer(
+            borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                child: buildAd()),
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -232,12 +237,12 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
             // 6.verticalSpace,
             // Padding(
             //   padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 16.w),
-            //   child: ShadowContainer(
-            //     borderRadius: BorderRadius.all(Radius.circular(10.r)),
-            //     child: ClipRRect(
-            //         borderRadius: BorderRadius.all(Radius.circular(10.r)),
-            //         child: buildAd()),
-            //   ),
+            // child: ShadowContainer(
+            //   borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            //   child: ClipRRect(
+            //       borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            //       child: buildAd()),
+            // ),
             // )
           ],
         ),
