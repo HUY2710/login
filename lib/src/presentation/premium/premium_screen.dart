@@ -30,7 +30,7 @@ class PremiumScreen extends StatefulWidget {
 }
 
 class _PremiumScreenState extends State<PremiumScreen> {
-  bool isSelectedWeek = true;
+  bool isSelectedWeek = false;
 
   Future<void> _launchUrl(String url) async {
     // EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
