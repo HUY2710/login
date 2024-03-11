@@ -7,4 +7,5 @@ extension ContextExtension on BuildContext {
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
   InputDecorationTheme get inputDecoration =>
       Theme.of(this).inputDecorationTheme;
+  Color get primary => Theme.of(this).primaryColor;
 }
