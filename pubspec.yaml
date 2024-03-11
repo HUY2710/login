@@ -85,7 +85,6 @@ dependencies:
   google_mlkit_barcode_scanning: ^0.10.0
   image_picker: ^1.0.7
   open_settings_plus: ^0.2.0
-  uni_links: ^0.5.1
 
 dev_dependencies:
   flutter_test:
