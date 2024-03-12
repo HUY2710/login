@@ -22,16 +22,21 @@ class MessageTypeUser extends StatelessWidget {
             Container(
               constraints: BoxConstraints(maxWidth: 1.sw * 0.7),
               margin: EdgeInsets.symmetric(vertical: 2.h),
-              padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+              padding: item.messageType == MessageType.image
+                  ? null
+                  : EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15.r),
-                      topRight: Radius.circular(15.r),
-                      bottomLeft: Radius.circular(15.r),
-                      bottomRight: Utils.checkLastMessage(
-                              code: item.senderId, isLastMessage: index == 0)
-                          ? Radius.zero
-                          : Radius.circular(15.r)),
+                  borderRadius: item.messageType == MessageType.image
+                      ? BorderRadius.circular(15.r)
+                      : BorderRadius.only(
+                          topLeft: Radius.circular(15.r),
+                          topRight: Radius.circular(15.r),
+                          bottomLeft: Radius.circular(15.r),
+                          bottomRight: Utils.checkLastMessage(
+                                  code: item.senderId,
+                                  isLastMessage: index == 0)
+                              ? Radius.zero
+                              : Radius.circular(15.r)),
                   color: const Color(0xffB98EFF)),
               child: switch (item.messageType) {
                 MessageType.location => buildMessLocation(context, item),
@@ -42,6 +47,7 @@ class MessageTypeUser extends StatelessWidget {
                         fontSize: 13.sp,
                         letterSpacing: -0.4),
                   ),
+                MessageType.image => buildMessImage(context, item),
                 _ => const SizedBox()
               },
             ),
@@ -50,6 +56,17 @@ class MessageTypeUser extends StatelessWidget {
         if (item.senderId == Global.instance.user!.code && index == 0)
           Assets.icons.icSendSuccess.svg(width: 16.r),
       ],
+    );
+  }
+
+  Widget buildMessImage(BuildContext context, MessageModel item) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15.r),
+      child: CachedNetworkImage(
+        imageUrl: item.imagUrl ??
+            'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png',
+        fit: BoxFit.fill,
+      ),
     );
   }
 

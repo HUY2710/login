@@ -150,18 +150,33 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
           border: Border(top: BorderSide(color: Color(0xffEAEAEA)))),
       child: Row(
         children: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.camera_alt_rounded)),
+          IconButton(
+              onPressed: () async {
+                EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+                final XFile? image =
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  final url = await FirebaseStorageClient.instance.uploadImage(
+                      idGroup: widget.idGroup, imageFile: File(image.path));
+                  ChatService.instance.sendImage(
+                      content: '',
+                      idGroup: widget.idGroup,
+                      groupName: widget.groupName,
+                      imageUrl: url);
+                }
+              },
+              icon: Icon(Icons.picture_in_picture)),
           GestureDetector(
             onTap: () async {
-              // ChatService.instance.sendMessageLocation(
-              //   content: '',
-              //   idGroup: widget.idGroup,
-              //   lat: Global.instance.currentLocation.latitude,
-              //   long: Global.instance.currentLocation.longitude,
-              //   groupName: widget.groupName,
-              //   context: context,
-              // );
-              final XFile? image =
-                  await ImagePicker().pickImage(source: ImageSource.camera);
+              ChatService.instance.sendMessageLocation(
+                content: '',
+                idGroup: widget.idGroup,
+                lat: Global.instance.currentLocation.latitude,
+                long: Global.instance.currentLocation.longitude,
+                groupName: widget.groupName,
+                context: context,
+              );
             },
             child: Container(
               padding: EdgeInsets.all(10.r),

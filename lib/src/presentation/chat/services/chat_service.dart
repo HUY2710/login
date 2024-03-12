@@ -169,6 +169,47 @@ class ChatService {
     }
   }
 
+  Future<void> sendImage({
+    required String content,
+    required String idGroup,
+    required String groupName,
+    required String imageUrl,
+    bool haveNoti = true,
+  }) async {
+    final user = Global.instance.user;
+    if (user?.code == null) {
+      // ignore: only_throw_errors
+      throw 'User must have';
+    } else {
+      final message = MessageModel(
+        content: content,
+        senderId: user?.code ?? '',
+        sentAt: DateTime.now().toIso8601String(),
+        imagUrl: imageUrl,
+        messageType: MessageType.image,
+      );
+      try {
+        Future.wait([
+          CollectionStore.chat
+              .doc(idGroup)
+              .collection(CollectionStoreConstant.messages)
+              .add(message.toJson()),
+          GroupsManager.updateGroup(
+              idGroup: idGroup, fields: {'lastMessage': message.toJson()})
+        ]);
+        if (haveNoti) {
+          getIt<FirebaseMessageService>().sendChatNotification(
+            groupName,
+          );
+        }
+      } catch (e) {
+        logger.e(
+          'Send Mess Err: $e',
+        );
+      }
+    }
+  }
+
   Stream<QuerySnapshot<MessageModel>> streamMessageGroup(
       String idGroup, List<StoreUser> listUser) {
     late Stream<QuerySnapshot<MessageModel>> result;

@@ -16,7 +16,13 @@ class FirebaseStorageClient {
       {required String idGroup, required File imageFile}) async {
     String imageUrl = '';
     try {
-      final result = await _firebaseStorage.child(idGroup).putFile(imageFile);
+      final result = await _firebaseStorage
+          .child('$idGroup/${DateTime.now().millisecondsSinceEpoch}')
+          .putFile(
+              imageFile,
+              SettableMetadata(
+                contentType: 'image/jpeg',
+              ));
       final urlTemp = await result.ref.getDownloadURL();
       imageUrl = urlTemp;
     } catch (e) {

@@ -45,11 +45,24 @@ class MessageTypeGuess extends StatelessWidget {
             width: 32.w,
           ),
         8.w.horizontalSpace,
-        if (item.content == '')
-          buildMessLocation(context, item)
-        else
-          buildMessText(),
+        switch (item.messageType) {
+          MessageType.location => buildMessLocation(context, item),
+          MessageType.text => buildMessText(),
+          MessageType.image => buildMessImage(context, item),
+          _ => const SizedBox()
+        }
       ],
+    );
+  }
+
+  Widget buildMessImage(BuildContext context, MessageModel item) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(15.r),
+      child: CachedNetworkImage(
+        imageUrl: item.imagUrl ??
+            'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png',
+        fit: BoxFit.fill,
+      ),
     );
   }
 

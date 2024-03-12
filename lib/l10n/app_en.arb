@@ -189,5 +189,6 @@
   "billedMonthlyTotal": "Billed monthly, total",
   "weekly": "Weekly",
   "billedWeeklyOnly": "Billed weekly only",
-  "youCanCancelAnyTime": "You can cancel any time"
+  "youCanCancelAnyTime": "You can cancel any time",
+  "sentAPhoto": "sent a photo"
 }
