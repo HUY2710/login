@@ -84,6 +84,8 @@
 	<string>Used to get your location, and update for others to see you in real time.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Used to recognize user activity information.</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This identifier will be used to deliver personalized ads to you.</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
