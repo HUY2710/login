@@ -150,7 +150,16 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
           border: Border(top: BorderSide(color: Color(0xffEAEAEA)))),
       child: Row(
         children: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.camera_alt_rounded)),
+          IconButton(
+              onPressed: () async {
+                EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+                final result =
+                    await ImagePicker().pickImage(source: ImageSource.camera);
+                if (result != null && mounted) {
+                  context.pushRoute(ImageResultRoute(image: File(result.path)));
+                }
+              },
+              icon: Icon(Icons.camera_alt_rounded)),
           IconButton(
               onPressed: () async {
                 EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
