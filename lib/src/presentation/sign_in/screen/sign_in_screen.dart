@@ -16,6 +16,11 @@ import '../widgets/text_fied_widget.dart';
 import '../widgets/text_field_password_widget.dart';
 import '../widgets/text_title_widget.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 @RoutePage()
 class SignInScreen extends StatefulWidget {
   const SignInScreen({
@@ -63,6 +68,30 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
           }
         }
       }
+    }
+  }
+
+  _signInWithGoogle() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          idToken: googleSignInAuthentication.idToken,
+          accessToken: googleSignInAuthentication.accessToken,
+        );
+
+        await FirebaseAuth.instance.signInWithCredential(credential);
+        print('OK');
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
