@@ -74,7 +74,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
                                     itemCount: chats.length,
                                     controller: _controller,
                                     reverse: true,
-                                    padding: const EdgeInsets.all(0),
+                                    padding: EdgeInsets.zero,
                                     itemBuilder: (context, index) {
                                       return Column(
                                         children: [
@@ -152,14 +152,16 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
         children: [
           GestureDetector(
             onTap: () async {
-              ChatService.instance.sendMessageLocation(
-                content: '',
-                idGroup: widget.idGroup,
-                lat: Global.instance.currentLocation.latitude,
-                long: Global.instance.currentLocation.longitude,
-                groupName: widget.groupName,
-                context: context,
-              );
+              // ChatService.instance.sendMessageLocation(
+              //   content: '',
+              //   idGroup: widget.idGroup,
+              //   lat: Global.instance.currentLocation.latitude,
+              //   long: Global.instance.currentLocation.longitude,
+              //   groupName: widget.groupName,
+              //   context: context,
+              // );
+              final XFile? image =
+                  await ImagePicker().pickImage(source: ImageSource.camera);
             },
             child: Container(
               padding: EdgeInsets.all(10.r),

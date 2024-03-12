@@ -69,6 +69,9 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 ),
                 buildTextTitle(),
                 buildImageBackground(),
+
+                ///TODO: IMPORTANT remove this line when release
+                Center(child: buildFirstCloseButton(context)),
                 Positioned.fill(
                     child: BlocBuilder<MyPurchaseManager, PurchaseState>(
                   builder: (context, purchaseState) {

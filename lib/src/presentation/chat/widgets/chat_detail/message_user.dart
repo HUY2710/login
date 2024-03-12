@@ -33,15 +33,17 @@ class MessageTypeUser extends StatelessWidget {
                           ? Radius.zero
                           : Radius.circular(15.r)),
                   color: const Color(0xffB98EFF)),
-              child: item.content == ''
-                  ? buildMessLocation(context, item)
-                  : Text(
-                      chats[index].data().content,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 13.sp,
-                          letterSpacing: -0.4),
-                    ),
+              child: switch (item.messageType) {
+                MessageType.location => buildMessLocation(context, item),
+                MessageType.text => Text(
+                    chats[index].data().content,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13.sp,
+                        letterSpacing: -0.4),
+                  ),
+                _ => const SizedBox()
+              },
             ),
           ],
         ),

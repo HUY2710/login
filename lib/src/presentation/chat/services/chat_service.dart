@@ -197,13 +197,6 @@ class ChatService {
     return result;
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> getMyGroupChat2(
-      List<String> idsMyGroup) {
-    return CollectionStore.groups
-        .where(FieldPath.documentId, whereIn: idsMyGroup)
-        .snapshots();
-  }
-
   Stream<QuerySnapshot<Map<String, dynamic>>> getUser2() {
     final String code = Global.instance.user!.code;
     return CollectionStore.users
