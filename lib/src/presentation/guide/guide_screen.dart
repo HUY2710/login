@@ -10,7 +10,6 @@ import '../../data/local/shared_preferences_manager.dart';
 import '../../gen/gens.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/extension/context_extension.dart';
-import '../../shared/mixin/permission_mixin.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
 import '../place/cubit/default_places_cubit.dart';
 import 'widgets/btn.dart';
