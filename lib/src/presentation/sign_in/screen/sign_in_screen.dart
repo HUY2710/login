@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
+import '../../../global/global.dart';
 import '../../../shared/mixin/permission_mixin.dart';
 import '../../../shared/utils/toast_utils.dart';
 import '../cubit/sign_in_cubit.dart';
@@ -42,12 +43,12 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
   }
 
   Future<void> navigateToNextScreen() async {
-    final user = FirebaseAuth.instance.currentUser;
+    final user = Global.instance.user;
     await SharedPreferencesManager.saveIsStarted(false);
 
     if (mounted) {
       if (user != null) {
-        if (user.displayName == null) {
+        if (user.userName == '') {
           context.replaceRoute(CreateUsernameRoute());
         } else {
           final bool statusLocation = await checkPermissionLocation().isGranted;
@@ -210,6 +211,19 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
                     },
                     child: const Text(
                       'Login with Facebook',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25.h,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      signInCubit.siginWithApple();
+                    },
+                    child: const Text(
+                      'Login with Apple',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.black),
                     ),

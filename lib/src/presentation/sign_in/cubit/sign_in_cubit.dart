@@ -100,4 +100,21 @@ class SignInCubit extends Cubit<SignInState> {
       }
     }
   }
+
+  Future<void> siginWithApple() async {
+    emit(state.copyWith(signInStatus: SignInStatus.loading));
+    try {
+      userCredential = await getIt<AuthClient>().signInWithApple();
+      emit(state.copyWith(
+        signInStatus: SignInStatus.success,
+      ));
+    } on FirebaseAuthException catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.message ?? '',
+          signInStatus: SignInStatus.error,
+        ),
+      );
+    }
+  }
 }

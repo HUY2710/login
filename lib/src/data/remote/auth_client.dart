@@ -69,6 +69,11 @@ class AuthClient {
     }
   }
 
+  Future<UserCredential> signInWithApple() async {
+    final appleProvider = AppleAuthProvider();
+    return await FirebaseAuth.instance.signInWithProvider(appleProvider);
+  }
+
   Future<void> sendEmailVerification() async {
     await auth.currentUser?.sendEmailVerification();
   }

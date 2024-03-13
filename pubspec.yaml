@@ -90,6 +90,7 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   google_sign_in: ^6.1.6
   flutter_facebook_auth: ^6.1.1
+  sign_in_with_apple: ^5.0.0
 
 dev_dependencies:
   flutter_test:

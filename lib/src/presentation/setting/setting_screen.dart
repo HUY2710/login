@@ -369,10 +369,9 @@ class _SettingScreenState extends State<SettingScreen>
   }
 
   Widget _buildUsernameEditSetting() {
-    final user = FirebaseAuth.instance.currentUser;
     return CustomItemSetting(
       onTap: () {
-        print(user);
+        print(Global.instance.user);
       },
       child: SizedBox(
         height: 50.h,
@@ -396,7 +395,6 @@ class _SettingScreenState extends State<SettingScreen>
                 // ),
                 child: LayoutBuilder(builder: (context, constraints) {
                   final text = Global.instance.user?.userName ?? 'User';
-
                   final painter = TextPainter(
                     text: TextSpan(text: text),
                     maxLines: 1,
@@ -409,14 +407,14 @@ class _SettingScreenState extends State<SettingScreen>
                   return overflow
                       ? SizedBox.expand(
                           child: Marquee(
-                              text: user?.displayName ?? '',
+                              text: text,
                               pauseAfterRound: const Duration(seconds: 3),
                               style: TextStyle(
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.w500)),
                         )
                       : Text(
-                          user?.displayName ?? '',
+                          text,
                           maxLines: 1,
                           style: TextStyle(
                             fontSize: 16.sp,
