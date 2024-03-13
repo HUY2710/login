@@ -47,17 +47,27 @@ class AuthClient {
     return auth.signInWithCredential(credential);
   }
 
-  // Future<UserCredential> signWithFacebook() async {
-  //   final LoginResult result = await FacebookAuth.instance.login();
-  //   if (result.status == LoginStatus.success) {
-  //     // Create a credential from the access token
-  //     final OAuthCredential credential =
-  //         FacebookAuthProvider.credential(result.accessToken!.token);
-  //     // Once signed in, return the UserCredential
-  //     return FirebaseAuth.instance.signInWithCredential(credential);
-  //   }
-  //   elseƠ
-  // }
+  Future<UserCredential> signInWithFacebook() async {
+    final loginResult = await FacebookAuth.instance.login();
+
+    switch (loginResult.status) {
+      case LoginStatus.success:
+        final accessToken = loginResult.accessToken!;
+
+        return await FirebaseAuth.instance.signInWithCredential(
+          FacebookAuthProvider.credential(accessToken.token),
+        );
+
+      case LoginStatus.cancelled:
+        throw FirebaseAuthException(
+          code: 'ERROR_FACEBOOK_LOGIN_FAILED',
+          message: loginResult.message,
+        );
+      case LoginStatus.failed:
+      case LoginStatus.operationInProgress:
+        throw UnimplementedError('Login Status is not implemented yet.');
+    }
+  }
 
   Future<void> sendEmailVerification() async {
     await auth.currentUser?.sendEmailVerification();

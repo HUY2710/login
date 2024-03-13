@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -16,12 +16,6 @@ import '../widgets/button_primary_widget.dart';
 import '../widgets/text_fied_widget.dart';
 import '../widgets/text_field_password_widget.dart';
 import '../widgets/text_title_widget.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 @RoutePage()
 class SignInScreen extends StatefulWidget {
@@ -48,52 +42,31 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
   }
 
   Future<void> navigateToNextScreen() async {
+    final user = FirebaseAuth.instance.currentUser;
     await SharedPreferencesManager.saveIsStarted(false);
 
-    final isCreateInfoFirstTime =
-        await SharedPreferencesManager.getIsCreateInfoFistTime();
     if (mounted) {
-      if (isCreateInfoFirstTime) {
-        context.replaceRoute(CreateUsernameRoute());
-      } else {
-        final bool statusLocation = await checkPermissionLocation().isGranted;
-        if (!statusLocation && context.mounted) {
-          context.replaceRoute(PermissionRoute(fromMapScreen: false));
-          return;
-        } else if (context.mounted) {
-          final showGuide = await SharedPreferencesManager.getGuide();
-          if (showGuide && context.mounted) {
-            context.replaceRoute(const GuideRoute());
+      if (user != null) {
+        if (user.displayName == null) {
+          context.replaceRoute(CreateUsernameRoute());
+        } else {
+          final bool statusLocation = await checkPermissionLocation().isGranted;
+          if (!statusLocation && context.mounted) {
+            context.replaceRoute(PermissionRoute(fromMapScreen: false));
+            return;
           } else if (context.mounted) {
-            // context.replaceRoute(HomeRoute());
-            context.replaceRoute(PremiumRoute(fromStart: true));
+            final showGuide = await SharedPreferencesManager.getGuide();
+            if (showGuide && context.mounted) {
+              context.replaceRoute(const GuideRoute());
+            } else if (context.mounted) {
+              // context.replaceRoute(HomeRoute());
+              context.replaceRoute(PremiumRoute(fromStart: true));
+            }
           }
         }
+      } else {
+        context.replaceRoute(CreateUsernameRoute());
       }
-    }
-  }
-
-  _signInWithGoogle() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-
-    try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await googleSignIn.signIn();
-
-      if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
-
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          idToken: googleSignInAuthentication.idToken,
-          accessToken: googleSignInAuthentication.accessToken,
-        );
-
-        await FirebaseAuth.instance.signInWithCredential(credential);
-        print('OK');
-      }
-    } catch (e) {
-      print(e);
     }
   }
 

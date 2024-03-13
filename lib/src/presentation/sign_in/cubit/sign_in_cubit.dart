@@ -86,31 +86,10 @@ class SignInCubit extends Cubit<SignInState> {
   Future<void> signInWithFacebook() async {
     emit(state.copyWith(signInStatus: SignInStatus.loading));
     try {
-      final loginResult = await FacebookAuth.instance.login();
-
-      switch (loginResult.status) {
-        case LoginStatus.success:
-          final accessToken = loginResult.accessToken!;
-
-          // Here is where the FirebaseAuthException is thrown because
-          // email/password exists for the same email.
-
-          await FirebaseAuth.instance.signInWithCredential(
-            FacebookAuthProvider.credential(accessToken.token),
-          );
-          emit(state.copyWith(
-            signInStatus: SignInStatus.success,
-          ));
-
-        case LoginStatus.cancelled:
-          throw FirebaseAuthException(
-            code: 'ERROR_FACEBOOK_LOGIN_FAILED',
-            message: loginResult.message,
-          );
-        case LoginStatus.failed:
-        case LoginStatus.operationInProgress:
-          throw UnimplementedError('Login Status is not implemented yet.');
-      }
+      userCredential = await getIt<AuthClient>().signWithGoogle();
+      emit(state.copyWith(
+        signInStatus: SignInStatus.success,
+      ));
     } on FirebaseAuthException catch (error) {
       if (error.code == 'account-exists-with-different-credential') {
         // error.email is null, It was not the case in the past.

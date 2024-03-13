@@ -17,7 +17,6 @@ import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/gradient_background.dart';
 import '../../shared/widgets/custom_inkwell.dart';
 import 'cubit/indicator_cubit.dart';
-import 'widgets/carouse_slider.dart';
 
 @RoutePage()
 class PremiumScreen extends StatefulWidget {
@@ -55,73 +54,76 @@ class _PremiumScreenState extends State<PremiumScreen> {
             }
           },
           child: Scaffold(
-            body: Stack(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                    colors: [Color(0xFFB67DFF), Color(0xFF7B3EFF)],
-                    begin: Alignment.topRight,
-                    end: Alignment.centerLeft,
-                    stops: [0.2, 1.0],
-                    // transform: GradientRotation(274 * (pi / 180)),
-                  )),
-                ),
-                buildTextTitle(),
-                buildImageBackground(),
-                Positioned.fill(
-                    child: BlocBuilder<MyPurchaseManager, PurchaseState>(
-                  builder: (context, purchaseState) {
-                    if (purchaseState.storeState == StoreState.loading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (purchaseState.storeState ==
-                        StoreState.notAvailable) {
-                      return const Center(
-                        child: Text('Not avaiable'),
-                      );
-                    }
-                    final weeklyProduct =
-                        purchaseState.getProductGroup(productKeyWeekly);
-                    final monthlyProduct =
-                        purchaseState.getProductGroup(productKeyMonthly);
-                    if (weeklyProduct.isEmpty || monthlyProduct.isEmpty) {
-                      return const SizedBox();
-                    }
-
-                    final weekPrice =
-                        weeklyProduct.first.productDetails.rawPrice;
-                    final monthPrice =
-                        monthlyProduct.first.productDetails.rawPrice;
-                    final saved =
-                        (weekPrice - (monthPrice / 4)) * 100 / weekPrice;
-
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const CarouseSliderPremium(),
-                        16.h.verticalSpace,
-                        buildIndicator(),
-                        24.h.verticalSpace,
-                        buildButtonWeek(item: weeklyProduct),
-                        8.h.verticalSpace,
-                        buildButtonMonth(item: monthlyProduct, save: saved),
-                        12.h.verticalSpace,
-                        buildButtonContinue(
-                            weeklyProduct.first, monthlyProduct.first),
-                        8.verticalSpace,
-                        buildFirstCloseButton(context),
-                        30.h.verticalSpace,
-                        buildRowTextButton(),
-                        10.h.verticalSpace,
-                      ],
-                    );
-                  },
-                ))
-              ],
+            body: Center(
+              child: buildFirstCloseButton(context),
             ),
+            // body: Stack(
+            //   children: [
+            //     Container(
+            //       decoration: const BoxDecoration(
+            //           gradient: LinearGradient(
+            //         colors: [Color(0xFFB67DFF), Color(0xFF7B3EFF)],
+            //         begin: Alignment.topRight,
+            //         end: Alignment.centerLeft,
+            //         stops: [0.2, 1.0],
+            //         // transform: GradientRotation(274 * (pi / 180)),
+            //       )),
+            //     ),
+            //     buildTextTitle(),
+            //     buildImageBackground(),
+            //     Positioned.fill(
+            //         child: BlocBuilder<MyPurchaseManager, PurchaseState>(
+            //       builder: (context, purchaseState) {
+            //         if (purchaseState.storeState == StoreState.loading) {
+            //           return const Center(
+            //             child: CircularProgressIndicator(),
+            //           );
+            //         } else if (purchaseState.storeState ==
+            //             StoreState.notAvailable) {
+            //           return const Center(
+            //             child: Text('Not avaiable'),
+            //           );
+            //         }
+            //         final weeklyProduct =
+            //             purchaseState.getProductGroup(productKeyWeekly);
+            //         final monthlyProduct =
+            //             purchaseState.getProductGroup(productKeyMonthly);
+            //         if (weeklyProduct.isEmpty || monthlyProduct.isEmpty) {
+            //           return const SizedBox();
+            //         }
+
+            //         final weekPrice =
+            //             weeklyProduct.first.productDetails.rawPrice;
+            //         final monthPrice =
+            //             monthlyProduct.first.productDetails.rawPrice;
+            //         final saved =
+            //             (weekPrice - (monthPrice / 4)) * 100 / weekPrice;
+
+            //         return Column(
+            //           mainAxisAlignment: MainAxisAlignment.end,
+            //           mainAxisSize: MainAxisSize.min,
+            //           children: [
+            //             const CarouseSliderPremium(),
+            //             16.h.verticalSpace,
+            //             buildIndicator(),
+            //             24.h.verticalSpace,
+            //             buildButtonWeek(item: weeklyProduct),
+            //             8.h.verticalSpace,
+            //             buildButtonMonth(item: monthlyProduct, save: saved),
+            //             12.h.verticalSpace,
+            //             buildButtonContinue(
+            //                 weeklyProduct.first, monthlyProduct.first),
+            //             8.verticalSpace,
+            //             buildFirstCloseButton(context),
+            //             30.h.verticalSpace,
+            //             buildRowTextButton(),
+            //             10.h.verticalSpace,
+            //           ],
+            //         );
+            //       },
+            //     ))
+            //   ],
+            // ),
           )),
     );
   }

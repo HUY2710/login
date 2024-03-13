@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,10 +38,17 @@ class EditInfoScreen extends StatefulWidget {
 }
 
 class _EditInfoScreenState extends State<EditInfoScreen> {
+  final user = FirebaseAuth.instance.currentUser!;
   ValueCubit<String> pathAvatarCubit =
       ValueCubit(Global.instance.user!.avatarUrl);
-  TextEditingController userNameCtrl =
-      TextEditingController(text: Global.instance.user?.userName ?? '');
+  TextEditingController userNameCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    userNameCtrl = TextEditingController(text: user.displayName ?? '');
+    super.initState();
+  }
+
   GenderType currentGender = GenderType.male;
   void showDialogAvatar() {
     showDialog(
@@ -97,6 +105,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
   }
 
   Future<void> updateInfo() async {
+    final user = FirebaseAuth.instance.currentUser!;
     if (userNameCtrl.text.isNotEmpty &&
         ValidHelper.containsSpecialCharacters(userNameCtrl.text)) {
       Fluttertoast.showToast(msg: 'Vui lòng không chứa kí tự đặc biệt');
@@ -110,6 +119,8 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
       try {
         // EasyLoading.show();
         showLoading();
+        user.updateDisplayName(userNameCtrl.text.trim());
+
         await FirestoreClient.instance.updateUser({
           'avatarUrl': pathAvatarCubit.state,
           'userName': ValidHelper.removeExtraSpaces(userNameCtrl.text.trim())

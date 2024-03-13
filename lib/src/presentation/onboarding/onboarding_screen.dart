@@ -104,7 +104,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
               child: BlocBuilder<ValueCubit<int>, int>(
                 builder: (context, currentIndex) => ActionRow(
                   pageController: _pageController,
-                  onStartedTap: navigateToNextScreen,
+                  onStartedTap: () {
+                    context.pushRoute(SignInRoute());
+                  },
                 ),
               ),
             ),

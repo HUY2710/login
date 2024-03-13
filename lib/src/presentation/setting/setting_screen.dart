@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +24,7 @@ import '../../config/remote_config.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
+import '../../services/authentication_service.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
 import '../../shared/cubit/value_cubit.dart';
@@ -165,6 +168,12 @@ class _SettingScreenState extends State<SettingScreen>
           _buildPrivacyPolicySetting(),
           _buildDivider(),
           _buildShareSetting(context),
+          GestureDetector(
+              onTap: () {
+                FirebaseAuth.instance.signOut().then(
+                    (value) => context.router.replaceAll([SignInRoute()]));
+              },
+              child: const Text('Logout'))
         ],
       ),
     );
@@ -360,9 +369,10 @@ class _SettingScreenState extends State<SettingScreen>
   }
 
   Widget _buildUsernameEditSetting() {
+    final user = FirebaseAuth.instance.currentUser;
     return CustomItemSetting(
       onTap: () {
-        // TODO: Implement for Edit username
+        print(user);
       },
       child: SizedBox(
         height: 50.h,
@@ -399,14 +409,14 @@ class _SettingScreenState extends State<SettingScreen>
                   return overflow
                       ? SizedBox.expand(
                           child: Marquee(
-                              text: text,
+                              text: user?.displayName ?? '',
                               pauseAfterRound: const Duration(seconds: 3),
                               style: TextStyle(
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.w500)),
                         )
                       : Text(
-                          text,
+                          user?.displayName ?? '',
                           maxLines: 1,
                           style: TextStyle(
                             fontSize: 16.sp,
