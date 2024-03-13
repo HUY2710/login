@@ -8,6 +8,7 @@ import '../../data/models/store_place/store_place.dart';
 import '../../presentation/add_place/add_place_screen.dart';
 import '../../presentation/chat/chat_detail_screen.dart';
 import '../../presentation/chat/chat_screen.dart';
+import '../../presentation/chat/widgets/chat_detail/camera_screen.dart';
 import '../../presentation/chat/widgets/chat_detail/image_result_screen.dart';
 import '../../presentation/create/screens/create_group_avatar_screen.dart';
 import '../../presentation/create/screens/create_group_name_screen.dart';
@@ -61,7 +62,8 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: GuideRoute.page),
         AutoRoute(page: JoinQrCodeRoute.page),
         AutoRoute(page: AddPlaceRoute.page),
-        AutoRoute(page: ImageResultRoute.page)
+        AutoRoute(page: ImageResultRoute.page),
+        AutoRoute(page: CameraRoute.page) 
       ];
 
   AutoRoute routeWithFadeTransition(
