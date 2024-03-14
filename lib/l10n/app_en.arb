@@ -179,7 +179,7 @@
   "code": "Code",
   "qrCode": "QR code",
   "savePicture": "Save Picture",
-  "uploadPhoto": "Upload photo" ,
+  "uploadPhoto": "Upload photo",
   "joinGroupQr": "Join with QR code",
   "invalidQrCode": "Invalid QR code",
   "pleaseCheckQrCode": "Please check your QR code again",
@@ -189,5 +189,12 @@
   "billedMonthlyTotal": "Billed monthly, total",
   "weekly": "Weekly",
   "billedWeeklyOnly": "Billed weekly only",
-  "youCanCancelAnyTime": "You can cancel any time"
+  "youCanCancelAnyTime": "You can cancel any time",
+  "continueWithFacebook": "Continue with Facebook",
+  "continueWithGoogle": "Continue with Google",
+  "continueWithApple": "Continue with Apple",
+  "joinWithAnonymous": "Join with anonymous",
+  "signUp": "Sign up",
+  "signIn": "Sign in",
+  "titleSignInSetting": "If you sign up, all your data will be recorded indefinitely even if you delete app or change your device."
 }

@@ -3,12 +3,11 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:marquee/marquee.dart';
 import 'package:share_plus/share_plus.dart';
@@ -24,7 +23,6 @@ import '../../config/remote_config.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
-import '../../services/authentication_service.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
 import '../../shared/cubit/value_cubit.dart';
@@ -33,6 +31,7 @@ import '../../shared/widgets/custom_appbar.dart';
 import '../../shared/widgets/main_switch.dart';
 import '../home/cubit/banner_collapse_cubit.dart';
 import '../home/widgets/dialog/action_dialog.dart';
+import '../sign_in/cubit/join_anonymous_cubit.dart';
 import 'widgets/custom_item_setting.dart';
 
 @RoutePage()
@@ -149,6 +148,10 @@ class _SettingScreenState extends State<SettingScreen>
               ),
               16.verticalSpace,
               _buildExternalSetting(context),
+              16.verticalSpace,
+              _buildLogOutSetting(),
+              16.verticalSpace,
+              _buildDeleteAccountSetting()
             ],
           ),
         ),
@@ -168,12 +171,6 @@ class _SettingScreenState extends State<SettingScreen>
           _buildPrivacyPolicySetting(),
           _buildDivider(),
           _buildShareSetting(context),
-          GestureDetector(
-              onTap: () {
-                FirebaseAuth.instance.signOut().then(
-                    (value) => context.router.replaceAll([SignInRoute()]));
-              },
-              child: const Text('Logout'))
         ],
       ),
     );
@@ -204,6 +201,73 @@ class _SettingScreenState extends State<SettingScreen>
         ),
       );
     });
+  }
+
+  Widget _buildLogOutSetting() {
+    return Container(
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(
+            offset: const Offset(0, 2),
+            blurRadius: 8.4,
+            color: const Color(0xff9C747D).withOpacity(0.17))
+      ], borderRadius: BorderRadius.circular(20.r), color: Colors.white),
+      child: Padding(
+        padding: const EdgeInsets.all(17),
+        child: GestureDetector(
+          onTap: () {
+            FirebaseAuth.instance.signOut().then(
+                (value) => context.router.replaceAll([const SignInRoute()]));
+          },
+          child: Row(
+            children: [
+              Assets.icons.login.icLogout.svg(height: 24.h),
+              12.horizontalSpace,
+              Expanded(
+                child: Text(
+                  'Log out',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDeleteAccountSetting() {
+    return Container(
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(
+            offset: const Offset(0, 2),
+            blurRadius: 8.4,
+            color: const Color(0xff9C747D).withOpacity(0.17))
+      ], borderRadius: BorderRadius.circular(20.r), color: Colors.white),
+      child: Padding(
+        padding: const EdgeInsets.all(17),
+        child: GestureDetector(
+          onTap: () {},
+          child: Row(
+            children: [
+              Assets.icons.login.icDeleteAccount.svg(height: 24.h),
+              12.horizontalSpace,
+              Expanded(
+                child: Text(
+                  'Delete my account',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildPrivacyPolicySetting() {
@@ -369,75 +433,110 @@ class _SettingScreenState extends State<SettingScreen>
   }
 
   Widget _buildUsernameEditSetting() {
-    return CustomItemSetting(
-      onTap: () {
-        print(Global.instance.user);
-      },
-      child: SizedBox(
-        height: 50.h,
-        child: Row(
-          // mainAxisSize: MainAxisSize.min,
-          children: [
-            Hero(
-              tag: 'editAvatar',
-              child: CircleAvatar(
-                radius: 28,
-                backgroundImage: AssetImage(Global.instance.user!.avatarUrl),
-              ),
-            ),
-            // 20.horizontalSpace,
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                // child: Container(
-                //   color: Colors.red,
-                //   // height: 60.h,
-                // ),
-                child: LayoutBuilder(builder: (context, constraints) {
-                  final text = Global.instance.user?.userName ?? 'User';
-                  final painter = TextPainter(
-                    text: TextSpan(text: text),
-                    maxLines: 1,
-                    textScaleFactor: MediaQuery.of(context).textScaleFactor,
-                    textDirection: TextDirection.ltr,
-                  );
-                  painter.layout();
-                  final overflow = painter.size.width > constraints.maxWidth;
-
-                  return overflow
-                      ? SizedBox.expand(
-                          child: Marquee(
-                              text: text,
-                              pauseAfterRound: const Duration(seconds: 3),
+    return BlocBuilder<JoinAnonymousCubit, bool>(
+      builder: (context, state) {
+        return state
+            ? CustomItemSetting(
+                onTap: () {
+                  context.pushRoute(const SignInFromSettingRoute());
+                },
+                child: SizedBox(
+                  height: 50.h,
+                  child: Row(
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle, color: Color(0xffFBF9FF)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SvgPicture.asset(
+                              Assets.icons.login.icProfile.path),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12.w),
+                            child: Text(
+                              '${context.l10n.signIn}/${context.l10n.signUp}',
                               style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w500)),
-                        )
-                      : Text(
-                          text,
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        );
-                }),
-              ),
-            ),
-            // 16.horizontalSpace,
-            GestureDetector(
-              onTap: () async {
-                final result =
-                    await context.pushRoute<bool>(const EditInfoRoute());
-                if (result != null && result) {
-                  setState(() {});
-                }
-              },
-              child: Assets.icons.icEdit.svg(height: 28.h),
-            ),
-          ],
-        ),
-      ),
+                                  fontSize: 13.sp,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color(0xff8E52FF)),
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : CustomItemSetting(
+                onTap: () {
+                  print(Global.instance.user);
+                },
+                child: SizedBox(
+                  height: 50.h,
+                  child: Row(
+                    children: [
+                      Hero(
+                        tag: 'editAvatar',
+                        child: CircleAvatar(
+                          radius: 28,
+                          backgroundImage:
+                              AssetImage(Global.instance.user!.avatarUrl),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: LayoutBuilder(builder: (context, constraints) {
+                            final text =
+                                Global.instance.user?.userName ?? 'User';
+                            final painter = TextPainter(
+                              text: TextSpan(text: text),
+                              maxLines: 1,
+                              textScaleFactor:
+                                  MediaQuery.of(context).textScaleFactor,
+                              textDirection: TextDirection.ltr,
+                            );
+                            painter.layout();
+                            final overflow =
+                                painter.size.width > constraints.maxWidth;
+
+                            return overflow
+                                ? SizedBox.expand(
+                                    child: Marquee(
+                                        text: text,
+                                        pauseAfterRound:
+                                            const Duration(seconds: 3),
+                                        style: TextStyle(
+                                            fontSize: 16.sp,
+                                            fontWeight: FontWeight.w500)),
+                                  )
+                                : Text(
+                                    text,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  );
+                          }),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          final result = await context
+                              .pushRoute<bool>(const EditInfoRoute());
+                          if (result != null && result) {
+                            setState(() {});
+                          }
+                        },
+                        child: Assets.icons.icEdit.svg(height: 28.h),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+      },
     );
   }
 }

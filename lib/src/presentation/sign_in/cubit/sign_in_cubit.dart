@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
@@ -64,6 +63,13 @@ class SignInCubit extends Cubit<SignInState> {
         isResendCode: false,
       ),
     );
+  }
+
+  void joinWithAnonymous() {
+    emit(state.copyWith(signInStatus: SignInStatus.loading));
+    emit(state.copyWith(
+      signInStatus: SignInStatus.success,
+    ));
   }
 
   Future<void> signInWithGoogle() async {
