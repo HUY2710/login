@@ -29,13 +29,18 @@ flutter_ios_podfile_setup
 
 target 'Runner' do
   use_frameworks!
-  ##use_modular_headers!
+  use_modular_headers!
 
+  pod 'GoogleMobileAdsMediationFacebook'
+  pod 'FBAudienceNetwork'
+  pod 'GoogleMobileAdsMediationAppLovin'
+  pod 'GoogleMobileAdsMediationMintegral'
 
-  
-  pod 'FirebaseAnalytics'
-  pod 'FirebaseAuth'
-  pod 'FirebaseFirestore'
+  pod 'GoogleMobileAdsMediationPangle'
+  pod 'GoogleMobileAdsMediationUnity'
+  pod 'GoogleMobileAdsMediationIronSource'
+  pod 'GoogleMobileAdsMediationVungle'
+  $FirebaseSDKVersion = '10.22.0'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
