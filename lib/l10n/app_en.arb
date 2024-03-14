@@ -190,5 +190,6 @@
   "weekly": "Weekly",
   "billedWeeklyOnly": "Billed weekly only",
   "youCanCancelAnyTime": "You can cancel any time",
-  "sentAPhoto": "sent a photo"
+  "sentAPhoto": "sent a photo",
+  "send": "Send"
 }

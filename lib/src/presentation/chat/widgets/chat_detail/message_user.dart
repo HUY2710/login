@@ -40,13 +40,7 @@ class MessageTypeUser extends StatelessWidget {
                   color: const Color(0xffB98EFF)),
               child: switch (item.messageType) {
                 MessageType.location => buildMessLocation(context, item),
-                MessageType.text => Text(
-                    chats[index].data().content,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 13.sp,
-                        letterSpacing: -0.4),
-                  ),
+                MessageType.text => buildMessText(context, item),
                 MessageType.image => buildMessImage(context, item),
                 _ => const SizedBox()
               },
@@ -59,10 +53,21 @@ class MessageTypeUser extends StatelessWidget {
     );
   }
 
+  Text buildMessText(BuildContext context, MessageModel item) {
+    return Text(
+      item.content,
+      style:
+          TextStyle(color: Colors.white, fontSize: 13.sp, letterSpacing: -0.4),
+    );
+  }
+
   Widget buildMessImage(BuildContext context, MessageModel item) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15.r),
       child: CachedNetworkImage(
+        placeholder: (context, url) => Center(
+          child: CircularProgressIndicator(),
+        ),
         imageUrl: item.imagUrl ??
             'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png',
         fit: BoxFit.fill,

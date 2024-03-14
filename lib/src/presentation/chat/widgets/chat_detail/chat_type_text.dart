@@ -34,13 +34,17 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
   }
 
   @override
+  void dispose() {
+    SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        // leadingWidth: 30.w,
-        // toolbarHeight: 98.h,
         leading: CustomInkWell(
             child: Padding(
               padding: EdgeInsets.all(12.w),
@@ -150,33 +154,6 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
           border: Border(top: BorderSide(color: Color(0xffEAEAEA)))),
       child: Row(
         children: [
-          IconButton(
-              onPressed: () async {
-                // EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
-                // final result =
-                //     await ImagePicker().pickImage(source: ImageSource.camera);
-                // if (result != null && mounted) {
-                //   context.pushRoute(ImageResultRoute(image: File(result.path)));
-                // }
-                context.pushRoute(const CameraRoute());
-              },
-              icon: Icon(Icons.camera_alt_rounded)),
-          IconButton(
-              onPressed: () async {
-                EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
-                final XFile? image =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
-                if (image != null) {
-                  final url = await FirebaseStorageClient.instance.uploadImage(
-                      idGroup: widget.idGroup, imageFile: File(image.path));
-                  ChatService.instance.sendImage(
-                      content: '',
-                      idGroup: widget.idGroup,
-                      groupName: widget.groupName,
-                      imageUrl: url);
-                }
-              },
-              icon: Icon(Icons.picture_in_picture)),
           GestureDetector(
             onTap: () async {
               ChatService.instance.sendMessageLocation(
@@ -231,6 +208,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
                                   groupName: widget.groupName,
                                 );
                                 textController.clear();
+                                isShowButtonSend.value = false;
                               }
                             },
                             icon: Assets.icons.icSend.svg(width: 20.r))
@@ -264,6 +242,42 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
               ),
             ),
           )),
+          IconButton(
+              onPressed: () async {
+                final result =
+                    await context.pushRoute(const CameraRoute()) ?? '';
+                if (result != '') {
+                  showLoading();
+                  final url = await FirebaseStorageClient.instance.uploadImage(
+                      idGroup: widget.idGroup,
+                      imageFile: File(result.toString()));
+                  ChatService.instance.sendImage(
+                      content: '',
+                      idGroup: widget.idGroup,
+                      groupName: widget.groupName,
+                      imageUrl: url);
+                  hideLoading();
+                }
+              },
+              icon: Assets.icons.icCameraFill.svg(width: 20.r)),
+          IconButton(
+              onPressed: () async {
+                EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+                final XFile? image =
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
+                if (image != null) {
+                  showLoading();
+                  final url = await FirebaseStorageClient.instance.uploadImage(
+                      idGroup: widget.idGroup, imageFile: File(image.path));
+                  ChatService.instance.sendImage(
+                      content: '',
+                      idGroup: widget.idGroup,
+                      groupName: widget.groupName,
+                      imageUrl: url);
+                  hideLoading();
+                }
+              },
+              icon: Assets.icons.icGallery.svg(width: 20.r)),
         ],
       ),
     );

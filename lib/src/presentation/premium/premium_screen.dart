@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../flavors.dart';
 import '../../../module/iap/my_purchase_manager.dart';
 import '../../../module/iap/product_id.dart';
 import '../../config/di/di.dart';
@@ -71,7 +72,8 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 buildImageBackground(),
 
                 ///TODO: IMPORTANT remove this line when release
-                Center(child: buildFirstCloseButton(context)),
+                if (F.appFlavor == Flavor.dev)
+                  Center(child: buildFirstCloseButton(context)),
                 Positioned.fill(
                     child: BlocBuilder<MyPurchaseManager, PurchaseState>(
                   builder: (context, purchaseState) {
