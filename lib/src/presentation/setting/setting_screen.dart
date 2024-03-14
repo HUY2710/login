@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -148,10 +147,6 @@ class _SettingScreenState extends State<SettingScreen>
               ),
               16.verticalSpace,
               _buildExternalSetting(context),
-              16.verticalSpace,
-              _buildLogOutSetting(),
-              16.verticalSpace,
-              _buildDeleteAccountSetting()
             ],
           ),
         ),
@@ -201,73 +196,6 @@ class _SettingScreenState extends State<SettingScreen>
         ),
       );
     });
-  }
-
-  Widget _buildLogOutSetting() {
-    return Container(
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-            offset: const Offset(0, 2),
-            blurRadius: 8.4,
-            color: const Color(0xff9C747D).withOpacity(0.17))
-      ], borderRadius: BorderRadius.circular(20.r), color: Colors.white),
-      child: Padding(
-        padding: const EdgeInsets.all(17),
-        child: GestureDetector(
-          onTap: () {
-            FirebaseAuth.instance.signOut().then(
-                (value) => context.router.replaceAll([const SignInRoute()]));
-          },
-          child: Row(
-            children: [
-              Assets.icons.login.icLogout.svg(height: 24.h),
-              12.horizontalSpace,
-              Expanded(
-                child: Text(
-                  'Log out',
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDeleteAccountSetting() {
-    return Container(
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-            offset: const Offset(0, 2),
-            blurRadius: 8.4,
-            color: const Color(0xff9C747D).withOpacity(0.17))
-      ], borderRadius: BorderRadius.circular(20.r), color: Colors.white),
-      child: Padding(
-        padding: const EdgeInsets.all(17),
-        child: GestureDetector(
-          onTap: () {},
-          child: Row(
-            children: [
-              Assets.icons.login.icDeleteAccount.svg(height: 24.h),
-              12.horizontalSpace,
-              Expanded(
-                child: Text(
-                  'Delete my account',
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _buildPrivacyPolicySetting() {
