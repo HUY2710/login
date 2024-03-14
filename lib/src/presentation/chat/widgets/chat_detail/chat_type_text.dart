@@ -34,6 +34,12 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
   }
 
   @override
+  void dispose() {
+    SharedPreferencesManager.saveTimeSeenChat(widget.idGroup);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
