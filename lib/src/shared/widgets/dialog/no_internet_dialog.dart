@@ -1,9 +1,10 @@
 import 'dart:io';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:open_settings_plus/core/open_settings_plus.dart';
+// import 'package:open_settings_plus/core/open_settings_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../gen/assets.gen.dart';
@@ -56,9 +57,11 @@ class NoIternetDialog extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 if (Platform.isAndroid) {
-                  const OpenSettingsPlusAndroid().wifi();
+                  AppSettings.openAppSettings(type: AppSettingsType.wifi);
+                  // const OpenSettingsPlusAndroid().wifi();
                 } else if (Platform.isIOS) {
-                  const OpenSettingsPlusIOS().wifi();
+                  // const OpenSettingsPlusIOS().wifi();
+                  AppSettings.openAppSettings(type: AppSettingsType.wifi);
                 } else {
                   openAppSettings();
                 }
