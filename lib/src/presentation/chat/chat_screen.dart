@@ -139,9 +139,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                             ? searchState[index]
                                             : groups[index];
                                     return GroupItem(
-                                      userName: groupItem.storeUser!.userName,
+                                      userName: groupItem.storeUser?.userName ??
+                                          'user',
                                       message: convertLastMessage(groupItem),
-                                      time: groupItem.lastMessage!.sentAt,
+                                      time: groupItem.lastMessage?.sentAt ?? '',
                                       avatar: groupItem.avatarGroup,
                                       groupName: groupItem.groupName,
                                       idGroup: groupItem.idGroup ?? '',
