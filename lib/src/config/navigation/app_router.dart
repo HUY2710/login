@@ -25,6 +25,7 @@ import '../../presentation/setting/about_screen.dart';
 import '../../presentation/setting/edit_infor_screen.dart';
 import '../../presentation/setting/map_type/map_type_screen.dart';
 import '../../presentation/setting/setting_screen.dart';
+import '../../presentation/sos/sos_screen.dart';
 import '../../presentation/splash/splash_screen.dart';
 import '../../shared/enum/language.dart';
 
@@ -58,6 +59,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: GuideRoute.page),
         AutoRoute(page: JoinQrCodeRoute.page),
         AutoRoute(page: AddPlaceRoute.page),
+        AutoRoute(page: SosRoute.page),
       ];
 
   AutoRoute routeWithFadeTransition(

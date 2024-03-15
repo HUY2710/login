@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_activity_recognition/flutter_activity_recognition.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
@@ -158,6 +159,16 @@ class _BuildMarkerState extends State<BuildMarker> {
             height: 60.r,
             width: 60.r,
             gaplessPlayback: true,
+          ),
+        ),
+
+        Positioned(
+          right: 0,
+          top: 0,
+          child: SvgPicture.asset(
+            Assets.icons.icSos.path,
+            height: 48.r,
+            width: 48.r,
           ),
         ),
       ],
