@@ -40,6 +40,8 @@ abstract class NotificationService {
   /// When check in any location.
   Future<void> sendJoinGroup(
       String groupName, String message, BuildContext? context);
+
+  Future<void> sendSOS(BuildContext? context);
 }
 
 @singleton
@@ -186,6 +188,14 @@ class FirebaseMessageService implements NotificationService {
   Future<void> sendJoinGroup(
       String groupName, String message, BuildContext? context) async {
     await _sendMessageByToken(groupName, message);
+  }
+
+  @override
+  Future<void> sendSOS(BuildContext? context) {
+    // TODO: implement sendSOS
+    throw UnimplementedError();
+
+    //cần xử lí lấy hết toàn bộ token của tất cả các group mà mình join
   }
 }
 

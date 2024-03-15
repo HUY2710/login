@@ -1,10 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-
 import '../../global/global.dart';
-import '../../shared/utils/logger_utils.dart';
 import '../local/shared_preferences_manager.dart';
-import '../models/store_user/store_user.dart';
 import 'collection_store.dart';
 import 'group_manager.dart';
 
@@ -19,14 +14,18 @@ class TokenManager {
     }
 
     final code = Global.instance.userCode;
-    
+
     if (code.isEmpty) {
       return;
     }
 
-    groupIds.forEach((element) {
-      CollectionStore.tokens.doc(element).collection(CollectionStoreConstant.users).doc(code).set({'token': token});
-    });
+    for (final element in groupIds) {
+      CollectionStore.tokens
+          .doc(element)
+          .collection(CollectionStoreConstant.users)
+          .doc(code)
+          .set({'token': token});
+    }
   }
 
   static Future<List<String>> getGroupTokens() async {
@@ -35,14 +34,21 @@ class TokenManager {
       return [];
     }
 
-    final snapShots = await CollectionStore.tokens.doc(groupId)
-        .collection(CollectionStoreConstant.users).get();
+    final snapShots = await CollectionStore.tokens
+        .doc(groupId)
+        .collection(CollectionStoreConstant.users)
+        .get();
     if (snapShots.docs.isEmpty) {
       return [];
     }
-    
-    final tokens = snapShots.docs.where((element) => element.id != Global.instance.userCode).toList().map((e) => e.data()['token'] as String)
-        .toList().where((element) => element.isNotEmpty).toList();
+
+    final tokens = snapShots.docs
+        .where((element) => element.id != Global.instance.userCode)
+        .toList()
+        .map((e) => e.data()['token'] as String)
+        .toList()
+        .where((element) => element.isNotEmpty)
+        .toList();
     return tokens;
   }
 
@@ -58,6 +64,10 @@ class TokenManager {
       return;
     }
 
-    return CollectionStore.tokens.doc(groupId).collection(CollectionStoreConstant.users).doc(code).set({'token': token});
+    return CollectionStore.tokens
+        .doc(groupId)
+        .collection(CollectionStoreConstant.users)
+        .doc(code)
+        .set({'token': token});
   }
 }
