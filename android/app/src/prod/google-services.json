@@ -7,38 +7,13 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:990967101864:android:7fe5cb1d007039a969459d",
+        "mobilesdk_app_id": "1:990967101864:android:7cb4b913196df4fb69459d",
         "android_client_info": {
-          "package_name": "com.locationsharing.livelocation.grouplocationshare.sendlocation"
+          "package_name": "com.locationsharing.livelocation.grouplocationsharing.circlesharing"
         }
       },
       "oauth_client": [],
       "api_key": [
-        {
-          "current_key": "AIzaSyAcqgqBUBMNutaNqaCEkUIZ2QtJtuqIzk8"
-        },
-        {
-          "current_key": "AIzaSyBFKovC1zGtWnf6EB8HLIPXzhb76pG4FLw"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:990967101864:android:cf490b9dc84d6ee269459d",
-        "android_client_info": {
-          "package_name": "com.locationsharing.livelocation.grouplocationsharing"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAcqgqBUBMNutaNqaCEkUIZ2QtJtuqIzk8"
-        },
         {
           "current_key": "AIzaSyBFKovC1zGtWnf6EB8HLIPXzhb76pG4FLw"
         }

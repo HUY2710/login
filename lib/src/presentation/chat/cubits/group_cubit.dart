@@ -78,7 +78,7 @@ class GroupCubit extends Cubit<GroupState> {
           }
         }
         if (myGroups.isEmpty) {
-          emit(GroupState.success([]));
+          emit(GroupState.initial());
         } else {
           sortGroup();
           emit(GroupState.success([...myGroups]));

@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -42,8 +45,34 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
   TextEditingController userNameCtrl =
       TextEditingController(text: Global.instance.user?.userName ?? '');
   GenderType currentGender = GenderType.male;
-  void showDialogAvatar() {
-    showDialog(
+
+  late StreamSubscription<bool> keyboardSubscription;
+
+  @override
+  void initState() {
+    final keyboardVisibilityController = KeyboardVisibilityController();
+
+    // Subscribe
+    keyboardSubscription =
+        keyboardVisibilityController.onChange.listen((bool visible) {
+      if (visible) {
+        context.read<NativeAdStatusCubit>().update(false);
+      } else {
+        context.read<NativeAdStatusCubit>().update(true);
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    keyboardSubscription.cancel();
+    super.dispose();
+  }
+
+  void showDialogAvatar() async {
+    context.read<NativeAdStatusCubit>().update(false);
+    await showDialog(
       context: context,
       builder: (context) {
         return Builder(builder: (context) {
@@ -94,6 +123,9 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
         });
       },
     );
+    if (mounted) {
+      context.read<NativeAdStatusCubit>().update(true);
+    }
   }
 
   Future<void> updateInfo() async {
