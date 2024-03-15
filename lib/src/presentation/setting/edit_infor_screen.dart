@@ -66,13 +66,13 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
 
   @override
   void dispose() {
-    getIt<NativeAdStatusCubit>().update(true);
     keyboardSubscription.cancel();
     super.dispose();
   }
 
-  void showDialogAvatar() {
-    showDialog(
+  void showDialogAvatar() async {
+    context.read<NativeAdStatusCubit>().update(false);
+    await showDialog(
       context: context,
       builder: (context) {
         return Builder(builder: (context) {
@@ -123,6 +123,9 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
         });
       },
     );
+    if (mounted) {
+      context.read<NativeAdStatusCubit>().update(true);
+    }
   }
 
   Future<void> updateInfo() async {
