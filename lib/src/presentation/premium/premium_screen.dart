@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iap/flutter_iap.dart';
@@ -90,13 +91,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
                       return const SizedBox();
                     }
 
-                    final weekPrice =
-                        weeklyProduct.first.productDetails.rawPrice;
-                    final monthPrice =
-                        monthlyProduct.first.productDetails.rawPrice;
-                    final saved =
-                        (weekPrice - (monthPrice / 4)) * 100 / weekPrice;
-
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       mainAxisSize: MainAxisSize.min,
@@ -105,14 +99,18 @@ class _PremiumScreenState extends State<PremiumScreen> {
                         16.h.verticalSpace,
                         buildIndicator(),
                         24.h.verticalSpace,
-                        buildButtonWeek(item: weeklyProduct),
-                        8.h.verticalSpace,
-                        buildButtonMonth(item: monthlyProduct, save: saved),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: Row(
+                            children: [
+                              buildButtonWeek(item: weeklyProduct),
+                              16.w.horizontalSpace,
+                              buildButtonMonth(item: monthlyProduct),
+                            ],
+                          ),
+                        ),
                         12.h.verticalSpace,
-                        buildButtonContinue(
-                            weeklyProduct.first, monthlyProduct.first),
-                        8.verticalSpace,
-                        buildFirstCloseButton(context),
+                        buildTextcancel(),
                         30.h.verticalSpace,
                         buildRowTextButton(),
                         10.h.verticalSpace,
@@ -126,19 +124,27 @@ class _PremiumScreenState extends State<PremiumScreen> {
     );
   }
 
-  Positioned buildTextTitle() {
+  Widget buildTextTitle() {
     return Positioned.fromRect(
-      rect: Rect.fromLTWH(16.w, -30.h, 1.sw * 0.65, 1.sh * 0.23),
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Text(
-          context.l10n.premiumTitle,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 28.sp,
-            fontWeight: FontWeight.w600,
+      rect: Rect.fromLTWH(
+          16.w, ScreenUtil().statusBarHeight + 20.h, 1.sw * 0.78, 1.sh * 0.2),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // 100.verticalSpace,
+          buildFirstCloseButton(context),
+          18.h.verticalSpace,
+          Text(
+            context.l10n.premiumTitle,
+            style: TextStyle(
+              height: 1.0,
+              color: Colors.white,
+              fontSize: 28.sp,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -162,11 +168,17 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
   CustomInkWell buildFirstCloseButton(BuildContext context) {
     return CustomInkWell(
-        child: Text(context.l10n.useLimitedVersion,
-            style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                color: Colors.black54)),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+          decoration: BoxDecoration(
+              color: const Color(0xff410097).withOpacity(0.2),
+              borderRadius: BorderRadius.circular(20.r)),
+          child: Text(context.l10n.useByAdsVersion,
+              style: TextStyle(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w500,
+                  color: const Color(0xffE2CEFF))),
+        ),
         onTap: () {
           if (widget.fromStart) {
             AutoRouter.of(context).replace(HomeRoute());
@@ -180,42 +192,59 @@ class _PremiumScreenState extends State<PremiumScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          children: [
-            TextButton(
-                onPressed: () {
-                  _launchUrl(UrlConstants.urlTerms);
-                },
-                child: Text(
-                  context.l10n.term,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    decoration: TextDecoration.underline,
-                    color: const Color(0xff7D7D7D),
-                  ),
-                )),
-            Text(
-              '|',
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: const Color(0xff7D7D7D),
+        Flexible(
+          flex: 4,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                    onPressed: () {
+                      _launchUrl(UrlConstants.urlTerms);
+                    },
+                    child: AutoSizeText(
+                      context.l10n.term,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        decoration: TextDecoration.underline,
+                        color: const Color(0xff7D7D7D),
+                      ),
+                    )),
               ),
-            ),
-            TextButton(
-                onPressed: () {
-                  _launchUrl(UrlConstants.urlPOLICY);
-                },
-                child: Text(
-                  context.l10n.privacy,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    decoration: TextDecoration.underline,
-                    color: const Color(0xff7D7D7D),
-                  ),
-                ))
-          ],
+              Text(
+                '|',
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: const Color(0xff7D7D7D),
+                ),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                      onPressed: () {
+                        _launchUrl(UrlConstants.urlPOLICY);
+                      },
+                      child: AutoSizeText(
+                        context.l10n.privacy,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          decoration: TextDecoration.underline,
+                          color: const Color(0xff7D7D7D),
+                        ),
+                      )),
+                ),
+              )
+            ],
+          ),
         ),
-        buildRestoreButton()
+        Flexible(flex: 2, child: buildRestoreButton())
       ],
     );
   }
@@ -234,197 +263,209 @@ class _PremiumScreenState extends State<PremiumScreen> {
     );
   }
 
-  CustomInkWell buildButtonMonth(
-      {required List<PurchasableProduct> item, required double save}) {
-    final isSelected = !isSelectedWeek;
+  Widget buildButtonMonth({required List<PurchasableProduct> item}) {
     final monthlyProduct = item.first;
     final formatter = NumberFormat.simpleCurrency(
       name: monthlyProduct.productDetails.currencyCode,
     );
     final monthPricePerWeek =
         formatter.format(monthlyProduct.productDetails.rawPrice / 4);
-    return CustomInkWell(
+    return Expanded(
         child: Container(
-          width: double.infinity,
-          margin: EdgeInsets.symmetric(horizontal: 16.w),
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              // gradient: gradientBackground,
-              border: Border.all(
-                  width: 2,
-                  color: isSelected
-                      ? const Color(0xffB67DFF)
-                      : const Color(0xffB67DFF).withOpacity(0.3)),
-              borderRadius:
-                  BorderRadius.circular(AppConstants.widgetBorderRadius.r)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        context.l10n.monthly,
-                        style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500,
-                            color: isSelected
-                                ? const Color(0xff8E52FF)
-                                : Colors.grey),
-                      ),
-                      8.horizontalSpace,
-                      Text('$monthPricePerWeek/${context.l10n.week}',
+      height: 150.h,
+      alignment: Alignment.bottomCenter,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: CustomInkWell(
+              onTap: () {
+                getIt<MyPurchaseManager>().buy(item.first);
+              },
+              child: Container(
+                height: 123.h,
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    gradient: gradientBackground,
+                    borderRadius: BorderRadius.circular(15.r)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          context.l10n.monthly,
                           style: TextStyle(
-                              fontSize: 12.sp, fontWeight: FontWeight.w500))
-                    ],
-                  ),
-                  4.verticalSpace,
-                  Row(
-                    children: [
-                      Text(
-                        context.l10n.billedMonthlyTotal,
-                        style: TextStyle(
-                            fontStyle: FontStyle.italic, fontSize: 12.sp),
-                      ),
-                      4.horizontalSpace,
-                      Text(item.first.price,
-                          style: const TextStyle(fontWeight: FontWeight.w500))
-                    ],
-                  )
-                ],
-              ),
-              if (isSelected)
-                Radio(
-                  activeColor: const Color(0xff8E52FF),
-                  value: true,
-                  groupValue: true,
-                  onChanged: (val) {},
-                  visualDensity: const VisualDensity(
-                    horizontal: VisualDensity.minimumDensity,
-                    vertical: VisualDensity.minimumDensity,
-                  ),
+                            fontSize: 14.sp,
+                            color: const Color(0xffF2F8FF),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        10.horizontalSpace,
+                        Expanded(
+                            child: AutoSizeText(
+                          item.first.price,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ))
+                      ],
+                    ),
+                    18.h.verticalSpace,
+                    buildDivider(color: const Color(0xffffffff)),
+                    18.h.verticalSpace,
+                    Text(
+                      '$monthPricePerWeek/ ${context.l10n.week}',
+                      style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white),
+                    )
+                  ],
                 ),
-            ],
+              ),
+            ),
           ),
-        ),
-        onTap: () {
-          if (!isSelectedWeek) {
-            return;
-          }
-          setState(() {
-            isSelectedWeek = false;
-          });
-        });
+          Align(
+            alignment: const Alignment(0.9, -0.8),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50.r),
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xff00C208),
+                    Color(0xff71DD81),
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+              ),
+              child: Text(
+                '-50%',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    ));
   }
 
-  CustomInkWell buildButtonWeek({required List<PurchasableProduct> item}) {
-    final isSelected = isSelectedWeek;
-    return CustomInkWell(
+  Widget buildButtonWeek({
+    required List<PurchasableProduct> item,
+  }) {
+    return Expanded(
         child: Container(
-          width: double.infinity,
-          margin: EdgeInsets.symmetric(horizontal: 16.w),
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              border: Border.all(
-                  width: 2,
-                  color: isSelected
-                      ? const Color(0xffB67DFF)
-                      : const Color(0xffB67DFF).withOpacity(0.3)),
-              borderRadius:
-                  BorderRadius.circular(AppConstants.widgetBorderRadius.r)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    context.l10n.weekly,
-                    style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
-                        color:
-                            isSelected ? const Color(0xff8E52FF) : Colors.grey),
-                  ),
-                  4.verticalSpace,
-                  Row(
-                    children: [
-                      Text(
-                        context.l10n.billedWeeklyOnly,
-                        style: TextStyle(
-                            fontStyle: FontStyle.italic, fontSize: 12.sp),
-                      ),
-                      4.horizontalSpace,
-                      Text(item.first.price,
-                          style: TextStyle(
-                              fontSize: 12.sp, fontWeight: FontWeight.w500))
-                    ],
-                  )
-                ],
-              ),
-              if (isSelected)
-                Radio(
-                  activeColor: const Color(0xff8E52FF),
-                  value: true,
-                  groupValue: true,
-                  onChanged: (val) {},
-                  visualDensity: const VisualDensity(
-                    horizontal: VisualDensity.minimumDensity,
-                    vertical: VisualDensity.minimumDensity,
-                  ),
-                ),
-            ],
-          ),
-        ),
+      height: 150.h,
+      alignment: Alignment.bottomCenter,
+      child: CustomInkWell(
         onTap: () {
-          if (isSelectedWeek) {
-            return;
-          }
-          setState(() {
-            isSelectedWeek = true;
-          });
-        });
-  }
-
-  Widget buildButtonContinue(
-      PurchasableProduct weekly, PurchasableProduct monthly) {
-    return CustomInkWell(
+          getIt<MyPurchaseManager>().buy(item.first);
+        },
         child: Container(
-          width: double.infinity,
-          margin: EdgeInsets.symmetric(horizontal: 16.w),
-          padding: EdgeInsets.symmetric(vertical: 8.h),
+          height: 123.h,
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              gradient: gradientBackground,
-              borderRadius:
-                  BorderRadius.circular(AppConstants.widgetBorderRadius.r)),
+              color: const Color(0xffF7F3FF),
+              borderRadius: BorderRadius.circular(15.r)),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: AutoSizeText(
+                      context.l10n.weekly,
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  10.horizontalSpace,
+                  AutoSizeText(
+                    item.first.price,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xff8E52FF),
+                    ),
+                  )
+                ],
+              ),
+              18.h.verticalSpace,
+              buildDivider(color: const Color(0xff894EFA)),
+              18.h.verticalSpace,
               Text(
-                context.l10n.continueText,
+                context.l10n.mostPopular,
                 style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
-                    color: Colors.white),
-              ),
-              Text(
-                context.l10n.youCanCancelAnyTime,
-                style: TextStyle(
-                    fontSize: 12.sp,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.white),
+                    color: const Color(0xffA677FF)),
               )
             ],
           ),
         ),
-        onTap: () {
-          final item = isSelectedWeek ? weekly : monthly;
-          getIt<MyPurchaseManager>().buy(item);
-        });
+      ),
+    ));
+  }
+
+  Row buildDivider({required Color color}) {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 1,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [color, color.withOpacity(.2)],
+                begin: Alignment.center,
+                end: Alignment.centerLeft,
+                stops: const [0.0, 0.5],
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Container(
+            height: 1,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [color, color.withOpacity(.2)],
+                begin: Alignment.center,
+                stops: const [0.0, 0.5],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildTextcancel() {
+    return Text(
+      context.l10n.youCanCancelAnyTime,
+      style: TextStyle(
+          fontSize: 13.sp,
+          fontStyle: FontStyle.italic,
+          color: MyColors.black34),
+    );
   }
 
   Widget buildIndicator() {
