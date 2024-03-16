@@ -197,4 +197,10 @@
   "alert": "Alert",
   "needHelp": "need help",
   "sent": "sent"
+  "youCanCancelAnyTime": "You can cancel any time",
+  "useByAdsVersion": "Use by ads version",
+  "day": "Day",
+  "mostPopular": "Most popular",
+  "sentAPhoto": "sent a photo",
+  "send": "Send"
 }

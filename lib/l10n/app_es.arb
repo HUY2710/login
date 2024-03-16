@@ -197,4 +197,8 @@
   "alert": "Alerta",
   "needHelp": "necesita ayuda",
   "sent": "enviado"
+  "youCanCancelAnyTime": "Puedes cancelar en cualquier momento",
+  "useByAdsVersion": "Usar por versión con anuncios",
+  "day": "Día",
+  "mostPopular": "Más popular"
 }

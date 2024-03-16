@@ -190,6 +190,10 @@
   "weekly": "Wöchentlich",
   "billedWeeklyOnly": "Nur wöchentlich abgerechnet",
   "youCanCancelAnyTime": "Sie können jederzeit kündigen",
+  "useByAdsVersion": "Verwendung durch Anzeigenversion",
+  "day": "Tag",
+  "mostPopular": "Beliebteste"
+  "youCanCancelAnyTime": "Sie können jederzeit kündigen",
   "sosTitle": "SOS-Alarm wird gesendet...",
   "sosHasSent": "SOS-Alarm wurde gesendet",
   "sosSend1": "Senden Sie im Notfall einen SOS-Alarm an Ihre Freunde",
