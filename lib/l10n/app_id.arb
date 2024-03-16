@@ -184,11 +184,20 @@
   "invalidQrCode": "Kode QR tidak valid",
   "pleaseCheckQrCode": "Harap periksa kembali kode QR Anda",
   "useLimitedVersion": "Lanjutkan dengan Versi Terbatas",
-  "useLimitedVersion": "Lanjutkan dengan Versi Terbatas",
   "restore": "Pulihkan",
   "week": "Minggu",
   "billedMonthlyTotal": "Dibebankan bulanan, total",
   "weekly": "Mingguan",
   "billedWeeklyOnly": "Dibebankan mingguan saja",
-  "youCanCancelAnyTime": "Anda dapat membatalkan kapan saja"
+  "youCanCancelAnyTime": "Anda dapat membatalkan kapan saja",
+  "sosTitle": "Mengirimkan Peringatan SOS...",
+  "sosHasSent": "Peringatan SOS telah dikirim",
+  "sosSend1": "Kirim peringatan SOS kepada teman Anda dalam keadaan darurat",
+  "sosSend2": "Peringatan SOS telah dikirim, teman-teman dalam grup Anda akan menerima pemberitahuan.",
+  "alert": "Peringatan",
+  "needHelp": "Butuh bantuan",
+  "sent": "terkirim",
+  "useByAdsVersion": "Gunakan versi iklan",
+  "day": "Hari",
+  "mostPopular": "Paling populer"
 }

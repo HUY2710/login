@@ -6,6 +6,7 @@ import 'package:applovin_max/applovin_max.dart';
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:battery_plus/battery_plus.dart';
+import 'package:camera/camera.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -45,6 +46,7 @@ import '../../shared/helpers/env_params.dart';
 import '../../shared/mixin/admob_consent_mixi.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../../shared/widgets/loading/loading_indicator.dart';
+import '../chat/widgets/chat_detail/camera_screen.dart';
 import '../map/cubit/select_group_cubit.dart';
 import 'update_dialog.dart';
 
@@ -83,6 +85,7 @@ class _SplashScreenState extends State<SplashScreen>
     }
     await checkAndShowConsent();
     initDebugger();
+    initCamera();
     await loadEnv();
     await Future.wait([
       RemoteConfigManager.instance.initConfig(),
@@ -101,6 +104,10 @@ class _SplashScreenState extends State<SplashScreen>
     } else {
       setInitScreen();
     }
+  }
+
+  Future<void> initCamera() async {
+    cameras = await availableCameras();
   }
 
   Future<bool> showSplashInter() async {

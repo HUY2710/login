@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../config/di/di.dart';
+import '../../../config/navigation/app_router.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
@@ -116,6 +118,8 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
             builder: (context) => const PlacesBottomSheet(),
           ).then((value) => getIt<BannerCollapseAdCubit>().update(true));
         }, Assets.icons.icPlace.path),
+        SizedBox(height: 16.h),
+        buildSOS()
       ],
     );
   }
@@ -141,6 +145,20 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
           height: 20.r,
           width: 20.r,
         ),
+      ),
+    );
+  }
+
+  Widget buildSOS() {
+    return GestureDetector(
+      onTap: () {
+        context.pushRoute(const SosRoute());
+      },
+      child: Image.asset(
+        Assets.images.sosBtn.path,
+        width: 40.r,
+        height: 40.r,
+        fit: BoxFit.cover,
       ),
     );
   }

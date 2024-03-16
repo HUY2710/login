@@ -11,6 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
+import '../../../data/models/store_group/store_group.dart';
 import '../../../data/remote/firestore_client.dart';
 import '../../../gen/gens.dart';
 import '../../../global/global.dart';
@@ -39,17 +40,32 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
   void dispose() {
     controllerEmail.dispose();
     controllerPassword.dispose();
+    getMyGroups();
     super.dispose();
+  }
+
+  List<StoreGroup> listMyGroups = [];
+
+  Future<void> getMyGroups() async {
+    final result = await FirestoreClient.instance.getMyGroups();
+    if (result != null) {
+      listMyGroups = result;
+      print('OMG ${listMyGroups.length}');
+    }
   }
 
   Future<void> navigateToNextScreen() async {
     final user = Global.instance.user;
+
     await SharedPreferencesManager.saveIsStarted(false);
+    // print('OMG ${groups.length}');
 
     if (mounted) {
       if (user != null) {
         if (user.userName == '') {
           context.replaceRoute(CreateUsernameRoute());
+        } else if (user.userName != '' && listMyGroups.isNotEmpty) {
+          context.replaceRoute(CreateGroupNameRoute());
         } else {
           final bool statusLocation = await checkPermissionLocation().isGranted;
           if (!statusLocation && context.mounted) {
@@ -81,7 +97,14 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
           bloc: signInCubit..initial(),
           listener: (context, state) {
             if (state.signInStatus == SignInStatus.success) {
-              navigateToNextScreen().then((value) async {});
+              navigateToNextScreen().then((value) async {
+                final user = Global.instance.user;
+                if (user?.uid == null) {
+                  final authUser = FirebaseAuth.instance.currentUser!;
+                  await FirestoreClient.instance
+                      .updateUser({'uid': authUser.uid});
+                }
+              });
             }
           },
           child: _buildBody(),

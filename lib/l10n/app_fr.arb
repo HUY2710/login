@@ -183,12 +183,21 @@
   "joinGroupQr": "Rejoindre avec un code QR",
   "invalidQrCode": "Code QR invalide",
   "pleaseCheckQrCode": "Veuillez vérifier à nouveau votre code QR",
-  "useLimitedVersion": "Continuer avec la version limitée",
   "useLimitedVersion": "Continuer avec la Version Limitée",
   "restore": "Restaurer",
   "week": "Semaine",
   "billedMonthlyTotal": "Facturé mensuellement, total",
   "weekly": "Hebdomadaire",
   "billedWeeklyOnly": "Facturé uniquement chaque semaine",
-  "youCanCancelAnyTime": "Vous pouvez annuler à tout moment"
+  "youCanCancelAnyTime": "Vous pouvez annuler à tout moment",
+  "useByAdsVersion": "Utiliser par version avec publicités",
+  "day": "Jour",
+  "mostPopular": "Le plus populaire",
+  "sosTitle": "Envoi de l'alerte SOS...",
+  "sosHasSent": "Alerte SOS envoyée",
+  "sosSend1": "Envoyez une alerte SOS à vos amis en cas d'urgence",
+  "sosSend2": "L'alerte SOS a été envoyée, vos amis au sein de votre groupe recevront la notification.",
+  "alert": "Alerte",
+  "needHelp": "Besoin d'aide",
+  "sent": "envoyé"
 }

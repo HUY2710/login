@@ -183,12 +183,21 @@
   "joinGroupQr": "Beitreten mit QR-Code",
   "invalidQrCode": "Ungültiger QR-Code",
   "pleaseCheckQrCode": "Bitte überprüfen Sie Ihren QR-Code erneut",
-  "useLimitedVersion": "Fahren Sie mit der limitierten Version fort",
   "useLimitedVersion": "Fortfahren mit der eingeschränkten Version",
   "restore": "Wiederherstellen",
   "week": "Woche",
   "billedMonthlyTotal": "Monatlich abgerechnet, insgesamt",
   "weekly": "Wöchentlich",
   "billedWeeklyOnly": "Nur wöchentlich abgerechnet",
-  "youCanCancelAnyTime": "Sie können jederzeit kündigen"
+  "youCanCancelAnyTime": "Sie können jederzeit kündigen",
+  "useByAdsVersion": "Verwendung durch Anzeigenversion",
+  "day": "Tag",
+  "mostPopular": "Beliebteste",
+  "sosTitle": "SOS-Alarm wird gesendet...",
+  "sosHasSent": "SOS-Alarm wurde gesendet",
+  "sosSend1": "Senden Sie im Notfall einen SOS-Alarm an Ihre Freunde",
+  "sosSend2": "Der SOS-Alarm wurde gesendet. Ihre Freunde in Ihrer Gruppe erhalten die Benachrichtigung.",
+  "alert": "Alarm",
+  "needHelp": "Brauche Hilfe",
+  "sent": "gesendet"
 }

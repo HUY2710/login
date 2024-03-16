@@ -19,7 +19,7 @@ class CollectionStoreConstant {
   static const String notificationPlace =
       'notificationPlaces'; //mỗi place thì mỗi user cần có thông tin leave && arrived// update lại
 
-  static const String loginUsers = 'loginUsers';
+  static const String sos = 'sos';
 }
 
 class CollectionStore {
@@ -28,8 +28,6 @@ class CollectionStore {
   static CollectionReference<Map<String, dynamic>> users =
       FirebaseFirestore.instance.collection(CollectionStoreConstant.users);
 
-  static CollectionReference<Map<String, dynamic>> loginUsers =
-      FirebaseFirestore.instance.collection(CollectionStoreConstant.loginUsers);
 
   static CollectionReference<Map<String, dynamic>> groups =
       FirebaseFirestore.instance.collection(CollectionStoreConstant.groups);
@@ -58,4 +56,7 @@ class CollectionStore {
   static CollectionReference<Map<String, dynamic>> notificationPlaces =
       FirebaseFirestore.instance
           .collection(CollectionStoreConstant.notificationPlace);
+
+  static CollectionReference<Map<String, dynamic>> sos =
+      FirebaseFirestore.instance.collection(CollectionStoreConstant.sos);
 }

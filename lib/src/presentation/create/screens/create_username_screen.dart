@@ -14,18 +14,33 @@ import '../../../shared/helpers/valid_helper.dart';
 import '../../onboarding/widgets/app_button.dart';
 
 @RoutePage()
-class CreateUsernameScreen extends StatelessWidget {
-  CreateUsernameScreen({super.key});
+class CreateUsernameScreen extends StatefulWidget {
+  const CreateUsernameScreen({super.key});
 
+  @override
+  State<CreateUsernameScreen> createState() => _CreateUsernameScreenState();
+}
+
+class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
   void changedUsername(String username) {
     Global.instance.user = Global.instance.user?.copyWith(
       userName: ValidHelper.removeExtraSpaces(username),
     );
   }
 
-  final TextEditingController userNameCtrl = TextEditingController(text: '');
+  TextEditingController userNameCtrl = TextEditingController(text: '');
+
   final ValueCubit<String> userNameCubit = ValueCubit('');
+
   final user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    userNameCtrl = TextEditingController(text: user?.displayName);
+    userNameCubit.update(user!.displayName!);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,10 +93,8 @@ class CreateUsernameScreen extends StatelessWidget {
                             ValidHelper.containsSpecialCharacters(value);
                         if (!validName) {
                           userNameCubit.update(value);
-                          user?.updateDisplayName(value);
                         } else {
                           userNameCubit.update('');
-                          user?.updateDisplayName('');
                         }
                       },
                       decoration: InputDecoration(
