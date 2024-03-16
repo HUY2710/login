@@ -1,13 +1,17 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
+import '../../config/di/di.dart';
 import '../../gen/gens.dart';
+import '../../services/firebase_message_service.dart';
+import '../../shared/extension/context_extension.dart';
 import '../onboarding/widgets/app_button.dart';
+import 'cubit/sos_cubit.dart';
 
 @RoutePage()
 class SosScreen extends StatefulWidget {
@@ -18,19 +22,21 @@ class SosScreen extends StatefulWidget {
 }
 
 class _SosScreenState extends State<SosScreen> {
-  late int _countdown;
-  late Timer _timer;
+  int _countdown = 5;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    _countdown = 5;
-    _startCountdown();
+    if (!getIt<SosCubit>().state) {
+      _countdown = 5;
+      _startCountdown();
+    }
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -41,10 +47,10 @@ class _SosScreenState extends State<SosScreen> {
         if (_countdown > 0) {
           _countdown--;
         } else {
+          getIt<SosCubit>().toggle();
+          FirebaseMessageService().sendSOS(context);
+
           timer.cancel();
-          // Put your code here to handle when countdown reaches 0
-          // For example, navigate to another screen
-          // context.router.replace(const AnotherScreen());
         }
       });
     });
@@ -53,42 +59,88 @@ class _SosScreenState extends State<SosScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 16.w),
-        child: AppButton(
-            title: 'Cancel Alert',
-            onTap: () {
-              context.popRoute();
-            }),
+      bottomNavigationBar: BlocBuilder<SosCubit, bool>(
+        bloc: getIt<SosCubit>(),
+        builder: (context, state) {
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 16.w),
+            child: AppButton(
+                title: state
+                    ? context.l10n.cancel
+                    : '${context.l10n.cancel} ${context.l10n.alert}',
+                onTap: () {
+                  //đang bật sos => tắt sos
+                  if (state) {
+                    //tiến hành hủy sos
+                    getIt<SosCubit>().toggle();
+                  }
+                  //sos tắt thì back về
+                  context.popRoute();
+                }),
+          );
+        },
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          RippleAnimation(
-            color: Colors.red,
-            delay: const Duration(milliseconds: 150),
-            repeat: true,
-            minRadius: 16,
-            ripplesCount: 20,
-            duration: const Duration(milliseconds: 6 * 300),
-            child: Image.asset(
-              Assets.images.sos.path,
-              height: 184.h,
-              width: 184.r,
-            ),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RippleAnimation(
+                color: Colors.red,
+                delay: const Duration(milliseconds: 150),
+                repeat: true,
+                minRadius: 25.r,
+                ripplesCount: 25,
+                duration: const Duration(milliseconds: 6 * 300),
+                child: Image.asset(
+                  Assets.images.sos.path,
+                  height: 150.r,
+                  width: 150.r,
+                ),
+              ),
+              16.verticalSpace,
+              BlocBuilder<SosCubit, bool>(
+                bloc: getIt<SosCubit>(),
+                builder: (context, state) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (!state)
+                        Text(
+                          '$_countdown',
+                          style: TextStyle(
+                            fontSize: 32.sp,
+                            fontWeight: FontWeight.w500,
+                            color: MyColors.primary,
+                          ),
+                        ),
+                      10.verticalSpace,
+                      Text(
+                        state ? context.l10n.sosHasSent : context.l10n.sosTitle,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      10.verticalSpace,
+                      Text(
+                        state ? context.l10n.sosSend2 : context.l10n.sosSend1,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: const Color(0xff9E9E9E),
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
           ),
-          Text(
-            '$_countdown',
-            style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.w500),
-          ),
-          10.verticalSpace,
-          const Text('Sending SOS Alert...'),
-          10.verticalSpace,
-          const Text(
-            'Send an SOS alert to your friends in case of emergency',
-            textAlign: TextAlign.center,
-          ),
-        ],
+        ),
       ),
     );
   }

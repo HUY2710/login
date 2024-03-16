@@ -52,6 +52,36 @@ class TokenManager {
     return tokens;
   }
 
+  static Future<List<String>> getAllGroupTokens() async {
+    //lấy ra toàn bộ id group mình join
+    final List<String> tokens = [];
+    final List<String>? myGroupsId = await GroupsManager.getIdMyListGroup();
+    if (myGroupsId == null || myGroupsId.isEmpty) {
+      return [];
+    }
+
+    for (final idGroup in myGroupsId) {
+      final snapShots = await CollectionStore.tokens
+          .doc(idGroup)
+          .collection(CollectionStoreConstant.users)
+          .get();
+      if (snapShots.docs.isEmpty) {
+        return [];
+      }
+      final token = snapShots.docs
+          .where((element) => element.id != Global.instance.userCode)
+          .toList()
+          .map((e) => e.data()['token'] as String)
+          .toList()
+          .where((element) => element.isNotEmpty)
+          .toList();
+
+      tokens.addAll(token);
+    }
+
+    return tokens;
+  }
+
   static Future<void> updateGroupNotification(bool mute, String groupId) async {
     String token = '';
     if (!mute) {

@@ -55,15 +55,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
             }
           },
           child: Scaffold(
-            appBar: AppBar(
-              actions: [
-                ElevatedButton(
-                    onPressed: () {
-                      context.pushRoute(HomeRoute());
-                    },
-                    child: const Text('Home'))
-              ],
-            ),
             body: Stack(
               children: [
                 Container(

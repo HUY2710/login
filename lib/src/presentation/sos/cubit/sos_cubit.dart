@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:injectable/injectable.dart';
 
@@ -8,22 +7,15 @@ import '../../../data/models/store_sos/store_sos.dart';
 import '../../../data/remote/sos_manager.dart';
 import '../../../global/global.dart';
 
-part 'sos_cubit.freezed.dart';
-part 'sos_state.dart';
-
 @singleton
-class SosCubit extends HydratedCubit<SosState> {
-  SosCubit() : super(const SosState.loading());
+class SosCubit extends HydratedCubit<bool> {
+  SosCubit() : super(false);
 
   Timer? _timer;
   final Duration _duration = const Duration(minutes: 10);
 
   Future<void> toggle() async {
-    final bool status = state.maybeWhen(
-      orElse: () => false,
-      success: (status) => status,
-    );
-    emit(SosState.success(!status));
+    emit(!state);
   }
 
   Future<void> init() async {
@@ -44,20 +36,15 @@ class SosCubit extends HydratedCubit<SosState> {
   }
 
   @override
-  Future<void> onChange(Change<SosState> change) async {
-    change.nextState.maybeWhen(
-      orElse: () => false,
-      success: (status) async {
-        await _updateStatus(status);
+  Future<void> onChange(Change<bool> change) async {
+    await _updateStatus(change.nextState);
 
-        if (status) {
-          //Tắt sos sau 10 phút nếu sos đang được bật
-          _timer = Timer(_duration, _turnOff);
-        } else {
-          _timer?.cancel();
-        }
-      },
-    );
+    if (change.nextState) {
+      //Tắt sos sau 10 phút nếu sos đang được bật
+      _timer = Timer(_duration, _turnOff);
+    } else {
+      _timer?.cancel();
+    }
 
     super.onChange(change);
   }
@@ -68,7 +55,7 @@ class SosCubit extends HydratedCubit<SosState> {
     Global.instance.user = Global.instance.user!.copyWith(
       sosStore: const StoreSOS(),
     );
-    emit(const SosState.success(false));
+    emit(false);
   }
 
   Future<void> _updateStatus(bool status) async {
@@ -86,23 +73,18 @@ class SosCubit extends HydratedCubit<SosState> {
       Global.instance.user = Global.instance.user!
           .copyWith(sosStore: StoreSOS(sos: status, sosTimeLimit: timeLimit));
     }).catchError(
-      (err) {
-        emit(SosState.error(err.toString()));
-      },
+      (err) {},
     );
   }
 
   @override
-  SosState? fromJson(Map<String, dynamic> json) {
+  bool? fromJson(Map<String, dynamic> json) {
     final bool? status = json['sos'] as bool?;
-    return SosState.success(status ?? false);
+    return status ?? false;
   }
 
   @override
-  Map<String, dynamic>? toJson(SosState state) {
-    return state.maybeWhen(
-      orElse: () => {'sos': false},
-      success: (status) => {'sos': status},
-    );
+  Map<String, dynamic>? toJson(bool state) {
+    return {'sos': state};
   }
 }

@@ -154,19 +154,11 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
       onTap: () {
         context.pushRoute(const SosRoute());
       },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius:
-              BorderRadius.circular(AppConstants.widgetBorderRadius.r),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xff42474C).withOpacity(0.3),
-              blurRadius: 17,
-            )
-          ],
-        ),
-        child: const Text('SOS'),
+      child: Image.asset(
+        Assets.images.sosBtn.path,
+        width: 40.r,
+        height: 40.r,
+        fit: BoxFit.cover,
       ),
     );
   }

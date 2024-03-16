@@ -367,6 +367,8 @@ class MapScreenState extends State<MapScreen>
                                 } else {
                                   temp.add(member);
                                 }
+                              } else {
+                                temp[memberExists] = member;
                               }
                             } else {
                               if (memberExists != -1) {

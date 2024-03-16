@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_activity_recognition/flutter_activity_recognition.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../data/models/store_user/store_user.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/colors.gen.dart';
 import '../../../global/global.dart';
+import '../../../shared/helpers/time_helper.dart';
 import '../../../shared/widgets/containers/shadow_container.dart';
 import '../models/member_maker_data.dart';
 import 'battery_bar.dart';
@@ -83,6 +83,12 @@ class _BuildMarkerState extends State<BuildMarker> {
       color = const Color(0xff0FEC47);
     }
 
+    //nếu sos được bật và time limit của user đó < 10 thì mới show sos
+    final bool sosStatus = widget.member.sosStore?.sos ?? false;
+    final timeLimit = TimerHelper.checkTimeDifferenceCurrent(
+      widget.member.sosStore?.sosTimeLimit ?? DateTime.now(),
+      argMinute: 10,
+    );
     return RepaintBoundary(
       key: widget.keyCap ?? _repaintKey,
       child: Column(
@@ -100,7 +106,12 @@ class _BuildMarkerState extends State<BuildMarker> {
               ),
             ),
           8.verticalSpace,
-          _buildMarker(color, battery),
+          _buildMarker(
+              color,
+              battery,
+              sosStatus &&
+                  !timeLimit &&
+                  widget.member.code != Global.instance.user?.code),
           8.verticalSpace,
           if (widget.member.code != Global.instance.user?.code)
             ShadowContainer(
@@ -142,12 +153,16 @@ class _BuildMarkerState extends State<BuildMarker> {
     );
   }
 
-  Stack _buildMarker(Color color, int battery) {
+  Stack _buildMarker(Color color, int battery, bool sos) {
     _generateMarker();
     return Stack(
       children: [
-        Assets.images.markers.markerBg
-            .image(width: 150.r, gaplessPlayback: true),
+        if (sos)
+          Assets.images.markers.sosMarkerBg
+              .image(width: 150.r, gaplessPlayback: true)
+        else
+          Assets.images.markers.markerBg
+              .image(width: 150.r, gaplessPlayback: true),
 
         _buildAvatar(),
         //demo
@@ -162,15 +177,16 @@ class _BuildMarkerState extends State<BuildMarker> {
           ),
         ),
 
-        Positioned(
-          right: 0,
-          top: 0,
-          child: SvgPicture.asset(
-            Assets.icons.icSos.path,
-            height: 48.r,
-            width: 48.r,
+        if (sos)
+          Positioned(
+            right: 0,
+            top: 0,
+            child: Image.asset(
+              Assets.images.sos.path,
+              height: 50.r,
+              width: 50.r,
+            ),
           ),
-        ),
       ],
     );
   }

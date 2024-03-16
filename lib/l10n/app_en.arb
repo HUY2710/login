@@ -179,7 +179,7 @@
   "code": "Code",
   "qrCode": "QR code",
   "savePicture": "Save Picture",
-  "uploadPhoto": "Upload photo" ,
+  "uploadPhoto": "Upload photo",
   "joinGroupQr": "Join with QR code",
   "invalidQrCode": "Invalid QR code",
   "pleaseCheckQrCode": "Please check your QR code again",
@@ -189,5 +189,12 @@
   "billedMonthlyTotal": "Billed monthly, total",
   "weekly": "Weekly",
   "billedWeeklyOnly": "Billed weekly only",
-  "youCanCancelAnyTime": "You can cancel any time"
+  "youCanCancelAnyTime": "You can cancel any time",
+  "sosTitle": "Sending SOS Alert...",
+  "sosHasSent": "SOS Alert has sent",
+  "sosSend1": "Send an SOS alert to your friends in case of emergency",
+  "sosSend2": "The SOS alert has been sent, your friends within your group will receive the notification.",
+  "alert": "Alert",
+  "needHelp": "need help",
+  "sent": "sent"
 }

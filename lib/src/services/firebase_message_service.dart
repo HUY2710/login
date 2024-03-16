@@ -191,22 +191,30 @@ class FirebaseMessageService implements NotificationService {
   }
 
   @override
-  Future<void> sendSOS(BuildContext? context) {
-    // TODO: implement sendSOS
-    throw UnimplementedError();
+  Future<void> sendSOS(BuildContext? context) async {
+    final message =
+        '${Global.instance.user?.userName} ${context?.l10n.has} sent SOS';
 
-    //cần xử lí lấy hết toàn bộ token của tất cả các group mà mình join
+    final title = '${Global.instance.user?.userName} ${context?.l10n.needHelp}';
+    await _sendMessageByToken(title, message);
   }
 }
 
 extension FirebaseMessageServiceExt on FirebaseMessageService {
-  Future<void> _sendMessageByToken(String title, String message) async {
+  Future<void> _sendMessageByToken(String title, String message,
+      {bool sos = false}) async {
     final url = Uri.https(EnvParams.apiUrlNotification,
         'group-location-sharing/send-notification-by-tokens');
     final headers = {
       'Content-Type': 'application/json',
     };
-    final tokens = await TokenManager.getGroupTokens();
+
+    List<String> tokens = [];
+    if (sos) {
+      tokens = await TokenManager.getAllGroupTokens();
+    } else {
+      tokens = await TokenManager.getGroupTokens();
+    }
     if (tokens.isEmpty) {
       return;
     }

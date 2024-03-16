@@ -184,11 +184,17 @@
   "invalidQrCode": "Código QR inválido",
   "pleaseCheckQrCode": "Por favor, verifique novamente o seu código QR",
   "useLimitedVersion": "Continuar com versão limitada",
-  "useLimitedVersion": "Continuar com a Versão Limitada",
   "restore": "Restaurar",
   "week": "Semana",
   "billedMonthlyTotal": "Faturado mensalmente, total",
   "weekly": "Semanal",
   "billedWeeklyOnly": "Apenas faturado semanalmente",
-  "youCanCancelAnyTime": "Você pode cancelar a qualquer momento"
+  "youCanCancelAnyTime": "Você pode cancelar a qualquer momento",
+  "sosTitle": "Enviando Alerta de SOS...",
+  "sosHasSent": "Alerta de SOS foi enviado",
+  "sosSend1": "Envie um alerta de SOS para seus amigos em caso de emergência",
+  "sosSend2": "O alerta de SOS foi enviado, seus amigos dentro do seu grupo receberão a notificação.",
+  "alert": "Alerta",
+  "needHelp": "precisa de ajuda",
+  "sent": "enviado"
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:simple_ripple_animation/simple_ripple_animation.dart';
 
 import '../../../data/models/store_user/store_user.dart';
+import '../../../shared/helpers/time_helper.dart';
 
 class VisibilityMemberMap extends StatelessWidget {
   const VisibilityMemberMap(
@@ -24,6 +26,7 @@ class VisibilityMemberMap extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
         itemBuilder: (context, index) {
+          final user = users[index];
           return GestureDetector(
             onTap: () {
               moveToUser(LatLng(users[index].location?.lat ?? 0,
@@ -34,10 +37,31 @@ class VisibilityMemberMap extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CircleAvatar(
-                    radius: 16.r,
-                    backgroundImage: Image.asset(users[index].avatarUrl).image,
-                  ),
+                  if (user.sosStore != null &&
+                      user.sosStore!.sos &&
+                      !TimerHelper.checkTimeDifferenceCurrent(
+                        user.sosStore?.sosTimeLimit ?? DateTime.now(),
+                        argMinute: 10,
+                      ))
+                    RippleAnimation(
+                      color: Colors.red,
+                      delay: const Duration(milliseconds: 150),
+                      repeat: true,
+                      minRadius: 10,
+                      ripplesCount: 16,
+                      duration: const Duration(milliseconds: 6 * 300),
+                      child: CircleAvatar(
+                        radius: 16.r,
+                        backgroundImage:
+                            Image.asset(users[index].avatarUrl).image,
+                      ),
+                    )
+                  else
+                    CircleAvatar(
+                      radius: 16.r,
+                      backgroundImage:
+                          Image.asset(users[index].avatarUrl).image,
+                    ),
                   6.verticalSpace,
                   Text(
                     users[index].userName,
