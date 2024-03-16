@@ -192,5 +192,7 @@
   "youCanCancelAnyTime": "You can cancel any time",
   "useByAdsVersion": "Use by ads version",
   "day": "Day",
-  "mostPopular": "Most popular"
+  "mostPopular": "Most popular",
+  "sentAPhoto": "sent a photo",
+  "send": "Send"
 }

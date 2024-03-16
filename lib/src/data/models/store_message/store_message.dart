@@ -11,6 +11,7 @@ class MessageModel with _$MessageModel {
     required String sentAt,
     double? lat,
     double? long,
+    String? imagUrl,
     @Default(MessageType.text) MessageType messageType,
     @JsonKey(includeToJson: false, includeFromJson: false) String? avatarUrl,
     @JsonKey(includeToJson: false, includeFromJson: false) String? userName,
@@ -19,4 +20,4 @@ class MessageModel with _$MessageModel {
       _$MessageModelFromJson(json);
 }
 
-enum MessageType { text, location, checkIn }
+enum MessageType { text, location, checkIn, image }

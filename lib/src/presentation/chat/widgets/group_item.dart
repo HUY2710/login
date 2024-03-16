@@ -37,11 +37,9 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
         ));
       },
       child: SizedBox(
-        // color: Colors.transparent,
-        height: 65.h,
+        height: 75.h,
         width: double.infinity,
         child: Row(
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               width: 52.r,

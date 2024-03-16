@@ -244,7 +244,6 @@ class MapScreenState extends State<MapScreen>
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('height:$kBottomNavigationBarHeight');
     return Stack(
       children: [
         Positioned.fill(
