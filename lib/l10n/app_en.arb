@@ -198,5 +198,6 @@
   "signIn": "Sign in",
   "titleSignInSetting": "If you sign up, all your data will be recorded indefinitely even if you delete app or change your device.",
   "logOut": "Log out",
-  "deleteMyAccount": "Delete my account"
+  "deleteMyAccount": "Delete my account",
+  "account": "Account"
 }

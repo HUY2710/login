@@ -108,6 +108,7 @@ class _SettingScreenState extends State<SettingScreen>
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               _buildUsernameEditSetting(),
+              _buildSignInSetting(),
               24.verticalSpace,
               CustomItemSetting(
                 padding: EdgeInsets.symmetric(
@@ -361,109 +362,116 @@ class _SettingScreenState extends State<SettingScreen>
   }
 
   Widget _buildUsernameEditSetting() {
+    return CustomItemSetting(
+      onTap: () {
+        print(Global.instance.user);
+      },
+      child: SizedBox(
+        height: 50.h,
+        child: Row(
+          children: [
+            Hero(
+              tag: 'editAvatar',
+              child: CircleAvatar(
+                radius: 28,
+                backgroundImage: AssetImage(Global.instance.user!.avatarUrl),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  final text = Global.instance.user?.userName ?? 'User';
+                  final painter = TextPainter(
+                    text: TextSpan(text: text),
+                    maxLines: 1,
+                    textScaleFactor: MediaQuery.of(context).textScaleFactor,
+                    textDirection: TextDirection.ltr,
+                  );
+                  painter.layout();
+                  final overflow = painter.size.width > constraints.maxWidth;
+
+                  return overflow
+                      ? SizedBox.expand(
+                          child: Marquee(
+                              text: text,
+                              pauseAfterRound: const Duration(seconds: 3),
+                              style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w500)),
+                        )
+                      : Text(
+                          text,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        );
+                }),
+              ),
+            ),
+            GestureDetector(
+              onTap: () async {
+                final result =
+                    await context.pushRoute<bool>(const EditInfoRoute());
+                if (result != null && result) {
+                  setState(() {});
+                }
+              },
+              child: Assets.icons.icEdit.svg(height: 28.h),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSignInSetting() {
     return BlocBuilder<JoinAnonymousCubit, bool>(
       builder: (context, state) {
         return state
-            ? CustomItemSetting(
+            ? GestureDetector(
                 onTap: () {
                   context.pushRoute(const SignInFromSettingRoute());
                 },
-                child: SizedBox(
-                  height: 50.h,
-                  child: Row(
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle, color: Color(0xffFBF9FF)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SvgPicture.asset(
-                              Assets.icons.login.icProfile.path),
+                child: Container(
+                  margin: EdgeInsets.only(top: 24.h),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20.r),
+                      boxShadow: [
+                        BoxShadow(
+                            offset: const Offset(0, 2),
+                            blurRadius: 8.4,
+                            color: const Color(0xff9C747D).withOpacity(0.17))
+                      ]),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            context.l10n.account,
+                            style: TextStyle(
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.w500,
+                                color: const Color(0xff343434)),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w),
-                            child: Text(
-                              '${context.l10n.signIn}/${context.l10n.signUp}',
-                              style: TextStyle(
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xff8E52FF)),
-                            )),
-                      ),
-                    ],
+                        Text(
+                          '${context.l10n.signIn}/ ${context.l10n.signUp}',
+                          style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xff8E52FF)),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               )
-            : CustomItemSetting(
-                onTap: () {
-                  print(Global.instance.user);
-                },
-                child: SizedBox(
-                  height: 50.h,
-                  child: Row(
-                    children: [
-                      Hero(
-                        tag: 'editAvatar',
-                        child: CircleAvatar(
-                          radius: 28,
-                          backgroundImage:
-                              AssetImage(Global.instance.user!.avatarUrl),
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w),
-                          child: LayoutBuilder(builder: (context, constraints) {
-                            final text =
-                                Global.instance.user?.userName ?? 'User';
-                            final painter = TextPainter(
-                              text: TextSpan(text: text),
-                              maxLines: 1,
-                              textScaleFactor:
-                                  MediaQuery.of(context).textScaleFactor,
-                              textDirection: TextDirection.ltr,
-                            );
-                            painter.layout();
-                            final overflow =
-                                painter.size.width > constraints.maxWidth;
-
-                            return overflow
-                                ? SizedBox.expand(
-                                    child: Marquee(
-                                        text: text,
-                                        pauseAfterRound:
-                                            const Duration(seconds: 3),
-                                        style: TextStyle(
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.w500)),
-                                  )
-                                : Text(
-                                    text,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  );
-                          }),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          final result = await context
-                              .pushRoute<bool>(const EditInfoRoute());
-                          if (result != null && result) {
-                            setState(() {});
-                          }
-                        },
-                        child: Assets.icons.icEdit.svg(height: 28.h),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+            : const SizedBox();
       },
     );
   }
