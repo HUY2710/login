@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
@@ -62,7 +64,7 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: JoinQrCodeRoute.page),
         AutoRoute(page: AddPlaceRoute.page),
         AutoRoute(page: ImageResultRoute.page),
-        AutoRoute(page: CameraRoute.page)
+        AutoRoute(page: CameraRoute.page),
         AutoRoute(page: SosRoute.page),
       ];
 
