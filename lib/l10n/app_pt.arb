@@ -190,5 +190,8 @@
   "billedMonthlyTotal": "Faturado mensalmente, total",
   "weekly": "Semanal",
   "billedWeeklyOnly": "Apenas faturado semanalmente",
-  "youCanCancelAnyTime": "Você pode cancelar a qualquer momento"
+  "youCanCancelAnyTime": "Você pode cancelar a qualquer momento",
+  "useByAdsVersion": "Usar pela versão com anúncios",
+  "day": "Dia",
+  "mostPopular": "Mais popular"
 }

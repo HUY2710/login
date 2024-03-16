@@ -190,5 +190,8 @@
   "billedMonthlyTotal": "Monatlich abgerechnet, insgesamt",
   "weekly": "Wöchentlich",
   "billedWeeklyOnly": "Nur wöchentlich abgerechnet",
-  "youCanCancelAnyTime": "Sie können jederzeit kündigen"
+  "youCanCancelAnyTime": "Sie können jederzeit kündigen",
+  "useByAdsVersion": "Verwendung durch Anzeigenversion",
+  "day": "Tag",
+  "mostPopular": "Beliebteste"
 }

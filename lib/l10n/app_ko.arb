@@ -190,5 +190,8 @@
   "billedMonthlyTotal": "매월 청구, 총액",
   "weekly": "주간",
   "billedWeeklyOnly": "주간만 청구됨",
-  "youCanCancelAnyTime": "언제든지 취소할 수 있습니다"
+  "youCanCancelAnyTime": "언제든지 취소할 수 있습니다",
+  "useByAdsVersion": "광고 버전 사용",
+  "day": "일",
+  "mostPopular": "가장 인기 있는"
 }

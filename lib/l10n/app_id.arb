@@ -190,5 +190,8 @@
   "billedMonthlyTotal": "Dibebankan bulanan, total",
   "weekly": "Mingguan",
   "billedWeeklyOnly": "Dibebankan mingguan saja",
-  "youCanCancelAnyTime": "Anda dapat membatalkan kapan saja"
+  "youCanCancelAnyTime": "Anda dapat membatalkan kapan saja",
+  "useByAdsVersion": "Gunakan versi iklan",
+  "day": "Hari",
+  "mostPopular": "Paling populer"
 }
