@@ -48,15 +48,19 @@ class MessageTypeGuess extends StatelessWidget {
         Container(
           constraints: BoxConstraints(maxWidth: 1.sw * 0.6),
           margin: EdgeInsets.symmetric(vertical: 2.h),
-          // padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+          padding: item.messageType == MessageType.image
+              ? null
+              : EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15.r),
-                  topRight: Radius.circular(15.r),
-                  bottomLeft: Utils.checkLastMessByUser(index, chats)
-                      ? Radius.zero
-                      : Radius.circular(15.r),
-                  bottomRight: Radius.circular(15.r)),
+              borderRadius: item.messageType == MessageType.image
+                  ? BorderRadius.circular(15.r)
+                  : BorderRadius.only(
+                      topLeft: Radius.circular(15.r),
+                      topRight: Radius.circular(15.r),
+                      bottomLeft: Utils.checkLastMessByUser(index, chats)
+                          ? Radius.zero
+                          : Radius.circular(15.r),
+                      bottomRight: Radius.circular(15.r)),
               color: const Color(0xffF7F5FA)),
           child: switch (item.messageType) {
             MessageType.location => buildMessLocation(context, item),
@@ -70,16 +74,63 @@ class MessageTypeGuess extends StatelessWidget {
   }
 
   Widget buildMessImage(BuildContext context, MessageModel item) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(15.r),
-      child: CachedNetworkImage(
-        placeholder: (context, url) => const Center(
-          child: CircularProgressIndicator(),
+    return CustomInkWell(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (contex) {
+              return Material(
+                color: Colors.black.withOpacity(.4),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    InteractiveViewer(
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        imageUrl: item.imagUrl ??
+                            'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    buildButtonClose(context)
+                  ],
+                ),
+              );
+            });
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15.r),
+        child: CachedNetworkImage(
+          placeholder: (context, url) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          imageUrl: item.imagUrl ??
+              'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png',
+          fit: BoxFit.cover,
         ),
-        imageUrl: item.imagUrl ??
-            'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png',
-        fit: BoxFit.cover,
       ),
+    );
+  }
+
+  Align buildButtonClose(BuildContext context) {
+    return Align(
+      alignment: const Alignment(0.9, -0.95),
+      child: CustomInkWell(
+          child: Container(
+            width: 24.r,
+            height: 24.r,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: Colors.black.withOpacity(.2), shape: BoxShape.circle),
+            child: Icon(
+              Icons.close,
+              size: 18.r,
+              color: Colors.white,
+            ),
+          ),
+          onTap: () => context.popRoute()),
     );
   }
 

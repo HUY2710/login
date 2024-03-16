@@ -126,6 +126,171 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
     );
   }
 
+  Container buildInput() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12.h),
+      decoration: const BoxDecoration(
+          border: Border(top: BorderSide(color: Color(0xffEAEAEA)))),
+      child: Row(
+        children: [
+          buildButtonSendLocation(),
+          16.w.horizontalSpace,
+          Expanded(
+              child: TextField(
+            controller: textController,
+            onChanged: (value) {
+              if (value.trimLeft().trimRight().isEmpty) {
+                isShowButtonSend.value = false;
+              } else {
+                isShowButtonSend.value = true;
+              }
+            },
+            keyboardType: TextInputType.multiline,
+            minLines: 1,
+            maxLines: 5,
+            decoration: _inputStyle(),
+          )),
+          buildButtonCamera(),
+          buildButtonGallery(),
+        ],
+      ),
+    );
+  }
+
+  InputDecoration _inputStyle() {
+    return InputDecoration(
+      suffixIcon: ValueListenableBuilder(
+          valueListenable: isShowButtonSend,
+          builder: (context, value, child) {
+            return value
+                ? IconButton(
+                    padding: EdgeInsets.zero,
+                    iconSize: 20.r,
+                    onPressed: () async {
+                      if (textController.text.isNotEmpty) {
+                        await getIt<GroupCubit>().sendMessage(
+                          content: textController.text.trimLeft().trimRight(),
+                          idGroup: widget.idGroup,
+                          groupName: widget.groupName,
+                        );
+                        textController.clear();
+                        isShowButtonSend.value = false;
+                      }
+                    },
+                    icon: Assets.icons.icSend.svg(width: 20.r))
+                : const SizedBox();
+          }),
+      hintText: context.l10n.messages,
+      hintStyle: TextStyle(color: const Color(0xff6C6C6C), fontSize: 14.sp),
+      contentPadding: EdgeInsets.only(left: 18.w, bottom: 12.w, top: 12.h),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15.r),
+        borderSide: const BorderSide(
+          width: 2,
+          color: MyColors.secondPrimary,
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15.r),
+        borderSide: const BorderSide(
+          width: 2,
+          color: MyColors.secondPrimary,
+        ),
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15.r),
+        borderSide: const BorderSide(
+          width: 2,
+          color: MyColors.secondPrimary,
+        ),
+      ),
+    );
+  }
+
+  IconButton buildButtonGallery() {
+    return IconButton(
+        onPressed: () async {
+          final bool isPremium = getIt<MyPurchaseManager>().state.isPremium();
+
+          ///TODO: remove !
+          if (!isPremium) {
+            EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+            final XFile? image =
+                await ImagePicker().pickImage(source: ImageSource.gallery);
+            if (image != null) {
+              showLoading();
+              final url = await FirebaseStorageClient.instance.uploadImage(
+                  idGroup: widget.idGroup, imageFile: File(image.path));
+              ChatService.instance.sendImage(
+                  content: '',
+                  idGroup: widget.idGroup,
+                  groupName: widget.groupName,
+                  imageUrl: url);
+              hideLoading();
+            }
+          } else {
+            context.pushRoute(PremiumRoute());
+          }
+        },
+        icon: Assets.icons.icGallery.svg(width: 20.r));
+  }
+
+  IconButton buildButtonCamera() {
+    return IconButton(
+        onPressed: () async {
+          final bool isPremium = getIt<MyPurchaseManager>().state.isPremium();
+
+          ///TODO: remove !
+          if (!isPremium) {
+            final result = await context.pushRoute(const CameraRoute()) ?? '';
+            if (result != '') {
+              showLoading();
+              final url = await FirebaseStorageClient.instance.uploadImage(
+                  idGroup: widget.idGroup, imageFile: File(result.toString()));
+              ChatService.instance.sendImage(
+                  content: '',
+                  idGroup: widget.idGroup,
+                  groupName: widget.groupName,
+                  imageUrl: url);
+              hideLoading();
+            }
+          } else {
+            context.pushRoute(PremiumRoute());
+          }
+        },
+        icon: Assets.icons.icCameraFill.svg(width: 20.r));
+  }
+
+  GestureDetector buildButtonSendLocation() {
+    return GestureDetector(
+      onTap: () async {
+        ChatService.instance.sendMessageLocation(
+          content: '',
+          idGroup: widget.idGroup,
+          lat: Global.instance.currentLocation.latitude,
+          long: Global.instance.currentLocation.longitude,
+          groupName: widget.groupName,
+          context: context,
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(10.r),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.r),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xff42474C).withOpacity(0.3),
+                blurRadius: 17,
+              )
+            ]),
+        child: Assets.icons.icLocation.svg(width: 20.r, height: 20.r),
+      ),
+    );
+  }
+
   Widget buildTextDay(
       int index, List<QueryDocumentSnapshot<MessageModel>> chats) {
     return (Utils.isMessageOnNewDay(index, chats) != null)
@@ -144,143 +309,6 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
                         fontSize: 13.sp, color: const Color(0xff6C6C6C)))
             : const SizedBox()
         : const SizedBox();
-  }
-
-  Container buildInput() {
-    return Container(
-      height: 88.h,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: Color(0xffEAEAEA)))),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () async {
-              ChatService.instance.sendMessageLocation(
-                content: '',
-                idGroup: widget.idGroup,
-                lat: Global.instance.currentLocation.latitude,
-                long: Global.instance.currentLocation.longitude,
-                groupName: widget.groupName,
-                context: context,
-              );
-            },
-            child: Container(
-              padding: EdgeInsets.all(10.r),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(15.r),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xff42474C).withOpacity(0.3),
-                      blurRadius: 17,
-                    )
-                  ]),
-              child: Assets.icons.icLocation.svg(width: 20.r, height: 20.r),
-            ),
-          ),
-          12.w.horizontalSpace,
-          Expanded(
-              child: TextField(
-            controller: textController,
-            onChanged: (value) {
-              if (value.trimLeft().trimRight().isEmpty) {
-                isShowButtonSend.value = false;
-              } else {
-                isShowButtonSend.value = true;
-              }
-            },
-            decoration: InputDecoration(
-              suffixIcon: ValueListenableBuilder(
-                  valueListenable: isShowButtonSend,
-                  builder: (context, value, child) {
-                    return value
-                        ? IconButton(
-                            onPressed: () async {
-                              if (textController.text.isNotEmpty) {
-                                await getIt<GroupCubit>().sendMessage(
-                                  content: textController.text
-                                      .trimLeft()
-                                      .trimRight(),
-                                  idGroup: widget.idGroup,
-                                  groupName: widget.groupName,
-                                );
-                                textController.clear();
-                                isShowButtonSend.value = false;
-                              }
-                            },
-                            icon: Assets.icons.icSend.svg(width: 20.r))
-                        : const SizedBox();
-                  }),
-              hintText: context.l10n.messages,
-              hintStyle:
-                  TextStyle(color: const Color(0xff6C6C6C), fontSize: 14.sp),
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 18.w, vertical: 12.h),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.r),
-                borderSide: const BorderSide(
-                  width: 2,
-                  color: MyColors.secondPrimary,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.r),
-                borderSide: const BorderSide(
-                  width: 2,
-                  color: MyColors.secondPrimary,
-                ),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.r),
-                borderSide: const BorderSide(
-                  width: 2,
-                  color: MyColors.secondPrimary,
-                ),
-              ),
-            ),
-          )),
-          IconButton(
-              onPressed: () async {
-                final result =
-                    await context.pushRoute(const CameraRoute()) ?? '';
-                if (result != '') {
-                  showLoading();
-                  final url = await FirebaseStorageClient.instance.uploadImage(
-                      idGroup: widget.idGroup,
-                      imageFile: File(result.toString()));
-                  ChatService.instance.sendImage(
-                      content: '',
-                      idGroup: widget.idGroup,
-                      groupName: widget.groupName,
-                      imageUrl: url);
-                  hideLoading();
-                }
-              },
-              icon: Assets.icons.icCameraFill.svg(width: 20.r)),
-          IconButton(
-              onPressed: () async {
-                EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
-                final XFile? image =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
-                if (image != null) {
-                  showLoading();
-                  final url = await FirebaseStorageClient.instance.uploadImage(
-                      idGroup: widget.idGroup, imageFile: File(image.path));
-                  ChatService.instance.sendImage(
-                      content: '',
-                      idGroup: widget.idGroup,
-                      groupName: widget.groupName,
-                      imageUrl: url);
-                  hideLoading();
-                }
-              },
-              icon: Assets.icons.icGallery.svg(width: 20.r)),
-        ],
-      ),
-    );
   }
 
   String formatDateTime(DateTime dateTime) {

@@ -33,7 +33,6 @@ import 'cubits/group_cubit.dart';
 import 'cubits/send_location_cubit.dart';
 import 'services/chat_service.dart';
 import 'utils/util.dart';
-import 'widgets/chat_detail/image_result_screen.dart';
 
 part './widgets/chat_detail/chat_mess_empty.dart';
 part 'widgets/chat_detail/chat_type_text.dart';

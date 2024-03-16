@@ -62,16 +62,63 @@ class MessageTypeUser extends StatelessWidget {
   }
 
   Widget buildMessImage(BuildContext context, MessageModel item) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(15.r),
-      child: CachedNetworkImage(
-        placeholder: (context, url) => Center(
-          child: CircularProgressIndicator(),
+    return CustomInkWell(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (contex) {
+              return Material(
+                color: Colors.black.withOpacity(.4),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    InteractiveViewer(
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        imageUrl: item.imagUrl ??
+                            'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png',
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    buildButtonClose(context)
+                  ],
+                ),
+              );
+            });
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15.r),
+        child: CachedNetworkImage(
+          placeholder: (context, url) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          imageUrl: item.imagUrl ??
+              'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png',
+          fit: BoxFit.cover,
         ),
-        imageUrl: item.imagUrl ??
-            'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png',
-        fit: BoxFit.fill,
       ),
+    );
+  }
+
+  Align buildButtonClose(BuildContext context) {
+    return Align(
+      alignment: const Alignment(0.9, -0.95),
+      child: CustomInkWell(
+          child: Container(
+            width: 24.r,
+            height: 24.r,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: Colors.black.withOpacity(.2), shape: BoxShape.circle),
+            child: Icon(
+              Icons.close,
+              size: 18.r,
+              color: Colors.white,
+            ),
+          ),
+          onTap: () => context.popRoute()),
     );
   }
 
