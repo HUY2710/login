@@ -10,10 +10,13 @@ import 'package:injectable/injectable.dart';
 import '../../../../config/di/di.dart';
 import '../../../../data/models/store_location/store_location.dart';
 import '../../../../data/models/store_member/store_member.dart';
+import '../../../../data/models/store_sos/store_sos.dart';
 import '../../../../data/models/store_user/store_user.dart';
 import '../../../../data/remote/firestore_client.dart';
+import '../../../../data/remote/sos_manager.dart';
 import '../../../../global/global.dart';
 import '../../../../shared/helpers/capture_widget_helper.dart';
+import '../../../../shared/helpers/time_helper.dart';
 import '../../models/member_maker_data.dart';
 import '../select_group_cubit.dart';
 
@@ -77,9 +80,9 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
             //check lại ở đây
             if (infoUser.code != Global.instance.user?.code) {
               infoUser = infoUser.copyWith(
-                subscriptionLocation: _listenLocationUserUpdate(infoUser),
-                subscriptionUser: _listenUserUpdate(infoUser),
-              );
+                  subscriptionLocation: _listenLocationUserUpdate(infoUser),
+                  subscriptionUser: _listenUserUpdate(infoUser),
+                  subscriptionSosUser: _listenSOSUser(infoUser));
             } else {
               infoUser = infoUser.copyWith(
                 subscriptionUser: _listenUserUpdate(infoUser),
@@ -143,6 +146,25 @@ class TrackingMemberCubit extends Cubit<TrackingMemberState> {
         }
       }
     });
+  }
+
+//lắng nghe xem user có bật sos không
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>?>>? _listenSOSUser(
+      StoreUser user) {
+    final subscription = SosManager.listenSOSUser(user.code)
+        .listen((DocumentSnapshot<Map<String, dynamic>?> docSnap) {
+      if (docSnap.data() != null && docSnap.exists) {
+        final StoreSOS storeSos = StoreSOS.fromJson(docSnap.data()!);
+        user = user.copyWith(sosStore: storeSos);
+        final index = _trackingListMember
+            .indexWhere((element) => element.code == user.code);
+        if (index != -1) {
+          _trackingListMember[index] = user;
+          emit(TrackingMemberState.success([..._trackingListMember]));
+        }
+      }
+    });
+    return subscription;
   }
 
   //lắng nghe xem vị trí của user có thay đổi hay không

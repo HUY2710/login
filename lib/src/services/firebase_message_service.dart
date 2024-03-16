@@ -40,6 +40,8 @@ abstract class NotificationService {
   /// When check in any location.
   Future<void> sendJoinGroup(
       String groupName, String message, BuildContext? context);
+
+  Future<void> sendSOS(BuildContext? context);
 }
 
 @singleton
@@ -187,16 +189,32 @@ class FirebaseMessageService implements NotificationService {
       String groupName, String message, BuildContext? context) async {
     await _sendMessageByToken(groupName, message);
   }
+
+  @override
+  Future<void> sendSOS(BuildContext? context) async {
+    final message =
+        '${Global.instance.user?.userName} ${context?.l10n.has} sent SOS';
+
+    final title = '${Global.instance.user?.userName} ${context?.l10n.needHelp}';
+    await _sendMessageByToken(title, message);
+  }
 }
 
 extension FirebaseMessageServiceExt on FirebaseMessageService {
-  Future<void> _sendMessageByToken(String title, String message) async {
+  Future<void> _sendMessageByToken(String title, String message,
+      {bool sos = false}) async {
     final url = Uri.https(EnvParams.apiUrlNotification,
         'group-location-sharing/send-notification-by-tokens');
     final headers = {
       'Content-Type': 'application/json',
     };
-    final tokens = await TokenManager.getGroupTokens();
+
+    List<String> tokens = [];
+    if (sos) {
+      tokens = await TokenManager.getAllGroupTokens();
+    } else {
+      tokens = await TokenManager.getGroupTokens();
+    }
     if (tokens.isEmpty) {
       return;
     }

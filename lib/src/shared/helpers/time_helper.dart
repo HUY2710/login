@@ -12,12 +12,12 @@ class TimerHelper {
     return null;
   }
 
-  static bool checkTimeDifferenceCurrent(DateTime time) {
+  static bool checkTimeDifferenceCurrent(DateTime time, {int? argMinute}) {
     final DateTime currentTime = DateTime.now();
     final Duration difference = currentTime.difference(time);
 
-    final bool isDifferenceGreaterThan15Minutes = difference.inMinutes > 15;
-    if (isDifferenceGreaterThan15Minutes) {
+    final bool isDifference = difference.inMinutes > (argMinute ?? 15);
+    if (isDifference) {
       return true;
     } else {
       return false;

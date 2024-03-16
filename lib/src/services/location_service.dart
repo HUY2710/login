@@ -79,7 +79,7 @@ class LocationService {
             await geo.placemarkFromCoordinates(
           latLng.latitude,
           latLng.longitude,
-          localeIdentifier: locale,
+          // localeIdentifier: locale,
         );
         if (Platform.isIOS) {
           address = _addressForIos(placeMarks, address);
