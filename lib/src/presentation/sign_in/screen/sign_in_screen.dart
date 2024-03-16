@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
+import '../../../data/remote/firestore_client.dart';
 import '../../../gen/gens.dart';
 import '../../../global/global.dart';
 import '../../../shared/extension/context_extension.dart';
@@ -79,7 +81,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
           bloc: signInCubit..initial(),
           listener: (context, state) {
             if (state.signInStatus == SignInStatus.success) {
-              navigateToNextScreen();
+              navigateToNextScreen().then((value) async {});
             }
           },
           child: _buildBody(),

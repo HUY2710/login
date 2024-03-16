@@ -163,7 +163,7 @@ class _SettingScreenState extends State<SettingScreen>
       multiChild: Column(
         children: [
           _buildRateUsSetting(),
-          _buildDivider(),
+          if (RemoteConfigManager.instance.isShowRate()) _buildDivider(),
           _buildPrivacyPolicySetting(),
           _buildDivider(),
           _buildShareSetting(context),
@@ -363,8 +363,11 @@ class _SettingScreenState extends State<SettingScreen>
 
   Widget _buildUsernameEditSetting() {
     return CustomItemSetting(
-      onTap: () {
-        print(Global.instance.user);
+      onTap: () async {
+        final result = await context.pushRoute<bool>(const EditInfoRoute());
+        if (result != null && result) {
+          setState(() {});
+        }
       },
       child: SizedBox(
         height: 50.h,
@@ -411,16 +414,7 @@ class _SettingScreenState extends State<SettingScreen>
                 }),
               ),
             ),
-            GestureDetector(
-              onTap: () async {
-                final result =
-                    await context.pushRoute<bool>(const EditInfoRoute());
-                if (result != null && result) {
-                  setState(() {});
-                }
-              },
-              child: Assets.icons.icEdit.svg(height: 28.h),
-            ),
+            Assets.icons.icArrowRight.svg(height: 28.h),
           ],
         ),
       ),

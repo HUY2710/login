@@ -139,9 +139,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                             ? searchState[index]
                                             : groups[index];
                                     return GroupItem(
-                                      userName: groupItem.storeUser!.userName,
+                                      userName: groupItem.storeUser?.userName ??
+                                          'user',
                                       message: convertLastMessage(groupItem),
-                                      time: groupItem.lastMessage!.sentAt,
+                                      time: groupItem.lastMessage?.sentAt ?? '',
                                       avatar: groupItem.avatarGroup,
                                       groupName: groupItem.groupName,
                                       idGroup: groupItem.idGroup ?? '',
@@ -174,25 +175,25 @@ class _ChatScreenState extends State<ChatScreen> {
 
   String convertLastMessage(StoreGroup group) {
     final String userCode = Global.instance.user!.code;
-    final String userName = group.storeUser!.userName;
-    final String content = group.lastMessage!.content;
+    final String userName = group.storeUser?.userName ?? 'user';
+    final String content = group.lastMessage?.content ?? '';
 
     if (content.isEmpty) {
-      if (group.lastMessage!.messageType == MessageType.location) {
-        return (group.storeUser!.code == userCode)
+      if (group.lastMessage?.messageType == MessageType.location) {
+        return (group.storeUser?.code == userCode)
             ? '${context.l10n.you} ${context.l10n.sendLocation}'
             : '$userName ${context.l10n.sendLocation}';
-      } else if (group.lastMessage!.messageType == MessageType.checkIn) {
-        return (group.storeUser!.code == userCode)
+      } else if (group.lastMessage?.messageType == MessageType.checkIn) {
+        return (group.storeUser?.code == userCode)
             ? '${context.l10n.you} ${context.l10n.checkIn.toLowerCase()}'
             : '$userName ${context.l10n.checkIn.toLowerCase()}';
       } else {
-        return (group.storeUser!.code == userCode)
+        return (group.storeUser?.code == userCode)
             ? '${context.l10n.you} ${context.l10n.createdGroup}'
             : '$userName ${context.l10n.createGroup}';
       }
     } else {
-      return (group.storeUser!.code == userCode)
+      return (group.storeUser?.code == userCode)
           ? '${context.l10n.you}: $content'
           : '$userName: $content';
     }

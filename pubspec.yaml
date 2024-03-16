@@ -26,7 +26,7 @@ dependencies:
   json_annotation: ^4.8.1
   freezed_annotation: ^2.4.1
   # Route
-  auto_route: ^7.8.4
+  auto_route: 7.8.4
   flutter_screenutil: ^5.9.0
 
   cloud_firestore: ^4.14.0
@@ -93,6 +93,10 @@ dependencies:
   sign_in_with_apple: ^5.0.0
   gradient_borders: ^1.0.0
 
+#  open_settings_plus: 0.1.0
+  iabtcf_consent_info: ^3.1.0
+  app_settings: ^5.1.1
+  flutter_keyboard_visibility: ^6.0.0
 
 dev_dependencies:
   flutter_test:

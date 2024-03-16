@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -29,6 +32,7 @@ import '../../shared/helpers/valid_helper.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
 import '../../shared/widgets/custom_appbar.dart';
 import '../create/widgets/gender_switch.dart';
+import '../sign_in/cubit/join_anonymous_cubit.dart';
 
 @RoutePage<bool>()
 class EditInfoScreen extends StatefulWidget {
@@ -44,8 +48,34 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
   TextEditingController userNameCtrl =
       TextEditingController(text: Global.instance.user?.userName ?? '');
   GenderType currentGender = GenderType.male;
-  void showDialogAvatar() {
-    showDialog(
+
+  late StreamSubscription<bool> keyboardSubscription;
+
+  @override
+  void initState() {
+    final keyboardVisibilityController = KeyboardVisibilityController();
+
+    // Subscribe
+    keyboardSubscription =
+        keyboardVisibilityController.onChange.listen((bool visible) {
+      if (visible) {
+        context.read<NativeAdStatusCubit>().update(false);
+      } else {
+        context.read<NativeAdStatusCubit>().update(true);
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    keyboardSubscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> showDialogAvatar() async {
+    context.read<NativeAdStatusCubit>().update(false);
+    await showDialog(
       context: context,
       builder: (context) {
         return Builder(builder: (context) {
@@ -96,6 +126,9 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
         });
       },
     );
+    if (mounted) {
+      context.read<NativeAdStatusCubit>().update(true);
+    }
   }
 
   Future<void> updateInfo() async {
@@ -158,37 +191,46 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
   }
 
   Widget _buildLogOutSetting() {
-    return Container(
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-            offset: const Offset(0, 2),
-            blurRadius: 8.4,
-            color: const Color(0xff9C747D).withOpacity(0.17))
-      ], borderRadius: BorderRadius.circular(20.r), color: Colors.white),
-      child: Padding(
-        padding: const EdgeInsets.all(17),
-        child: GestureDetector(
-          onTap: () {
-            FirebaseAuth.instance.signOut().then(
-                (value) => context.router.replaceAll([const SignInRoute()]));
-          },
-          child: Row(
-            children: [
-              Assets.icons.login.icLogout.svg(height: 24.h),
-              12.horizontalSpace,
-              Expanded(
-                child: Text(
-                  context.l10n.logOut,
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w400,
+    return BlocBuilder<JoinAnonymousCubit, bool>(
+      builder: (context, state) {
+        return state
+            ? const SizedBox.shrink()
+            : Container(
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          offset: const Offset(0, 2),
+                          blurRadius: 8.4,
+                          color: const Color(0xff9C747D).withOpacity(0.17))
+                    ],
+                    borderRadius: BorderRadius.circular(20.r),
+                    color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(17),
+                  child: GestureDetector(
+                    onTap: () {
+                      FirebaseAuth.instance.signOut().then((value) =>
+                          context.router.replaceAll([const SignInRoute()]));
+                    },
+                    child: Row(
+                      children: [
+                        Assets.icons.login.icLogout.svg(height: 24.h),
+                        12.horizontalSpace,
+                        Expanded(
+                          child: Text(
+                            context.l10n.logOut,
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
+              );
+      },
     );
   }
 

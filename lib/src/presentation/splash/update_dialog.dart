@@ -39,98 +39,102 @@ class UpdateDialog extends UpgradeBase {
         });
   }
 
-  Center buildUpdateCard(BuildContext context, UpgradeBaseState state) {
+  Widget buildUpdateCard(BuildContext context, UpgradeBaseState state) {
     final UpgraderMessages appMessages = upgrader.determineMessages(context);
-    return Center(
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.r),
-        ),
-        padding: const EdgeInsets.all(16).r,
-        margin: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              appMessages.message(UpgraderMessage.title) ?? '',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16).h,
-              child: Assets.icons.update.svg(
-                width: 69.r,
-                height: 69.r,
-                colorFilter: const ColorFilter.mode(
-                  MyColors.primary,
-                  BlendMode.srcIn,
+    return Material(
+      type: MaterialType.transparency,
+      child: Center(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          padding: const EdgeInsets.all(16).r,
+          margin: EdgeInsets.symmetric(horizontal: 24.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                appMessages.message(UpgraderMessage.title) ?? '',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-            ),
-            Text(
-              upgrader.body(appMessages),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                color: const Color(0xffADADAD),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16).h,
+                child: Assets.icons.update.svg(
+                  width: 69.r,
+                  height: 69.r,
+                  colorFilter: const ColorFilter.mode(
+                    MyColors.primary,
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
-            ),
-            5.verticalSpace,
-            Text(
-              appMessages.message(UpgraderMessage.prompt) ?? '',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            16.verticalSpace,
-            FilledButton(
-              onPressed: () {
-                upgrader.saveLastAlerted();
-
-                upgrader.onUserUpdated(context, false);
-                state.forceUpdateState();
-              },
-              child: Text(
-                appMessages.message(UpgraderMessage.buttonTitleUpdate) ?? '',
+              Text(
+                upgrader.body(appMessages),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                  color: const Color(0xffADADAD),
                 ),
               ),
-            ),
-            if (!forceUpdate)
-              Padding(
-                padding: EdgeInsets.only(top: 10.h),
-                child: Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      upgrader.saveLastAlerted();
+              5.verticalSpace,
+              Text(
+                appMessages.message(UpgraderMessage.prompt) ?? '',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              16.verticalSpace,
+              FilledButton(
+                onPressed: () {
+                  upgrader.saveLastAlerted();
 
-                      upgrader.onUserLater(context, false);
-                      state.forceUpdateState();
-                    },
-                    child: SizedBox(
-                      height: 30.h,
-                      child: Text(
-                        appMessages.message(UpgraderMessage.buttonTitleLater) ??
-                            '',
-                        style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600),
+                  upgrader.onUserUpdated(context, false);
+                  state.forceUpdateState();
+                },
+                child: Text(
+                  appMessages.message(UpgraderMessage.buttonTitleUpdate) ?? '',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ),
+              if (!forceUpdate)
+                Padding(
+                  padding: EdgeInsets.only(top: 10.h),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        upgrader.saveLastAlerted();
+
+                        upgrader.onUserLater(context, false);
+                        state.forceUpdateState();
+                      },
+                      child: SizedBox(
+                        height: 30.h,
+                        child: Text(
+                          appMessages
+                                  .message(UpgraderMessage.buttonTitleLater) ??
+                              '',
+                          style: TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );

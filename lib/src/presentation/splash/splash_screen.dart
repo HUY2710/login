@@ -42,6 +42,7 @@ import '../../shared/enum/preference_keys.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/extension/int_extension.dart';
 import '../../shared/helpers/env_params.dart';
+import '../../shared/mixin/admob_consent_mixi.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../../shared/widgets/loading/loading_indicator.dart';
 import '../map/cubit/select_group_cubit.dart';
@@ -55,7 +56,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with PermissionMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with PermissionMixin, AdmobConsentMixin {
   late final StreamSubscription internetListener;
   @override
   void initState() {
@@ -79,7 +81,7 @@ class _SplashScreenState extends State<SplashScreen> with PermissionMixin {
     if (!kDebugMode) {
       initCrashlytics();
     }
-
+    await checkAndShowConsent();
     initDebugger();
     await loadEnv();
     await Future.wait([
@@ -321,10 +323,9 @@ class _SplashScreenState extends State<SplashScreen> with PermissionMixin {
     }
   }
 
-  Future<StoreUser?> addNewUser({
-    StoreUser? storeUser,
-  }) async {
+  Future<StoreUser?> addNewUser({StoreUser? storeUser}) async {
     final String newCode = 24.randomString();
+
     int battery = 0;
     try {
       battery = await Battery().batteryLevel;
@@ -336,10 +337,12 @@ class _SplashScreenState extends State<SplashScreen> with PermissionMixin {
         userName: '',
         batteryLevel: battery,
         avatarUrl: Assets.images.avatars.male.avatar1.path);
+
     await FirestoreClient.instance.createUser(storeUser).then((value) async {
       await SharedPreferencesManager.setString(
           PreferenceKeys.userCode.name, newCode);
     });
+
     return storeUser;
   }
 

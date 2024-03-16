@@ -30,7 +30,8 @@ class AuthClient {
   }
 
   Future<UserCredential> signWithGoogle() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final GoogleSignIn googleSignIn =
+        GoogleSignIn(scopes: ['profile', 'email']);
 
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();
