@@ -82,7 +82,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                       right: 10,
                       child: TextButton(
                         onPressed: () {
-                          context.pushRoute(SignInRoute());
+                          context.pushRoute(const AuthLoginRoute());
                         },
                         style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(

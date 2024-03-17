@@ -1,20 +1,26 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_group/store_group.dart';
+import '../../../data/models/store_user/store_user.dart';
+import '../../../data/remote/collection_store.dart';
 import '../../../data/remote/firestore_client.dart';
 import '../../../gen/gens.dart';
 import '../../../global/global.dart';
+import '../../../services/my_background_service.dart';
+import '../../../shared/enum/preference_keys.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/mixin/permission_mixin.dart';
 import '../../../shared/utils/toast_utils.dart';
@@ -50,20 +56,83 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
     final result = await FirestoreClient.instance.getMyGroups();
     if (result != null) {
       listMyGroups = result;
-      print('OMG ${listMyGroups.length}');
     }
   }
 
+  Future<bool> isExistUser(String uid) async {
+    final result =
+        await CollectionStore.users.where('uid', isEqualTo: uid).limit(1).get();
+    if (result.docs.isNotEmpty) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> getExitsUser(String uid) async {
+    final result =
+        await CollectionStore.users.where('uid', isEqualTo: uid).limit(1).get();
+    if (result.docs.isNotEmpty) {
+      // Lấy document đầu tiên từ QuerySnapshot
+      final QueryDocumentSnapshot<Map<String, dynamic>> document =
+          result.docs.first;
+
+      // Lấy dữ liệu từ Firestore và chuyển đổi thành đối tượng StoreGroup
+      StoreUser storeUser = StoreUser.fromJson(document.data());
+      // Lấy documentId
+      final String documentId = document.id;
+
+      //set id cho local
+      storeUser = storeUser.copyWith(uid: documentId);
+
+      final String? userCode = await SharedPreferencesManager.getString(
+          PreferenceKeys.userCode.name);
+
+      CollectionStore.users.doc(userCode).delete();
+      Global.instance.user = storeUser;
+
+      //   await SharedPreferencesManager.setString(
+      //       PreferenceKeys.userCode.name, Global.instance.user!.code);
+      // }
+      print('OMG ${Global.instance.user}');
+    }
+  }
+
+  // Future<void> getMe() async {
+  //   final String? userCode =
+  //       await SharedPreferencesManager.getString(PreferenceKeys.userCode.name);
+
+  //   StoreUser? storeUser;
+  //   if (userCode == null) {
+  //     storeUser = await addNewUser(storeUser: storeUser);
+  //   } else {
+  //     storeUser = await FirestoreClient.instance.getUser(userCode);
+  //   }
+  //   Global.instance.user = storeUser;
+  //   getIt<MyBackgroundService>().initSubAndUnSubTopic();
+  //   final location = await FirestoreClient.instance.getLocation();
+
+  //   if (location != null) {
+  //     Global.instance.user = Global.instance.user?.copyWith(location: location);
+  //     Global.instance.serverLocation = LatLng(location.lat, location.lng);
+  //     Global.instance.currentLocation = LatLng(location.lat, location.lng);
+  //   }
+  // }
+
   Future<void> navigateToNextScreen() async {
-    final user = Global.instance.user;
+    final StoreUser? user = Global.instance.user;
+    final authUser = FirebaseAuth.instance.currentUser;
 
     await SharedPreferencesManager.saveIsStarted(false);
+
     // print('OMG ${groups.length}');
 
     if (mounted) {
       if (user != null) {
+        if (await isExistUser(authUser!.uid)) {
+          await getExitsUser(authUser.uid);
+        }
         if (user.userName == '') {
-          context.replaceRoute(CreateUsernameRoute());
+          context.replaceRoute(const CreateUsernameRoute());
         } else if (user.userName != '' && listMyGroups.isNotEmpty) {
           context.replaceRoute(CreateGroupNameRoute());
         } else {
@@ -82,7 +151,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
           }
         }
       } else {
-        context.replaceRoute(CreateUsernameRoute());
+        context.replaceRoute(const CreateUsernameRoute());
       }
     }
   }

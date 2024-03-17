@@ -1,0 +1,97 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../../../config/navigation/app_router.dart';
+import '../../../data/local/shared_preferences_manager.dart';
+import '../../../data/models/store_group/store_group.dart';
+import '../../../data/models/store_user/store_user.dart';
+import '../../../data/remote/firestore_client.dart';
+import '../../../global/global.dart';
+import '../../../shared/mixin/permission_mixin.dart';
+
+import '../cubit/authen_cubit.dart';
+import '../cubit/authen_state.dart';
+
+@RoutePage()
+class AuthLoginScreen extends StatefulWidget {
+  const AuthLoginScreen({super.key});
+
+  @override
+  State<AuthLoginScreen> createState() => _AuthLoginScreenState();
+}
+
+class _AuthLoginScreenState extends State<AuthLoginScreen>
+    with PermissionMixin {
+  List<StoreGroup> listMyGroups = [];
+
+  Future<void> getMyGroups() async {
+    final result = await FirestoreClient.instance.getMyGroups();
+    if (result != null) {
+      listMyGroups = result;
+    }
+  }
+
+  @override
+  void dispose() {
+    getMyGroups();
+    super.dispose();
+  }
+
+  Future<void> navigateToNextScreen() async {
+    final StoreUser? user = Global.instance.user;
+    // final authUser = FirebaseAuth.instance.currentUser;
+
+    await SharedPreferencesManager.saveIsStarted(false);
+
+    // print('OMG ${groups.length}');
+
+    if (mounted) {
+      if (user != null) {
+        if (user.userName == '') {
+          // ignore: use_build_context_synchronously
+          context.replaceRoute(const CreateUsernameRoute());
+        } else if (user.userName != '' && listMyGroups.isNotEmpty) {
+          // ignore: use_build_context_synchronously
+          context.replaceRoute(CreateGroupNameRoute());
+        } else {
+          final bool statusLocation = await checkPermissionLocation().isGranted;
+          if (!statusLocation && context.mounted) {
+            context.replaceRoute(PermissionRoute(fromMapScreen: false));
+            return;
+          } else if (context.mounted) {
+            final showGuide = await SharedPreferencesManager.getGuide();
+            if (showGuide && context.mounted) {
+              context.replaceRoute(const GuideRoute());
+            } else if (context.mounted) {
+              // context.replaceRoute(HomeRoute());
+              context.replaceRoute(PremiumRoute(fromStart: true));
+            }
+          }
+        }
+      } else {
+        context.replaceRoute(const CreateUsernameRoute());
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocListener<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is Authenticated) {
+            navigateToNextScreen();
+          } else if (state is Unauthenticated) {
+            context.pushRoute(const SignInRoute());
+          }
+        },
+        child: Center(
+          child: Text(context.read<AuthCubit>().state.toString()),
+        ),
+      ),
+    );
+  }
+}

@@ -32,12 +32,19 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
 
   final ValueCubit<String> userNameCubit = ValueCubit('');
 
-  final user = FirebaseAuth.instance.currentUser;
+  final authUser = FirebaseAuth.instance.currentUser;
+  final user = Global.instance.user;
 
   @override
   void initState() {
-    userNameCtrl = TextEditingController(text: user?.displayName);
-    userNameCubit.update(user!.displayName!);
+    if (user?.userName != '' || user?.userName != null) {
+      userNameCtrl = TextEditingController(text: user?.userName);
+      userNameCubit.update(user!.userName);
+    } else {
+      userNameCtrl = TextEditingController(text: authUser?.displayName);
+      userNameCubit.update(authUser!.displayName!);
+    }
+
     super.initState();
   }
 
@@ -83,7 +90,8 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
                             ValidHelper.containsSpecialCharacters(value);
                         if (!validName) {
                           userNameCubit.update(value.trimLeft().trimRight());
-                          user?.updateDisplayName(value.trimLeft().trimRight());
+                          authUser
+                              ?.updateDisplayName(value.trimLeft().trimRight());
                         } else {
                           Fluttertoast.showToast(msg: context.l10n.pleaseDoNot);
                         }

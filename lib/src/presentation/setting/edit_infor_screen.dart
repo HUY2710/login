@@ -32,6 +32,7 @@ import '../../shared/helpers/valid_helper.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
 import '../../shared/widgets/custom_appbar.dart';
 import '../create/widgets/gender_switch.dart';
+import '../sign_in/cubit/authen_cubit.dart';
 import '../sign_in/cubit/join_anonymous_cubit.dart';
 
 @RoutePage<bool>()
@@ -209,6 +210,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                   padding: const EdgeInsets.all(17),
                   child: GestureDetector(
                     onTap: () {
+                      context.read<AuthCubit>().loggedOut();
                       FirebaseAuth.instance.signOut().then((value) =>
                           context.router.replaceAll([const SignInRoute()]));
                     },
