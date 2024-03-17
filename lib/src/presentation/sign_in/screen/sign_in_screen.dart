@@ -83,17 +83,15 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
 
       //set id cho local
       storeUser = storeUser.copyWith(uid: documentId);
+      Global.instance.user = storeUser;
 
       final String? userCode = await SharedPreferencesManager.getString(
           PreferenceKeys.userCode.name);
-
-      CollectionStore.users.doc(userCode).delete();
-      Global.instance.user = storeUser;
-
-      //   await SharedPreferencesManager.setString(
-      //       PreferenceKeys.userCode.name, Global.instance.user!.code);
-      // }
-      print('OMG ${Global.instance.user}');
+      if (userCode != Global.instance.user?.code) {
+        CollectionStore.users.doc(userCode).delete();
+        await SharedPreferencesManager.setString(
+            PreferenceKeys.userCode.name, Global.instance.user!.code);
+      }
     }
   }
 
