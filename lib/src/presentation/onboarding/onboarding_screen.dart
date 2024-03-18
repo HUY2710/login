@@ -12,6 +12,7 @@ import '../../shared/cubit/value_cubit.dart';
 import '../../shared/enum/language.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/mixin/permission_mixin.dart';
+import '../sign_in/cubit/join_anonymous_cubit.dart';
 import 'widgets/app_button.dart';
 import 'widgets/indicator.dart';
 import 'widgets/page_widget.dart';
@@ -46,7 +47,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
         await SharedPreferencesManager.getIsCreateInfoFistTime();
     if (mounted) {
       if (isCreateInfoFirstTime) {
-        context.replaceRoute(CreateUsernameRoute());
+        context.replaceRoute(const CreateUsernameRoute());
       } else {
         final bool statusLocation = await checkPermissionLocation().isGranted;
         if (!statusLocation && context.mounted) {
@@ -81,8 +82,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                       top: ScreenUtil().statusBarHeight,
                       right: 10,
                       child: TextButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          final isLogin =
+                              await SharedPreferencesManager.getIsLogin();
                           context.pushRoute(const AuthLoginRoute());
+                          // if (isLogin) {
+                          //   navigateToNextScreen();
+                          // } else {
+
+                          // }
                         },
                         style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
@@ -105,7 +113,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                 builder: (context, currentIndex) => ActionRow(
                   pageController: _pageController,
                   onStartedTap: () {
-                    context.pushRoute(SignInRoute());
+                    context.pushRoute(const AuthLoginRoute());
                   },
                 ),
               ),

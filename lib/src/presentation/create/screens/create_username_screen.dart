@@ -6,12 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../config/navigation/app_router.dart';
+import '../../../data/local/shared_preferences_manager.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/helpers/valid_helper.dart';
 import '../../onboarding/widgets/app_button.dart';
+import '../../sign_in/cubit/join_anonymous_cubit.dart';
 
 @RoutePage()
 class CreateUsernameScreen extends StatefulWidget {
@@ -33,14 +35,26 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
   final ValueCubit<String> userNameCubit = ValueCubit('');
 
   final authUser = FirebaseAuth.instance.currentUser;
-  final user = Global.instance.user;
 
   @override
   void initState() {
-    if (user?.userName != '' || user?.userName != null) {
-      userNameCtrl = TextEditingController(text: user?.userName);
-      userNameCubit.update(user!.userName);
-    } else {
+    // final isLogin = await SharedPreferencesManager.getIsLogin();
+    // if (isLogin) {
+    //   userNameCtrl =
+    //       TextEditingController(text: Global.instance.user?.userName);
+    //   userNameCubit.update(Global.instance.user!.userName);
+    // } else {
+    //   if (Global.instance.user?.userName != '' &&
+    //       Global.instance.user?.userName != null) {
+    //     userNameCtrl =
+    //         TextEditingController(text: Global.instance.user?.userName);
+    //     userNameCubit.update(Global.instance.user!.userName);
+    //   } else {
+    //     userNameCtrl = TextEditingController(text: authUser?.displayName);
+    //     userNameCubit.update(authUser!.displayName!);
+    //   }
+    // }
+    if (authUser != null) {
       userNameCtrl = TextEditingController(text: authUser?.displayName);
       userNameCubit.update(authUser!.displayName!);
     }

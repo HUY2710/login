@@ -11,6 +11,7 @@ class AuthConstant {
 @singleton
 class AuthClient {
   FirebaseAuth get auth => FirebaseAuth.instance;
+
   Future<UserCredential> createUserWithEmailAndPassword(
       {required String email, required String password}) async {
     final userCredential = await auth.createUserWithEmailAndPassword(
@@ -55,7 +56,7 @@ class AuthClient {
       case LoginStatus.success:
         final accessToken = loginResult.accessToken!;
 
-        return await FirebaseAuth.instance.signInWithCredential(
+        return FirebaseAuth.instance.signInWithCredential(
           FacebookAuthProvider.credential(accessToken.token),
         );
 
@@ -72,10 +73,6 @@ class AuthClient {
 
   Future<UserCredential> signInWithApple() async {
     final appleProvider = AppleAuthProvider();
-    return await FirebaseAuth.instance.signInWithProvider(appleProvider);
-  }
-
-  Future<void> sendEmailVerification() async {
-    await auth.currentUser?.sendEmailVerification();
+    return FirebaseAuth.instance.signInWithProvider(appleProvider);
   }
 }

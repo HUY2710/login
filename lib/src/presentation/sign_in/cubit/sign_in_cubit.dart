@@ -65,8 +65,9 @@ class SignInCubit extends Cubit<SignInState> {
     );
   }
 
-  void joinWithAnonymous() {
+  Future<void> joinWithAnonymous() async {
     emit(state.copyWith(signInStatus: SignInStatus.loading));
+
     emit(state.copyWith(
       signInStatus: SignInStatus.success,
     ));
@@ -92,7 +93,7 @@ class SignInCubit extends Cubit<SignInState> {
   Future<void> signInWithFacebook() async {
     emit(state.copyWith(signInStatus: SignInStatus.loading));
     try {
-      userCredential = await getIt<AuthClient>().signWithGoogle();
+      userCredential = await getIt<AuthClient>().signInWithFacebook();
       emit(state.copyWith(
         signInStatus: SignInStatus.success,
       ));
@@ -103,6 +104,7 @@ class SignInCubit extends Cubit<SignInState> {
         emit(state.copyWith(
           signInStatus: SignInStatus.success,
         ));
+        print(state);
       }
     }
   }

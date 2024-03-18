@@ -41,19 +41,17 @@ class _AuthLoginScreenState extends State<AuthLoginScreen>
   }
 
   Future<void> navigateToNextScreen() async {
-    final StoreUser? user = Global.instance.user;
     // final authUser = FirebaseAuth.instance.currentUser;
 
     await SharedPreferencesManager.saveIsStarted(false);
 
-    // print('OMG ${groups.length}');
-
     if (mounted) {
-      if (user != null) {
-        if (user.userName == '') {
+      if (Global.instance.user != null) {
+        if (Global.instance.user?.userName == '') {
           // ignore: use_build_context_synchronously
           context.replaceRoute(const CreateUsernameRoute());
-        } else if (user.userName != '' && listMyGroups.isNotEmpty) {
+        } else if (Global.instance.user?.userName != '' &&
+            listMyGroups.isNotEmpty) {
           // ignore: use_build_context_synchronously
           context.replaceRoute(CreateGroupNameRoute());
         } else {
@@ -88,9 +86,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen>
             context.pushRoute(const SignInRoute());
           }
         },
-        child: Center(
-          child: Text(context.read<AuthCubit>().state.toString()),
-        ),
+        child: const SizedBox.shrink(),
       ),
     );
   }

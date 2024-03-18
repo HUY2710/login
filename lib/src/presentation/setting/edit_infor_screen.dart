@@ -9,6 +9,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
 import '../../../app/cubit/loading_cubit.dart';
@@ -21,7 +22,9 @@ import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../config/remote_config.dart';
 import '../../data/local/avatar/avatar_repository.dart';
+import '../../data/local/shared_preferences_manager.dart';
 import '../../data/models/avatar/avatar_model.dart';
+import '../../data/remote/collection_store.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
@@ -211,6 +214,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                   child: GestureDetector(
                     onTap: () {
                       context.read<AuthCubit>().loggedOut();
+                      GoogleSignIn().disconnect();
                       FirebaseAuth.instance.signOut().then((value) =>
                           context.router.replaceAll([const SignInRoute()]));
                     },
@@ -247,7 +251,29 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
       child: Padding(
         padding: const EdgeInsets.all(17),
         child: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            // if (mounted) {
+            //   context.read<AuthCubit>().loggedOut();
+            //   FirebaseAuth.instance.currentUser!.delete();
+
+            //   CollectionStore.users
+            //       .doc(Global.instance.user?.code)
+            //       .delete()
+            //       .then((value) {
+            //     context.router.replaceAll([const SignInRoute()]);
+            //   });
+            // }
+
+            if (context.read<JoinAnonymousCubit>().state) {
+              CollectionStore.users
+                  .doc(Global.instance.user?.code)
+                  .delete()
+                  .then((value) async {
+                FirestoreClient.instance.updateUser({'uid': null});
+                context.router.replaceAll([const SignInRoute()]);
+              });
+            }
+          },
           child: Row(
             children: [
               Assets.icons.login.icDeleteAccount.svg(height: 24.h),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:battery_plus/battery_plus.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +23,10 @@ import '../../../global/global.dart';
 import '../../../services/my_background_service.dart';
 import '../../../shared/enum/preference_keys.dart';
 import '../../../shared/extension/context_extension.dart';
+import '../../../shared/extension/int_extension.dart';
 import '../../../shared/mixin/permission_mixin.dart';
 import '../../../shared/utils/toast_utils.dart';
+import '../../map/cubit/select_group_cubit.dart';
 import '../cubit/join_anonymous_cubit.dart';
 import '../cubit/sign_in_cubit.dart';
 import '../widgets/item_sign_in.dart';
@@ -46,26 +49,16 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
   void dispose() {
     controllerEmail.dispose();
     controllerPassword.dispose();
-    getMyGroups();
+
     super.dispose();
   }
 
-  List<StoreGroup> listMyGroups = [];
-
-  Future<void> getMyGroups() async {
-    final result = await FirestoreClient.instance.getMyGroups();
-    if (result != null) {
-      listMyGroups = result;
+  Future<void> getExistUserCode(String code) async {
+    final result = await CollectionStore.users.doc(code).get();
+    if (result.exists) {
+      final StoreUser storeUser = StoreUser.fromJson(result.data()!);
+      Global.instance.user = storeUser;
     }
-  }
-
-  Future<bool> isExistUser(String uid) async {
-    final result =
-        await CollectionStore.users.where('uid', isEqualTo: uid).limit(1).get();
-    if (result.docs.isNotEmpty) {
-      return true;
-    }
-    return false;
   }
 
   Future<void> getExitsUser(String uid) async {
@@ -84,55 +77,28 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
       //set id cho local
       storeUser = storeUser.copyWith(uid: documentId);
       Global.instance.user = storeUser;
-
-      final String? userCode = await SharedPreferencesManager.getString(
-          PreferenceKeys.userCode.name);
-      if (userCode != Global.instance.user?.code) {
-        CollectionStore.users.doc(userCode).delete();
-        await SharedPreferencesManager.setString(
-            PreferenceKeys.userCode.name, Global.instance.user!.code);
-      }
-    }
-  }
-
-  // Future<void> getMe() async {
-  //   final String? userCode =
-  //       await SharedPreferencesManager.getString(PreferenceKeys.userCode.name);
-
-  //   StoreUser? storeUser;
-  //   if (userCode == null) {
-  //     storeUser = await addNewUser(storeUser: storeUser);
-  //   } else {
-  //     storeUser = await FirestoreClient.instance.getUser(userCode);
-  //   }
-  //   Global.instance.user = storeUser;
-  //   getIt<MyBackgroundService>().initSubAndUnSubTopic();
-  //   final location = await FirestoreClient.instance.getLocation();
-
-  //   if (location != null) {
-  //     Global.instance.user = Global.instance.user?.copyWith(location: location);
-  //     Global.instance.serverLocation = LatLng(location.lat, location.lng);
-  //     Global.instance.currentLocation = LatLng(location.lat, location.lng);
-  //   }
-  // }
-
-  Future<void> navigateToNextScreen() async {
-    final StoreUser? user = Global.instance.user;
-    final authUser = FirebaseAuth.instance.currentUser;
-
-    await SharedPreferencesManager.saveIsStarted(false);
-
-    // print('OMG ${groups.length}');
-
-    if (mounted) {
-      if (user != null) {
-        if (await isExistUser(authUser!.uid)) {
-          await getExitsUser(authUser.uid);
+      await SharedPreferencesManager.setString(
+              PreferenceKeys.userCode.name, Global.instance.user!.code)
+          .then((value) async {
+        final bool statusLocation = await checkPermissionLocation().isGranted;
+        if (!statusLocation && context.mounted) {
+          context.replaceRoute(PermissionRoute(fromMapScreen: false));
+          return;
+        } else if (context.mounted) {
+          final showGuide = await SharedPreferencesManager.getGuide();
+          if (showGuide && context.mounted) {
+            context.replaceRoute(const GuideRoute());
+          } else if (context.mounted) {
+            context.replaceRoute(PremiumRoute(fromStart: true));
+          }
         }
-        if (user.userName == '') {
+      });
+    } else {
+      FirestoreClient.instance.updateUser(
+          {'uid': FirebaseAuth.instance.currentUser?.uid}).then((value) async {
+        if (Global.instance.user?.userName == '') {
+          // ignore: use_build_context_synchronously
           context.replaceRoute(const CreateUsernameRoute());
-        } else if (user.userName != '' && listMyGroups.isNotEmpty) {
-          context.replaceRoute(CreateGroupNameRoute());
         } else {
           final bool statusLocation = await checkPermissionLocation().isGranted;
           if (!statusLocation && context.mounted) {
@@ -143,39 +109,88 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
             if (showGuide && context.mounted) {
               context.replaceRoute(const GuideRoute());
             } else if (context.mounted) {
-              // context.replaceRoute(HomeRoute());
               context.replaceRoute(PremiumRoute(fromStart: true));
             }
           }
         }
+      });
+    }
+  }
+
+  Future<StoreUser?> addNewUser({StoreUser? storeUser}) async {
+    final String newCode = 24.randomString();
+
+    int battery = 0;
+    try {
+      battery = await Battery().batteryLevel;
+    } catch (e) {
+      battery = 100;
+    }
+    storeUser = StoreUser(
+        code: newCode,
+        userName: '',
+        batteryLevel: battery,
+        avatarUrl: Assets.images.avatars.male.avatar1.path);
+    Global.instance.user = storeUser;
+    await FirestoreClient.instance.createUser(storeUser).then((value) async {
+      await SharedPreferencesManager.setString(
+          PreferenceKeys.userCode.name, newCode);
+    });
+
+    return storeUser;
+  }
+
+  Future<void> navigateToNextScreen() async {
+    final authUser = FirebaseAuth.instance.currentUser;
+    await SharedPreferencesManager.saveIsStarted(false);
+    if (mounted) {
+      if (context.read<JoinAnonymousCubit>().state) {
+        if (Global.instance.user?.uid == null) {
+          final String? userCode = await SharedPreferencesManager.getString(
+              PreferenceKeys.userCode.name);
+          await getExistUserCode(userCode!).then((value) async {
+            if (Global.instance.user?.userName == null ||
+                Global.instance.user?.userName == '') {
+              context.replaceRoute(const CreateUsernameRoute());
+            } else {
+              final bool statusLocation =
+                  await checkPermissionLocation().isGranted;
+              if (!statusLocation && context.mounted) {
+                context.replaceRoute(PermissionRoute(fromMapScreen: false));
+                return;
+              } else if (context.mounted) {
+                final showGuide = await SharedPreferencesManager.getGuide();
+                if (showGuide && context.mounted) {
+                  context.replaceRoute(const GuideRoute());
+                } else if (context.mounted) {
+                  context.replaceRoute(PremiumRoute(fromStart: true));
+                }
+              }
+            }
+          });
+        } else {
+          StoreUser? storeUser;
+          addNewUser(storeUser: storeUser).then((value) {
+            FirestoreClient.instance.updateUser({'uid': null});
+            context.replaceRoute(const CreateUsernameRoute());
+          });
+        }
       } else {
-        context.replaceRoute(const CreateUsernameRoute());
+        if (Global.instance.user != null && authUser != null) {
+          getExitsUser(authUser.uid);
+        } else {
+          context.replaceRoute(const CreateUsernameRoute());
+        }
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final SignInCubit signInCubit = getIt<SignInCubit>();
     return Scaffold(
       body: BlocProvider(
         create: (context) => SignInCubit(),
-        child: BlocListener<SignInCubit, SignInState>(
-          bloc: signInCubit..initial(),
-          listener: (context, state) {
-            if (state.signInStatus == SignInStatus.success) {
-              navigateToNextScreen().then((value) async {
-                final user = Global.instance.user;
-                if (user?.uid == null) {
-                  final authUser = FirebaseAuth.instance.currentUser!;
-                  await FirestoreClient.instance
-                      .updateUser({'uid': authUser.uid});
-                }
-              });
-            }
-          },
-          child: _buildBody(),
-        ),
+        child: _buildBody(),
       ),
     );
   }
@@ -183,7 +198,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
   Widget _buildBody() {
     final SignInCubit signInCubit = getIt<SignInCubit>();
     return BlocListener<SignInCubit, SignInState>(
-        bloc: signInCubit,
+        bloc: signInCubit..initial(),
         listener: (context, state) {
           if (state.signInStatus == SignInStatus.error) {
             if (state.errorMessage.contains('INVALID LOGIN CREDENTIALS')) {
@@ -195,6 +210,8 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
                 state.errorMessage,
               );
             }
+          } else if (state.signInStatus == SignInStatus.success) {
+            navigateToNextScreen();
           }
         },
         child: Stack(
@@ -228,18 +245,20 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
                     ),
                     87.verticalSpace,
                     ItemSignIn(
-                      onTap: () {
+                      onTap: () async {
                         context
                             .read<JoinAnonymousCubit>()
                             .setJoinAnonymousCubit(false);
+                        await SharedPreferencesManager.saveIsLogin(false);
                         signInCubit.signInWithFacebook();
                       },
                     ),
                     ItemSignIn(
-                      onTap: () {
+                      onTap: () async {
                         context
                             .read<JoinAnonymousCubit>()
                             .setJoinAnonymousCubit(false);
+                        await SharedPreferencesManager.saveIsLogin(false);
                         signInCubit.signInWithGoogle();
                       },
                       logo: Assets.icons.login.icGoogle.path,
@@ -247,10 +266,11 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
                     ),
                     if (Platform.isIOS)
                       ItemSignIn(
-                        onTap: () {
+                        onTap: () async {
                           context
                               .read<JoinAnonymousCubit>()
                               .setJoinAnonymousCubit(false);
+                          await SharedPreferencesManager.saveIsLogin(true);
                           signInCubit.siginWithApple();
                         },
                         logo: Assets.icons.login.icApple.path,
@@ -267,7 +287,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
               right: 0,
               left: 0,
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
                   context
                       .read<JoinAnonymousCubit>()
                       .setJoinAnonymousCubit(true);

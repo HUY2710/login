@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,12 +11,18 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
+import '../../../data/models/store_group/store_group.dart';
+import '../../../data/models/store_user/store_user.dart';
+import '../../../data/remote/collection_store.dart';
+import '../../../data/remote/firestore_client.dart';
 import '../../../gen/gens.dart';
 import '../../../global/global.dart';
+import '../../../shared/enum/preference_keys.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/mixin/permission_mixin.dart';
 import '../../../shared/utils/toast_utils.dart';
 import '../../../shared/widgets/custom_appbar.dart';
+import '../cubit/authen_cubit.dart';
 import '../cubit/join_anonymous_cubit.dart';
 import '../cubit/sign_in_cubit.dart';
 import '../widgets/item_sign_in.dart';
@@ -39,55 +47,86 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
   void dispose() {
     controllerEmail.dispose();
     controllerPassword.dispose();
+
     super.dispose();
   }
 
-  Future<void> navigateToNextScreen() async {
-    final user = Global.instance.user;
-    await SharedPreferencesManager.saveIsStarted(false);
+  Future<void> getExitsUser(String uid) async {
+    final result =
+        await CollectionStore.users.where('uid', isEqualTo: uid).limit(1).get();
+    if (result.docs.isNotEmpty) {
+      // Lấy document đầu tiên từ QuerySnapshot
+      final QueryDocumentSnapshot<Map<String, dynamic>> document =
+          result.docs.first;
 
-    if (mounted) {
-      if (user != null) {
-        if (user.userName == '') {
-          context.replaceRoute(CreateUsernameRoute());
+      // Lấy dữ liệu từ Firestore và chuyển đổi thành đối tượng StoreGroup
+      StoreUser storeUser = StoreUser.fromJson(document.data());
+      // Lấy documentId
+      final String documentId = document.id;
+
+      //set id cho local
+      storeUser = storeUser.copyWith(uid: documentId);
+      Global.instance.user = storeUser;
+      await SharedPreferencesManager.setString(
+              PreferenceKeys.userCode.name, Global.instance.user!.code)
+          .then((value) async {
+        final bool statusLocation = await checkPermissionLocation().isGranted;
+        if (!statusLocation && context.mounted) {
+          context.router.replaceAll([PermissionRoute(fromMapScreen: false)]);
+          return;
+        } else if (context.mounted) {
+          final showGuide = await SharedPreferencesManager.getGuide();
+          if (showGuide && context.mounted) {
+            context.router.replaceAll([const GuideRoute()]);
+          } else if (context.mounted) {
+            context.router.replaceAll([PremiumRoute(fromStart: true)]);
+          }
+        }
+      });
+    } else {
+      FirestoreClient.instance.updateUser(
+          {'uid': FirebaseAuth.instance.currentUser?.uid}).then((value) async {
+        if (Global.instance.user?.userName == '') {
+          // ignore: use_build_context_synchronously
+          context.router.replaceAll([const CreateUsernameRoute()]);
         } else {
           final bool statusLocation = await checkPermissionLocation().isGranted;
           if (!statusLocation && context.mounted) {
-            context.replaceRoute(PermissionRoute(fromMapScreen: false));
+            context.router.replaceAll([PermissionRoute(fromMapScreen: false)]);
             return;
           } else if (context.mounted) {
             final showGuide = await SharedPreferencesManager.getGuide();
             if (showGuide && context.mounted) {
-              context.replaceRoute(const GuideRoute());
+              context.router.replaceAll([const GuideRoute()]);
             } else if (context.mounted) {
-              // context.replaceRoute(HomeRoute());
-              context.replaceRoute(PremiumRoute(fromStart: true));
+              context.router.replaceAll([PremiumRoute(fromStart: true)]);
             }
           }
         }
+      });
+    }
+  }
+
+  Future<void> navigateToNextScreen() async {
+    final authUser = FirebaseAuth.instance.currentUser;
+    await SharedPreferencesManager.saveIsStarted(false);
+    if (mounted) {
+      if (Global.instance.user != null && authUser != null) {
+        getExitsUser(authUser.uid);
       } else {
-        context.replaceRoute(CreateUsernameRoute());
+        context.router.replaceAll([const CreateUsernameRoute()]);
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final SignInCubit signInCubit = getIt<SignInCubit>();
     return Scaffold(
       appBar:
           CustomAppBar(title: '${context.l10n.signIn}/${context.l10n.signUp}'),
       body: BlocProvider(
         create: (context) => SignInCubit(),
-        child: BlocListener<SignInCubit, SignInState>(
-          bloc: signInCubit..initial(),
-          listener: (context, state) {
-            if (state.signInStatus == SignInStatus.success) {
-              navigateToNextScreen();
-            }
-          },
-          child: _buildBody(),
-        ),
+        child: _buildBody(),
       ),
     );
   }
@@ -107,6 +146,8 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
                 state.errorMessage,
               );
             }
+          } else if (state.signInStatus == SignInStatus.success) {
+            navigateToNextScreen();
           }
         },
         child: Padding(
@@ -129,6 +170,7 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
                     context
                         .read<JoinAnonymousCubit>()
                         .setJoinAnonymousCubit(false);
+                    context.read<AuthCubit>().loggedIn();
                     signInCubit.signInWithFacebook();
                   },
                   haveShadow: true,
@@ -138,6 +180,7 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
                     context
                         .read<JoinAnonymousCubit>()
                         .setJoinAnonymousCubit(false);
+                    context.read<AuthCubit>().loggedIn();
                     signInCubit.signInWithGoogle();
                   },
                   logo: Assets.icons.login.icGoogle.path,
@@ -150,6 +193,7 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
                       context
                           .read<JoinAnonymousCubit>()
                           .setJoinAnonymousCubit(false);
+                      context.read<AuthCubit>().loggedIn();
                       signInCubit.siginWithApple();
                     },
                     logo: Assets.icons.login.icApple.path,
