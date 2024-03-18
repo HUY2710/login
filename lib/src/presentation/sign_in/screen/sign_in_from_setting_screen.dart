@@ -11,7 +11,6 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
-import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../data/remote/collection_store.dart';
 import '../../../data/remote/firestore_client.dart';
@@ -107,14 +106,47 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
     }
   }
 
+  Future<void> getExistUserCode(String code) async {
+    final result = await CollectionStore.users.doc(code).get();
+    if (result.exists) {
+      final StoreUser storeUser = StoreUser.fromJson(result.data()!);
+      Global.instance.user = storeUser;
+    }
+  }
+
   Future<void> navigateToNextScreen() async {
     final authUser = FirebaseAuth.instance.currentUser;
     await SharedPreferencesManager.saveIsStarted(false);
     if (mounted) {
-      if (Global.instance.user != null && authUser != null) {
-        getExitsUser(authUser.uid);
+      if (context.read<JoinAnonymousCubit>().state) {
+        final String? userCode = await SharedPreferencesManager.getString(
+            PreferenceKeys.userCode.name);
+        await getExistUserCode(userCode!).then((value) async {
+          if (Global.instance.user?.userName == null ||
+              Global.instance.user?.userName == '') {
+            context.replaceRoute(const CreateUsernameRoute());
+          } else {
+            final bool statusLocation =
+                await checkPermissionLocation().isGranted;
+            if (!statusLocation && context.mounted) {
+              context.replaceRoute(PermissionRoute(fromMapScreen: false));
+              return;
+            } else if (context.mounted) {
+              final showGuide = await SharedPreferencesManager.getGuide();
+              if (showGuide && context.mounted) {
+                context.replaceRoute(const GuideRoute());
+              } else if (context.mounted) {
+                context.replaceRoute(PremiumRoute(fromStart: true));
+              }
+            }
+          }
+        });
       } else {
-        context.router.replaceAll([const CreateUsernameRoute()]);
+        if (Global.instance.user != null && authUser != null) {
+          getExitsUser(authUser.uid);
+        } else {
+          context.replaceRoute(const CreateUsernameRoute());
+        }
       }
     }
   }
@@ -166,21 +198,21 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
                 ),
                 18.verticalSpace,
                 ItemSignIn(
-                  onTap: () {
+                  onTap: () async {
                     context
                         .read<JoinAnonymousCubit>()
                         .setJoinAnonymousCubit(false);
-                    context.read<AuthCubit>().loggedIn();
+                    await SharedPreferencesManager.saveIsLogin(false);
                     signInCubit.signInWithFacebook();
                   },
                   haveShadow: true,
                 ),
                 ItemSignIn(
-                  onTap: () {
+                  onTap: () async {
                     context
                         .read<JoinAnonymousCubit>()
                         .setJoinAnonymousCubit(false);
-                    context.read<AuthCubit>().loggedIn();
+                    await SharedPreferencesManager.saveIsLogin(false);
                     signInCubit.signInWithGoogle();
                   },
                   logo: Assets.icons.login.icGoogle.path,
@@ -189,11 +221,11 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
                 ),
                 if (Platform.isIOS)
                   ItemSignIn(
-                    onTap: () {
+                    onTap: () async {
                       context
                           .read<JoinAnonymousCubit>()
                           .setJoinAnonymousCubit(false);
-                      context.read<AuthCubit>().loggedIn();
+                      await SharedPreferencesManager.saveIsLogin(false);
                       signInCubit.siginWithApple();
                     },
                     logo: Assets.icons.login.icApple.path,

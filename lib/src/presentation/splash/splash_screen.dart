@@ -296,7 +296,6 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> getMe() async {
     final String? userCode =
         await SharedPreferencesManager.getString(PreferenceKeys.userCode.name);
-    print('OMG $userCode');
     StoreUser? storeUser;
     if (userCode == null) {
       storeUser = await addNewUser(storeUser: storeUser);

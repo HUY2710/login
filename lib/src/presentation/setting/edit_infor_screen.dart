@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:battery_plus/battery_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,13 +25,16 @@ import '../../config/remote_config.dart';
 import '../../data/local/avatar/avatar_repository.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../data/models/avatar/avatar_model.dart';
+import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/collection_store.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
 import '../../shared/cubit/value_cubit.dart';
 import '../../shared/enum/gender_type.dart';
+import '../../shared/enum/preference_keys.dart';
 import '../../shared/extension/context_extension.dart';
+import '../../shared/extension/int_extension.dart';
 import '../../shared/helpers/valid_helper.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
 import '../../shared/widgets/custom_appbar.dart';
@@ -69,6 +73,29 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
       }
     });
     super.initState();
+  }
+
+  Future<StoreUser?> addNewUser({StoreUser? storeUser}) async {
+    final String newCode = 24.randomString();
+
+    int battery = 0;
+    try {
+      battery = await Battery().batteryLevel;
+    } catch (e) {
+      battery = 100;
+    }
+    storeUser = StoreUser(
+        code: newCode,
+        userName: '',
+        batteryLevel: battery,
+        avatarUrl: Assets.images.avatars.male.avatar1.path);
+    Global.instance.user = storeUser;
+    await FirestoreClient.instance.createUser(storeUser).then((value) async {
+      await SharedPreferencesManager.setString(
+          PreferenceKeys.userCode.name, newCode);
+    });
+
+    return storeUser;
   }
 
   @override
@@ -252,23 +279,28 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
         padding: const EdgeInsets.all(17),
         child: GestureDetector(
           onTap: () {
-            // if (mounted) {
-            //   context.read<AuthCubit>().loggedOut();
-            //   FirebaseAuth.instance.currentUser!.delete();
-
-            //   CollectionStore.users
-            //       .doc(Global.instance.user?.code)
-            //       .delete()
-            //       .then((value) {
-            //     context.router.replaceAll([const SignInRoute()]);
-            //   });
-            // }
-
             if (context.read<JoinAnonymousCubit>().state) {
-              CollectionStore.users
-                  .doc(Global.instance.user?.code)
-                  .delete()
-                  .then((value) async {
+              context.read<AuthCubit>().loggedOut();
+              CollectionStore.users.doc(Global.instance.user?.code).delete();
+              StoreUser? storeUser;
+              addNewUser(storeUser: storeUser).then((value) {
+                FirestoreClient.instance.updateUser({'uid': null});
+                context.router.replaceAll([const SignInRoute()]);
+              });
+            } else {
+              context.read<AuthCubit>().loggedOut();
+              if (FirebaseAuth
+                      .instance.currentUser?.providerData[0].providerId ==
+                  'google.com') {
+                GoogleSignIn().disconnect();
+              }
+
+              FirebaseAuth.instance.currentUser!.delete();
+              CollectionStore.users.doc(Global.instance.user?.code).delete();
+
+              StoreUser? storeUser;
+
+              addNewUser(storeUser: storeUser).then((value) {
                 FirestoreClient.instance.updateUser({'uid': null});
                 context.router.replaceAll([const SignInRoute()]);
               });

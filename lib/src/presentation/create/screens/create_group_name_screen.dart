@@ -15,9 +15,16 @@ import '../../../shared/helpers/valid_helper.dart';
 import '../../onboarding/widgets/app_button.dart';
 
 @RoutePage()
-class CreateGroupNameScreen extends StatelessWidget {
-  CreateGroupNameScreen({super.key});
+class CreateGroupNameScreen extends StatefulWidget {
+  const CreateGroupNameScreen({super.key});
+
+  @override
+  State<CreateGroupNameScreen> createState() => _CreateGroupNameScreenState();
+}
+
+class _CreateGroupNameScreenState extends State<CreateGroupNameScreen> {
   final ValueCubit<String> groupNameCubit = ValueCubit('');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +112,7 @@ class CreateGroupNameScreen extends StatelessWidget {
                   title: context.l10n.continueText,
                   isEnable: state.trimLeft().trimRight().isNotEmpty,
                   onTap: () {
-                    Global.instance.group ??= StoreGroup(
+                    Global.instance.group = StoreGroup(
                       idGroup: 24.randomString(),
                       passCode: 6.randomUpperCaseString().toUpperCase(),
                       groupName: ValidHelper.removeExtraSpaces(state),
@@ -116,8 +123,10 @@ class CreateGroupNameScreen extends StatelessWidget {
                         sentAt: DateTime.now().toIso8601String(),
                       ),
                     );
-
+                    setState(() {});
                     debugPrint('GroupGlobal:${Global.instance.group}');
+                    print(Global.instance.group);
+
                     context.pushRoute(CreateGroupAvatarRoute());
                   },
                   isShowIcon: true,

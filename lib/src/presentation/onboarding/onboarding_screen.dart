@@ -85,12 +85,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                         onPressed: () async {
                           final isLogin =
                               await SharedPreferencesManager.getIsLogin();
-                          context.pushRoute(const AuthLoginRoute());
-                          // if (isLogin) {
-                          //   navigateToNextScreen();
-                          // } else {
 
-                          // }
+                          if (isLogin) {
+                            context
+                                .read<JoinAnonymousCubit>()
+                                .setJoinAnonymousCubit(true);
+                            navigateToNextScreen();
+                          } else {
+                            context.pushRoute(const AuthLoginRoute());
+                          }
                         },
                         style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(

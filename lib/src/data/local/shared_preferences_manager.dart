@@ -34,6 +34,17 @@ class SharedPreferencesManager {
   static Future<bool> getIsLogin() async {
     return (await SharedPreferences.getInstance())
             .getBool(PreferenceKeys.isLogin.name) ??
+        false;
+  }
+
+  static Future<void> saveIsLoginWithGoogle(bool status) async {
+    (await SharedPreferences.getInstance())
+        .setBool(PreferenceKeys.isLoginGoogle.name, status);
+  }
+
+  static Future<bool> getIsLoginWithGoogle() async {
+    return (await SharedPreferences.getInstance())
+            .getBool(PreferenceKeys.isLoginGoogle.name) ??
         true;
   }
 

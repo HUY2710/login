@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -7,7 +6,6 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_group/store_group.dart';
-import '../../../data/models/store_user/store_user.dart';
 import '../../../data/remote/firestore_client.dart';
 import '../../../global/global.dart';
 import '../../../shared/mixin/permission_mixin.dart';

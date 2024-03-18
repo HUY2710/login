@@ -6,21 +6,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
-import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../data/remote/collection_store.dart';
 import '../../../data/remote/firestore_client.dart';
 import '../../../gen/gens.dart';
 import '../../../global/global.dart';
-import '../../../services/my_background_service.dart';
 import '../../../shared/enum/preference_keys.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/extension/int_extension.dart';
@@ -144,6 +142,17 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
     final authUser = FirebaseAuth.instance.currentUser;
     await SharedPreferencesManager.saveIsStarted(false);
     if (mounted) {
+      final snapShotGroups = await CollectionStore.users
+          .doc(Global.instance.user?.code)
+          .collection(CollectionStoreConstant.myGroups)
+          .get();
+      if (snapShotGroups.docs.isNotEmpty) {
+        final group = await FirestoreClient.instance
+            .getDetailGroup(snapShotGroups.docs.first.id);
+        getIt<SelectGroupCubit>().update(group);
+      }
+
+      // print('OMG ${group?.groupName}');
       if (context.read<JoinAnonymousCubit>().state) {
         if (Global.instance.user?.uid == null) {
           final String? userCode = await SharedPreferencesManager.getString(
@@ -169,9 +178,11 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
             }
           });
         } else {
+          await FirebaseAuth.instance.signOut();
           StoreUser? storeUser;
           addNewUser(storeUser: storeUser).then((value) {
-            FirestoreClient.instance.updateUser({'uid': null});
+            Global.instance.user = storeUser;
+
             context.replaceRoute(const CreateUsernameRoute());
           });
         }
@@ -179,7 +190,8 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
         if (Global.instance.user != null && authUser != null) {
           getExitsUser(authUser.uid);
         } else {
-          context.replaceRoute(const CreateUsernameRoute());
+          print('OMG ${FirebaseAuth.instance.currentUser}');
+          // context.replaceRoute(const CreateUsernameRoute());
         }
       }
     }
@@ -211,7 +223,10 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
               );
             }
           } else if (state.signInStatus == SignInStatus.success) {
+            EasyLoading.dismiss();
             navigateToNextScreen();
+          } else if (state.signInStatus == SignInStatus.loading) {
+            EasyLoading.show();
           }
         },
         child: Stack(
@@ -270,7 +285,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
                           context
                               .read<JoinAnonymousCubit>()
                               .setJoinAnonymousCubit(false);
-                          await SharedPreferencesManager.saveIsLogin(true);
+                          await SharedPreferencesManager.saveIsLogin(false);
                           signInCubit.siginWithApple();
                         },
                         logo: Assets.icons.login.icApple.path,
@@ -291,6 +306,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
                   context
                       .read<JoinAnonymousCubit>()
                       .setJoinAnonymousCubit(true);
+                  await SharedPreferencesManager.saveIsLogin(true);
                   signInCubit.joinWithAnonymous();
                 },
                 child: Text(

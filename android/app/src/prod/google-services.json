@@ -1,8 +1,8 @@
 {
   "project_info": {
-    "project_number": "204561008176",
-    "project_id": "cs-dev-34127",
-    "storage_bucket": "cs-dev-34127.appspot.com"
+    "project_number": "990967101864",
+    "project_id": "ios29---group-location-sharing",
+    "storage_bucket": "ios29---group-location-sharing.appspot.com"
   },
   "client": [
     {
@@ -12,7 +12,8 @@
           "package_name": "com.locationsharing.livelocation.grouplocationsharing.circlesharing"
         }
       },
-      "oauth_client": [
+      "oauth_client": [],
+      "api_key": [
         {
           "current_key": "AIzaSyBFKovC1zGtWnf6EB8HLIPXzhb76pG4FLw"
         }

@@ -1,48 +1,40 @@
 {
   "project_info": {
-    "project_number": "204561008176",
-    "project_id": "cs-dev-34127",
-    "storage_bucket": "cs-dev-34127.appspot.com"
+    "project_number": "176777253646",
+    "project_id": "fir-for-base-flutter",
+    "storage_bucket": "fir-for-base-flutter.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:204561008176:android:e268d202f371e41b670ff5",
+        "mobilesdk_app_id": "1:176777253646:android:c86e092063828c8af9bd5f",
         "android_client_info": {
-          "package_name": "com.tinhvu.cycle.sharing.dev"
+          "package_name": "com.vtn.global.base.flutter"
         }
       },
       "oauth_client": [
         {
-          "client_id": "204561008176-rbmdnivg28k6nrp6tr7adc3hhnn072f0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.tinhvu.cycle.sharing.dev",
-            "certificate_hash": "842574bf3f5c67adb87639d3f6bbc9c39e1671de"
-          }
-        },
-        {
-          "client_id": "204561008176-qsai95oggafnkr9veslc081femed0c47.apps.googleusercontent.com",
+          "client_id": "176777253646-2hihnmljfi08fnnnol5bg4ok249n1kpu.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAnbiCHk_PXPcPZDZl2Epubu0dPpHoR8qE"
+          "current_key": "AIzaSyCe8PxNWY9x8x7F_URHA2URkIlGC57xqIY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "204561008176-dkeulgppr097o93vr1rv9ca91rgcumm3.apps.googleusercontent.com",
+              "client_id": "176777253646-2hihnmljfi08fnnnol5bg4ok249n1kpu.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "204561008176-dsj98kj7uok68frcirr7p4ppc42njnsa.apps.googleusercontent.com",
+              "client_id": "176777253646-0q3ubq6vbofvb88sclo9n3muhtqdbn91.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.tinhvu.cycle-sharing.dev"
+                "bundle_id": "com.example.flutterBase"
               }
             }
           ]
