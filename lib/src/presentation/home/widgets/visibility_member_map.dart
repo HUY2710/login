@@ -63,13 +63,15 @@ class VisibilityMemberMap extends StatelessWidget {
                           Image.asset(users[index].avatarUrl).image,
                     ),
                   6.verticalSpace,
-                  Text(
-                    users[index].userName,
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w400,
+                  Flexible(
+                    child: Text(
+                      users[index].userName,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   )
                 ],
