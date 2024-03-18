@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../gen/assets.gen.dart';
 import '../../../gen/gens.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/custom_inkwell.dart';
@@ -25,11 +24,13 @@ class _CarouseSliderPremiumState extends State<CarouseSliderPremium> {
       builder: (context, state) {
         return Column(
           children: [
-            Text('All of Premium Benefits', style: TextStyle(
-              color: MyColors.primary,
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w700
-            ),),
+            Text(
+              'All of Premium Benefits',
+              style: TextStyle(
+                  color: MyColors.primary,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w700),
+            ),
             16.verticalSpace,
             CarouselSlider(
               carouselController: controller,
@@ -50,18 +51,25 @@ class _CarouseSliderPremiumState extends State<CarouseSliderPremium> {
                 ),
                 buildItem(
                   context,
+                  svgItem: Assets.icons.premium.icPhoto,
+                  title: context.l10n.sendingPhoto,
+                  subTitle: context.l10n.ableToSendPhoto,
+                  index: 2,
+                ),
+                buildItem(
+                  context,
                   svgItem: Assets.icons.premium.icMember,
                   title: context.l10n.guideToGroupMembers,
                   subTitle: context.l10n.guideToGroupMembersSub,
-                  index: 2,
+                  index: 3,
                 ),
                 buildItem(
                   context,
                   svgItem: Assets.icons.premium.icSharePremium,
                   title: context.l10n.sendMyCurrent,
                   subTitle: context.l10n.sendMyCurrentSub,
-                  index: 3,
-                )
+                  index: 4,
+                ),
               ],
               disableGesture: true,
               options: CarouselOptions(

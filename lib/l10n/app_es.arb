@@ -199,5 +199,7 @@
   "sent": "enviado",
   "useByAdsVersion": "Usar por versión con anuncios",
   "day": "Día",
-  "mostPopular": "Más popular"
+  "mostPopular": "Más popular",
+  "sendingPhoto": "Enviando fotos con ubicación exacta",
+  "ableToSendPhoto": "Capaz de enviar fotos con ubicación exacta vía mensajería"
 }

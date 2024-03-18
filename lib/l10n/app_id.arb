@@ -199,5 +199,7 @@
   "sent": "terkirim",
   "useByAdsVersion": "Gunakan versi iklan",
   "day": "Hari",
-  "mostPopular": "Paling populer"
+  "mostPopular": "Paling populer",
+  "sendingPhoto": "Mengirim foto dengan lokasi yang tepat",
+  "ableToSendPhoto": "Mampu mengirim foto dengan lokasi yang tepat melalui pesan"
 }
