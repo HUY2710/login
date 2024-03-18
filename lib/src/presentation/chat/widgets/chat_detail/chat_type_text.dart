@@ -231,8 +231,8 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
           ///TODO: remove !
           if (!isPremium) {
             EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
-            final XFile? image =
-                await ImagePicker().pickImage(source: ImageSource.gallery);
+            final XFile? image = await ImagePicker()
+                .pickImage(source: ImageSource.gallery, imageQuality: 60);
             if (image != null) {
               showLoading();
               final url = await FirebaseStorageClient.instance.uploadImage(
@@ -256,8 +256,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
         onPressed: () async {
           final bool isPremium = getIt<MyPurchaseManager>().state.isPremium();
 
-          ///TODO: remove !
-          if (isPremium) {
+          if (!isPremium) {
             final result = await context.pushRoute(const CameraRoute()) ?? '';
             if (result != '') {
               showLoading();

@@ -128,7 +128,8 @@ class _ImageResultScreenState extends State<ImageResultScreen>
           ),
         ),
         onTap: () async {
-          final resultBytes = await widgetToBytes(repaintKey: repaintKey);
+          final resultBytes =
+              await widgetToBytes(repaintKey: repaintKey, pixelRatio: 2);
           imgPathResult = saveToCacheDirectory(resultBytes!);
           if (mounted) {
             await context

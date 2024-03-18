@@ -180,18 +180,23 @@ class _ChatScreenState extends State<ChatScreen> {
     final String content = group.lastMessage?.content ?? '';
 
     if (content.isEmpty) {
-      if (group.lastMessage?.messageType == MessageType.location) {
-        return (group.storeUser?.code == userCode)
-            ? '${context.l10n.you} ${context.l10n.sendLocation}'
-            : '$userName ${context.l10n.sendLocation}';
-      } else if (group.lastMessage?.messageType == MessageType.checkIn) {
-        return (group.storeUser?.code == userCode)
-            ? '${context.l10n.you} ${context.l10n.checkIn.toLowerCase()}'
-            : '$userName ${context.l10n.checkIn.toLowerCase()}';
-      } else {
-        return (group.storeUser?.code == userCode)
-            ? '${context.l10n.you} ${context.l10n.createdGroup}'
-            : '$userName ${context.l10n.createGroup}';
+      switch (group.lastMessage!.messageType) {
+        case MessageType.location:
+          return (group.storeUser?.code == userCode)
+              ? '${context.l10n.you} ${context.l10n.sendLocation}'
+              : '$userName ${context.l10n.sendLocation}';
+        case MessageType.checkIn:
+          return (group.storeUser?.code == userCode)
+              ? '${context.l10n.you} ${context.l10n.checkIn.toLowerCase()}'
+              : '$userName ${context.l10n.checkIn.toLowerCase()}';
+        case MessageType.image:
+          return (group.storeUser?.code == userCode)
+              ? '${context.l10n.you} ${context.l10n.sentAPhoto}'
+              : '$userName ${context.l10n.sentAPhoto}';
+        default:
+          return (group.storeUser?.code == userCode)
+              ? '${context.l10n.you} ${context.l10n.createdGroup}'
+              : '$userName ${context.l10n.createGroup}';
       }
     } else {
       return (group.storeUser?.code == userCode)

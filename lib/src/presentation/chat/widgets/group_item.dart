@@ -105,28 +105,6 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
   String formatDateTime(DateTime input) {
     final languageCode = getIt<LanguageCubit>().state.languageCode;
     return timeago.format(input, locale: languageCode);
-    final DateTime now = DateTime.now();
-    if (isToday(input)) {
-      return '${input.hour}:${input.minute < 10 ? '0${input.minute}' : input.minute}';
-    } else if (input.weekday == now.weekday) {
-      return input.weekday == 1
-          ? 'Sun'
-          : input.weekday == 2
-              ? 'Mon'
-              : input.weekday == 3
-                  ? 'Tues'
-                  : input.weekday == 4
-                      ? 'Wed'
-                      : input.weekday == 5
-                          ? 'Thu'
-                          : input.weekday == 6
-                              ? 'Fri'
-                              : 'Sat';
-    } else {
-      return DateFormat('MMM d, yyyy',
-              '${Locale(getIt<LanguageCubit>().state.languageCode)}')
-          .format(input);
-    }
   }
 
   bool isToday(DateTime dateTime) {

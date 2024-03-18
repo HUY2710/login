@@ -14,6 +14,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../../../app/cubit/language_cubit.dart';
 import '../../../app/cubit/loading_cubit.dart';

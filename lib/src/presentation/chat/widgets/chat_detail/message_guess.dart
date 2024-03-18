@@ -55,18 +55,21 @@ class MessageTypeGuess extends StatelessWidget {
               borderRadius: item.messageType == MessageType.image
                   ? BorderRadius.circular(AppConstants.widgetBorderRadius.r)
                   : BorderRadius.only(
-                      topLeft: Radius.circular(AppConstants.widgetBorderRadius.r),
-                      topRight: Radius.circular(AppConstants.widgetBorderRadius.r),
+                      topLeft:
+                          Radius.circular(AppConstants.widgetBorderRadius.r),
+                      topRight:
+                          Radius.circular(AppConstants.widgetBorderRadius.r),
                       bottomLeft: Utils.checkLastMessByUser(index, chats)
                           ? Radius.zero
                           : Radius.circular(AppConstants.widgetBorderRadius.r),
-                      bottomRight: Radius.circular(AppConstants.widgetBorderRadius.r)),
+                      bottomRight:
+                          Radius.circular(AppConstants.widgetBorderRadius.r)),
               color: const Color(0xffF7F5FA)),
           child: switch (item.messageType) {
             MessageType.location => buildMessLocation(context, item),
+            MessageType.checkIn => buildMessLocation(context, item),
             MessageType.text => buildMessText(),
             MessageType.image => buildMessImage(context, item),
-            _ => const SizedBox()
           },
         ),
       ],

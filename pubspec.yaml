@@ -91,6 +91,7 @@ dependencies:
   firebase_storage: ^11.6.7
   camera: ^0.10.5+9
   timeago: ^3.6.1
+  photo_view: ^0.14.0
 
 dev_dependencies:
   flutter_test:
