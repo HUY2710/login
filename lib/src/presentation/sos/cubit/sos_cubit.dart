@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../config/di/di.dart';
 import '../../../data/models/store_sos/store_sos.dart';
 import '../../../data/remote/sos_manager.dart';
 import '../../../global/global.dart';
+import '../../map/cubit/my_marker_cubit.dart';
 
 @singleton
 class SosCubit extends HydratedCubit<bool> {
@@ -63,7 +65,14 @@ class SosCubit extends HydratedCubit<bool> {
     if (status) {
       timeLimit = DateTime.now().add(_duration);
     }
-
+    getIt<MyMarkerCubit>().update(
+      Global.instance.user?.copyWith(
+        sosStore: StoreSOS(
+          sos: status,
+          sosTimeLimit: timeLimit,
+        ),
+      ),
+    );
     await SosManager.updateSos(
       {
         'sos': status,

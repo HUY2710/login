@@ -205,15 +205,6 @@ class _BuildMarkerState extends State<BuildMarker> {
     );
   }
 
-  Widget _buildActivity() {
-    return Image.asset(
-      Assets.images.markers.car.path,
-      height: 60.r,
-      width: 60.r,
-      gaplessPlayback: true,
-    );
-  }
-
   String getType() {
     if (widget.member.activityType == ActivityType.RUNNING.name) {
       return Assets.images.markers.running.path;

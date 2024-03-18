@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
@@ -22,6 +23,7 @@ import '../../global/global.dart';
 import '../../services/my_background_service.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/extension/context_extension.dart';
+import '../../shared/helpers/capture_widget_helper.dart';
 import '../../shared/mixin/permission_mixin.dart';
 import '../chat/cubits/group_cubit.dart';
 import '../home/cubit/banner_collapse_cubit.dart';
@@ -29,6 +31,7 @@ import '../home/widgets/bottom_bar.dart';
 import '../permission/widget/permission_home_android.dart';
 import '../permission/widget/permission_home_ios.dart';
 import 'cubit/map_type_cubit.dart';
+import 'cubit/my_marker_cubit.dart';
 import 'cubit/select_group_cubit.dart';
 import 'cubit/tracking_location/tracking_location_cubit.dart';
 import 'cubit/tracking_members/tracking_member_cubit.dart';
@@ -38,6 +41,7 @@ import 'cubit/user_map_visibility/user_map_visibility_cubit.dart';
 import 'widgets/custom_map.dart';
 import 'widgets/float_right_app_bar.dart';
 import 'widgets/member_marker_list.dart';
+import 'widgets/my_marker.dart';
 import 'widgets/place_mark_list.dart';
 
 class MapScreen extends StatefulWidget {
@@ -80,6 +84,7 @@ class MapScreenState extends State<MapScreen>
     _trackingMemberCubit.initTrackingMember();
     _trackingPlacesCubit.initTrackingPlaces();
     _defaultLocation = Global.instance.serverLocation;
+    getIt<MyMarkerCubit>().update(Global.instance.user);
     getLocalLocation();
     super.initState();
 
@@ -144,24 +149,6 @@ class MapScreenState extends State<MapScreen>
         _init();
       });
     }
-
-    // if (!statusLocation) {
-    //   getIt<BannerCollapseAdCubit>().update(false);
-    //   await navigateToPermission();
-    //   final bool checkAgain = await checkPermissionLocation();
-    //   if (checkAgain) {
-    //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-    //       getIt<BannerCollapseAdCubit>().update(true);
-    //       _init();
-    //     });
-    //   }
-    // } else {
-    //   //exist permission
-    //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-    //     getIt<BannerCollapseAdCubit>().update(true);
-    //     _init();
-    //   });
-    // }
   }
 
   Future<void> _init() async {
@@ -242,10 +229,52 @@ class MapScreenState extends State<MapScreen>
     }
   }
 
+  final GlobalKey myMarkerKey = GlobalKey();
+
+  //generate my marker
+  Future<void> genMyMarker() async {
+    try {
+      final Uint8List? bytes =
+          await CaptureWidgetHelp.widgetToBytes(myMarkerKey);
+      if (bytes == null) {
+        return;
+      }
+      Global.instance.myMarker = BitmapDescriptor.fromBytes(
+        bytes,
+        size: const Size.fromWidth(30),
+      );
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        Positioned.fill(
+          child: Align(
+            child: BlocBuilder<MyMarkerCubit, StoreUser?>(
+              bloc: getIt<MyMarkerCubit>(),
+              buildWhen: (pre, cur) =>
+                  pre?.avatarUrl != cur?.avatarUrl ||
+                  pre?.sosStore?.sos != cur?.sosStore?.sos ||
+                  pre?.activityType != cur?.activityType,
+              builder: (context, state) {
+                if (state == null) {
+                  return const SizedBox();
+                }
+                WidgetsBinding.instance.addPostFrameCallback((_) async {
+                  genMyMarker();
+                });
+                return MyMarkerOnMap(
+                  member: state,
+                  keyCap: myMarkerKey,
+                );
+              },
+            ),
+          ),
+        ),
         Positioned.fill(
           child: Align(
             child: BlocBuilder<TrackingMemberCubit, TrackingMemberState>(
@@ -392,15 +421,20 @@ class MapScreenState extends State<MapScreen>
                                 Set<Polyline>?>(
                               bloc: getIt<TrackingRoutesCubit>(),
                               builder: (context, polylinesState) {
-                                return CustomMap(
-                                  defaultLocation: _defaultLocation,
-                                  trackingLocationState: locationState,
-                                  mapController: _mapController,
-                                  mapType: mapTypeState,
-                                  marker: marker,
-                                  trackingMemberState: trackingMemberState,
-                                  trackingPlacesState: trackingPlacesState,
-                                  polylines: polylinesState,
+                                return BlocBuilder<MyMarkerCubit, StoreUser?>(
+                                  bloc: getIt<MyMarkerCubit>(),
+                                  builder: (context, state) {
+                                    return CustomMap(
+                                      defaultLocation: _defaultLocation,
+                                      trackingLocationState: locationState,
+                                      mapController: _mapController,
+                                      mapType: mapTypeState,
+                                      marker: marker,
+                                      trackingMemberState: trackingMemberState,
+                                      trackingPlacesState: trackingPlacesState,
+                                      polylines: polylinesState,
+                                    );
+                                  },
                                 );
                               },
                             );
