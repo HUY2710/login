@@ -189,12 +189,13 @@ Widget _buildItemLanguage({
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: isSelected
-            ? Border.all(
-                color: MyColors.primary,
-              )
-            : null,
         borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
+        gradient: isSelected
+            ? const LinearGradient(colors: [
+                Color(0xffB67DFF),
+                Color(0xff7B3EFF),
+              ])
+            : null,
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF9C747D).withOpacity(0.17),
@@ -218,19 +219,10 @@ Widget _buildItemLanguage({
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
+                color: isSelected ? Colors.white : MyColors.black34,
               ),
             ),
           ),
-          if (isSelected)
-            Radio(
-              value: true,
-              groupValue: true,
-              onChanged: (val) {},
-              visualDensity: const VisualDensity(
-                horizontal: VisualDensity.minimumDensity,
-                vertical: VisualDensity.minimumDensity,
-              ),
-            ),
         ],
       ),
     ),
