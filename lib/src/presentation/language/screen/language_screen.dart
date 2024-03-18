@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../app/cubit/language_cubit.dart';
 import '../../../../module/admob/app_ad_id_manager.dart';
@@ -17,6 +18,7 @@ import '../../../shared/constants/app_constants.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/language.dart';
 import '../../../shared/extension/context_extension.dart';
+import '../../../shared/mixin/permission_mixin.dart';
 
 @RoutePage()
 class LanguageScreen extends StatefulWidget {
@@ -31,7 +33,7 @@ class LanguageScreen extends StatefulWidget {
   State<LanguageScreen> createState() => _LanguageScreenState();
 }
 
-class _LanguageScreenState extends State<LanguageScreen> {
+class _LanguageScreenState extends State<LanguageScreen> with PermissionMixin {
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
@@ -118,9 +120,40 @@ class _LanguageScreenState extends State<LanguageScreen> {
           if (widget.isFirst == null || widget.isFirst == false) {
             context.popRoute();
           } else {
-            await SharedPreferencesManager.saveIsFirstLaunch(false);
-            if (mounted) {
+            final isFirstLaunch =
+                await SharedPreferencesManager.getIsFirstLaunch();
+            //Nếu lần đầu dùng app
+            if (isFirstLaunch && context.mounted) {
               context.replaceRoute(OnBoardingRoute(language: selectedLanguage));
+              return;
+            }
+
+            //nếu lần thứ 2 trở đi
+            if (!isFirstLaunch) {
+              //xem lần trước đó đã tạo user hay chưa
+              final isCreateInfoFirstTime =
+                  await SharedPreferencesManager.getIsCreateInfoFistTime();
+              if (isCreateInfoFirstTime && context.mounted) {
+                context.replaceRoute(CreateUsernameRoute());
+                return;
+              }
+
+              //Nếu đã qua màn intro và đã tạo thông tin user rồi
+              final bool allowPermission = await checkAllPermission();
+              if (!allowPermission && context.mounted) {
+                context.replaceRoute(PermissionRoute(fromMapScreen: false));
+                return;
+              }
+
+              //xem đến màn guide chưa
+              final showGuide = await SharedPreferencesManager.getGuide();
+              if (showGuide && context.mounted) {
+                context.replaceRoute(const GuideRoute());
+                return;
+              } else if (context.mounted) {
+                context.replaceRoute(PremiumRoute(fromStart: true));
+                return;
+              }
             }
           }
         },

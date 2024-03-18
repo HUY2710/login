@@ -68,6 +68,14 @@ mixin PermissionMixin {
     return status;
   }
 
+  Future<bool> checkAllPermission() async {
+    final locationStatus = await checkPermissionLocation().isGranted;
+    final notifyStatus = await statusNotification();
+    final activityStatus = await statusActivityRecognition();
+
+    return locationStatus && notifyStatus && activityStatus;
+  }
+
   Future<PermissionStatus> checkPermissionLocation() async {
     final PermissionStatus locationStatus =
         await Permission.locationWhenInUse.status;
@@ -121,12 +129,29 @@ mixin PermissionMixin {
     return notificationStatus.isGranted;
   }
 
+  //notification
+  Future<bool> statusNotification() async {
+    final PermissionStatus notificationStatus =
+        await Permission.notification.status;
+    return notificationStatus.isGranted;
+  }
+
   Future<bool> requestActivityRecognition() async {
     PermissionStatus activityRecognition;
     if (Platform.isIOS) {
       activityRecognition = await Permission.sensors.request();
     } else {
       activityRecognition = await Permission.activityRecognition.request();
+    }
+    return activityRecognition.isGranted;
+  }
+
+  Future<bool> statusActivityRecognition() async {
+    PermissionStatus activityRecognition;
+    if (Platform.isIOS) {
+      activityRecognition = await Permission.sensors.status;
+    } else {
+      activityRecognition = await Permission.activityRecognition.status;
     }
     return activityRecognition.isGranted;
   }
