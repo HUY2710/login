@@ -200,7 +200,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
       hintStyle: TextStyle(color: const Color(0xff6C6C6C), fontSize: 14.sp),
       contentPadding: EdgeInsets.only(left: 18.w, bottom: 12.w, top: 12.h),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15.r),
+        borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
         borderSide: const BorderSide(
           width: 2,
           color: MyColors.secondPrimary,
@@ -294,7 +294,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(
-              Radius.circular(15.r),
+              Radius.circular(AppConstants.widgetBorderRadius.r),
             ),
             boxShadow: [
               BoxShadow(

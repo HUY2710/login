@@ -27,6 +27,7 @@ class GroupItem extends StatefulWidget {
 }
 
 class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
+
   @override
   Widget build(BuildContext context) {
     return CustomInkWell(
@@ -51,6 +52,7 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   4.verticalSpace,
                   Row(
@@ -101,6 +103,8 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
   }
 
   String formatDateTime(DateTime input) {
+    final languageCode = getIt<LanguageCubit>().state.languageCode;
+    return timeago.format(input, locale: languageCode);
     final DateTime now = DateTime.now();
     if (isToday(input)) {
       return '${input.hour}:${input.minute < 10 ? '0${input.minute}' : input.minute}';
