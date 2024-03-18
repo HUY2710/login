@@ -40,8 +40,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
   }
 
   Future<void> navigateToNextScreen() async {
-    await SharedPreferencesManager.saveIsStarted(false);
-
+    SharedPreferencesManager.saveIsFirstLaunch(false);
     final isCreateInfoFirstTime =
         await SharedPreferencesManager.getIsCreateInfoFistTime();
     if (mounted) {
@@ -57,7 +56,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
           if (showGuide && context.mounted) {
             context.replaceRoute(const GuideRoute());
           } else if (context.mounted) {
-            // context.replaceRoute(HomeRoute());
             context.replaceRoute(PremiumRoute(fromStart: true));
           }
         }
