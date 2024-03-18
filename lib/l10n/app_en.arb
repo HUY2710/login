@@ -201,5 +201,7 @@
   "day": "Day",
   "mostPopular": "Most popular",
   "sentAPhoto": "sent a photo",
-  "send": "Send"
+  "send": "Send",
+  "sendingPhoto": "Sending photos with exact location",
+  "ableToSendPhoto": "Able to send photos with exact location via messaging"
 }

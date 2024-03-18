@@ -30,7 +30,7 @@ dependencies:
   flutter_screenutil: ^5.9.0
 
   cloud_firestore: ^4.9.0
-  firebase_core: ^2.15.1
+  firebase_core: ^2.25.0
   firebase_crashlytics: ^3.3.5
   appsflyer_sdk: ^6.11.3
   change_app_package_name: ^1.1.0
@@ -41,8 +41,7 @@ dependencies:
   shimmer: ^3.0.0
   easy_ads_flutter:
     git:
-        url: https://bitbucket.org/innofyapp/flutter_ads.git
-#     url: https://KyLQ@bitbucket.org/innofyapp/flutter_ads.git
+      url: https://bitbucket.org/innofyapp/flutter_ads.git
   device_info_plus: ^9.0.3
   hydrated_bloc: ^9.1.2
   path_provider: ^2.1.1
@@ -69,7 +68,7 @@ dependencies:
   flutter_iap:
     git:
       url: https://bitbucket.org/innofyapp/flutter_iap.git
-  map_launcher: 3.1.0
+  map_launcher: ^3.1.0
   flutter_polyline_points: ^2.0.0
   flutter_lifecycle_detector: ^0.0.6
   flutter_activity_recognition: ^3.0.0
@@ -89,7 +88,7 @@ dependencies:
   app_settings: ^5.1.1
   flutter_keyboard_visibility: ^6.0.0
   simple_ripple_animation: ^0.0.9
-  firebase_storage: ^11.6.0
+  firebase_storage: ^11.6.7
   camera: ^0.10.5+9
   timeago: ^3.6.1
 

@@ -199,5 +199,7 @@
   "sent": "보냄",
   "useByAdsVersion": "광고 버전 사용",
   "day": "일",
-  "mostPopular": "가장 인기 있는"
+  "mostPopular": "가장 인기 있는",
+  "sendingPhoto": "정확한 위치와 함께 사진 보내기",
+  "ableToSendPhoto": "메시징을 통해 정확한 위치와 함께 사진을 보낼 수 있음"
 }

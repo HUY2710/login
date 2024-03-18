@@ -150,7 +150,23 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
             maxLines: 5,
             decoration: _inputStyle(),
           )),
-          buildButtonCamera(),
+          Stack(
+            clipBehavior: Clip.antiAlias,
+            children: [
+              buildButtonCamera(),
+              if (!getIt<MyPurchaseManager>().state.isPremium())
+                Positioned(
+                  right: 0,
+                  child: ShadowContainer(
+                    padding: EdgeInsets.all(4.r),
+                    child: SvgPicture.asset(
+                      Assets.icons.premium.icPremiumSvg.path,
+                      width: 10.r,
+                    ),
+                  ),
+                )
+            ],
+          ),
           buildButtonGallery(),
         ],
       ),
@@ -241,7 +257,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
           final bool isPremium = getIt<MyPurchaseManager>().state.isPremium();
 
           ///TODO: remove !
-          if (!isPremium) {
+          if (isPremium) {
             final result = await context.pushRoute(const CameraRoute()) ?? '';
             if (result != '') {
               showLoading();
