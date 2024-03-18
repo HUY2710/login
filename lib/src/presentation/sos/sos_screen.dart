@@ -107,15 +107,19 @@ class _SosScreenState extends State<SosScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (!state)
-                        Text(
-                          '$_countdown',
-                          style: TextStyle(
-                            fontSize: 32.sp,
-                            fontWeight: FontWeight.w500,
-                            color: MyColors.primary,
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10.h),
+                          child: Text(
+                            '$_countdown',
+                            style: TextStyle(
+                              fontSize: 32.sp,
+                              fontWeight: FontWeight.w500,
+                              color: MyColors.primary,
+                            ),
                           ),
-                        ),
-                      10.verticalSpace,
+                        )
+                      else
+                        Assets.lottie.sosCheck.lottie(width: 100.r),
                       Text(
                         state ? context.l10n.sosHasSent : context.l10n.sosTitle,
                         style: TextStyle(
