@@ -20,6 +20,7 @@ import '../../shared/widgets/custom_inkwell.dart';
 import 'cubits/group_cubit.dart';
 import 'cubits/group_state.dart';
 import 'cubits/search_group_cubit.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 part 'widgets/chat_group_empty.dart';
 part 'widgets/group_item.dart';
