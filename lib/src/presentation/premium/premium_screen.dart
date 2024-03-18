@@ -106,7 +106,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                             children: [
                               buildButtonWeek(item: weeklyProduct),
                               16.w.horizontalSpace,
-                              buildButtonMonth(item: monthlyProduct),
+                              buildButtonMonth(item: monthlyProduct, weeklyPrice: weeklyProduct.first.productDetails.rawPrice),
                             ],
                           ),
                         ),
@@ -264,13 +264,14 @@ class _PremiumScreenState extends State<PremiumScreen> {
     );
   }
 
-  Widget buildButtonMonth({required List<PurchasableProduct> item}) {
+  Widget buildButtonMonth({required List<PurchasableProduct> item, required double weeklyPrice}) {
     final monthlyProduct = item.first;
     final formatter = NumberFormat.simpleCurrency(
       name: monthlyProduct.productDetails.currencyCode,
     );
     final monthPricePerWeek =
         formatter.format(monthlyProduct.productDetails.rawPrice / 4);
+    final saved = (weeklyPrice - (monthlyProduct.productDetails.rawPrice / 4)) * 100 / weeklyPrice;
     return Expanded(
         child: Container(
       height: 150.h,
@@ -349,7 +350,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 ),
               ),
               child: Text(
-                '-50%',
+                '-${saved.toStringAsFixed(0)}%',
                 style: TextStyle(
                   fontSize: 14.sp,
                   color: Colors.white,
