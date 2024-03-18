@@ -52,6 +52,7 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   4.verticalSpace,
                   Row(
