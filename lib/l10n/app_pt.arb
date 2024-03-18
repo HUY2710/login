@@ -201,5 +201,6 @@
   "day": "Dia",
   "mostPopular": "Mais popular",
   "sendingPhoto": "Enviando fotos com localização exata",
-  "ableToSendPhoto": "Capaz de enviar fotos com localização exata via mensagens"
+  "ableToSendPhoto": "Capaz de enviar fotos com localização exata via mensagens",
+  "guideSos": "A função SOS permite alertar rapidamente seus amigos em casos de emergência ou situações perigosas."
 }

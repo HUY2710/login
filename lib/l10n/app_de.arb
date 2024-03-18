@@ -201,5 +201,6 @@
   "needHelp": "Brauche Hilfe",
   "sent": "gesendet",
   "sendingPhoto": "Senden von Fotos mit genauer Standortangabe",
-  "ableToSendPhoto": "In der Lage, Fotos mit genauer Standortangabe per Nachricht zu senden"
+  "ableToSendPhoto": "In der Lage, Fotos mit genauer Standortangabe per Nachricht zu senden",
+  "guideSos": "Die SOS-Funktion ermöglicht es Ihnen, Ihre Freunde schnell bei Notfällen oder gefährlichen Situationen zu alarmieren."
 }

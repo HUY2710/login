@@ -42,6 +42,10 @@ dependencies:
   easy_ads_flutter:
     git:
       url: https://bitbucket.org/innofyapp/flutter_ads.git
+      #  url: https://bitbucket.org/innofyapp/flutter_ads.git
+#     url: https://KyLQ@bitbucket.org/innofyapp/flutter_ads.git
+      #  url: https://soncm1220@bitbucket.org/innofyapp/flutter_ads.git
+     url: https://KyLQ@bitbucket.org/innofyapp/flutter_ads.git
   device_info_plus: ^9.0.3
   hydrated_bloc: ^9.1.2
   path_provider: ^2.1.1
@@ -67,7 +71,7 @@ dependencies:
   carousel_slider: ^4.2.1
   flutter_iap:
     git:
-      url: https://bitbucket.org/innofyapp/flutter_iap.git
+      url: https://soncm1220@bitbucket.org/innofyapp/flutter_iap.git
   map_launcher: ^3.1.0
   flutter_polyline_points: ^2.0.0
   flutter_lifecycle_detector: ^0.0.6
@@ -90,7 +94,6 @@ dependencies:
   simple_ripple_animation: ^0.0.9
   firebase_storage: ^11.6.7
   camera: ^0.10.5+9
-  timeago: ^3.6.1
 
 dev_dependencies:
   flutter_test:
