@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -118,6 +119,10 @@ mixin PermissionMixin {
   Future<bool> requestNotification() async {
     final PermissionStatus notificationStatus =
         await Permission.notification.request();
+    if (notificationStatus.isPermanentlyDenied) {
+      await AppSettings.openAppSettings(type: AppSettingsType.notification);
+      return notificationStatus.isGranted;
+    }
     return notificationStatus.isGranted;
   }
 

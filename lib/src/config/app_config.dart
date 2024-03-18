@@ -30,10 +30,10 @@ class AppConfig with SystemUiMixin {
       _initGlobalData(),
     ]);
     configureDependencies();
-    await FirebaseMessageService().initNotification();
-    if (await Permission.notification.isGranted) {
-      await FirebaseMessageService().startService();
-    }
+    // await FirebaseMessageService().initNotification();
+    // if (await Permission.notification.isGranted) {
+    //   await FirebaseMessageService().startService();
+    // }
     EasyLoading.instance
       ..indicatorType = EasyLoadingIndicatorType.fadingCircle
       ..maskType = EasyLoadingMaskType.custom

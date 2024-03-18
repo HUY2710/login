@@ -119,6 +119,7 @@ class _PermissionScreenState extends State<PermissionScreen>
 
                     if (state == 2) {
                       final status = await requestNotification();
+                      await FirebaseMessageService().initNotification();
                       if (status) {
                         await FirebaseMessageService().startService();
                       }

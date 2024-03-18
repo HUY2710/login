@@ -19,6 +19,7 @@ import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../data/remote/token_manager.dart';
 import '../../global/global.dart';
+import '../../services/firebase_message_service.dart';
 import '../../services/my_background_service.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/extension/context_extension.dart';
@@ -70,6 +71,7 @@ class MapScreenState extends State<MapScreen>
   @override
   void initState() {
     // context.pushRoute(PremiumRoute(fromStart: true));
+
     EasyAds.instance.initCollapsibleBannerAd();
     WidgetsBinding.instance.addObserver(this);
     FirestoreClient.instance.updateUser({'online': true});
@@ -144,24 +146,9 @@ class MapScreenState extends State<MapScreen>
         _init();
       });
     }
-
-    // if (!statusLocation) {
-    //   getIt<BannerCollapseAdCubit>().update(false);
-    //   await navigateToPermission();
-    //   final bool checkAgain = await checkPermissionLocation();
-    //   if (checkAgain) {
-    //     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-    //       getIt<BannerCollapseAdCubit>().update(true);
-    //       _init();
-    //     });
-    //   }
-    // } else {
-    //   //exist permission
-    //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-    //     getIt<BannerCollapseAdCubit>().update(true);
-    //     _init();
-    //   });
-    // }
+    if (widget.latLng == null && await Permission.notification.isGranted) {
+      await FirebaseMessageService().startService();
+    }
   }
 
   Future<void> _init() async {
