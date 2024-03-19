@@ -185,8 +185,6 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
       } else {
         if (Global.instance.user != null && authUser != null) {
           getExitsUser(authUser.uid);
-        } else {
-          context.router.replaceAll([const CreateUsernameRoute()]);
         }
       }
     }

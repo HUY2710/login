@@ -30,43 +30,45 @@ class AuthClient {
     return userCredential;
   }
 
-  Future<UserCredential> signWithGoogle() async {
+  Future<UserCredential?> signWithGoogle() async {
     final GoogleSignIn googleSignIn =
         GoogleSignIn(scopes: ['profile', 'email']);
 
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();
-
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount!.authentication;
-
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      idToken: googleSignInAuthentication.idToken,
-      accessToken: googleSignInAuthentication.accessToken,
-    );
-    return auth.signInWithCredential(credential);
+    if (googleSignInAccount != null) {
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleSignInAuthentication.idToken,
+        accessToken: googleSignInAuthentication.accessToken,
+      );
+      return auth.signInWithCredential(credential);
+    } else {
+      GoogleSignIn().disconnect();
+      return null;
+    }
   }
 
-  Future<UserCredential> signInWithFacebook() async {
+  Future<UserCredential?> signInWithFacebook() async {
     final loginResult = await FacebookAuth.instance.login();
 
     switch (loginResult.status) {
       case LoginStatus.success:
-        final accessToken = loginResult.accessToken!;
-
-        return FirebaseAuth.instance.signInWithCredential(
-          FacebookAuthProvider.credential(accessToken.token),
-        );
+        final accessToken = loginResult.accessToken;
+        if (accessToken != null) {
+          return FirebaseAuth.instance.signInWithCredential(
+            FacebookAuthProvider.credential(accessToken.token),
+          );
+        }
 
       case LoginStatus.cancelled:
-        throw FirebaseAuthException(
-          code: 'ERROR_FACEBOOK_LOGIN_FAILED',
-          message: loginResult.message,
-        );
+        return null;
       case LoginStatus.failed:
       case LoginStatus.operationInProgress:
         throw UnimplementedError('Login Status is not implemented yet.');
     }
+    return null;
   }
 
   Future<UserCredential> signInWithApple() async {

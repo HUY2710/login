@@ -5,7 +5,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.5 <4.0.0'
+  sdk: '>=3.2.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -43,7 +43,7 @@ dependencies:
     git:
 #      url: https://bitbucket.org/innofyapp/flutter_ads.git
       #  url: https://soncm1220@bitbucket.org/innofyapp/flutter_ads.git
-      url: https://KyLQ@bitbucket.org/innofyapp/flutter_ads.git
+      url: https://huytmvtn@bitbucket.org/innofyapp/flutter_ads.git
   device_info_plus: ^9.0.3
   hydrated_bloc: ^9.1.2
   path_provider: ^2.1.1

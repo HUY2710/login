@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,9 +12,7 @@ import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
-import '../../../data/remote/firestore_client.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../global/global.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../home/cubit/banner_collapse_cubit.dart';
@@ -154,7 +151,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
 
   Widget buildSOS() {
     return GestureDetector(
-      onTap: () async {
+      onTap: () {
         context.pushRoute(const SosRoute());
       },
       child: Image.asset(

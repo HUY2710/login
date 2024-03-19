@@ -40,6 +40,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen>
 
   Future<void> navigateToNextScreen() async {
     SharedPreferencesManager.saveIsStarted(false);
+    print(Global.instance.user);
 
     if (mounted) {
       if (Global.instance.user != null) {
