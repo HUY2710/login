@@ -98,7 +98,6 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
         }
       });
     } else {
-      print(FirebaseAuth.instance.currentUser?.uid);
       await FirestoreClient.instance.updateUser(
           {'uid': FirebaseAuth.instance.currentUser?.uid}).then((value) async {
         if (Global.instance.user?.userName == '') {
@@ -149,17 +148,6 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
     final authUser = FirebaseAuth.instance.currentUser;
     await SharedPreferencesManager.saveIsStarted(false);
     if (mounted) {
-      // final snapShotGroups = await CollectionStore.users
-      //     .doc(Global.instance.user?.code)
-      //     .collection(CollectionStoreConstant.myGroups)
-      //     .get();
-      // if (snapShotGroups.docs.isNotEmpty) {
-      //   final group = await FirestoreClient.instance
-      //       .getDetailGroup(snapShotGroups.docs.first.id);
-      //   getIt<SelectGroupCubit>().update(group);
-      // }
-
-      // ignore: use_build_context_synchronously
       if (context.read<JoinAnonymousCubit>().state) {
         if (Global.instance.user?.uid == null) {
           final String? userCode = await SharedPreferencesManager.getString(
@@ -195,8 +183,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
         if (Global.instance.user != null && authUser != null) {
           getExitsUser(authUser.uid);
         } else {
-          print('OMG ${FirebaseAuth.instance.currentUser}');
-          // context.replaceRoute(const CreateUsernameRoute());
+          context.replaceRoute(const CreateUsernameRoute());
         }
       }
     }

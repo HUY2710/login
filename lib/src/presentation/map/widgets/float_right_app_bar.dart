@@ -155,11 +155,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
   Widget buildSOS() {
     return GestureDetector(
       onTap: () async {
-        // context.pushRoute(const SosRoute());
-        // print(FirebaseAuth.instance.currentUser);
-        // print(Global.instance.user);
-
-        print(Global.instance.user);
+        context.pushRoute(const SosRoute());
       },
       child: Image.asset(
         Assets.images.sosBtn.path,

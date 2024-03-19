@@ -49,7 +49,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen>
           // ignore: use_build_context_synchronously
           context.replaceRoute(const CreateUsernameRoute());
         } else if (Global.instance.user?.userName != '' &&
-            listMyGroups.isNotEmpty) {
+            listMyGroups.isEmpty) {
           // ignore: use_build_context_synchronously
           context.replaceRoute(CreateGroupNameRoute());
         } else {
