@@ -8,7 +8,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:camera/camera.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +48,6 @@ import '../../shared/mixin/permission_mixin.dart';
 import '../../shared/widgets/loading/loading_indicator.dart';
 import '../chat/widgets/chat_detail/camera_screen.dart';
 import '../map/cubit/select_group_cubit.dart';
-import '../sign_in/cubit/authen_cubit.dart';
 import 'update_dialog.dart';
 
 @RoutePage()
