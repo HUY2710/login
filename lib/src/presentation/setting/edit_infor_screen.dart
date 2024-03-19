@@ -39,6 +39,7 @@ import '../../shared/helpers/valid_helper.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
 import '../../shared/widgets/custom_appbar.dart';
 import '../create/widgets/gender_switch.dart';
+import '../map/cubit/select_group_cubit.dart';
 import '../sign_in/cubit/authen_cubit.dart';
 import '../sign_in/cubit/join_anonymous_cubit.dart';
 
@@ -243,6 +244,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                       context.read<AuthCubit>().loggedOut();
                       GoogleSignIn().disconnect();
                       FirebaseAuth.instance.signOut().then((value) {
+                        getIt<SelectGroupCubit>().update(null);
                         StoreUser? storeUser;
                         addNewUser(storeUser: storeUser);
                         context.router.replaceAll([const SignInRoute()]);
@@ -282,6 +284,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
         padding: const EdgeInsets.all(17),
         child: GestureDetector(
           onTap: () {
+            getIt<SelectGroupCubit>().update(null);
             if (context.read<JoinAnonymousCubit>().state) {
               context.read<AuthCubit>().loggedOut();
               CollectionStore.users.doc(Global.instance.user?.code).delete();

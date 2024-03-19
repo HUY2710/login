@@ -112,7 +112,7 @@ class _CreateGroupNameScreenState extends State<CreateGroupNameScreen> {
                   title: context.l10n.continueText,
                   isEnable: state.trimLeft().trimRight().isNotEmpty,
                   onTap: () {
-                    Global.instance.group = StoreGroup(
+                    Global.instance.group ??= StoreGroup(
                       idGroup: 24.randomString(),
                       passCode: 6.randomUpperCaseString().toUpperCase(),
                       groupName: ValidHelper.removeExtraSpaces(state),
@@ -123,9 +123,8 @@ class _CreateGroupNameScreenState extends State<CreateGroupNameScreen> {
                         sentAt: DateTime.now().toIso8601String(),
                       ),
                     );
-                    setState(() {});
+
                     debugPrint('GroupGlobal:${Global.instance.group}');
-                    print(Global.instance.group);
 
                     context.pushRoute(CreateGroupAvatarRoute());
                   },
