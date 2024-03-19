@@ -8,6 +8,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../config/di/di.dart';
 import '../../../data/local/secure_storage_manager.dart';
+import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/remote/auth_client.dart';
 part 'sign_in_state.dart';
 part 'sign_in_cubit.freezed.dart';
@@ -78,6 +79,7 @@ class SignInCubit extends Cubit<SignInState> {
     emit(state.copyWith(signInStatus: SignInStatus.loading));
     try {
       userCredential = await getIt<AuthClient>().signWithGoogle();
+      await SharedPreferencesManager.setIsLogin(true);
       emit(state.copyWith(
         signInStatus: SignInStatus.success,
       ));
@@ -133,6 +135,7 @@ class SignInCubit extends Cubit<SignInState> {
     emit(state.copyWith(signInStatus: SignInStatus.loading));
     try {
       userCredential = await getIt<AuthClient>().signInWithApple();
+
       emit(state.copyWith(
         signInStatus: SignInStatus.success,
       ));

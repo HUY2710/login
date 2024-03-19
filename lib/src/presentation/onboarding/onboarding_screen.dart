@@ -42,7 +42,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
   Future<void> navigateToNextScreen() async {
     await SharedPreferencesManager.saveIsFirstLaunch(false);
     if (context.mounted) {
-      context.replaceRoute(const AuthLoginRoute());
+      context.replaceRoute(const SignInRoute());
     }
     return;
   }

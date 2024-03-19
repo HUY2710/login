@@ -213,8 +213,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
               );
             }
           } else if (state.signInStatus == SignInStatus.success) {
-            hideLoading();
-            navigateToNextScreen();
+            navigateToNextScreen().then((value) => hideLoading());
           } else if (state.signInStatus == SignInStatus.loading) {
             showLoading();
           }

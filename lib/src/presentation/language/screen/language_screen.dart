@@ -18,8 +18,6 @@ import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/language.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/mixin/permission_mixin.dart';
-import '../../sign_in/cubit/authen_cubit.dart';
-import '../../sign_in/cubit/authen_state.dart';
 
 @RoutePage()
 class LanguageScreen extends StatefulWidget {
@@ -131,12 +129,9 @@ class _LanguageScreenState extends State<LanguageScreen> with PermissionMixin {
           }
 
           //nếu lần thứ 2 trở lên và chưa login
-          final isLogin = await SharedPreferencesManager.isLogin(); //anonymous
-          if (!isLogin &&
-              context.mounted &&
-              context.read<AuthCubit>().state == Unauthenticated() &&
-              !isFirstLaunch) {
-            context.replaceRoute(const AuthLoginRoute());
+          final isLogin = await SharedPreferencesManager.isLogin();
+          if (!isLogin && !isFirstLaunch && context.mounted) {
+            context.replaceRoute(const SignInRoute());
             return;
           }
 

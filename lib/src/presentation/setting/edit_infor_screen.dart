@@ -256,10 +256,14 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                               onTapButton1: () {
                                 context.read<AuthCubit>().loggedOut();
                                 GoogleSignIn().disconnect();
-                                FirebaseAuth.instance.signOut().then((value) {
+                                FirebaseAuth.instance
+                                    .signOut()
+                                    .then((value) async {
                                   getIt<SelectGroupCubit>().update(null);
                                   StoreUser? storeUser;
                                   addNewUser(storeUser: storeUser);
+                                  await SharedPreferencesManager.setIsLogin(
+                                      false);
                                   context.popRoute();
                                   context.router
                                       .replaceAll([const SignInRoute()]);

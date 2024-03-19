@@ -132,4 +132,13 @@ class SharedPreferencesManager {
   static Future<void> setIsLogin(bool value) async {
     (await _preference).setBool(PreferenceKeys.isLogin.name, value);
   }
+
+  static Future<bool> isLoginAnonymous() async {
+    return (await _preference).getBool(PreferenceKeys.isLoginAnonymous.name) ??
+        false;
+  }
+
+  static Future<void> setIsLoginAnonymous(bool value) async {
+    (await _preference).setBool(PreferenceKeys.isLoginAnonymous.name, value);
+  }
 }

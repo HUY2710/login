@@ -15,4 +15,5 @@ enum PreferenceKeys {
   fcmToken,
   isLogin,
   isLoginGoogle,
+  isLoginAnonymous
 }
