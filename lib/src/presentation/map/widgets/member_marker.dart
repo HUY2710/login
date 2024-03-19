@@ -158,7 +158,7 @@ class _BuildMarkerState extends State<BuildMarker> {
     return Stack(
       children: [
         if (sos)
-          Assets.images.markers.sosMarkerBg
+          Assets.images.markers.sosBgMarker
               .image(width: 150.r, gaplessPlayback: true)
         else
           Assets.images.markers.markerBg
@@ -202,15 +202,6 @@ class _BuildMarkerState extends State<BuildMarker> {
           alignment: Alignment.topCenter,
         ),
       ),
-    );
-  }
-
-  Widget _buildActivity() {
-    return Image.asset(
-      Assets.images.markers.car.path,
-      height: 60.r,
-      width: 60.r,
-      gaplessPlayback: true,
     );
   }
 

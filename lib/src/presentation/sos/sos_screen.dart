@@ -49,7 +49,6 @@ class _SosScreenState extends State<SosScreen> {
         } else {
           getIt<SosCubit>().toggle();
           FirebaseMessageService().sendSOS(context);
-
           timer.cancel();
         }
       });
@@ -68,11 +67,11 @@ class _SosScreenState extends State<SosScreen> {
                 title: state
                     ? context.l10n.cancel
                     : '${context.l10n.cancel} ${context.l10n.alert}',
-                onTap: () {
+                onTap: () async {
                   //đang bật sos => tắt sos
                   if (state) {
                     //tiến hành hủy sos
-                    getIt<SosCubit>().toggle();
+                    await getIt<SosCubit>().toggle();
                   }
                   //sos tắt thì back về
                   context.popRoute();

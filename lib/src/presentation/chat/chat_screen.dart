@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../app/cubit/language_cubit.dart';
 import '../../../module/admob/widget/ads/build_banner_ad.dart';
@@ -20,7 +21,6 @@ import '../../shared/widgets/custom_inkwell.dart';
 import 'cubits/group_cubit.dart';
 import 'cubits/group_state.dart';
 import 'cubits/search_group_cubit.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 part 'widgets/chat_group_empty.dart';
 part 'widgets/group_item.dart';

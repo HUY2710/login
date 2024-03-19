@@ -11,6 +11,7 @@ import '../config/di/di.dart';
 import '../data/remote/firestore_client.dart';
 import '../global/global.dart';
 import '../presentation/home/cubit/steps_cubit.dart';
+import '../presentation/map/cubit/my_marker_cubit.dart';
 
 class ActivityRecognitionService {
   ActivityRecognitionService._privateConstructor();
@@ -51,6 +52,7 @@ class ActivityRecognitionService {
         oldActivity = activityTemp;
         Global.instance.user = Global.instance.user
             ?.copyWith(activityType: oldActivity ?? 'STILL');
+        getIt<MyMarkerCubit>().update(Global.instance.user);
         _firestoreClient.updateUser({'activityType': oldActivity});
       }
     });

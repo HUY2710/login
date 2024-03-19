@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../flavors.dart';
@@ -73,12 +74,13 @@ class _CustomMapState extends State<CustomMap> {
             return places.map((StorePlace place) => _buildPlaceMarker(place));
           },
         ),
-        if (getIt<SelectGroupCubit>().state == null)
-          Marker(
-            position: Global.instance.currentLocation,
-            markerId: MarkerId(Global.instance.user?.code ?? ''),
-            icon: Global.instance.myMarker ?? BitmapDescriptor.defaultMarker,
-          )
+
+        Marker(
+          visible: widget.marker != null,
+          position: Global.instance.currentLocation,
+          markerId: MarkerId(Global.instance.user?.code ?? ''),
+          icon: widget.marker??BitmapDescriptor.defaultMarker,
+        ),
       },
       circles: <Circle>{
         ...widget.trackingPlacesState.maybeWhen(
@@ -170,14 +172,14 @@ class _CustomMapState extends State<CustomMap> {
   Marker _buildFriendMarker(StoreUser user) {
     final double lat = user.location?.lat ?? 0;
     final double lng = user.location?.lng ?? 0;
-    if (user.code == Global.instance.user?.code && user.marker != null) {
-      Global.instance.myMarker = BitmapDescriptor.fromBytes(
-        user.marker!,
-        size: const Size.fromWidth(30),
+    if (user.code == Global.instance.user?.code) {
+      return const Marker(
+        markerId: MarkerId(''),
+        visible: false,
       );
     }
+
     return Marker(
-        // anchor: const Offset(0.5, 0.72),
         position: user.code == Global.instance.user?.code
             ? Global.instance.currentLocation
             : LatLng(lat, lng),
