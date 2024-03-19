@@ -119,7 +119,7 @@ mixin PermissionMixin {
   Future<bool> requestNotification() async {
     final PermissionStatus notificationStatus =
         await Permission.notification.request();
-    if (notificationStatus.isPermanentlyDenied) {
+    if (notificationStatus.isPermanentlyDenied || notificationStatus.isDenied) {
       await AppSettings.openAppSettings(type: AppSettingsType.notification);
       return notificationStatus.isGranted;
     }

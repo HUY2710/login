@@ -146,8 +146,12 @@ class MapScreenState extends State<MapScreen>
         _init();
       });
     }
-    if (widget.latLng == null && await Permission.notification.isGranted) {
-      await FirebaseMessageService().startService();
+
+    if (widget.latLng == null) {
+      await FirebaseMessageService().initNotification();
+      if (await Permission.notification.isGranted) {
+        await FirebaseMessageService().startService();
+      }
     }
   }
 
