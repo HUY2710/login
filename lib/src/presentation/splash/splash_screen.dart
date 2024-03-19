@@ -48,6 +48,8 @@ import '../../shared/mixin/permission_mixin.dart';
 import '../../shared/widgets/loading/loading_indicator.dart';
 import '../chat/widgets/chat_detail/camera_screen.dart';
 import '../map/cubit/select_group_cubit.dart';
+import '../sign_in/cubit/authen_cubit.dart';
+import '../sign_in/cubit/authen_state.dart';
 import 'update_dialog.dart';
 
 @RoutePage()
@@ -294,12 +296,24 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> getMe() async {
     final String? userCode =
         await SharedPreferencesManager.getString(PreferenceKeys.userCode.name);
+    final isLogin = await SharedPreferencesManager.isLogin();
     StoreUser? storeUser;
-    if (userCode == null) {
+    if (userCode == null && !isLogin) {
       storeUser = await addNewUser(storeUser: storeUser);
-    } else {
-      storeUser = await FirestoreClient.instance.getUser(userCode);
     }
+
+    //trường hợp login anonymous || Social  media
+    if (userCode != null && isLogin ||
+        userCode != null &&
+            context.mounted &&
+            context.read<AuthCubit>().state == Authenticated()) {
+      storeUser = await FirestoreClient.instance.getUser(userCode);
+    } else {
+      if (userCode != null && !isLogin) {
+        storeUser = await addNewUser(storeUser: storeUser);
+      }
+    }
+
     Global.instance.user = storeUser;
     getIt<MyBackgroundService>().initSubAndUnSubTopic();
     final location = await FirestoreClient.instance.getLocation();

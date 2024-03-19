@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../../app/cubit/loading_cubit.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
@@ -38,14 +39,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
-  TextEditingController controllerEmail = TextEditingController();
-  TextEditingController controllerPassword = TextEditingController();
-
   @override
   void dispose() {
-    controllerEmail.dispose();
-    controllerPassword.dispose();
-
     super.dispose();
   }
 
@@ -95,27 +90,32 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
           }
         }
       });
-    } else {
-      await FirestoreClient.instance.updateUser(
-          {'uid': FirebaseAuth.instance.currentUser?.uid}).then((value) async {
-        if (Global.instance.user?.userName == '') {
-          // ignore: use_build_context_synchronously
-          context.replaceRoute(const CreateUsernameRoute());
-        } else {
-          final bool statusLocation = await checkPermissionLocation().isGranted;
-          if (!statusLocation && context.mounted) {
-            context.replaceRoute(PermissionRoute(fromMapScreen: false));
-            return;
-          } else if (context.mounted) {
-            final showGuide = await SharedPreferencesManager.getGuide();
-            if (showGuide && context.mounted) {
-              context.replaceRoute(const GuideRoute());
-            } else if (context.mounted) {
-              context.replaceRoute(PremiumRoute(fromStart: true));
-            }
-          }
-        }
-      });
+      return;
+    }
+
+    await FirestoreClient.instance
+        .updateUser({'uid': FirebaseAuth.instance.currentUser?.uid});
+
+    if (Global.instance.user?.userName == '' && context.mounted) {
+      context.replaceRoute(const CreateUsernameRoute());
+      return;
+    }
+    final bool statusPermission = await checkAllPermission();
+    if (!statusPermission && context.mounted) {
+      context.replaceRoute(PermissionRoute(fromMapScreen: false));
+      return;
+    }
+
+    //check xem app này đã từng show guide chưa
+    final showGuide = await SharedPreferencesManager.getGuide();
+    if (showGuide && context.mounted) {
+      context.replaceRoute(const GuideRoute());
+      return;
+    }
+    //nếu pass tất cả màn trên thì đến màn premium
+    if (context.mounted) {
+      context.replaceRoute(PremiumRoute(fromStart: true));
+      return;
     }
   }
 
@@ -213,8 +213,11 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
               );
             }
           } else if (state.signInStatus == SignInStatus.success) {
+            hideLoading();
             navigateToNextScreen();
-          } else if (state.signInStatus == SignInStatus.loading) {}
+          } else if (state.signInStatus == SignInStatus.loading) {
+            showLoading();
+          }
         },
         child: Stack(
           children: [
@@ -278,8 +281,6 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
                         logo: Assets.icons.login.icApple.path,
                         title: context.l10n.continueWithApple,
                       )
-                    else
-                      const SizedBox.shrink(),
                   ],
                 ),
               ),

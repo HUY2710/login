@@ -49,7 +49,6 @@ class _SosScreenState extends State<SosScreen> {
         } else {
           getIt<SosCubit>().toggle();
           FirebaseMessageService().sendSOS(context);
-
           timer.cancel();
         }
       });
@@ -68,11 +67,11 @@ class _SosScreenState extends State<SosScreen> {
                 title: state
                     ? context.l10n.cancel
                     : '${context.l10n.cancel} ${context.l10n.alert}',
-                onTap: () {
+                onTap: () async {
                   //đang bật sos => tắt sos
                   if (state) {
                     //tiến hành hủy sos
-                    getIt<SosCubit>().toggle();
+                    await getIt<SosCubit>().toggle();
                   }
                   //sos tắt thì back về
                   context.popRoute();
@@ -103,38 +102,57 @@ class _SosScreenState extends State<SosScreen> {
               BlocBuilder<SosCubit, bool>(
                 bloc: getIt<SosCubit>(),
                 builder: (context, state) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (!state)
+                  return SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 100.r,
+                          width: 100.r,
+                          child: !state
+                              ? Center(
+                                  child: Text(
+                                    '$_countdown',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 30.sp,
+                                      fontWeight: FontWeight.w500,
+                                      color: MyColors.primary,
+                                    ),
+                                  ),
+                                )
+                              : Assets.lottie.sosCheck.lottie(
+                                  fit: BoxFit.fill,
+                                  repeat: false,
+                                ),
+                        ),
                         Text(
-                          '$_countdown',
+                          state
+                              ? context.l10n.sosHasSent
+                              : context.l10n.sosTitle,
                           style: TextStyle(
-                            fontSize: 32.sp,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
-                            color: MyColors.primary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        10.verticalSpace,
+                        SizedBox(
+                          height: 70.h,
+                          child: Text(
+                            state
+                                ? context.l10n.sosSend2
+                                : context.l10n.sosSend1,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: const Color(0xff9E9E9E),
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
-                      10.verticalSpace,
-                      Text(
-                        state ? context.l10n.sosHasSent : context.l10n.sosTitle,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      10.verticalSpace,
-                      Text(
-                        state ? context.l10n.sosSend2 : context.l10n.sosSend1,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: const Color(0xff9E9E9E),
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 },
               ),

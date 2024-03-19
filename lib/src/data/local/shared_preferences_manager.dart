@@ -124,4 +124,12 @@ class SharedPreferencesManager {
   static Future<String> getFCMToken() async {
     return (await _preference).getString(PreferenceKeys.fcmToken.name) ?? '';
   }
+
+  static Future<bool> isLogin() async {
+    return (await _preference).getBool(PreferenceKeys.isLogin.name) ?? false;
+  }
+
+  static Future<void> setIsLogin(bool value) async {
+    (await _preference).setBool(PreferenceKeys.isLogin.name, value);
+  }
 }

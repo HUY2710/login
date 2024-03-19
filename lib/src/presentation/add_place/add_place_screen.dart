@@ -29,7 +29,6 @@ import '../../shared/widgets/custom_appbar.dart';
 import '../../shared/widgets/text_field/main_text_form_field.dart';
 import '../map/cubit/map_type_cubit.dart';
 import '../map/cubit/select_group_cubit.dart';
-import '../onboarding/widgets/app_button.dart';
 import '../place/cubit/default_places_cubit.dart';
 import '../place/cubit/select_place_cubit.dart';
 

@@ -1,7 +1,6 @@
 # custom
 assets/ad_unit_id/prod/
 
-
 # Miscellaneous
 *.class
 *.lock
@@ -134,5 +133,7 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 
 # fvm
-.fvm/flutter_sdk
 .tmp
+
+# FVM Version Cache
+.fvm/

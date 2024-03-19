@@ -39,19 +39,16 @@ class _AuthLoginScreenState extends State<AuthLoginScreen>
   }
 
   Future<void> navigateToNextScreen() async {
-    // final authUser = FirebaseAuth.instance.currentUser;
-
-    await SharedPreferencesManager.saveIsStarted(false);
+    SharedPreferencesManager.saveIsStarted(false);
+    print(Global.instance.user);
 
     if (mounted) {
       if (Global.instance.user != null) {
         if (Global.instance.user?.userName == '') {
-          // ignore: use_build_context_synchronously
           context.replaceRoute(const CreateUsernameRoute());
         } else if (Global.instance.user?.userName != '' &&
             listMyGroups.isEmpty) {
-          // ignore: use_build_context_synchronously
-          context.replaceRoute(CreateGroupNameRoute());
+          context.replaceRoute(const CreateGroupNameRoute());
         } else {
           final bool statusLocation = await checkPermissionLocation().isGranted;
           if (!statusLocation && context.mounted) {
