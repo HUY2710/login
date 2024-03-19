@@ -151,7 +151,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
 
   Widget buildSOS() {
     return GestureDetector(
-      onTap: () async {
+      onTap: () {
         context.pushRoute(const SosRoute());
       },
       child: Image.asset(

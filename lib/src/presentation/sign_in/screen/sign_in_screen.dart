@@ -180,8 +180,6 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
       } else {
         if (Global.instance.user != null && authUser != null) {
           getExitsUser(authUser.uid);
-        } else {
-          context.replaceRoute(const CreateUsernameRoute());
         }
       }
     }

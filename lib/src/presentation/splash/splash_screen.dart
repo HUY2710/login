@@ -296,24 +296,13 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> getMe() async {
     final String? userCode =
         await SharedPreferencesManager.getString(PreferenceKeys.userCode.name);
-    final isLogin = await SharedPreferencesManager.isLogin();
+
     StoreUser? storeUser;
-    if (userCode == null && !isLogin) {
+    if (userCode == null) {
       storeUser = await addNewUser(storeUser: storeUser);
-    }
-
-    //trường hợp login anonymous || Social  media
-    if (userCode != null && isLogin ||
-        userCode != null &&
-            context.mounted &&
-            context.read<AuthCubit>().state == Authenticated()) {
-      storeUser = await FirestoreClient.instance.getUser(userCode);
     } else {
-      if (userCode != null && !isLogin) {
-        storeUser = await addNewUser(storeUser: storeUser);
-      }
+      storeUser = await FirestoreClient.instance.getUser(userCode);
     }
-
     Global.instance.user = storeUser;
     getIt<MyBackgroundService>().initSubAndUnSubTopic();
     final location = await FirestoreClient.instance.getLocation();
