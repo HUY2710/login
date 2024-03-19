@@ -242,8 +242,11 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                     onTap: () {
                       context.read<AuthCubit>().loggedOut();
                       GoogleSignIn().disconnect();
-                      FirebaseAuth.instance.signOut().then((value) =>
-                          context.router.replaceAll([const SignInRoute()]));
+                      FirebaseAuth.instance.signOut().then((value) {
+                        StoreUser? storeUser;
+                        addNewUser(storeUser: storeUser);
+                        context.router.replaceAll([const SignInRoute()]);
+                      });
                     },
                     child: Row(
                       children: [
@@ -295,7 +298,6 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                 GoogleSignIn().disconnect();
               }
 
-              FirebaseAuth.instance.currentUser!.delete();
               CollectionStore.users.doc(Global.instance.user?.code).delete();
 
               StoreUser? storeUser;

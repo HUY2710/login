@@ -13,6 +13,7 @@ import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_user/store_user.dart';
+import '../../../data/remote/firestore_client.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../../../shared/constants/app_constants.dart';
@@ -158,7 +159,7 @@ class _FloatRightAppBarState extends State<FloatRightAppBar> {
         // print(FirebaseAuth.instance.currentUser);
         // print(Global.instance.user);
 
-        print(Global.instance.group);
+        print(Global.instance.user);
       },
       child: Image.asset(
         Assets.images.sosBtn.path,

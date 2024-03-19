@@ -115,8 +115,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
               child: BlocBuilder<ValueCubit<int>, int>(
                 builder: (context, currentIndex) => ActionRow(
                   pageController: _pageController,
-                  onStartedTap: () {
-                    context.pushRoute(const AuthLoginRoute());
+                  onStartedTap: () async {
+                    final isLogin = await SharedPreferencesManager.getIsLogin();
+
+                    if (isLogin) {
+                      context
+                          .read<JoinAnonymousCubit>()
+                          .setJoinAnonymousCubit(true);
+                      navigateToNextScreen();
+                    } else {
+                      context.pushRoute(const AuthLoginRoute());
+                    }
                   },
                 ),
               ),

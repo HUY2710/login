@@ -62,6 +62,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
   Future<void> getExitsUser(String uid) async {
     final result =
         await CollectionStore.users.where('uid', isEqualTo: uid).limit(1).get();
+
     if (result.docs.isNotEmpty) {
       // Lấy document đầu tiên từ QuerySnapshot
       final QueryDocumentSnapshot<Map<String, dynamic>> document =
@@ -70,29 +71,35 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
       // Lấy dữ liệu từ Firestore và chuyển đổi thành đối tượng StoreGroup
       StoreUser storeUser = StoreUser.fromJson(document.data());
       // Lấy documentId
-      final String documentId = document.id;
 
-      //set id cho local
-      storeUser = storeUser.copyWith(uid: documentId);
+      storeUser =
+          storeUser.copyWith(uid: FirebaseAuth.instance.currentUser?.uid);
       Global.instance.user = storeUser;
+
       await SharedPreferencesManager.setString(
               PreferenceKeys.userCode.name, Global.instance.user!.code)
           .then((value) async {
-        final bool statusLocation = await checkPermissionLocation().isGranted;
-        if (!statusLocation && context.mounted) {
-          context.replaceRoute(PermissionRoute(fromMapScreen: false));
-          return;
-        } else if (context.mounted) {
-          final showGuide = await SharedPreferencesManager.getGuide();
-          if (showGuide && context.mounted) {
-            context.replaceRoute(const GuideRoute());
+        if (Global.instance.user?.userName == null ||
+            Global.instance.user?.userName == '') {
+          context.replaceRoute(const CreateUsernameRoute());
+        } else {
+          final bool statusLocation = await checkPermissionLocation().isGranted;
+          if (!statusLocation && context.mounted) {
+            context.replaceRoute(PermissionRoute(fromMapScreen: false));
+            return;
           } else if (context.mounted) {
-            context.replaceRoute(PremiumRoute(fromStart: true));
+            final showGuide = await SharedPreferencesManager.getGuide();
+            if (showGuide && context.mounted) {
+              context.replaceRoute(const GuideRoute());
+            } else if (context.mounted) {
+              context.replaceRoute(PremiumRoute(fromStart: true));
+            }
           }
         }
       });
     } else {
-      FirestoreClient.instance.updateUser(
+      print(FirebaseAuth.instance.currentUser?.uid);
+      await FirestoreClient.instance.updateUser(
           {'uid': FirebaseAuth.instance.currentUser?.uid}).then((value) async {
         if (Global.instance.user?.userName == '') {
           // ignore: use_build_context_synchronously
@@ -142,17 +149,17 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
     final authUser = FirebaseAuth.instance.currentUser;
     await SharedPreferencesManager.saveIsStarted(false);
     if (mounted) {
-      final snapShotGroups = await CollectionStore.users
-          .doc(Global.instance.user?.code)
-          .collection(CollectionStoreConstant.myGroups)
-          .get();
-      if (snapShotGroups.docs.isNotEmpty) {
-        final group = await FirestoreClient.instance
-            .getDetailGroup(snapShotGroups.docs.first.id);
-        getIt<SelectGroupCubit>().update(group);
-      }
+      // final snapShotGroups = await CollectionStore.users
+      //     .doc(Global.instance.user?.code)
+      //     .collection(CollectionStoreConstant.myGroups)
+      //     .get();
+      // if (snapShotGroups.docs.isNotEmpty) {
+      //   final group = await FirestoreClient.instance
+      //       .getDetailGroup(snapShotGroups.docs.first.id);
+      //   getIt<SelectGroupCubit>().update(group);
+      // }
 
-      // print('OMG ${group?.groupName}');
+      // ignore: use_build_context_synchronously
       if (context.read<JoinAnonymousCubit>().state) {
         if (Global.instance.user?.uid == null) {
           final String? userCode = await SharedPreferencesManager.getString(
@@ -181,8 +188,6 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
           await FirebaseAuth.instance.signOut();
           StoreUser? storeUser;
           addNewUser(storeUser: storeUser).then((value) {
-            Global.instance.user = storeUser;
-
             context.replaceRoute(const CreateUsernameRoute());
           });
         }
@@ -223,11 +228,8 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
               );
             }
           } else if (state.signInStatus == SignInStatus.success) {
-            EasyLoading.dismiss();
             navigateToNextScreen();
-          } else if (state.signInStatus == SignInStatus.loading) {
-            EasyLoading.show();
-          }
+          } else if (state.signInStatus == SignInStatus.loading) {}
         },
         child: Stack(
           children: [

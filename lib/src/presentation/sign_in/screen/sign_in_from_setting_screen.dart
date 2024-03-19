@@ -21,7 +21,6 @@ import '../../../shared/extension/context_extension.dart';
 import '../../../shared/mixin/permission_mixin.dart';
 import '../../../shared/utils/toast_utils.dart';
 import '../../../shared/widgets/custom_appbar.dart';
-import '../cubit/authen_cubit.dart';
 import '../cubit/join_anonymous_cubit.dart';
 import '../cubit/sign_in_cubit.dart';
 import '../widgets/item_sign_in.dart';
