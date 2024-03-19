@@ -8,6 +8,7 @@ import '../../../data/models/store_message/store_message.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../data/remote/collection_store.dart';
 import '../../../data/remote/group_manager.dart';
+import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../../../services/firebase_message_service.dart';
 import '../../../services/location_service.dart';
@@ -213,6 +214,11 @@ class ChatService {
   Stream<QuerySnapshot<MessageModel>> streamMessageGroup(
       String idGroup, List<StoreUser> listUser) {
     late Stream<QuerySnapshot<MessageModel>> result;
+    final storeUserDelete = StoreUser(
+        code: '',
+        avatarUrl: Assets.images.markers.profileMaker.path,
+        userName: 'Deleted Account',
+        batteryLevel: 100);
     try {
       result = CollectionStore.chat
           .doc(idGroup)
@@ -223,17 +229,19 @@ class ChatService {
                 MessageModel message = MessageModel.fromJson(snapshot.data()!);
                 message = message.copyWith(
                     avatarUrl: listUser
-                        .firstWhere((user) => user.code == message.senderId)
+                        .firstWhere((user) => user.code == message.senderId,
+                            orElse: () => storeUserDelete)
                         .avatarUrl,
                     userName: listUser
-                        .firstWhere((user) => user.code == message.senderId)
+                        .firstWhere((user) => user.code == message.senderId,
+                            orElse: () => storeUserDelete)
                         .userName);
                 return message;
               },
               toFirestore: (message, _) => message.toJson())
           .snapshots();
     } catch (e) {
-      logger.e('ERRROE stream mess $e');
+      logger.e('ERROR stream mess $e');
     }
     return result;
   }

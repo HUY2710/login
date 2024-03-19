@@ -11,6 +11,7 @@ import '../../../../../config/di/di.dart';
 import '../../../../../config/navigation/app_router.dart';
 import '../../../../../data/models/store_group/store_group.dart';
 import '../../../../../data/models/store_member/store_member.dart';
+import '../../../../../data/remote/chat_manager.dart';
 import '../../../../../data/remote/firestore_client.dart';
 import '../../../../../data/remote/token_manager.dart';
 import '../../../../../gen/assets.gen.dart';
@@ -123,6 +124,7 @@ class ActionGroupBottomSheet extends StatelessWidget {
                         //delete group
                         // EasyLoading.show();
                         showLoading();
+                        ChatManager.removeGroupChat(itemGroup.idGroup!);
                         myGroupCubit.deleteGroup(itemGroup).then((value) async {
                           if (itemGroup.idGroup ==
                               getIt<SelectGroupCubit>().state?.idGroup) {

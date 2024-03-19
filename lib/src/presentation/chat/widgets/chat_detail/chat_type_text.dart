@@ -150,23 +150,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
             maxLines: 5,
             decoration: _inputStyle(),
           )),
-          Stack(
-            clipBehavior: Clip.antiAlias,
-            children: [
-              buildButtonCamera(),
-              if (!getIt<MyPurchaseManager>().state.isPremium())
-                Positioned(
-                  right: 0,
-                  child: ShadowContainer(
-                    padding: EdgeInsets.all(4.r),
-                    child: SvgPicture.asset(
-                      Assets.icons.premium.icPremiumSvg.path,
-                      width: 10.r,
-                    ),
-                  ),
-                )
-            ],
-          ),
+          buildButtonCamera(),
           buildButtonGallery(),
         ],
       ),
@@ -223,57 +207,92 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
     );
   }
 
-  IconButton buildButtonGallery() {
-    return IconButton(
-        onPressed: () async {
-          final bool isPremium = getIt<MyPurchaseManager>().state.isPremium();
+  Widget buildButtonGallery() {
+    return Stack(
+      clipBehavior: Clip.antiAlias,
+      children: [
+        IconButton(
+            onPressed: () async {
+              final bool isPremium =
+                  getIt<MyPurchaseManager>().state.isPremium();
 
-          ///TODO: remove !
-          if (!isPremium) {
-            EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
-            final XFile? image = await ImagePicker()
-                .pickImage(source: ImageSource.gallery, imageQuality: 60);
-            if (image != null) {
-              showLoading();
-              final url = await FirebaseStorageClient.instance.uploadImage(
-                  idGroup: widget.idGroup, imageFile: File(image.path));
-              ChatService.instance.sendImage(
-                  content: '',
-                  idGroup: widget.idGroup,
-                  groupName: widget.groupName,
-                  imageUrl: url);
-              hideLoading();
-            }
-          } else {
-            context.pushRoute(PremiumRoute());
-          }
-        },
-        icon: Assets.icons.icGallery.svg(width: 20.r));
+              if (isPremium) {
+                EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
+                final XFile? image = await ImagePicker()
+                    .pickImage(source: ImageSource.gallery, imageQuality: 60);
+                if (image != null) {
+                  showLoading();
+                  final url = await FirebaseStorageClient.instance.uploadImage(
+                      idGroup: widget.idGroup, imageFile: File(image.path));
+                  ChatService.instance.sendImage(
+                      content: '',
+                      idGroup: widget.idGroup,
+                      groupName: widget.groupName,
+                      imageUrl: url);
+                  hideLoading();
+                }
+              } else {
+                context.pushRoute(PremiumRoute());
+              }
+            },
+            icon: Assets.icons.icGallery.svg(width: 20.r)),
+        if (!getIt<MyPurchaseManager>().state.isPremium())
+          Positioned(
+            right: 0,
+            child: ShadowContainer(
+              padding: EdgeInsets.all(4.r),
+              child: SvgPicture.asset(
+                Assets.icons.premium.icPremiumSvg.path,
+                width: 10.r,
+              ),
+            ),
+          )
+      ],
+    );
   }
 
-  IconButton buildButtonCamera() {
-    return IconButton(
-        onPressed: () async {
-          final bool isPremium = getIt<MyPurchaseManager>().state.isPremium();
+  Widget buildButtonCamera() {
+    return Stack(
+      clipBehavior: Clip.antiAlias,
+      children: [
+        IconButton(
+            onPressed: () async {
+              final bool isPremium =
+                  getIt<MyPurchaseManager>().state.isPremium();
 
-          if (!isPremium) {
-            final result = await context.pushRoute(const CameraRoute()) ?? '';
-            if (result != '') {
-              showLoading();
-              final url = await FirebaseStorageClient.instance.uploadImage(
-                  idGroup: widget.idGroup, imageFile: File(result.toString()));
-              ChatService.instance.sendImage(
-                  content: '',
-                  idGroup: widget.idGroup,
-                  groupName: widget.groupName,
-                  imageUrl: url);
-              hideLoading();
-            }
-          } else {
-            context.pushRoute(PremiumRoute());
-          }
-        },
-        icon: Assets.icons.icCameraFill.svg(width: 20.r));
+              if (isPremium) {
+                final result =
+                    await context.pushRoute(const CameraRoute()) ?? '';
+                if (result != '') {
+                  showLoading();
+                  final url = await FirebaseStorageClient.instance.uploadImage(
+                      idGroup: widget.idGroup,
+                      imageFile: File(result.toString()));
+                  ChatService.instance.sendImage(
+                      content: '',
+                      idGroup: widget.idGroup,
+                      groupName: widget.groupName,
+                      imageUrl: url);
+                  hideLoading();
+                }
+              } else {
+                context.pushRoute(PremiumRoute());
+              }
+            },
+            icon: Assets.icons.icCameraFill.svg(width: 20.r)),
+        if (!getIt<MyPurchaseManager>().state.isPremium())
+          Positioned(
+            right: 0,
+            child: ShadowContainer(
+              padding: EdgeInsets.all(4.r),
+              child: SvgPicture.asset(
+                Assets.icons.premium.icPremiumSvg.path,
+                width: 10.r,
+              ),
+            ),
+          )
+      ],
+    );
   }
 
   GestureDetector buildButtonSendLocation() {

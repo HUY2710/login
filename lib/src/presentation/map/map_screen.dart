@@ -21,6 +21,7 @@ import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../data/remote/token_manager.dart';
 import '../../global/global.dart';
+import '../../services/firebase_message_service.dart';
 import '../../services/my_background_service.dart';
 import '../../shared/constants/app_constants.dart';
 import '../../shared/extension/context_extension.dart';
@@ -76,6 +77,7 @@ class MapScreenState extends State<MapScreen>
   @override
   void initState() {
     // context.pushRoute(PremiumRoute(fromStart: true));
+
     EasyAds.instance.initCollapsibleBannerAd();
     WidgetsBinding.instance.addObserver(this);
     FirestoreClient.instance.updateUser({'online': true});
@@ -150,6 +152,13 @@ class MapScreenState extends State<MapScreen>
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
         _init();
       });
+    }
+
+    if (widget.latLng == null) {
+      await FirebaseMessageService().initNotification();
+      if (await Permission.notification.isGranted) {
+        await FirebaseMessageService().startService();
+      }
     }
   }
 

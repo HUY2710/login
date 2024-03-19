@@ -120,7 +120,9 @@ class _PermissionScreenState extends State<PermissionScreen>
 
                     if (state == 2) {
                       final status = await requestNotification();
+
                       if (status) {
+                        FirebaseMessageService().initNotification();
                         await FirebaseMessageService().startService();
                       }
                       notifyCubit.update(status);
