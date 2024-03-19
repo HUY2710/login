@@ -214,12 +214,10 @@
   "send": "Send",
   "sendingPhoto": "Sending photos with exact location",
   "ableToSendPhoto": "Able to send photos with exact location via messaging",
-  "guideSos": "Allows you to quickly alert your friends in case of emergencies or dangerous situations."
-  "send": "Send",
-  "deleteAccount":"Delete account?",
-  "titleDelete":"Are you sure you want to log out? Your infomation will be removed",
-  "yes":"Yes",
-  "no":"No",
-  "titleLogout":"Are you sure you want to log out?"
-
+  "guideSos": "Allows you to quickly alert your friends in case of emergencies or dangerous situations.",
+  "deleteAccount": "Delete account?",
+  "titleDelete": "Are you sure you want to log out? Your infomation will be removed",
+  "yes": "Yes",
+  "no": "No",
+  "titleLogout": "Are you sure you want to log out?"
 }

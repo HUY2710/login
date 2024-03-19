@@ -40,15 +40,10 @@ class AuthClient {
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount!.authentication;
 
-    
-
     final AuthCredential credential = GoogleAuthProvider.credential(
       idToken: googleSignInAuthentication.idToken,
       accessToken: googleSignInAuthentication.accessToken,
     );
-    
-
-    await auth.signInWithCredential(credential);
     return auth.signInWithCredential(credential);
   }
 

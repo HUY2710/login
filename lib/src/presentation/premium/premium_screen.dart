@@ -17,6 +17,7 @@ import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/gradient_background.dart';
 import '../../shared/widgets/custom_inkwell.dart';
 import 'cubit/indicator_cubit.dart';
+import 'widgets/carouse_slider.dart';
 
 @RoutePage()
 class PremiumScreen extends StatefulWidget {

@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../../app/cubit/language_cubit.dart';
 import '../../config/navigation/app_router.dart';
@@ -12,7 +11,6 @@ import '../../shared/cubit/value_cubit.dart';
 import '../../shared/enum/language.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/mixin/permission_mixin.dart';
-import '../sign_in/cubit/join_anonymous_cubit.dart';
 import 'widgets/app_button.dart';
 import 'widgets/indicator.dart';
 import 'widgets/page_widget.dart';
@@ -40,28 +38,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
     super.initState();
   }
 
+  //vì màn onboard chỉ chạy 1 lần
   Future<void> navigateToNextScreen() async {
-    SharedPreferencesManager.saveIsFirstLaunch(false);
-    final isCreateInfoFirstTime =
-        await SharedPreferencesManager.getIsCreateInfoFistTime();
-    if (mounted) {
-      if (isCreateInfoFirstTime) {
-        context.replaceRoute(const CreateUsernameRoute());
-      } else {
-        final bool statusLocation = await checkPermissionLocation().isGranted;
-        if (!statusLocation && context.mounted) {
-          context.replaceRoute(PermissionRoute(fromMapScreen: false));
-          return;
-        } else if (context.mounted) {
-          final showGuide = await SharedPreferencesManager.getGuide();
-          if (showGuide && context.mounted) {
-            context.replaceRoute(const GuideRoute());
-          } else if (context.mounted) {
-            context.replaceRoute(PremiumRoute(fromStart: true));
-          }
-        }
-      }
+    await SharedPreferencesManager.saveIsFirstLaunch(false);
+    if (context.mounted) {
+      context.replaceRoute(const AuthLoginRoute());
     }
+    return;
   }
 
   @override
@@ -80,22 +63,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
                       top: ScreenUtil().statusBarHeight,
                       right: 10,
                       child: TextButton(
-                        onPressed: () async {
-                          final isLogin =
-                              await SharedPreferencesManager.getIsLogin();
-
-                          if (isLogin) {
-                            context
-                                .read<JoinAnonymousCubit>()
-                                .setJoinAnonymousCubit(true);
-                            navigateToNextScreen();
-                          } else {
-                            context.pushRoute(const AuthLoginRoute());
-                          }
-                        },
+                        onPressed: navigateToNextScreen,
                         style: ButtonStyle(
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.zero)),
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.zero,
+                          ),
+                        ),
                         child: Text(
                           context.l10n.skip,
                           style: TextStyle(
@@ -113,18 +86,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
               child: BlocBuilder<ValueCubit<int>, int>(
                 builder: (context, currentIndex) => ActionRow(
                   pageController: _pageController,
-                  onStartedTap: () async {
-                    final isLogin = await SharedPreferencesManager.getIsLogin();
-
-                    if (isLogin) {
-                      context
-                          .read<JoinAnonymousCubit>()
-                          .setJoinAnonymousCubit(true);
-                      navigateToNextScreen();
-                    } else {
-                      context.pushRoute(const AuthLoginRoute());
-                    }
-                  },
+                  onStartedTap: navigateToNextScreen,
                 ),
               ),
             ),

@@ -18,6 +18,8 @@ import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/language.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/mixin/permission_mixin.dart';
+import '../../sign_in/cubit/authen_cubit.dart';
+import '../../sign_in/cubit/authen_state.dart';
 
 @RoutePage()
 class LanguageScreen extends StatefulWidget {
@@ -118,41 +120,43 @@ class _LanguageScreenState extends State<LanguageScreen> with PermissionMixin {
               context.read<ValueCubit<Language>>().state;
           if (widget.isFirst == null || widget.isFirst == false) {
             context.popRoute();
-          } else {
-            final isFirstLaunch =
-                await SharedPreferencesManager.getIsFirstLaunch();
-            //Nếu lần đầu dùng app
-            if (isFirstLaunch && context.mounted) {
-              context.replaceRoute(OnBoardingRoute(language: selectedLanguage));
+            return;
+          }
+          final isFirstLaunch =
+              await SharedPreferencesManager.getIsFirstLaunch();
+          //Nếu lần đầu dùng app
+          if (isFirstLaunch && context.mounted) {
+            context.replaceRoute(OnBoardingRoute(language: selectedLanguage));
+            return;
+          }
+
+          //nếu lần thứ 2 trở lên và chưa login
+          final isLogin = await SharedPreferencesManager.isLogin(); //anonymous
+          if (!isLogin &&
+              context.mounted &&
+              context.read<AuthCubit>().state == Unauthenticated() &&
+              !isFirstLaunch) {
+            context.replaceRoute(const AuthLoginRoute());
+            return;
+          }
+
+          //nếu lần thứ 2 trở đi
+          if (!isFirstLaunch) {
+            //Nếu đã qua màn intro và đã tạo thông tin user rồi
+            final bool allowPermission = await checkAllPermission();
+            if (!allowPermission && context.mounted) {
+              context.replaceRoute(PermissionRoute(fromMapScreen: false));
               return;
             }
 
-            //nếu lần thứ 2 trở đi
-            if (!isFirstLaunch) {
-              //xem lần trước đó đã tạo user hay chưa
-              final isCreateInfoFirstTime =
-                  await SharedPreferencesManager.getIsCreateInfoFistTime();
-              if (isCreateInfoFirstTime && context.mounted) {
-                context.replaceRoute(CreateUsernameRoute());
-                return;
-              }
-
-              //Nếu đã qua màn intro và đã tạo thông tin user rồi
-              final bool allowPermission = await checkAllPermission();
-              if (!allowPermission && context.mounted) {
-                context.replaceRoute(PermissionRoute(fromMapScreen: false));
-                return;
-              }
-
-              //xem đến màn guide chưa
-              final showGuide = await SharedPreferencesManager.getGuide();
-              if (showGuide && context.mounted) {
-                context.replaceRoute(const GuideRoute());
-                return;
-              } else if (context.mounted) {
-                context.replaceRoute(PremiumRoute(fromStart: true));
-                return;
-              }
+            //xem đến màn guide chưa
+            final showGuide = await SharedPreferencesManager.getGuide();
+            if (showGuide && context.mounted) {
+              context.replaceRoute(const GuideRoute());
+              return;
+            } else if (context.mounted) {
+              context.replaceRoute(PremiumRoute(fromStart: true));
+              return;
             }
           }
         },
