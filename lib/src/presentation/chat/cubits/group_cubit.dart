@@ -8,6 +8,7 @@ import '../../../data/models/store_group/store_group.dart';
 import '../../../data/models/store_message/store_message.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../data/remote/firestore_client.dart';
+import '../../../gen/assets.gen.dart';
 import '../../../global/global.dart';
 import '../services/chat_service.dart';
 import '../utils/util.dart';
@@ -95,8 +96,14 @@ class GroupCubit extends Cubit<GroupState> {
       if (snapshot.exists) {
         final StoreGroup storeGroupTemp = StoreGroup.fromJson(snapshot.data()!);
         //lấy ra thông tin user từ tin nhắn cuối cùng trong collection group
-        final StoreUser? storeUser = await FirestoreClient.instance
+        StoreUser? storeUser = await FirestoreClient.instance
             .getUser(storeGroupTemp.lastMessage!.senderId);
+        // storeUser mà null có nghĩa là tài khoản đã bị xóa
+        storeUser ??= StoreUser(
+            code: '',
+            avatarUrl: Assets.images.avatars.male.avatar1.path,
+            userName: 'Deleted Account',
+            batteryLevel: 100);
         bool seen = false;
         // người dùng check in thì không kiểm tra đã gửi hay chưa
         if (storeGroupTemp.lastMessage!.senderId == Global.instance.userCode &&
@@ -114,6 +121,7 @@ class GroupCubit extends Cubit<GroupState> {
           groupName: storeGroupTemp.groupName,
           avatarGroup: storeGroupTemp.avatarGroup,
         );
+
         //lấy ra index của group thay đổi dưới local
         final index = myGroups.indexWhere((e) => e.idGroup == snapshot.id);
         if (index < myGroups.length) {
