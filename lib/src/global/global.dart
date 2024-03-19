@@ -18,7 +18,8 @@ class Global {
   String get userCode => user?.code ?? '';
   StoreGroup? group;
   List<StoreUser> groupMembers = [];
-  List<StoreUser> get groupOtherMembers => groupMembers.where((element) => element.code != user?.code).toList();
+  List<StoreUser> get groupOtherMembers =>
+      groupMembers.where((element) => element.code != user?.code).toList();
   BitmapDescriptor? myMarker;
   LatLng currentLocation = const LatLng(0, 0);
   LatLng serverLocation = const LatLng(0, 0);

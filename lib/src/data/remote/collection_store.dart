@@ -28,6 +28,7 @@ class CollectionStore {
   static CollectionReference<Map<String, dynamic>> users =
       FirebaseFirestore.instance.collection(CollectionStoreConstant.users);
 
+
   static CollectionReference<Map<String, dynamic>> groups =
       FirebaseFirestore.instance.collection(CollectionStoreConstant.groups);
 

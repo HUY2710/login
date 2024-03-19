@@ -15,9 +15,16 @@ import '../../../shared/helpers/valid_helper.dart';
 import '../../onboarding/widgets/app_button.dart';
 
 @RoutePage()
-class CreateGroupNameScreen extends StatelessWidget {
-  CreateGroupNameScreen({super.key});
+class CreateGroupNameScreen extends StatefulWidget {
+  const CreateGroupNameScreen({super.key});
+
+  @override
+  State<CreateGroupNameScreen> createState() => _CreateGroupNameScreenState();
+}
+
+class _CreateGroupNameScreenState extends State<CreateGroupNameScreen> {
   final ValueCubit<String> groupNameCubit = ValueCubit('');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,6 +125,7 @@ class CreateGroupNameScreen extends StatelessWidget {
                     );
 
                     debugPrint('GroupGlobal:${Global.instance.group}');
+
                     context.pushRoute(CreateGroupAvatarRoute());
                   },
                   isShowIcon: true,

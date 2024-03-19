@@ -12,5 +12,8 @@ enum PreferenceKeys {
   isWeeklyPremium,
   isMonthlyPremium,
   showGuide,
-  fcmToken
+  fcmToken,
+  isLogin,
+  isLoginGoogle,
+  isLoginAnonymous
 }

@@ -12,7 +12,20 @@
           "package_name": "com.tinhvu.cycle.sharing.dev"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "204561008176-rbmdnivg28k6nrp6tr7adc3hhnn072f0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tinhvu.cycle.sharing.dev",
+            "certificate_hash": "842574bf3f5c67adb87639d3f6bbc9c39e1671de"
+          }
+        },
+        {
+          "client_id": "204561008176-qsai95oggafnkr9veslc081femed0c47.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAnbiCHk_PXPcPZDZl2Epubu0dPpHoR8qE"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "204561008176-dkeulgppr097o93vr1rv9ca91rgcumm3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "204561008176-dsj98kj7uok68frcirr7p4ppc42njnsa.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tinhvu.cycle-sharing.dev"
+              }
+            }
+          ]
         }
       }
     }

@@ -190,6 +190,16 @@
   "weekly": "Weekly",
   "billedWeeklyOnly": "Billed weekly only",
   "youCanCancelAnyTime": "You can cancel any time",
+  "continueWithFacebook": "Continue with Facebook",
+  "continueWithGoogle": "Continue with Google",
+  "continueWithApple": "Continue with Apple",
+  "joinWithAnonymous": "Join with anonymous",
+  "signUp": "Sign up",
+  "signIn": "Sign in",
+  "titleSignInSetting": "If you sign up, all your data will be recorded indefinitely even if you delete app or change your device.",
+  "logOut": "Log out",
+  "deleteMyAccount": "Delete my account",
+  "account": "Account",
   "sosTitle": "Sending SOS Alert...",
   "sosHasSent": "SOS Alert has sent",
   "sosSend1": "Send an SOS alert to your friends in case of emergency",
@@ -204,5 +214,10 @@
   "send": "Send",
   "sendingPhoto": "Sending photos with exact location",
   "ableToSendPhoto": "Able to send photos with exact location via messaging",
-  "guideSos": "Allows you to quickly alert your friends in case of emergencies or dangerous situations."
+  "guideSos": "Allows you to quickly alert your friends in case of emergencies or dangerous situations.",
+  "deleteAccount": "Delete account?",
+  "titleDelete": "Are you sure you want to log out? Your infomation will be removed",
+  "yes": "Yes",
+  "no": "No",
+  "titleLogout": "Are you sure you want to log out?"
 }

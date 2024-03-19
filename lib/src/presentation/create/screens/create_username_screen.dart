@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,17 +14,52 @@ import '../../../shared/helpers/valid_helper.dart';
 import '../../onboarding/widgets/app_button.dart';
 
 @RoutePage()
-class CreateUsernameScreen extends StatelessWidget {
-  CreateUsernameScreen({super.key});
+class CreateUsernameScreen extends StatefulWidget {
+  const CreateUsernameScreen({super.key});
 
+  @override
+  State<CreateUsernameScreen> createState() => _CreateUsernameScreenState();
+}
+
+class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
   void changedUsername(String username) {
     Global.instance.user = Global.instance.user?.copyWith(
       userName: ValidHelper.removeExtraSpaces(username),
     );
   }
 
-  final TextEditingController userNameCtrl = TextEditingController(text: '');
+  TextEditingController userNameCtrl = TextEditingController(text: '');
+
   final ValueCubit<String> userNameCubit = ValueCubit('');
+
+  final authUser = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    // final isLogin = await SharedPreferencesManager.getIsLogin();
+    // if (isLogin) {
+    //   userNameCtrl =
+    //       TextEditingController(text: Global.instance.user?.userName);
+    //   userNameCubit.update(Global.instance.user!.userName);
+    // } else {
+    //   if (Global.instance.user?.userName != '' &&
+    //       Global.instance.user?.userName != null) {
+    //     userNameCtrl =
+    //         TextEditingController(text: Global.instance.user?.userName);
+    //     userNameCubit.update(Global.instance.user!.userName);
+    //   } else {
+    //     userNameCtrl = TextEditingController(text: authUser?.displayName);
+    //     userNameCubit.update(authUser!.displayName!);
+    //   }
+    // }
+    if (authUser != null) {
+      userNameCtrl = TextEditingController(text: authUser?.displayName);
+      userNameCubit.update(authUser!.displayName!);
+    }
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +102,8 @@ class CreateUsernameScreen extends StatelessWidget {
                             ValidHelper.containsSpecialCharacters(value);
                         if (!validName) {
                           userNameCubit.update(value.trimLeft().trimRight());
+                          authUser
+                              ?.updateDisplayName(value.trimLeft().trimRight());
                         } else {
                           Fluttertoast.showToast(msg: context.l10n.pleaseDoNot);
                         }

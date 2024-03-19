@@ -26,6 +26,28 @@ class SharedPreferencesManager {
         true;
   }
 
+  static Future<void> saveIsLogin(bool status) async {
+    (await SharedPreferences.getInstance())
+        .setBool(PreferenceKeys.isLogin.name, status);
+  }
+
+  static Future<bool> getIsLogin() async {
+    return (await SharedPreferences.getInstance())
+            .getBool(PreferenceKeys.isLogin.name) ??
+        false;
+  }
+
+  static Future<void> saveIsLoginWithGoogle(bool status) async {
+    (await SharedPreferences.getInstance())
+        .setBool(PreferenceKeys.isLoginGoogle.name, status);
+  }
+
+  static Future<bool> getIsLoginWithGoogle() async {
+    return (await SharedPreferences.getInstance())
+            .getBool(PreferenceKeys.isLoginGoogle.name) ??
+        true;
+  }
+
   static Future<void> saveIsStarted(bool status) async {
     (await SharedPreferences.getInstance())
         .setBool(PreferenceKeys.isStarted.name, status);
@@ -101,5 +123,22 @@ class SharedPreferencesManager {
 
   static Future<String> getFCMToken() async {
     return (await _preference).getString(PreferenceKeys.fcmToken.name) ?? '';
+  }
+
+  static Future<bool> isLogin() async {
+    return (await _preference).getBool(PreferenceKeys.isLogin.name) ?? false;
+  }
+
+  static Future<void> setIsLogin(bool value) async {
+    (await _preference).setBool(PreferenceKeys.isLogin.name, value);
+  }
+
+  static Future<bool> isLoginAnonymous() async {
+    return (await _preference).getBool(PreferenceKeys.isLoginAnonymous.name) ??
+        false;
+  }
+
+  static Future<void> setIsLoginAnonymous(bool value) async {
+    (await _preference).setBool(PreferenceKeys.isLoginAnonymous.name, value);
   }
 }

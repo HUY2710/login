@@ -85,6 +85,14 @@ dependencies:
   image_gallery_saver: ^2.0.3
   google_mlkit_barcode_scanning: ^0.10.0
   image_picker: ^1.0.7
+  firebase_auth: ^4.16.0
+
+  flutter_secure_storage: ^9.0.0
+  google_sign_in: ^6.1.6
+  flutter_facebook_auth: ^6.1.1
+  sign_in_with_apple: ^5.0.0
+  gradient_borders: ^1.0.0
+
 #  open_settings_plus: 0.1.0
   iabtcf_consent_info: ^3.1.0
   app_settings: ^5.1.1
@@ -119,6 +127,7 @@ flutter:
     - assets/icons/rates/
     - assets/icons/premium/
     - assets/icons/activity/
+    - assets/icons/login/
     - assets/images/
     - assets/images/logo/
     - assets/images/onboarding/

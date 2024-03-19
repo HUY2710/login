@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +18,7 @@ import '../../../module/admob/widget/ads/banner_ad.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../config/remote_config.dart';
+
 import '../../data/remote/firestore_client.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
@@ -30,6 +30,7 @@ import '../../shared/widgets/custom_appbar.dart';
 import '../../shared/widgets/main_switch.dart';
 import '../home/cubit/banner_collapse_cubit.dart';
 import '../home/widgets/dialog/action_dialog.dart';
+import '../sign_in/cubit/join_anonymous_cubit.dart';
 import 'widgets/custom_item_setting.dart';
 
 @RoutePage()
@@ -107,6 +108,7 @@ class _SettingScreenState extends State<SettingScreen>
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               _buildUsernameEditSetting(),
+              _buildSignInSetting(),
               24.verticalSpace,
               CustomItemSetting(
                 padding: EdgeInsets.symmetric(
@@ -361,13 +363,15 @@ class _SettingScreenState extends State<SettingScreen>
 
   Widget _buildUsernameEditSetting() {
     return CustomItemSetting(
-      onTap: () {
-        // TODO: Implement for Edit username
+      onTap: () async {
+        final result = await context.pushRoute<bool>(const EditInfoRoute());
+        if (result != null && result) {
+          setState(() {});
+        }
       },
       child: SizedBox(
         height: 50.h,
         child: Row(
-          // mainAxisSize: MainAxisSize.min,
           children: [
             Hero(
               tag: 'editAvatar',
@@ -376,17 +380,11 @@ class _SettingScreenState extends State<SettingScreen>
                 backgroundImage: AssetImage(Global.instance.user!.avatarUrl),
               ),
             ),
-            // 20.horizontalSpace,
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
-                // child: Container(
-                //   color: Colors.red,
-                //   // height: 60.h,
-                // ),
                 child: LayoutBuilder(builder: (context, constraints) {
                   final text = Global.instance.user?.userName ?? 'User';
-
                   final painter = TextPainter(
                     text: TextSpan(text: text),
                     maxLines: 1,
@@ -416,20 +414,59 @@ class _SettingScreenState extends State<SettingScreen>
                 }),
               ),
             ),
-            // 16.horizontalSpace,
-            GestureDetector(
-              onTap: () async {
-                final result =
-                    await context.pushRoute<bool>(const EditInfoRoute());
-                if (result != null && result) {
-                  setState(() {});
-                }
-              },
-              child: Assets.icons.icEdit.svg(height: 28.h),
-            ),
+            Assets.icons.icArrowRight.svg(height: 28.h),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSignInSetting() {
+    return BlocBuilder<JoinAnonymousCubit, bool>(
+      builder: (context, state) {
+        return state
+            ? GestureDetector(
+                onTap: () {
+                  context.pushRoute(const SignInFromSettingRoute());
+                },
+                child: Container(
+                  margin: EdgeInsets.only(top: 24.h),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20.r),
+                      boxShadow: [
+                        BoxShadow(
+                            offset: const Offset(0, 2),
+                            blurRadius: 8.4,
+                            color: const Color(0xff9C747D).withOpacity(0.17))
+                      ]),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            context.l10n.account,
+                            style: TextStyle(
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.w500,
+                                color: const Color(0xff343434)),
+                          ),
+                        ),
+                        Text(
+                          '${context.l10n.signIn}/ ${context.l10n.signUp}',
+                          style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xff8E52FF)),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            : const SizedBox();
+      },
     );
   }
 }

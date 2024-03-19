@@ -18,7 +18,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../../../flavors.dart';
@@ -48,6 +47,8 @@ import '../../shared/mixin/permission_mixin.dart';
 import '../../shared/widgets/loading/loading_indicator.dart';
 import '../chat/widgets/chat_detail/camera_screen.dart';
 import '../map/cubit/select_group_cubit.dart';
+import '../sign_in/cubit/authen_cubit.dart';
+import '../sign_in/cubit/authen_state.dart';
 import 'update_dialog.dart';
 
 @RoutePage()
@@ -200,23 +201,32 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> setInitScreen() async {
     final bool isFirstLaunch =
         await SharedPreferencesManager.getIsFirstLaunch();
-    final bool isPermissionAllow = await checkPermissionLocation().isGranted;
+    final bool isPermissionAllow = await checkAllPermission();
     final isPremium = getIt<MyPurchaseManager>().state.isPremium();
+    final isLoginMedia =
+        context.mounted && context.read<AuthCubit>().state == Authenticated();
+
+    final isLoginAnonymous = await SharedPreferencesManager.isLoginAnonymous();
     if (mounted) {
       if (isFirstLaunch) {
         AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
-      } else {
-        if (isPremium) {
-          if (!isPermissionAllow) {
-            AutoRouter.of(context)
-                .replace(PermissionRoute(fromMapScreen: false));
-          } else {
-            AutoRouter.of(context).replace(HomeRoute());
-          }
-        } else {
-          AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
-        }
+        return;
       }
+
+      if (isPremium) {
+        if (!isPermissionAllow) {
+          AutoRouter.of(context).replace(PermissionRoute(fromMapScreen: false));
+          return;
+        }
+        if (isLoginMedia || isLoginAnonymous) {
+          AutoRouter.of(context).replace(HomeRoute());
+          return;
+        }
+        AutoRouter.of(context).replace(const AuthLoginRoute());
+        return;
+      }
+      AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
+      return;
     }
   }
 
@@ -330,10 +340,9 @@ class _SplashScreenState extends State<SplashScreen>
     }
   }
 
-  Future<StoreUser?> addNewUser({
-    StoreUser? storeUser,
-  }) async {
+  Future<StoreUser?> addNewUser({StoreUser? storeUser}) async {
     final String newCode = 24.randomString();
+
     int battery = 0;
     try {
       battery = await Battery().batteryLevel;
@@ -345,10 +354,12 @@ class _SplashScreenState extends State<SplashScreen>
         userName: '',
         batteryLevel: battery,
         avatarUrl: Assets.images.avatars.male.avatar1.path);
+
     await FirestoreClient.instance.createUser(storeUser).then((value) async {
       await SharedPreferencesManager.setString(
           PreferenceKeys.userCode.name, newCode);
     });
+
     return storeUser;
   }
 

@@ -8,12 +8,12 @@ import '../models/store_member/store_member.dart';
 import '../models/store_place/store_place.dart';
 import '../models/store_user/store_user.dart';
 import 'collection_store.dart';
-import 'user_manager.dart';
 import 'group_manager.dart';
 import 'history_place_manager.dart';
 import 'location_manager.dart';
 import 'member_manager.dart';
 import 'places_manager.dart';
+import 'user_manager.dart';
 
 class FirestoreClient {
   FirestoreClient._privateConstructor();

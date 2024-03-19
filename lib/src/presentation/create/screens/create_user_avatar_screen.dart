@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,6 +24,8 @@ class CreateUserAvatarScreen extends StatelessWidget {
       ValueCubit(maleAvatarList.first.avatarPath);
   final ValueCubit<String> avatarBgCubit =
       ValueCubit(maleAvatarList.first.previewAvatarPath);
+
+  final user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,6 +85,7 @@ class CreateUserAvatarScreen extends StatelessWidget {
           onTap: () async {
             Global.instance.user =
                 Global.instance.user?.copyWith(avatarUrl: avatarCubit.state);
+            user?.updatePhotoURL(Global.instance.user?.avatarUrl);
             try {
               await FirestoreClient.instance.updateUser({
                 'userName': Global.instance.user?.userName,

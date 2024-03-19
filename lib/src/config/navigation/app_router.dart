@@ -29,6 +29,12 @@ import '../../presentation/setting/about_screen.dart';
 import '../../presentation/setting/edit_infor_screen.dart';
 import '../../presentation/setting/map_type/map_type_screen.dart';
 import '../../presentation/setting/setting_screen.dart';
+import '../../presentation/sign_in/screen/auth_login_screen.dart';
+import '../../presentation/sign_in/screen/sign_in_from_setting_screen.dart';
+import '../../presentation/sign_in/screen/sign_in_screen.dart';
+import '../../presentation/sign_up/screen/confirm_pin_code_screen.dart';
+import '../../presentation/sign_up/screen/create_pin_code_screen.dart';
+import '../../presentation/sign_up/screen/sign_up_screen.dart';
 import '../../presentation/sos/sos_screen.dart';
 import '../../presentation/splash/splash_screen.dart';
 import '../../shared/enum/language.dart';
@@ -63,9 +69,9 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: GuideRoute.page),
         AutoRoute(page: JoinQrCodeRoute.page),
         AutoRoute(page: AddPlaceRoute.page),
-        AutoRoute(page: ImageResultRoute.page),
-        AutoRoute(page: CameraRoute.page),
-        AutoRoute(page: SosRoute.page),
+        AutoRoute(page: SignInRoute.page),
+        AutoRoute(page: SignInFromSettingRoute.page),
+        AutoRoute(page: AuthLoginRoute.page),
       ];
 
   AutoRoute routeWithFadeTransition(
