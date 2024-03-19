@@ -76,10 +76,10 @@ class _CustomMapState extends State<CustomMap> {
         ),
 
         Marker(
-          visible: Global.instance.myMarker != null,
+          visible: widget.marker != null,
           position: Global.instance.currentLocation,
           markerId: MarkerId(Global.instance.user?.code ?? ''),
-          icon: Global.instance.myMarker ?? BitmapDescriptor.defaultMarker,
+          icon: widget.marker??BitmapDescriptor.defaultMarker,
         ),
       },
       circles: <Circle>{

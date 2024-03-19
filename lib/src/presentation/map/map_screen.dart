@@ -16,6 +16,7 @@ import '../../config/navigation/app_router.dart';
 import '../../data/models/store_group/store_group.dart';
 import '../../data/models/store_location/store_location.dart';
 import '../../data/models/store_place/store_place.dart';
+import '../../data/models/store_sos/store_sos.dart';
 import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../data/remote/token_manager.dart';
@@ -30,6 +31,7 @@ import '../home/cubit/banner_collapse_cubit.dart';
 import '../home/widgets/bottom_bar.dart';
 import '../permission/widget/permission_home_android.dart';
 import '../permission/widget/permission_home_ios.dart';
+import '../sos/cubit/sos_cubit.dart';
 import 'cubit/map_type_cubit.dart';
 import 'cubit/my_marker_cubit.dart';
 import 'cubit/select_group_cubit.dart';
@@ -84,7 +86,8 @@ class MapScreenState extends State<MapScreen>
     _trackingMemberCubit.initTrackingMember();
     _trackingPlacesCubit.initTrackingPlaces();
     _defaultLocation = Global.instance.serverLocation;
-    getIt<MyMarkerCubit>().update(Global.instance.user);
+    getIt<MyMarkerCubit>().update(Global.instance.user
+        ?.copyWith(sosStore: StoreSOS(sos: getIt<SosCubit>().state)));
     getLocalLocation();
     super.initState();
 
@@ -181,12 +184,12 @@ class MapScreenState extends State<MapScreen>
               if (Platform.isIOS) {
                 return PermissionHomeIOS(
                   confirmTap: () async {
+                    EasyAds.instance.appLifecycleReactor
+                        ?.setIsExcludeScreen(true);
                     context1.popRoute();
                     final rejectAlway =
                         await Permission.locationAlways.isPermanentlyDenied;
                     if (rejectAlway) {
-                      EasyAds.instance.appLifecycleReactor
-                          ?.setIsExcludeScreen(true);
                       openAppSettings();
                     }
                     final status = await Permission.locationAlways.request();
@@ -198,12 +201,12 @@ class MapScreenState extends State<MapScreen>
               }
               return PermissionHomeAndroid(
                 confirmTap: () async {
+                  EasyAds.instance.appLifecycleReactor
+                      ?.setIsExcludeScreen(true);
                   context1.popRoute();
                   final rejectAlway =
                       await Permission.locationAlways.isPermanentlyDenied;
                   if (rejectAlway) {
-                    EasyAds.instance.appLifecycleReactor
-                        ?.setIsExcludeScreen(true);
                     openAppSettings();
                   }
                   final status = await Permission.locationAlways.request();
@@ -243,6 +246,8 @@ class MapScreenState extends State<MapScreen>
         bytes,
         size: const Size.fromWidth(30),
       );
+      getIt<MyMarkerCubit>()
+          .update(getIt<MyMarkerCubit>().state?.copyWith(marker: bytes));
     } on Exception catch (e) {
       debugPrint(e.toString());
     }
@@ -423,13 +428,18 @@ class MapScreenState extends State<MapScreen>
                               builder: (context, polylinesState) {
                                 return BlocBuilder<MyMarkerCubit, StoreUser?>(
                                   bloc: getIt<MyMarkerCubit>(),
-                                  builder: (context, state) {
+                                  builder: (context, stateMarker) {
                                     return CustomMap(
                                       defaultLocation: _defaultLocation,
                                       trackingLocationState: locationState,
                                       mapController: _mapController,
                                       mapType: mapTypeState,
-                                      marker: marker,
+                                      marker: stateMarker?.marker != null
+                                          ? BitmapDescriptor.fromBytes(
+                                              stateMarker!.marker!,
+                                              size: const Size.fromWidth(30),
+                                            )
+                                          : marker,
                                       trackingMemberState: trackingMemberState,
                                       trackingPlacesState: trackingPlacesState,
                                       polylines: polylinesState,

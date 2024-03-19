@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../config/navigation/app_router.dart';
+import '../../data/local/shared_preferences_manager.dart';
 import '../../services/activity_recognition_service.dart';
 import '../../services/firebase_message_service.dart';
 import '../../shared/cubit/value_cubit.dart';
@@ -134,8 +135,17 @@ class _PermissionScreenState extends State<PermissionScreen>
                       }
                       motionCubit.update(status);
                       typeRequest.update(0); //không request nữa
-                      if (!widget.fromMapScreen && context.mounted) {
+
+                      final showGuide =
+                          await SharedPreferencesManager.getGuide();
+                      if (showGuide &&
+                          context.mounted &&
+                          !widget.fromMapScreen) {
                         context.router.replaceAll([const GuideRoute()]);
+                        return;
+                      } else if (context.mounted) {
+                        context.replaceRoute(PremiumRoute(fromStart: true));
+                        return;
                       }
                     }
                   },
