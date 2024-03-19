@@ -38,6 +38,7 @@ import '../../shared/extension/int_extension.dart';
 import '../../shared/helpers/valid_helper.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
 import '../../shared/widgets/custom_appbar.dart';
+import '../../shared/widgets/dialog/delete_dialog.dart';
 import '../create/widgets/gender_switch.dart';
 import '../map/cubit/select_group_cubit.dart';
 import '../sign_in/cubit/authen_cubit.dart';
@@ -241,14 +242,28 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                   padding: const EdgeInsets.all(17),
                   child: GestureDetector(
                     onTap: () {
-                      context.read<AuthCubit>().loggedOut();
-                      GoogleSignIn().disconnect();
-                      FirebaseAuth.instance.signOut().then((value) {
-                        getIt<SelectGroupCubit>().update(null);
-                        StoreUser? storeUser;
-                        addNewUser(storeUser: storeUser);
-                        context.router.replaceAll([const SignInRoute()]);
-                      });
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return DeleteDialog(
+                              titleDialog: context.l10n.logOut,
+                              subTitleDialog: context.l10n.titleLogout,
+                              titleButton1: context.l10n.yes,
+                              titleButton2: context.l10n.no,
+                              onTapButton1: () {
+                                context.read<AuthCubit>().loggedOut();
+                                GoogleSignIn().disconnect();
+                                FirebaseAuth.instance.signOut().then((value) {
+                                  getIt<SelectGroupCubit>().update(null);
+                                  StoreUser? storeUser;
+                                  addNewUser(storeUser: storeUser);
+                                  context.popRoute();
+                                  context.router
+                                      .replaceAll([const SignInRoute()]);
+                                });
+                              },
+                            );
+                          });
                     },
                     child: Row(
                       children: [
@@ -284,32 +299,51 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
         padding: const EdgeInsets.all(17),
         child: GestureDetector(
           onTap: () {
-            getIt<SelectGroupCubit>().update(null);
-            if (context.read<JoinAnonymousCubit>().state) {
-              context.read<AuthCubit>().loggedOut();
-              CollectionStore.users.doc(Global.instance.user?.code).delete();
-              StoreUser? storeUser;
-              addNewUser(storeUser: storeUser).then((value) {
-                FirestoreClient.instance.updateUser({'uid': null});
-                context.router.replaceAll([const SignInRoute()]);
-              });
-            } else {
-              context.read<AuthCubit>().loggedOut();
-              if (FirebaseAuth
-                      .instance.currentUser?.providerData[0].providerId ==
-                  'google.com') {
-                GoogleSignIn().disconnect();
-              }
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return DeleteDialog(
+                    titleDialog: context.l10n.deleteAccount,
+                    subTitleDialog: context.l10n.titleDelete,
+                    titleButton1: context.l10n.delete,
+                    titleButton2: context.l10n.cancel,
+                    isTextRed: true,
+                    onTapButton1: () {
+                      getIt<SelectGroupCubit>().update(null);
+                      if (context.read<JoinAnonymousCubit>().state) {
+                        context.read<AuthCubit>().loggedOut();
+                        CollectionStore.users
+                            .doc(Global.instance.user?.code)
+                            .delete();
+                        StoreUser? storeUser;
+                        addNewUser(storeUser: storeUser).then((value) {
+                          FirestoreClient.instance.updateUser({'uid': null});
+                          context.popRoute();
+                          context.router.replaceAll([const SignInRoute()]);
+                        });
+                      } else {
+                        context.read<AuthCubit>().loggedOut();
+                        if (FirebaseAuth.instance.currentUser?.providerData[0]
+                                .providerId ==
+                            'google.com') {
+                          GoogleSignIn().disconnect();
+                        }
 
-              CollectionStore.users.doc(Global.instance.user?.code).delete();
+                        CollectionStore.users
+                            .doc(Global.instance.user?.code)
+                            .delete();
 
-              StoreUser? storeUser;
+                        StoreUser? storeUser;
 
-              addNewUser(storeUser: storeUser).then((value) {
-                FirestoreClient.instance.updateUser({'uid': null});
-                context.router.replaceAll([const SignInRoute()]);
-              });
-            }
+                        addNewUser(storeUser: storeUser).then((value) {
+                          FirestoreClient.instance.updateUser({'uid': null});
+                          context.popRoute();
+                          context.router.replaceAll([const SignInRoute()]);
+                        });
+                      }
+                    },
+                  );
+                });
           },
           child: Row(
             children: [

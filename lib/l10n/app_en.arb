@@ -211,5 +211,11 @@
   "day": "Day",
   "mostPopular": "Most popular",
   "sentAPhoto": "sent a photo",
-  "send": "Send"
+  "send": "Send",
+  "deleteAccount":"Delete account?",
+  "titleDelete":"Are you sure you want to log out? Your infomation will be removed",
+  "yes":"Yes",
+  "no":"No",
+  "titleLogout":"Are you sure you want to log out?"
+
 }
