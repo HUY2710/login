@@ -158,7 +158,7 @@ class _BuildMarkerState extends State<BuildMarker> {
     return Stack(
       children: [
         if (sos)
-          Assets.images.markers.sosMarkerBg
+          Assets.images.markers.sosBgMarker
               .image(width: 150.r, gaplessPlayback: true)
         else
           Assets.images.markers.markerBg
