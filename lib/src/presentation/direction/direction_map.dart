@@ -39,7 +39,6 @@ class DirectionMap extends StatefulWidget {
 class _DirectionMapState extends State<DirectionMap> {
   PolylinePoints polylinePoints = PolylinePoints();
   List<LatLng> polylineCoordinates = [];
-  final Set<Polyline> _polylines = {};
   String typeDirection = RouteTravelMode.DRIVE.name;
   double distance = 0;
   double duration = 0;

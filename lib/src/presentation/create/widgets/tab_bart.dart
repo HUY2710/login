@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/custom_tab_bar.dart';
 import '../cubit/code_type_cubit.dart';
 
