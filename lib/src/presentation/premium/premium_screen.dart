@@ -7,13 +7,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../flavors.dart';
 import '../../../module/iap/my_purchase_manager.dart';
 import '../../../module/iap/product_id.dart';
 import '../../config/di/di.dart';
 import '../../config/navigation/app_router.dart';
 import '../../gen/gens.dart';
-import '../../shared/constants/app_constants.dart';
 import '../../shared/constants/url_constants.dart';
 import '../../shared/extension/context_extension.dart';
 import '../../shared/helpers/gradient_background.dart';
@@ -106,7 +104,10 @@ class _PremiumScreenState extends State<PremiumScreen> {
                             children: [
                               buildButtonWeek(item: weeklyProduct),
                               16.w.horizontalSpace,
-                              buildButtonMonth(item: monthlyProduct, weeklyPrice: weeklyProduct.first.productDetails.rawPrice),
+                              buildButtonMonth(
+                                  item: monthlyProduct,
+                                  weeklyPrice: weeklyProduct
+                                      .first.productDetails.rawPrice),
                             ],
                           ),
                         ),
@@ -264,14 +265,17 @@ class _PremiumScreenState extends State<PremiumScreen> {
     );
   }
 
-  Widget buildButtonMonth({required List<PurchasableProduct> item, required double weeklyPrice}) {
+  Widget buildButtonMonth(
+      {required List<PurchasableProduct> item, required double weeklyPrice}) {
     final monthlyProduct = item.first;
     final formatter = NumberFormat.simpleCurrency(
       name: monthlyProduct.productDetails.currencyCode,
     );
     final monthPricePerWeek =
         formatter.format(monthlyProduct.productDetails.rawPrice / 4);
-    final saved = (weeklyPrice - (monthlyProduct.productDetails.rawPrice / 4)) * 100 / weeklyPrice;
+    final saved = (weeklyPrice - (monthlyProduct.productDetails.rawPrice / 4)) *
+        100 /
+        weeklyPrice;
     return Expanded(
         child: Container(
       height: 150.h,
@@ -345,8 +349,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     Color(0xff00C208),
                     Color(0xff71DD81),
                   ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
                 ),
               ),
               child: Text(

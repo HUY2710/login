@@ -37,17 +37,6 @@ class ContentPageWidget extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            // child: Text(
-            //   title,
-            //   textAlign: TextAlign.center,
-            //   style: TextStyle(
-            //     color: const Color(0xFF343434),
-            //     fontSize: 18.sp,
-            //     overflow: TextOverflow.ellipsis,
-            //     fontWeight: FontWeight.w500,
-            //   ),
-            //   maxLines: 2,
-            // ),
           ),
         ),
       ],

@@ -13,7 +13,6 @@ import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/avatar/avatar_model.dart';
 import '../../../data/remote/firestore_client.dart';
 import '../../../global/global.dart';
-import '../../../services/firebase_message_service.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/extension/context_extension.dart';
 import '../../../shared/widgets/custom_appbar.dart';

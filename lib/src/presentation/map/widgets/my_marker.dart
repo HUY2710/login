@@ -10,12 +10,10 @@ class MyMarkerOnMap extends StatefulWidget {
   const MyMarkerOnMap({
     super.key,
     required this.member,
-    this.callBack,
     required this.keyCap,
   });
 
   final StoreUser member;
-  final VoidCallback? callBack;
   final GlobalKey keyCap;
   @override
   State<MyMarkerOnMap> createState() => _MyMarkerOnMapState();
