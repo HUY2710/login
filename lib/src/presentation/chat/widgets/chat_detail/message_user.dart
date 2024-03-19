@@ -27,22 +27,26 @@ class MessageTypeUser extends StatelessWidget {
                   : EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
               decoration: BoxDecoration(
                   borderRadius: item.messageType == MessageType.image
-                      ? BorderRadius.circular(15.r)
+                      ? BorderRadius.circular(AppConstants.widgetBorderRadius.r)
                       : BorderRadius.only(
-                          topLeft: Radius.circular(15.r),
-                          topRight: Radius.circular(15.r),
-                          bottomLeft: Radius.circular(15.r),
+                          topLeft: Radius.circular(
+                              AppConstants.widgetBorderRadius.r),
+                          topRight: Radius.circular(
+                              AppConstants.widgetBorderRadius.r),
+                          bottomLeft: Radius.circular(
+                              AppConstants.widgetBorderRadius.r),
                           bottomRight: Utils.checkLastMessage(
                                   code: item.senderId,
                                   isLastMessage: index == 0)
                               ? Radius.zero
-                              : Radius.circular(15.r)),
+                              : Radius.circular(
+                                  AppConstants.widgetBorderRadius.r)),
                   color: const Color(0xffB98EFF)),
               child: switch (item.messageType) {
                 MessageType.location => buildMessLocation(context, item),
+                MessageType.checkIn => buildMessLocation(context, item),
                 MessageType.text => buildMessText(context, item),
                 MessageType.image => buildMessImage(context, item),
-                _ => const SizedBox()
               },
             ),
           ],
@@ -72,15 +76,20 @@ class MessageTypeUser extends StatelessWidget {
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    InteractiveViewer(
-                      child: CachedNetworkImage(
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        imageUrl: item.imagUrl ??
-                            'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png',
-                        fit: BoxFit.contain,
+                    CachedNetworkImage(
+                      placeholder: (context, url) => const Center(
+                        child: CupertinoActivityIndicator(),
                       ),
+                      imageBuilder: (context, image) {
+                        return PhotoView(
+                          imageProvider: image,
+                          minScale: 0.5,
+                          maxScale: 1.5,
+                        );
+                      },
+                      imageUrl: item.imagUrl ??
+                          'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png',
+                      fit: BoxFit.contain,
                     ),
                     buildButtonClose(context)
                   ],
@@ -89,10 +98,10 @@ class MessageTypeUser extends StatelessWidget {
             });
       },
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(15.r),
+        borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
         child: CachedNetworkImage(
           placeholder: (context, url) => const Center(
-            child: CircularProgressIndicator(),
+            child: CupertinoActivityIndicator(),
           ),
           imageUrl: item.imagUrl ??
               'https://cdn.pixabay.com/photo/2017/02/12/21/29/false-2061132_960_720.png',

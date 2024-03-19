@@ -1,14 +1,17 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:battery_plus/battery_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_activity_recognition/flutter_activity_recognition.dart';
 import 'package:pedometer/pedometer.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../config/di/di.dart';
 import '../data/remote/firestore_client.dart';
 import '../global/global.dart';
 import '../presentation/home/cubit/steps_cubit.dart';
+import '../presentation/map/cubit/my_marker_cubit.dart';
 
 class ActivityRecognitionService {
   ActivityRecognitionService._privateConstructor();
@@ -27,17 +30,13 @@ class ActivityRecognitionService {
   }
 
   Future<bool> isPermissionGrants() async {
-    // Check if the user has granted permission. If not, request permission.
-    PermissionRequestResult reqResult;
-    reqResult = await activityRecognition.checkPermission();
-    if (reqResult == PermissionRequestResult.PERMANENTLY_DENIED) {
-      debugPrint('Activity Permission is permanently denied.');
-      return false;
-    } else if (reqResult == PermissionRequestResult.DENIED) {
-      debugPrint('Activity Permission is denied.');
-      return false;
+    PermissionStatus activityRecognition;
+    if (Platform.isIOS) {
+      activityRecognition = await Permission.sensors.status;
+    } else {
+      activityRecognition = await Permission.activityRecognition.status;
     }
-    return true;
+    return activityRecognition.isGranted;
   }
 
   Future<void> initStreamActivityRecognition() async {
@@ -53,6 +52,7 @@ class ActivityRecognitionService {
         oldActivity = activityTemp;
         Global.instance.user = Global.instance.user
             ?.copyWith(activityType: oldActivity ?? 'STILL');
+        getIt<MyMarkerCubit>().update(Global.instance.user);
         _firestoreClient.updateUser({'activityType': oldActivity});
       }
     });

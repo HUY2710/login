@@ -39,6 +39,8 @@ import '../../shared/helpers/valid_helper.dart';
 import '../../shared/widgets/containers/shadow_container.dart';
 import '../../shared/widgets/custom_appbar.dart';
 import '../create/widgets/gender_switch.dart';
+import '../map/cubit/my_marker_cubit.dart';
+import '../onboarding/widgets/app_button.dart';
 import '../map/cubit/select_group_cubit.dart';
 import '../sign_in/cubit/authen_cubit.dart';
 import '../sign_in/cubit/join_anonymous_cubit.dart';
@@ -184,6 +186,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
         Global.instance.user = Global.instance.user?.copyWith(
             avatarUrl: pathAvatarCubit.state,
             userName: userNameCtrl.text.trim());
+        getIt<MyMarkerCubit>().update(Global.instance.user);
         // EasyLoading.dismiss();
         hideLoading();
         final bool isShowInterAd = RemoteConfigManager.instance

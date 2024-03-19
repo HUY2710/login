@@ -150,7 +150,23 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
             maxLines: 5,
             decoration: _inputStyle(),
           )),
-          buildButtonCamera(),
+          Stack(
+            clipBehavior: Clip.antiAlias,
+            children: [
+              buildButtonCamera(),
+              if (!getIt<MyPurchaseManager>().state.isPremium())
+                Positioned(
+                  right: 0,
+                  child: ShadowContainer(
+                    padding: EdgeInsets.all(4.r),
+                    child: SvgPicture.asset(
+                      Assets.icons.premium.icPremiumSvg.path,
+                      width: 10.r,
+                    ),
+                  ),
+                )
+            ],
+          ),
           buildButtonGallery(),
         ],
       ),
@@ -184,7 +200,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
       hintStyle: TextStyle(color: const Color(0xff6C6C6C), fontSize: 14.sp),
       contentPadding: EdgeInsets.only(left: 18.w, bottom: 12.w, top: 12.h),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15.r),
+        borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
         borderSide: const BorderSide(
           width: 2,
           color: MyColors.secondPrimary,
@@ -215,8 +231,8 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
           ///TODO: remove !
           if (!isPremium) {
             EasyAds.instance.appLifecycleReactor?.setIsExcludeScreen(true);
-            final XFile? image =
-                await ImagePicker().pickImage(source: ImageSource.gallery);
+            final XFile? image = await ImagePicker()
+                .pickImage(source: ImageSource.gallery, imageQuality: 60);
             if (image != null) {
               showLoading();
               final url = await FirebaseStorageClient.instance.uploadImage(
@@ -240,7 +256,6 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
         onPressed: () async {
           final bool isPremium = getIt<MyPurchaseManager>().state.isPremium();
 
-          ///TODO: remove !
           if (!isPremium) {
             final result = await context.pushRoute(const CameraRoute()) ?? '';
             if (result != '') {
@@ -278,7 +293,7 @@ class _ChatTypeWidgetState extends State<ChatTextWidget>
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(
-              Radius.circular(15.r),
+              Radius.circular(AppConstants.widgetBorderRadius.r),
             ),
             boxShadow: [
               BoxShadow(

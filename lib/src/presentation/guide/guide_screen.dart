@@ -39,6 +39,7 @@ class GuideScreenState extends State<GuideScreen> with WidgetsBindingObserver {
   GlobalKey keyGroup = GlobalKey();
   GlobalKey keySetting = GlobalKey();
   GlobalKey keyButton = GlobalKey();
+  GlobalKey keySos = GlobalKey();
 
   @override
   void initState() {
@@ -115,6 +116,14 @@ class GuideScreenState extends State<GuideScreen> with WidgetsBindingObserver {
                   ItemRightGuide(
                     pathIc: Assets.icons.icPlace.path,
                     key: keyPlace,
+                  ),
+                  SizedBox(height: 16.h),
+                  Image.asset(
+                    Assets.images.sosBtn.path,
+                    width: 40.r,
+                    height: 40.r,
+                    fit: BoxFit.cover,
+                    key: keySos,
                   ),
                 ],
               ),
@@ -243,6 +252,7 @@ class GuideScreenState extends State<GuideScreen> with WidgetsBindingObserver {
       _buildTarget(keyAddMember, context.l10n.guideAddMember),
       _buildTarget(keyMember, context.l10n.guideMember),
       _buildTarget(keyPlace, context.l10n.guidePlace),
+      _buildTarget(keySos, context.l10n.guideSos),
       _buildTarget(keyLocation, context.l10n.guideLocation,
           align: ContentAlign.top),
       _buildTarget(keyMessage, context.l10n.guideMessenger,

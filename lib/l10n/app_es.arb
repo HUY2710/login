@@ -199,5 +199,8 @@
   "sent": "enviado",
   "useByAdsVersion": "Usar por versión con anuncios",
   "day": "Día",
-  "mostPopular": "Más popular"
+  "mostPopular": "Más popular",
+  "sendingPhoto": "Enviando fotos con ubicación exacta",
+  "ableToSendPhoto": "Capaz de enviar fotos con ubicación exacta vía mensajería",
+  "guideSos": "La función de SOS le permite alertar rápidamente a sus amigos en caso de emergencias o situaciones peligrosas."
 }

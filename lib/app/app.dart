@@ -15,6 +15,7 @@ import '../src/config/theme/light/light_theme.dart';
 import '../src/presentation/home/cubit/banner_collapse_cubit.dart';
 import '../src/presentation/sign_in/cubit/authen_cubit.dart';
 import '../src/presentation/sign_in/cubit/join_anonymous_cubit.dart';
+import '../src/services/activity_recognition_service.dart';
 import '../src/shared/enum/language.dart';
 import '../src/shared/widgets/dialog/no_internet_dialog.dart';
 import '../src/shared/widgets/loading/loading_indicator.dart';
@@ -38,7 +39,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // ActivityRecognitionService.instance.initActivityRecognitionService();
+    ActivityRecognitionService.instance.initActivityRecognitionService();
   }
 
   @override

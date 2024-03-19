@@ -8,9 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location/location.dart';
 
-import '../../app/cubit/language_cubit.dart';
 import '../../flavors.dart';
-import '../config/di/di.dart';
 import '../data/remote/firestore_client.dart';
 import '../global/global.dart';
 
@@ -73,7 +71,6 @@ class LocationService {
   Future<String> getCurrentAddress(LatLng latLng, {int countReload = 0}) async {
     String address = '';
     if (countReload <= 5) {
-      final String locale = getIt<LanguageCubit>().state.languageCode;
       try {
         final List<geo.Placemark> placeMarks =
             await geo.placemarkFromCoordinates(

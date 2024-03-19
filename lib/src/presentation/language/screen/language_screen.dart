@@ -17,6 +17,7 @@ import '../../../shared/constants/app_constants.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/language.dart';
 import '../../../shared/extension/context_extension.dart';
+import '../../../shared/mixin/permission_mixin.dart';
 
 @RoutePage()
 class LanguageScreen extends StatefulWidget {
@@ -31,7 +32,7 @@ class LanguageScreen extends StatefulWidget {
   State<LanguageScreen> createState() => _LanguageScreenState();
 }
 
-class _LanguageScreenState extends State<LanguageScreen> {
+class _LanguageScreenState extends State<LanguageScreen> with PermissionMixin {
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
@@ -118,9 +119,40 @@ class _LanguageScreenState extends State<LanguageScreen> {
           if (widget.isFirst == null || widget.isFirst == false) {
             context.popRoute();
           } else {
-            await SharedPreferencesManager.saveIsFirstLaunch(false);
-            if (mounted) {
+            final isFirstLaunch =
+                await SharedPreferencesManager.getIsFirstLaunch();
+            //Nếu lần đầu dùng app
+            if (isFirstLaunch && context.mounted) {
               context.replaceRoute(OnBoardingRoute(language: selectedLanguage));
+              return;
+            }
+
+            //nếu lần thứ 2 trở đi
+            if (!isFirstLaunch) {
+              //xem lần trước đó đã tạo user hay chưa
+              final isCreateInfoFirstTime =
+                  await SharedPreferencesManager.getIsCreateInfoFistTime();
+              if (isCreateInfoFirstTime && context.mounted) {
+                context.replaceRoute(CreateUsernameRoute());
+                return;
+              }
+
+              //Nếu đã qua màn intro và đã tạo thông tin user rồi
+              final bool allowPermission = await checkAllPermission();
+              if (!allowPermission && context.mounted) {
+                context.replaceRoute(PermissionRoute(fromMapScreen: false));
+                return;
+              }
+
+              //xem đến màn guide chưa
+              final showGuide = await SharedPreferencesManager.getGuide();
+              if (showGuide && context.mounted) {
+                context.replaceRoute(const GuideRoute());
+                return;
+              } else if (context.mounted) {
+                context.replaceRoute(PremiumRoute(fromStart: true));
+                return;
+              }
             }
           }
         },
@@ -189,12 +221,13 @@ Widget _buildItemLanguage({
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: isSelected
-            ? Border.all(
-                color: MyColors.primary,
-              )
-            : null,
         borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
+        gradient: isSelected
+            ? const LinearGradient(colors: [
+                Color(0xffB67DFF),
+                Color(0xff7B3EFF),
+              ])
+            : null,
         boxShadow: [
           BoxShadow(
             color: const Color(0xFF9C747D).withOpacity(0.17),
@@ -218,19 +251,10 @@ Widget _buildItemLanguage({
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
+                color: isSelected ? Colors.white : MyColors.black34,
               ),
             ),
           ),
-          if (isSelected)
-            Radio(
-              value: true,
-              groupValue: true,
-              onChanged: (val) {},
-              visualDensity: const VisualDensity(
-                horizontal: VisualDensity.minimumDensity,
-                vertical: VisualDensity.minimumDensity,
-              ),
-            ),
         ],
       ),
     ),

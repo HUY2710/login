@@ -16,7 +16,6 @@ import '../../../../../data/remote/token_manager.dart';
 import '../../../../../gen/assets.gen.dart';
 import '../../../../../gen/colors.gen.dart';
 import '../../../../../global/global.dart';
-import '../../../../../services/firebase_message_service.dart';
 import '../../../../../shared/constants/app_constants.dart';
 import '../../../../../shared/cubit/value_cubit.dart';
 import '../../../../../shared/extension/context_extension.dart';
@@ -153,7 +152,6 @@ class ActionGroupBottomSheet extends StatelessWidget {
                       title: context.l10n.leaveGroup,
                       subTitle: context.l10n.leaveGroupContent,
                       confirmTap: () {
-                        // EasyLoading.show();
                         showLoading();
                         myGroupCubit
                             .leaveGroup(
@@ -162,7 +160,6 @@ class ActionGroupBottomSheet extends StatelessWidget {
                           context: context,
                         )
                             .then((value) async {
-                          // EasyLoading.dismiss();
                           hideLoading();
                           await context1
                               .popRoute()
