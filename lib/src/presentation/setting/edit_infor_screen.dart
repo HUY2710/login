@@ -25,6 +25,8 @@ import '../../config/remote_config.dart';
 import '../../data/local/avatar/avatar_repository.dart';
 import '../../data/local/shared_preferences_manager.dart';
 import '../../data/models/avatar/avatar_model.dart';
+import '../../data/models/store_group/store_group.dart';
+import '../../data/models/store_message/store_message.dart';
 import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/collection_store.dart';
 import '../../data/remote/firestore_client.dart';
@@ -44,7 +46,6 @@ import '../map/cubit/my_marker_cubit.dart';
 import '../onboarding/widgets/app_button.dart';
 import '../map/cubit/select_group_cubit.dart';
 import '../sign_in/cubit/authen_cubit.dart';
-import '../sign_in/cubit/join_anonymous_cubit.dart';
 
 @RoutePage<bool>()
 class EditInfoScreen extends StatefulWidget {
@@ -203,9 +204,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
           context.popRoute(true);
         }
       } catch (error) {
-        // EasyLoading.dismiss();
         hideLoading();
-        // Fluttertoast.showToast(msg: context.l10n.error);
       }
     }
   }
@@ -227,71 +226,72 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
   }
 
   Widget _buildLogOutSetting() {
-    return BlocBuilder<JoinAnonymousCubit, bool>(
-      builder: (context, state) {
-        return state
-            ? const SizedBox.shrink()
-            : Container(
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          offset: const Offset(0, 2),
-                          blurRadius: 8.4,
-                          color: const Color(0xff9C747D).withOpacity(0.17))
-                    ],
-                    borderRadius: BorderRadius.circular(20.r),
-                    color: Colors.white),
-                child: Padding(
-                  padding: const EdgeInsets.all(17),
-                  child: GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return DeleteDialog(
-                              titleDialog: context.l10n.logOut,
-                              subTitleDialog: context.l10n.titleLogout,
-                              titleButton1: context.l10n.yes,
-                              titleButton2: context.l10n.no,
-                              onTapButton1: () {
-                                context.read<AuthCubit>().loggedOut();
-                                GoogleSignIn().disconnect();
-                                FirebaseAuth.instance
-                                    .signOut()
-                                    .then((value) async {
-                                  getIt<SelectGroupCubit>().update(null);
-                                  StoreUser? storeUser;
-                                  addNewUser(storeUser: storeUser);
-                                  await SharedPreferencesManager.setIsLogin(
-                                      false);
-                                  context.popRoute();
-                                  context.router
-                                      .replaceAll([const SignInRoute()]);
-                                });
-                              },
-                            );
-                          });
-                    },
-                    child: Row(
-                      children: [
-                        Assets.icons.login.icLogout.svg(height: 24.h),
-                        12.horizontalSpace,
-                        Expanded(
-                          child: Text(
-                            context.l10n.logOut,
-                            style: TextStyle(
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
+    return Global.instance.user?.uid == null
+        ? const SizedBox.shrink()
+        : Container(
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                  offset: const Offset(0, 2),
+                  blurRadius: 8.4,
+                  color: const Color(0xff9C747D).withOpacity(0.17))
+            ], borderRadius: BorderRadius.circular(20.r), color: Colors.white),
+            child: Padding(
+              padding: const EdgeInsets.all(17),
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return DeleteDialog(
+                          titleDialog: context.l10n.logOut,
+                          subTitleDialog: context.l10n.titleLogout,
+                          titleButton1: context.l10n.yes,
+                          titleButton2: context.l10n.no,
+                          onTapButton1: () {
+                            context.read<AuthCubit>().loggedOut();
+                            GoogleSignIn().disconnect();
+                            FirebaseAuth.instance.signOut().then((value) async {
+                              getIt<SelectGroupCubit>().update(null);
+                              StoreUser? storeUser;
+                              addNewUser(storeUser: storeUser);
+                              Global.instance.group ??= StoreGroup(
+                                idGroup: 24.randomString(),
+                                passCode:
+                                    6.randomUpperCaseString().toUpperCase(),
+                                groupName: '',
+                                avatarGroup: '',
+                                lastMessage: MessageModel(
+                                  content: '',
+                                  senderId: Global.instance.user!.code,
+                                  sentAt: DateTime.now().toIso8601String(),
+                                ),
+                              );
+                              await SharedPreferencesManager.setIsLogin(false);
+                              context.popRoute();
+                              context.router.replaceAll([const SignInRoute()]);
+                            });
+                          },
+                        );
+                      });
+                },
+                child: Row(
+                  children: [
+                    Assets.icons.login.icLogout.svg(height: 24.h),
+                    12.horizontalSpace,
+                    Expanded(
+                      child: Text(
+                        context.l10n.logOut,
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w400,
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              );
-      },
-    );
+              ),
+            ),
+          );
   }
 
   Widget _buildDeleteAccountSetting() {
@@ -316,8 +316,9 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                     titleButton2: context.l10n.cancel,
                     isTextRed: true,
                     onTapButton1: () {
+                      SharedPreferencesManager.setIsLogin(false);
                       getIt<SelectGroupCubit>().update(null);
-                      if (context.read<JoinAnonymousCubit>().state) {
+                      if (Global.instance.user?.uid == null) {
                         context.read<AuthCubit>().loggedOut();
                         CollectionStore.users
                             .doc(Global.instance.user?.code)

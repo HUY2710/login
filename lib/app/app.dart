@@ -14,7 +14,6 @@ import '../src/config/observer/route_observer.dart';
 import '../src/config/theme/light/light_theme.dart';
 import '../src/presentation/home/cubit/banner_collapse_cubit.dart';
 import '../src/presentation/sign_in/cubit/authen_cubit.dart';
-import '../src/presentation/sign_in/cubit/join_anonymous_cubit.dart';
 import '../src/services/activity_recognition_service.dart';
 import '../src/shared/enum/language.dart';
 import '../src/shared/widgets/dialog/no_internet_dialog.dart';
@@ -54,9 +53,6 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (context) => RateStatusCubit(),
-        ),
-        BlocProvider(
-          create: (context) => JoinAnonymousCubit(),
         ),
         BlocProvider(
           create: (context) => getIt<MyPurchaseManager>(),
