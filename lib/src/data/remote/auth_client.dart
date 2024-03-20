@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthConstant {
   static const String userName = 'userName';
@@ -71,8 +73,14 @@ class AuthClient {
     return null;
   }
 
-  Future<UserCredential> signInWithApple() async {
-    final appleProvider = AppleAuthProvider();
-    return FirebaseAuth.instance.signInWithProvider(appleProvider);
+  Future<AuthorizationCredentialAppleID?> signInWithApple() async {
+    final credential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+
+    return credential;
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../config/di/di.dart';
 import '../../../data/local/secure_storage_manager.dart';
@@ -100,42 +101,53 @@ class SignInCubit extends Cubit<SignInState> {
       emit(state.copyWith(
         signInStatus: SignInStatus.success,
       ));
-    } on FirebaseAuthException catch (error) {
-      if (error.code == 'account-exists-with-different-credential') {
-        // error.email is null, It was not the case in the past.
-        final AuthCredential pendingCredential = error.credential!;
-
-        await userCredential?.user?.linkWithCredential(pendingCredential);
-        print('OMG ${FirebaseAuth.instance.currentUser}');
-        emit(state.copyWith(
-          signInStatus: SignInStatus.success,
-        ));
-
-        // final List<String> signInMethods = await FirebaseAuth.instance
-        //     .fetchSignInMethodsForEmail(error.email!);
-        // print('OMG $signInMethods');
-        // if (signInMethods.first == 'facebook.com') {
-        //   final loginResult = await FacebookAuth.instance.login();
-        //   final accessToken = loginResult.accessToken!;
-        //   final facebookAuthCredential =
-        //       FacebookAuthProvider.credential(accessToken.token);
-        //   final UserCredential userCredential = await FirebaseAuth.instance
-        //       .signInWithCredential(facebookAuthCredential);
-        //   await userCredential.user?.linkWithCredential(pendingCredential);
-        //   print('OMG ${FirebaseAuth.instance.currentUser}');
-        //   emit(state.copyWith(
-        //     signInStatus: SignInStatus.success,
-        //   ));
-        // }
-      }
+    } catch(e){
+      print(e);
     }
+
+
+
+    // on FirebaseAuthException catch (error) {
+    //   if (error.code == 'account-exists-with-different-credential') {
+    //     // error.email is null, It was not the case in the past.
+    //     final AuthCredential pendingCredential = error.credential!;
+    //
+    //     await userCredential?.user?.linkWithCredential(pendingCredential);
+    //     print('OMG ${FirebaseAuth.instance.currentUser}');
+    //     emit(state.copyWith(
+    //       signInStatus: SignInStatus.success,
+    //     ));
+    //
+    //     // final List<String> signInMethods = await FirebaseAuth.instance
+    //     //     .fetchSignInMethodsForEmail(error.email!);
+    //     // print('OMG $signInMethods');
+    //     // if (signInMethods.first == 'facebook.com') {
+    //     //   final loginResult = await FacebookAuth.instance.login();
+    //     //   final accessToken = loginResult.accessToken!;
+    //     //   final facebookAuthCredential =
+    //     //       FacebookAuthProvider.credential(accessToken.token);
+    //     //   final UserCredential userCredential = await FirebaseAuth.instance
+    //     //       .signInWithCredential(facebookAuthCredential);
+    //     //   await userCredential.user?.linkWithCredential(pendingCredential);
+    //     //   print('OMG ${FirebaseAuth.instance.currentUser}');
+    //     //   emit(state.copyWith(
+    //     //     signInStatus: SignInStatus.success,
+    //     //   ));
+    //     // }
+    //   }
+    // }
   }
 
   Future<void> siginWithApple() async {
     emit(state.copyWith(signInStatus: SignInStatus.loading));
     try {
-      userCredential = await getIt<AuthClient>().signInWithApple();
-
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      print(credential);
       emit(state.copyWith(
         signInStatus: SignInStatus.success,
       ));
