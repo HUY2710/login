@@ -34,6 +34,9 @@ class LocationManager {
   }
 
   static Future<StoreLocation?> getLocation() async {
+    if (Global.instance.user?.code == null) {
+      return null;
+    }
     final DocumentSnapshot<Map<String, dynamic>> docLocation =
         await CollectionStore.locations.doc(Global.instance.user!.code).get();
     if (docLocation.data() == null) {
