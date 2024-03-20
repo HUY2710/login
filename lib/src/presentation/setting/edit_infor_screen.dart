@@ -43,7 +43,6 @@ import '../../shared/widgets/custom_appbar.dart';
 import '../../shared/widgets/dialog/delete_dialog.dart';
 import '../create/widgets/gender_switch.dart';
 import '../map/cubit/my_marker_cubit.dart';
-import '../onboarding/widgets/app_button.dart';
 import '../map/cubit/select_group_cubit.dart';
 import '../sign_in/cubit/authen_cubit.dart';
 
@@ -90,10 +89,11 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
       battery = 100;
     }
     storeUser = StoreUser(
-        code: newCode,
-        userName: '',
-        batteryLevel: battery,
-        avatarUrl: Assets.images.avatars.male.avatar1.path);
+      code: newCode,
+      userName: '',
+      batteryLevel: battery,
+      avatarUrl: Assets.images.avatars.male.avatar1.path,
+    );
     Global.instance.user = storeUser;
     await FirestoreClient.instance.createUser(storeUser).then((value) async {
       await SharedPreferencesManager.setString(
@@ -316,6 +316,17 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                     titleButton2: context.l10n.cancel,
                     isTextRed: true,
                     onTapButton1: () {
+                      Global.instance.group ??= StoreGroup(
+                        idGroup: 24.randomString(),
+                        passCode: 6.randomUpperCaseString().toUpperCase(),
+                        groupName: '',
+                        avatarGroup: '',
+                        lastMessage: MessageModel(
+                          content: '',
+                          senderId: Global.instance.user!.code,
+                          sentAt: DateTime.now().toIso8601String(),
+                        ),
+                      );
                       SharedPreferencesManager.setIsLogin(false);
                       getIt<SelectGroupCubit>().update(null);
                       if (Global.instance.user?.uid == null) {
@@ -344,7 +355,6 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                         StoreUser? storeUser;
 
                         addNewUser(storeUser: storeUser).then((value) {
-                          FirestoreClient.instance.updateUser({'uid': null});
                           context.popRoute();
                           context.router.replaceAll([const SignInRoute()]);
                         });
