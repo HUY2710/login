@@ -6,7 +6,6 @@ enum AdRemoteKeys {
   app_open_resume,
   native_language,
   native_language_setting,
-  inter_intro,
   banner_collapse_home,
   banner_all,
   inter_message,

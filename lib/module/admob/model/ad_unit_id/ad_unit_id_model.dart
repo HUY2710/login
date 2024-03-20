@@ -11,7 +11,6 @@ abstract class AdUnitIdModel with _$AdUnitIdModel {
     required String appopenResume,
     required String nativeLanguage,
     required String nativeLanguageSetting,
-    required String interIntro,
     required String bannerCollapseHome,
     required String bannerAll,
     required String interMessage,
