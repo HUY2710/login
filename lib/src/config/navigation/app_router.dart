@@ -70,6 +70,10 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: AddPlaceRoute.page),
         AutoRoute(page: SignInRoute.page),
         AutoRoute(page: SignInFromSettingRoute.page),
+        AutoRoute(page: SosRoute.page),
+        AutoRoute(page: AddPlaceRoute.page),
+        AutoRoute(page: ImageResultRoute.page),
+        AutoRoute(page: CameraRoute.page),
       ];
 
   AutoRoute routeWithFadeTransition(
