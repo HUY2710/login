@@ -20,6 +20,10 @@ class SosCubit extends HydratedCubit<bool> {
     emit(!state);
   }
 
+  void update(bool status) {
+    emit(status);
+  }
+
   Future<void> init() async {
     final bool status = Global.instance.user?.sosStore?.sos ?? false;
 

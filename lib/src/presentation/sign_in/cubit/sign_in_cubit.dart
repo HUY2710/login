@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../config/di/di.dart';
 import '../../../data/local/secure_storage_manager.dart';

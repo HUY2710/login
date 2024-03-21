@@ -354,6 +354,7 @@ class MapScreenState extends State<MapScreen>
                   _trackingMemberCubit.disposeMarkerSubscription();
                   _trackingMemberCubit.resetData();
                   _trackingPlacesCubit.resetData();
+                  getIt<UserMapVisibilityCubit>().updateList([]);
                 } else {
                   _trackingMemberCubit.initTrackingMember();
                   _trackingPlacesCubit.initTrackingPlaces();

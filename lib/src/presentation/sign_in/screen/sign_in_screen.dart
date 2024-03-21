@@ -11,15 +11,19 @@ import '../../../../app/cubit/loading_cubit.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
 import '../../../data/local/shared_preferences_manager.dart';
+import '../../../data/models/store_sos/store_sos.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../data/remote/collection_store.dart';
 import '../../../data/remote/firestore_client.dart';
+import '../../../data/remote/sos_manager.dart';
 import '../../../gen/gens.dart';
 import '../../../global/global.dart';
 import '../../../shared/enum/preference_keys.dart';
 import '../../../shared/extension/context_extension.dart';
+import '../../../shared/helpers/time_helper.dart';
 import '../../../shared/mixin/permission_mixin.dart';
 import '../../../shared/utils/toast_utils.dart';
+import '../../sos/cubit/sos_cubit.dart';
 import '../cubit/sign_in_cubit.dart';
 import '../widgets/item_sign_in.dart';
 
@@ -52,7 +56,28 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
 
       storeUser =
           storeUser.copyWith(uid: FirebaseAuth.instance.currentUser?.uid);
-      Global.instance.user = storeUser;
+      //status sos
+      final StoreSOS? sos = await SosManager.getSOS(storeUser.code);
+      //nếu user chưa có sos
+      if (sos == null) {
+        getIt<SosCubit>().update(false);
+      }
+      //nếu user có sos và xem nó có bật và limit hết hạn
+      if (sos != null && sos.sos) {
+        //nếu time hết hạn
+        if (sos.sosTimeLimit != null &&
+            TimerHelper.checkTimeDifferenceCurrent(
+                sos.sosTimeLimit ?? DateTime.now(),
+                argMinute: 10)) {
+          getIt<SosCubit>().update(false);
+        } else {
+          getIt<SosCubit>().update(true);
+        }
+      } else {
+        getIt<SosCubit>().update(false);
+      }
+
+      Global.instance.user = storeUser.copyWith(sosStore: sos);
 
       await SharedPreferencesManager.setString(
               PreferenceKeys.userCode.name, Global.instance.user!.code)
@@ -105,13 +130,14 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
     final authUser = FirebaseAuth.instance.currentUser;
     if (mounted) {
       if (Global.instance.user != null && authUser != null) {
-        getExitsUser(authUser.uid);
+        await getExitsUser(authUser.uid);
         return;
       }
     }
   }
 
   void signInAnonymous() {
+    getIt<SosCubit>().update(false);
     SharedPreferencesManager.saveIsLogin(true);
     AutoRouter.of(context).replaceAll([const CreateUsernameRoute()]);
     return;
@@ -169,13 +195,11 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
                 children: [
                   ItemSignIn(
                     onTap: () async {
-                      await SharedPreferencesManager.saveIsLogin(false);
                       signInCubit.signInWithFacebook();
                     },
                   ),
                   ItemSignIn(
                     onTap: () async {
-                      await SharedPreferencesManager.saveIsLogin(false);
                       signInCubit.signInWithGoogle();
                     },
                     logo: Assets.icons.login.icGoogle.path,
@@ -184,7 +208,6 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
                   if (Platform.isIOS)
                     ItemSignIn(
                       onTap: () async {
-                        await SharedPreferencesManager.saveIsLogin(false);
                         signInCubit.siginWithApple();
                       },
                       logo: Assets.icons.login.icApple.path,
