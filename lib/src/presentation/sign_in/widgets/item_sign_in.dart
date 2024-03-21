@@ -35,7 +35,12 @@ class ItemSignIn extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(logo ?? Assets.icons.login.icFacebook.path),
+              SvgPicture.asset(
+                logo ?? Assets.icons.login.icFacebook.path,
+                height: 36.h,
+                width: 36.w,
+                fit: BoxFit.cover,
+              ),
               8.horizontalSpace,
               Flexible(
                 child: Text(

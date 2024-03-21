@@ -2,12 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Used to start camera and take the photo around your location.</string>
-	<key>FlutterDeepLinkingEnabled</key>
-	<true/>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -28,34 +22,45 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>CFBundleURLTypes</key>
+	<!-- Facebook Sign-in Section -->
+	<key>FacebookAppID</key>
+	<string>1056733432084622</string>
+	<key>FacebookClientToken</key>
+	<string>CLIENT-TOKEN</string>
+	<key>FacebookDisplayName</key>
+	<string>Group sharing</string>
+	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>invite.com</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>fbAPP-ID</string>
-				<string>groupsharing</string>
-			</array>
-		</dict>
+  		<string>fbapi</string>
+  		<string>fb-messenger-share-api</string>
+	</array>
+	<!-- Google Sign-in Section -->
+	<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>fb1056733432084622</string>
+					<string>com.googleusercontent.apps.990967101864-il4747p2f2t3tp7u2mmnss262r2pvd4p</string>
+				</array>
+			</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>FacebookAppID</key>
-	<string>2176809139333271</string>
-	<key>FacebookClientToken</key>
-	<string>227dbeb6c4c8df544b2ff85429e82f7c</string>
-	<key>FacebookDisplayName</key>
-	<string>$(BUNDLE_NAME)</string>
-	<key>FirebaseAppDelegateProxyEnabled</key>
+	<key>FlutterDeepLinkingEnabled</key>
 	<true/>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-6172905758741898~7523343125</string>
+	<key>GIDClientID</key>
+	<string>990967101864-il4747p2f2t3tp7u2mmnss262r2pvd4p.apps.googleusercontent.com</string>
+	<key>GIDServerClientID</key>
+	<string>990967101864-il4747p2f2t3tp7u2mmnss262r2pvd4p.apps.googleusercontent.com</string>
 	<key>GMSServiceKey</key>
 	<string>$(MAP_KEY)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>comgooglemaps</string>
@@ -78,14 +83,22 @@
 	<true/>
 	<key>NSAdvertisingAttributionReportEndpoint</key>
 	<string>https://postbacks-app.com</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Used to scan QR Code for join group feature.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Used to get your location, and update for others to see you in real time.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Used to get your location, and update for others to see you in real time.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Used to get your location, and update for others to see you in real time.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Used to start camera and take the photo around your location.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Used to recognize user activity information.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Used to save QR Code and share for your group member.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to get QR Code photo when you need scaning and join new group.</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>This identifier will be used to deliver personalized ads to you.</string>
 	<key>SKAdNetworkItems</key>
@@ -707,11 +720,5 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>Used to scan QR Code for join group feature.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Used to save QR Code and share for your group member.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Used to get QR Code photo when you need scaning and join new group.</string>
 </dict>
 </plist>

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 class AuthConstant {
   static const String userName = 'userName';
@@ -71,8 +72,23 @@ class AuthClient {
     return null;
   }
 
-  Future<UserCredential> signInWithApple() async {
-    final appleProvider = AppleAuthProvider();
-    return FirebaseAuth.instance.signInWithProvider(appleProvider);
+  Future<UserCredential?> signInWithApple() async {
+    final AuthorizationResult result = await TheAppleSignIn.performRequests(
+        [AppleIdRequest(requestedScopes: [])]);
+
+    if (result.error != null) {
+      return null;
+    }
+    if (result.credential?.identityToken != null &&
+        result.credential?.authorizationCode != null) {
+      final AuthCredential credential = OAuthProvider('apple.com').credential(
+        idToken: String.fromCharCodes(
+            result.credential?.identityToken as Iterable<int>),
+        accessToken: String.fromCharCodes(
+            result.credential?.authorizationCode as Iterable<int>),
+      );
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    }
+    return null;
   }
 }

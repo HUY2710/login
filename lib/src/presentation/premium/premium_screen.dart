@@ -89,7 +89,8 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     if (weeklyProduct.isEmpty || monthlyProduct.isEmpty) {
                       return const SizedBox();
                     }
-
+                    debugPrint(
+                        "========)))))) ${monthlyProduct.first.productDetails}");
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       mainAxisSize: MainAxisSize.min,
