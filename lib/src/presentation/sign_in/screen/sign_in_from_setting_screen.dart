@@ -166,6 +166,7 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
                     },
                     logo: Assets.icons.login.icApple.path,
                     title: context.l10n.continueWithApple,
+                    haveShadow: true,
                   )
                 else
                   const SizedBox.shrink(),
