@@ -121,7 +121,7 @@ class MyPurchaseManager extends PurchasesManager {
       case productKeyWeekly:
         if (purchaseDate == null ||
             DateTime.now()
-                .isBefore(purchaseDate.add(const Duration(days: 3)))) {
+                .isBefore(purchaseDate.add(const Duration(days: 7)))) {
           updateStatus(productKeyWeekly, ProductStatus.purchased);
           hideAdOpenInstantly();
           SharedPreferencesManager.setIsWeeklyPremium(true);
