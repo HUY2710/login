@@ -30,7 +30,6 @@ import '../../shared/widgets/custom_appbar.dart';
 import '../../shared/widgets/main_switch.dart';
 import '../home/cubit/banner_collapse_cubit.dart';
 import '../home/widgets/dialog/action_dialog.dart';
-import '../sign_in/cubit/join_anonymous_cubit.dart';
 import 'widgets/custom_item_setting.dart';
 
 @RoutePage()
@@ -422,51 +421,47 @@ class _SettingScreenState extends State<SettingScreen>
   }
 
   Widget _buildSignInSetting() {
-    return BlocBuilder<JoinAnonymousCubit, bool>(
-      builder: (context, state) {
-        return state
-            ? GestureDetector(
-                onTap: () {
-                  context.pushRoute(const SignInFromSettingRoute());
-                },
-                child: Container(
-                  margin: EdgeInsets.only(top: 24.h),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20.r),
-                      boxShadow: [
-                        BoxShadow(
-                            offset: const Offset(0, 2),
-                            blurRadius: 8.4,
-                            color: const Color(0xff9C747D).withOpacity(0.17))
-                      ]),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            context.l10n.account,
-                            style: TextStyle(
-                                fontSize: 13.sp,
-                                fontWeight: FontWeight.w500,
-                                color: const Color(0xff343434)),
-                          ),
-                        ),
-                        Text(
-                          '${context.l10n.signIn}/ ${context.l10n.signUp}',
-                          style: TextStyle(
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w500,
-                              color: const Color(0xff8E52FF)),
-                        )
-                      ],
+    return Global.instance.user?.uid == null
+        ? GestureDetector(
+            onTap: () {
+              context.pushRoute(const SignInFromSettingRoute());
+            },
+            child: Container(
+              margin: EdgeInsets.only(top: 24.h),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.r),
+                  boxShadow: [
+                    BoxShadow(
+                        offset: const Offset(0, 2),
+                        blurRadius: 8.4,
+                        color: const Color(0xff9C747D).withOpacity(0.17))
+                  ]),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        context.l10n.account,
+                        style: TextStyle(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xff343434)),
+                      ),
                     ),
-                  ),
+                    Text(
+                      '${context.l10n.signIn}/ ${context.l10n.signUp}',
+                      style: TextStyle(
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xff8E52FF)),
+                    )
+                  ],
                 ),
-              )
-            : const SizedBox();
-      },
-    );
+              ),
+            ),
+          )
+        : const SizedBox();
   }
 }

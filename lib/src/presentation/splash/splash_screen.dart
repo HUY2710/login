@@ -47,8 +47,6 @@ import '../../shared/mixin/permission_mixin.dart';
 import '../../shared/widgets/loading/loading_indicator.dart';
 import '../chat/widgets/chat_detail/camera_screen.dart';
 import '../map/cubit/select_group_cubit.dart';
-import '../sign_in/cubit/authen_cubit.dart';
-import '../sign_in/cubit/authen_state.dart';
 import 'update_dialog.dart';
 
 @RoutePage()
@@ -203,10 +201,8 @@ class _SplashScreenState extends State<SplashScreen>
         await SharedPreferencesManager.getIsFirstLaunch();
     final bool isPermissionAllow = await checkAllPermission();
     final isPremium = getIt<MyPurchaseManager>().state.isPremium();
-    final isLoginMedia =
-        context.mounted && context.read<AuthCubit>().state == Authenticated();
 
-    final isLoginAnonymous = await SharedPreferencesManager.isLoginAnonymous();
+    final isLogin = await SharedPreferencesManager.isLogin();
     if (mounted) {
       if (isFirstLaunch) {
         AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
@@ -218,11 +214,11 @@ class _SplashScreenState extends State<SplashScreen>
           AutoRouter.of(context).replace(PermissionRoute(fromMapScreen: false));
           return;
         }
-        if (isLoginMedia || isLoginAnonymous) {
+        if (isLogin) {
           AutoRouter.of(context).replace(HomeRoute());
           return;
         }
-        AutoRouter.of(context).replace(const AuthLoginRoute());
+        AutoRouter.of(context).replace(const SignInRoute());
         return;
       }
       AutoRouter.of(context).replace(LanguageRoute(isFirst: true));
