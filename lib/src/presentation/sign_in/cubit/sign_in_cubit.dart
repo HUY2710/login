@@ -101,11 +101,9 @@ class SignInCubit extends Cubit<SignInState> {
       emit(state.copyWith(
         signInStatus: SignInStatus.success,
       ));
-    } catch(e){
+    } catch (e) {
       print(e);
     }
-
-
 
     // on FirebaseAuthException catch (error) {
     //   if (error.code == 'account-exists-with-different-credential') {
@@ -141,13 +139,7 @@ class SignInCubit extends Cubit<SignInState> {
   Future<void> siginWithApple() async {
     emit(state.copyWith(signInStatus: SignInStatus.loading));
     try {
-      final credential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-      );
-      print(credential);
+      await getIt<AuthClient>().signInWithApple();
       emit(state.copyWith(
         signInStatus: SignInStatus.success,
       ));

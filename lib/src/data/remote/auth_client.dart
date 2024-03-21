@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 class AuthConstant {
   static const String userName = 'userName';
@@ -73,14 +72,23 @@ class AuthClient {
     return null;
   }
 
-  Future<AuthorizationCredentialAppleID?> signInWithApple() async {
-    final credential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
+  Future<UserCredential?> signInWithApple() async {
+    final AuthorizationResult result = await TheAppleSignIn.performRequests(
+        [AppleIdRequest(requestedScopes: [])]);
 
-    return credential;
+    if (result.error != null) {
+      return null;
+    }
+    if (result.credential?.identityToken != null &&
+        result.credential?.authorizationCode != null) {
+      final AuthCredential credential = OAuthProvider('apple.com').credential(
+        idToken: String.fromCharCodes(
+            result.credential?.identityToken as Iterable<int>),
+        accessToken: String.fromCharCodes(
+            result.credential?.authorizationCode as Iterable<int>),
+      );
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    }
+    return null;
   }
 }
