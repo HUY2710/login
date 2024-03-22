@@ -77,7 +77,8 @@ class MembersBottomSheet extends StatelessWidget {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 12.r, vertical: 10.r),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.r),
+                                borderRadius: BorderRadius.circular(
+                                    AppConstants.widgetBorderRadius.r),
                                 gradient: gradientBackground,
                               ),
                               child: Text(

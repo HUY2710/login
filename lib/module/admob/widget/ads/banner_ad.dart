@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../../src/gen/colors.gen.dart';
 import '../../../../src/shared/widgets/my_placeholder.dart';
 
 class MyBannerAd extends StatelessWidget {
@@ -21,6 +22,12 @@ class MyBannerAd extends StatelessWidget {
       adId: id,
       isCollapsible: isCollapsible,
       loadingWidget: _buildLoadingAd(),
+      borderBanner: const Border(
+        top: BorderSide(
+          width: 2,
+          color: MyColors.primary,
+        ),
+      ),
     );
   }
 
