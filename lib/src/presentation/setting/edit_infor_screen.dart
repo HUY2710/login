@@ -255,7 +255,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                               getIt<SelectGroupCubit>().update(null);
                               StoreUser? storeUser;
                               addNewUser(storeUser: storeUser);
-                              Global.instance.group ??= StoreGroup(
+                              Global.instance.group = StoreGroup(
                                 idGroup: 24.randomString(),
                                 passCode:
                                     6.randomUpperCaseString().toUpperCase(),
@@ -317,7 +317,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                     titleButton2: context.l10n.cancel,
                     isTextRed: true,
                     onTapButton1: () {
-                      Global.instance.group ??= StoreGroup(
+                      Global.instance.group = StoreGroup(
                         idGroup: 24.randomString(),
                         passCode: 6.randomUpperCaseString().toUpperCase(),
                         groupName: '',
