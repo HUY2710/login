@@ -219,5 +219,9 @@
   "titleDelete": "¿Estás seguro de que quieres cerrar sesión? Tus información será eliminada",
   "yes": "Sí",
   "no": "No",
-  "titleLogout": "¿Estás seguro de que quieres cerrar sesión?"
+  "titleLogout": "¿Estás seguro de que quieres cerrar sesión?",
+  "subtitleSignInBlack1": "Esta cuenta ya ha sido creada anteriormente. Inicie sesión en su ",
+  "existingAccount": "cuenta existente ",
+  "subtitleSignInBlack2": "o restablezca todos los datos para ",
+  "createNew": "crear una nueva."
 }

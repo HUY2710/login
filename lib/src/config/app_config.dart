@@ -7,10 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../global/global.dart';
-import '../services/firebase_message_service.dart';
 import '../shared/mixin/system_ui_mixin.dart';
 import 'di/di.dart';
 

@@ -219,5 +219,9 @@
   "titleDelete": "Tem certeza de que deseja sair? Suas informações serão removidas",
   "yes": "Sim",
   "no": "Não",
-  "titleLogout": "Tem certeza de que deseja sair?"
+  "titleLogout": "Tem certeza de que deseja sair?",
+  "subtitleSignInBlack1": "Esta conta já foi criada anteriormente. Faça login na sua ",
+  "existingAccount": "conta existente ",
+  "subtitleSignInBlack2": "ou redefina todos os dados para ",
+  "createNew": "criar uma nova."
 }

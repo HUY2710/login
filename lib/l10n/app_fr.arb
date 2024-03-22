@@ -219,5 +219,9 @@
   "titleDelete": "Êtes-vous sûr de vouloir vous déconnecter ? Vos informations seront supprimées",
   "yes": "Oui",
   "no": "Non",
-  "titleLogout": "Êtes-vous sûr de vouloir vous déconnecter ?"
+  "titleLogout": "Êtes-vous sûr de vouloir vous déconnecter ?",
+  "subtitleSignInBlack1": "Ce compte a déjà été créé auparavant. Connectez-vous à votre ",
+  "existingAccount": "compte existant ",
+  "subtitleSignInBlack2": "ou réinitialisez toutes les données pour ",
+  "createNew": "en créer un nouveau."
 }

@@ -219,5 +219,9 @@
   "titleDelete": "로그아웃 하시겠습니까? 정보가 삭제됩니다",
   "yes": "예",
   "no": "아니요",
-  "titleLogout": "로그아웃 하시겠습니까?"
+  "titleLogout": "로그아웃 하시겠습니까?",
+  "subtitleSignInBlack1": "이 계정은 이미 이전에 생성되었습니다. 귀하의 ",
+  "existingAccount": "기존 계정 ",
+  "subtitleSignInBlack2": "으로 로그인하거나 모든 데이터를 재설정하여 ",
+  "createNew": "새로운 계정을 생성하십시오."
 }

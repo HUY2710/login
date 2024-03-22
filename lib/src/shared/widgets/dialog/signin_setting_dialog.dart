@@ -40,37 +40,43 @@ class SigninSettingDialog extends StatelessWidget {
                 color: const Color(0xff343434)),
           ),
           4.verticalSpace,
-          RichText(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: RichText(
               text: TextSpan(children: [
-            TextSpan(
-              text: context.l10n.subtitleSignInBlack1,
-              style: TextStyle(
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w400,
-                  color: const Color(0xff6C6C6C)),
+                TextSpan(
+                  text: context.l10n.subtitleSignInBlack1,
+                  style: TextStyle(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xff6C6C6C)),
+                ),
+                TextSpan(
+                  text: context.l10n.existingAccount,
+                  style: TextStyle(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xff8E52FF)),
+                ),
+                TextSpan(
+                  text: context.l10n.subtitleSignInBlack2,
+                  style: TextStyle(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xff6C6C6C)),
+                ),
+                TextSpan(
+                  text: context.l10n.createNew,
+                  style: TextStyle(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xff8E52FF)),
+                ),
+              ]),
+              textAlign: TextAlign.center,
+            
             ),
-            TextSpan(
-              text: context.l10n.existingAccount,
-              style: TextStyle(
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w400,
-                  color: const Color(0xff8E52FF)),
-            ),
-            TextSpan(
-              text: context.l10n.subtitleSignInBlack2,
-              style: TextStyle(
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w400,
-                  color: const Color(0xff6C6C6C)),
-            ),
-            TextSpan(
-              text: context.l10n.createNew,
-              style: TextStyle(
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w400,
-                  color: const Color(0xff8E52FF)),
-            ),
-          ])),
+          ),
           24.verticalSpace,
           Container(
             height: 1.h,
@@ -101,7 +107,7 @@ class SigninSettingDialog extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Text(
-                context.l10n.createNew,
+                context.l10n.createNew.capitalize(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 13.sp,
