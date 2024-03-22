@@ -223,7 +223,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
                 context.l10n.joinWithAnonymous,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
                     decoration: TextDecoration.underline,
