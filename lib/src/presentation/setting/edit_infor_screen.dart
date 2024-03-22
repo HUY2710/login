@@ -32,6 +32,7 @@ import '../../data/remote/collection_store.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/gens.dart';
 import '../../global/global.dart';
+import '../../shared/constants/app_constants.dart';
 import '../../shared/cubit/value_cubit.dart';
 import '../../shared/enum/gender_type.dart';
 import '../../shared/enum/preference_keys.dart';
@@ -234,7 +235,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                   offset: const Offset(0, 2),
                   blurRadius: 8.4,
                   color: const Color(0xff9C747D).withOpacity(0.17))
-            ], borderRadius: BorderRadius.circular(20.r), color: Colors.white),
+            ], borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r), color: Colors.white),
             child: Padding(
               padding: const EdgeInsets.all(17),
               child: GestureDetector(
@@ -301,7 +302,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
             offset: const Offset(0, 2),
             blurRadius: 8.4,
             color: const Color(0xff9C747D).withOpacity(0.17))
-      ], borderRadius: BorderRadius.circular(20.r), color: Colors.white),
+      ], borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r), color: Colors.white),
       child: Padding(
         padding: const EdgeInsets.all(17),
         child: GestureDetector(
@@ -446,7 +447,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
               36.verticalSpace,
               Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.r),
+                    borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
                     color: Colors.white,
                     border: const GradientBoxBorder(
                         gradient: LinearGradient(
