@@ -219,5 +219,9 @@
   "titleDelete": "Are you sure you want to log out? Your infomation will be removed",
   "yes": "Yes",
   "no": "No",
-  "titleLogout": "Are you sure you want to log out?"
+  "titleLogout": "Are you sure you want to log out?",
+  "subtitleSignInBlack1": "This account has been previously created.Sign in to your ",
+  "existingAccount": "existing account ",
+  "subtitleSignInBlack2": "or reset all data to ",
+  "createNew": "create a new one."
 }

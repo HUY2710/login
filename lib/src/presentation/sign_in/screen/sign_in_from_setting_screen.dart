@@ -21,6 +21,8 @@ import '../../../shared/extension/context_extension.dart';
 import '../../../shared/mixin/permission_mixin.dart';
 import '../../../shared/utils/toast_utils.dart';
 import '../../../shared/widgets/custom_appbar.dart';
+import '../../../shared/widgets/dialog/delete_dialog.dart';
+import '../../../shared/widgets/dialog/signin_setting_dialog.dart';
 import '../../map/cubit/select_group_cubit.dart';
 import '../cubit/sign_in_cubit.dart';
 import '../widgets/item_sign_in.dart';
@@ -56,25 +58,59 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
           .limit(1)
           .get();
       if (result.docs.isNotEmpty) {
+        // ignore: use_build_context_synchronously
         final QueryDocumentSnapshot<Map<String, dynamic>> document =
             result.docs.first;
         final StoreUser storeUser = StoreUser.fromJson(document.data());
-        Global.instance.user = storeUser;
-        await SharedPreferencesManager.setString(
-                PreferenceKeys.userCode.name, Global.instance.user!.code)
-            .then((value) async {
+        // ignore: use_build_context_synchronously
+        showDialog(
+            context: context,
+            builder: (context) => SigninSettingDialog(
+                  titleDialog: 'Notication',
+                  subTitleDialog:
+                      'Tài khoản này đã được đăng nhập. Bạn muốn dùng thông tin mới cho tài khoản này?',
+                  titleButton1: context.l10n.yes,
+                  titleButton2: context.l10n.no,
+                  onTapButton1: () async {
+                    CollectionStore.users
+                        .doc(storeUser.code)
+                        .delete()
+                        .then((value) async {
+                      await FirestoreClient.instance.updateUser({
+                        'uid': FirebaseAuth.instance.currentUser?.uid
+                      }).then((value) async {
+                        Global.instance.user = Global.instance.user?.copyWith(
+                            uid: FirebaseAuth.instance.currentUser?.uid);
+                        context.popRoute();
+                        context.router
+                            .replaceAll([PremiumRoute(fromStart: true)]);
+                        return;
+                      });
+                    });
+                  },
+                  onTapButton2: () async {
+                    Global.instance.user = storeUser;
+                    await SharedPreferencesManager.setString(
+                            PreferenceKeys.userCode.name,
+                            Global.instance.user!.code)
+                        .then((value) async {
+                      context.popRoute();
+                      context.router
+                          .replaceAll([PremiumRoute(fromStart: true)]);
+                    });
+                    return;
+                  },
+                ));
+      } else {
+        await FirestoreClient.instance
+            .updateUser({'uid': FirebaseAuth.instance.currentUser?.uid}).then(
+                (value) async {
+          Global.instance.user = Global.instance.user
+              ?.copyWith(uid: FirebaseAuth.instance.currentUser?.uid);
           context.router.replaceAll([PremiumRoute(fromStart: true)]);
+          return;
         });
-        return;
       }
-
-      await FirestoreClient.instance.updateUser(
-          {'uid': FirebaseAuth.instance.currentUser?.uid}).then((value) async {
-        Global.instance.user = Global.instance.user
-            ?.copyWith(uid: FirebaseAuth.instance.currentUser?.uid);
-        context.router.replaceAll([PremiumRoute(fromStart: true)]);
-        return;
-      });
     } catch (error) {}
   }
 
@@ -166,6 +202,7 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
                     },
                     logo: Assets.icons.login.icApple.path,
                     title: context.l10n.continueWithApple,
+                    haveShadow: true,
                   )
                 else
                   const SizedBox.shrink(),

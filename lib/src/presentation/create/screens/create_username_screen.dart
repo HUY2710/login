@@ -36,25 +36,9 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
 
   @override
   void initState() {
-    // final isLogin = await SharedPreferencesManager.getIsLogin();
-    // if (isLogin) {
-    //   userNameCtrl =
-    //       TextEditingController(text: Global.instance.user?.userName);
-    //   userNameCubit.update(Global.instance.user!.userName);
-    // } else {
-    //   if (Global.instance.user?.userName != '' &&
-    //       Global.instance.user?.userName != null) {
-    //     userNameCtrl =
-    //         TextEditingController(text: Global.instance.user?.userName);
-    //     userNameCubit.update(Global.instance.user!.userName);
-    //   } else {
-    //     userNameCtrl = TextEditingController(text: authUser?.displayName);
-    //     userNameCubit.update(authUser!.displayName!);
-    //   }
-    // }
     if (authUser != null) {
-      userNameCtrl = TextEditingController(text: authUser?.displayName);
-      userNameCubit.update(authUser!.displayName!);
+      userNameCtrl = TextEditingController(text: authUser?.displayName ?? '');
+      userNameCubit.update(authUser!.displayName ?? '');
     }
 
     super.initState();
