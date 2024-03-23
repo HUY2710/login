@@ -35,7 +35,6 @@ import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
-import '../../services/location_service.dart';
 import '../../services/my_background_service.dart';
 import '../../services/tracking_history_place_service.dart';
 import '../../shared/constants/app_constants.dart';
@@ -212,7 +211,7 @@ class _SplashScreenState extends State<SplashScreen>
 
       if (isPremium) {
         if (!isPermissionAllow) {
-          AutoRouter.of(context).replace(PermissionRoute(fromMapScreen: false));
+          AutoRouter.of(context).replace(const PermissionRoute());
           return;
         }
         if (isLogin) {

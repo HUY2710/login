@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../app/cubit/loading_cubit.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
+import '../../../config/remote_config.dart';
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_user/store_user.dart';
 import '../../../data/remote/collection_store.dart';
@@ -171,13 +172,14 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
                       color: const Color(0xff343434)),
                 ),
                 18.verticalSpace,
-                // ItemSignIn(
-                //   onTap: () async {
-                //     await SharedPreferencesManager.saveIsLogin(false);
-                //     signInCubit.signInWithFacebook();
-                //   },
-                //   haveShadow: true,
-                // ),
+                if (RemoteConfigManager.instance.showFB())
+                  ItemSignIn(
+                    onTap: () async {
+                      await SharedPreferencesManager.saveIsLogin(false);
+                      signInCubit.signInWithFacebook();
+                    },
+                    haveShadow: true,
+                  ),
                 ItemSignIn(
                   onTap: () async {
                     await SharedPreferencesManager.saveIsLogin(false);

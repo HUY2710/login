@@ -5,6 +5,7 @@ enum RemoteKeys {
   adOffVersion,
   showSkipIntroButton,
   multipleLoadIntroAd,
+  showFB
 }
 
 extension RemoteKeysExt on RemoteKeys {

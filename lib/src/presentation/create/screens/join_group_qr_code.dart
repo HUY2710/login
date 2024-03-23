@@ -7,7 +7,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart'
     as google_mlkit_barcode_scanning;
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../../config/di/di.dart';
@@ -82,11 +81,9 @@ class _JoinQrCodeScreenState extends State<JoinQrCodeScreen>
                 return;
               } else {
                 await SharedPreferencesManager.saveIsCreateInfoFistTime(false);
-                final bool statusLocation =
-                    await checkPermissionLocation().isGranted;
-                if (!statusLocation && context.mounted) {
-                  getIt<AppRouter>()
-                      .replaceAll([PermissionRoute(fromMapScreen: false)]);
+                final bool statusPermission = await checkAllPermission();
+                if (!statusPermission && context.mounted) {
+                  getIt<AppRouter>().replaceAll([const PermissionRoute()]);
                   return;
                 } else if (context.mounted) {
                   getIt<AppRouter>().replaceAll([HomeRoute()]);

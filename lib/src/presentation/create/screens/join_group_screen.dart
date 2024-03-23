@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../app/cubit/loading_cubit.dart';
@@ -126,11 +125,11 @@ class JoinGroupScreen extends StatelessWidget with PermissionMixin {
                                 '${context.l10n.joinGroup} ${context.l10n.success}');
                         await SharedPreferencesManager.saveIsCreateInfoFistTime(
                             false);
-                        final bool statusLocation =
-                            await checkPermissionLocation().isGranted;
-                        if (!statusLocation && context.mounted) {
-                          getIt<AppRouter>().replaceAll(
-                              [PermissionRoute(fromMapScreen: false)]);
+                        final bool statusPermission =
+                            await checkAllPermission();
+                        if (!statusPermission && context.mounted) {
+                          getIt<AppRouter>()
+                              .replaceAll([const PermissionRoute()]);
                           return;
                         } else if (context.mounted) {
                           getIt<AppRouter>().replaceAll([HomeRoute()]);
