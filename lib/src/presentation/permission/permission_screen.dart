@@ -20,8 +20,9 @@ import 'widget/permission_content.dart';
 
 @RoutePage()
 class PermissionScreen extends StatefulWidget {
-  const PermissionScreen({super.key, required this.fromMapScreen});
-  final bool fromMapScreen;
+  const PermissionScreen({
+    super.key,
+  });
 
   @override
   State<PermissionScreen> createState() => _PermissionScreenState();
@@ -138,9 +139,7 @@ class _PermissionScreenState extends State<PermissionScreen>
 
                       final showGuide =
                           await SharedPreferencesManager.getGuide();
-                      if (showGuide &&
-                          context.mounted &&
-                          !widget.fromMapScreen) {
+                      if (showGuide && context.mounted) {
                         context.router.replaceAll([const GuideRoute()]);
                         return;
                       } else if (context.mounted) {
@@ -153,11 +152,16 @@ class _PermissionScreenState extends State<PermissionScreen>
               },
             ),
             TextButton(
-              onPressed: () {
-                if (context.mounted && !widget.fromMapScreen) {
+              onPressed: () async {
+                //xem đến màn guide chưa
+                final showGuide = await SharedPreferencesManager.getGuide();
+                if (showGuide && context.mounted) {
                   context.replaceRoute(const GuideRoute());
-                } else if (context.mounted) {
-                  context.popRoute();
+                  return;
+                }
+                if (context.mounted) {
+                  context.replaceRoute(PremiumRoute(fromStart: true));
+                  return;
                 }
               },
               child: Text(context.l10n.later),

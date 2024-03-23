@@ -146,7 +146,7 @@ class _LanguageScreenState extends State<LanguageScreen> with PermissionMixin {
             //Nếu đã qua màn intro và đã tạo thông tin user rồi
             final bool allowPermission = await checkAllPermission();
             if (!allowPermission && context.mounted) {
-              context.replaceRoute(PermissionRoute(fromMapScreen: false));
+              context.replaceRoute(const PermissionRoute());
               return;
             }
 

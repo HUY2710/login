@@ -95,4 +95,8 @@ class RemoteConfigManager {
   bool isShowRate() {
     return _remoteConfig.getBool(AdRemoteKeys.show_rate.platformKey);
   }
+
+  bool showFB() {
+    return _remoteConfig.getBool(RemoteKeys.showFB.name);
+  }
 }
