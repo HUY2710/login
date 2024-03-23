@@ -65,11 +65,6 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
         showDialog(
             context: context,
             builder: (context) => SigninSettingDialog(
-                  titleDialog: 'Notication',
-                  subTitleDialog:
-                      'Tài khoản này đã được đăng nhập. Bạn muốn dùng thông tin mới cho tài khoản này?',
-                  titleButton1: context.l10n.yes,
-                  titleButton2: context.l10n.no,
                   onTapButton2: () async {
                     CollectionStore.users
                         .doc(storeUser.code)

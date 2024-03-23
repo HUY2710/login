@@ -6,18 +6,10 @@ import '../../extension/context_extension.dart';
 class SigninSettingDialog extends StatelessWidget {
   const SigninSettingDialog({
     super.key,
-    required this.titleDialog,
-    required this.subTitleDialog,
-    required this.titleButton1,
-    required this.titleButton2,
     this.onTapButton1,
     this.onTapButton2,
   });
-  final String titleDialog;
-  final String subTitleDialog;
 
-  final String titleButton1;
-  final String titleButton2;
   final Function()? onTapButton1;
   final Function()? onTapButton2;
 
@@ -74,7 +66,6 @@ class SigninSettingDialog extends StatelessWidget {
                 ),
               ]),
               textAlign: TextAlign.center,
-            
             ),
           ),
           24.verticalSpace,
