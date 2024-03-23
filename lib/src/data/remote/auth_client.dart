@@ -4,6 +4,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
+import '../../../flavors.dart';
+
 class AuthConstant {
   static const String userName = 'userName';
   static const String code = 'code';
@@ -32,8 +34,8 @@ class AuthClient {
   }
 
   Future<UserCredential?> signWithGoogle() async {
-    final GoogleSignIn googleSignIn =
-        GoogleSignIn(scopes: ['profile', 'email']);
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['profile', 'email'], forceCodeForRefreshToken: true);
 
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();
@@ -46,7 +48,6 @@ class AuthClient {
       );
       return auth.signInWithCredential(credential);
     } else {
-      GoogleSignIn().disconnect();
       return null;
     }
   }
@@ -74,7 +75,7 @@ class AuthClient {
 
   Future<UserCredential?> signInWithApple() async {
     final AuthorizationResult result = await TheAppleSignIn.performRequests(
-        [AppleIdRequest(requestedScopes: [])]);
+        [const AppleIdRequest(requestedScopes: [])]);
 
     if (result.error != null) {
       return null;
@@ -82,10 +83,9 @@ class AuthClient {
     if (result.credential?.identityToken != null &&
         result.credential?.authorizationCode != null) {
       final AuthCredential credential = OAuthProvider('apple.com').credential(
-        idToken: String.fromCharCodes(
-            result.credential?.identityToken as Iterable<int>),
-        accessToken: String.fromCharCodes(
-            result.credential?.authorizationCode as Iterable<int>),
+        idToken: String.fromCharCodes(result.credential!.identityToken!),
+        accessToken:
+            String.fromCharCodes(result.credential!.authorizationCode!),
       );
       return await FirebaseAuth.instance.signInWithCredential(credential);
     }

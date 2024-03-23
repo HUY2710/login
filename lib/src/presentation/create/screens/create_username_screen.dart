@@ -37,8 +37,8 @@ class _CreateUsernameScreenState extends State<CreateUsernameScreen> {
   @override
   void initState() {
     if (authUser != null) {
-      userNameCtrl = TextEditingController(text: authUser?.displayName ?? "");
-      userNameCubit.update(authUser!.displayName ?? "");
+      userNameCtrl = TextEditingController(text: authUser?.displayName ?? '');
+      userNameCubit.update(authUser!.displayName ?? '');
     }
 
     super.initState();

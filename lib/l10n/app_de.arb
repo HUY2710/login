@@ -219,5 +219,9 @@
   "titleDelete": "Sind Sie sicher, dass Sie sich abmelden möchten? Ihre Informationen werden gelöscht",
   "yes": "Ja",
   "no": "Nein",
-  "titleLogout": "Sind Sie sicher, dass Sie sich abmelden möchten?"
+  "titleLogout": "Sind Sie sicher, dass Sie sich abmelden möchten?",
+  "subtitleSignInBlack1": "Dieses Konto wurde bereits zuvor erstellt. Melden Sie sich bei Ihrem ",
+  "existingAccount": "bestehenden Konto ",
+  "subtitleSignInBlack2": "an oder setzen Sie alle Daten zurück, um ",
+  "createNew": "ein neues zu erstellen."
 }

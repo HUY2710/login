@@ -13,6 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
+import '../../../app/cubit/last_place_cubit.dart';
 import '../../../app/cubit/loading_cubit.dart';
 import '../../../app/cubit/native_ad_status_cubit.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
@@ -230,12 +231,16 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
     return Global.instance.user?.uid == null
         ? const SizedBox.shrink()
         : Container(
-            decoration: BoxDecoration(boxShadow: [
-              BoxShadow(
-                  offset: const Offset(0, 2),
-                  blurRadius: 8.4,
-                  color: const Color(0xff9C747D).withOpacity(0.17))
-            ], borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r), color: Colors.white),
+            decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      offset: const Offset(0, 2),
+                      blurRadius: 8.4,
+                      color: const Color(0xff9C747D).withOpacity(0.17))
+                ],
+                borderRadius:
+                    BorderRadius.circular(AppConstants.widgetBorderRadius.r),
+                color: Colors.white),
             child: Padding(
               padding: const EdgeInsets.all(17),
               child: GestureDetector(
@@ -248,10 +253,13 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                           subTitleDialog: context.l10n.titleLogout,
                           titleButton1: context.l10n.yes,
                           titleButton2: context.l10n.no,
-                          onTapButton1: () {
+                          onTapButton1: () async {
                             context.read<AuthCubit>().loggedOut();
-                            GoogleSignIn().disconnect();
-                            FirebaseAuth.instance.signOut().then((value) async {
+                            await GoogleSignIn().signOut();
+                            getIt<LastPlaceCubit>().update(null);
+                            await FirebaseAuth.instance
+                                .signOut()
+                                .then((value) async {
                               getIt<SelectGroupCubit>().update(null);
                               StoreUser? storeUser;
                               addNewUser(storeUser: storeUser);
@@ -297,12 +305,16 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
 
   Widget _buildDeleteAccountSetting() {
     return Container(
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-            offset: const Offset(0, 2),
-            blurRadius: 8.4,
-            color: const Color(0xff9C747D).withOpacity(0.17))
-      ], borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r), color: Colors.white),
+      decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+                offset: const Offset(0, 2),
+                blurRadius: 8.4,
+                color: const Color(0xff9C747D).withOpacity(0.17))
+          ],
+          borderRadius:
+              BorderRadius.circular(AppConstants.widgetBorderRadius.r),
+          color: Colors.white),
       child: Padding(
         padding: const EdgeInsets.all(17),
         child: GestureDetector(
@@ -316,7 +328,8 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                     titleButton1: context.l10n.delete,
                     titleButton2: context.l10n.cancel,
                     isTextRed: true,
-                    onTapButton1: () {
+                    onTapButton1: () async {
+                      getIt<LastPlaceCubit>().update(null);
                       Global.instance.group = StoreGroup(
                         idGroup: 24.randomString(),
                         passCode: 6.randomUpperCaseString().toUpperCase(),
@@ -342,20 +355,14 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                           context.router.replaceAll([const SignInRoute()]);
                         });
                       } else {
+                        await GoogleSignIn().signOut();
+                        await FirebaseAuth.instance.signOut();
                         context.read<AuthCubit>().loggedOut();
-                        if (FirebaseAuth.instance.currentUser?.providerData[0]
-                                .providerId ==
-                            'google.com') {
-                          GoogleSignIn().disconnect();
-                        }
-
                         CollectionStore.users
                             .doc(Global.instance.user?.code)
                             .delete();
-
                         StoreUser? storeUser;
-
-                        addNewUser(storeUser: storeUser).then((value) {
+                        addNewUser(storeUser: storeUser).then((value) async {
                           context.popRoute();
                           context.router.replaceAll([const SignInRoute()]);
                         });
@@ -447,7 +454,8 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
               36.verticalSpace,
               Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(AppConstants.widgetBorderRadius.r),
+                    borderRadius: BorderRadius.circular(
+                        AppConstants.widgetBorderRadius.r),
                     color: Colors.white,
                     border: const GradientBoxBorder(
                         gradient: LinearGradient(
