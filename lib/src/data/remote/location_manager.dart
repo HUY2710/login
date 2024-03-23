@@ -19,18 +19,17 @@ class LocationManager {
         );
   }
 
-  static Future<void> updateLocation(
-    Map<String, dynamic> fields,
-  ) async {
-    CollectionStore.locations
-        .doc(Global.instance.user!.code)
-        .update(fields)
-        .then((_) {
-      LoggerUtils.logInfo('Location Update: $fields');
-    }).catchError((error) {
-      LoggerUtils.logError('Failed to update location: $error');
-      throw Exception(error);
-    });
+  static Future<void> updateLocation(Map<String, dynamic> fields) async {
+    final userCode = Global.instance.user!.code;
+    final locationRef = CollectionStore.locations.doc(userCode);
+    final docSnapshot = await locationRef.get();
+    if (docSnapshot.exists) {
+      await locationRef.update(fields).then((_) {
+        LoggerUtils.logInfo('Location Update: $fields');
+      }).catchError((error) {
+        LoggerUtils.logError('Failed to update location: $error');
+      });
+    }
   }
 
   static Future<StoreLocation?> getLocation() async {

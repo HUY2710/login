@@ -143,6 +143,14 @@ class MapScreenState extends State<MapScreen>
       } else {
         checkAgain = await requestPermissionLocation();
       }
+      final statusNotify = await statusNotification();
+      if (!statusNotify) {
+        await requestNotification();
+      }
+      final statusActivity = await statusActivityRecognition();
+      if (!statusActivity) {
+        await requestActivityRecognition();
+      }
       if (checkAgain) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
           _init();
@@ -224,7 +232,8 @@ class MapScreenState extends State<MapScreen>
                 },
                 confirmText: context.l10n.goToSettings,
               );
-            }).then((value) => getIt<BannerCollapseAdCubit>().update(true));
+            });
+        getIt<BannerCollapseAdCubit>().update(true);
       }
     }
   }

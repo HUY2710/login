@@ -29,6 +29,15 @@ class PermissionScreen extends StatefulWidget {
 
 class _PermissionScreenState extends State<PermissionScreen>
     with WidgetsBindingObserver, PermissionMixin {
+  final ValueCubit<bool?> locationCubit = ValueCubit(null);
+  final ValueCubit<bool?> notifyCubit = ValueCubit(null);
+  final ValueCubit<bool?> motionCubit = ValueCubit(null);
+  final ValueCubit<int> typeRequest = ValueCubit(1);
+  //1 request location
+  //2 request notification
+  //3 request motion
+  final ValueCubit<bool> showNotify = ValueCubit(false);
+  final ValueCubit<bool> showMotion = ValueCubit(false);
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -48,44 +57,33 @@ class _PermissionScreenState extends State<PermissionScreen>
     super.dispose();
   }
 
+  Future<bool?> showGuidePermissionDialog(
+      VoidCallback voidCallback, BuildContext context) async {
+    final status = await showDialog(
+      context: context,
+      builder: (context) {
+        if (Platform.isIOS) {
+          return GuideFirstPermission(
+            title: context.l10n.pleaseShareLocation,
+            subTitle: context.l10n.permissionsGreateSub,
+            backgroundColor: Colors.white.withOpacity(0.95),
+            confirmTap: () => context.popRoute(true),
+            confirmText: context.l10n.continueText,
+          );
+        }
+        return GuideFirstPermissionAndroid(
+          title: context.l10n.pleaseShareLocation,
+          subTitle: context.l10n.subLocation,
+          confirmTap: () => context.popRoute(true),
+          confirmText: context.l10n.allow,
+        );
+      },
+    );
+    return status;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final ValueCubit<bool?> locationCubit = ValueCubit(null);
-    final ValueCubit<bool?> notifyCubit = ValueCubit(null);
-    final ValueCubit<bool?> motionCubit = ValueCubit(null);
-    final ValueCubit<int> typeRequest = ValueCubit(1);
-
-    final ValueCubit<bool> showNotify = ValueCubit(false);
-    final ValueCubit<bool> showMotion = ValueCubit(false);
-    //1 request location
-    //2 request notification
-    //3 request motion
-
-    Future<bool?> showGuidePermissionDialog(
-        VoidCallback voidCallback, BuildContext context) async {
-      final status = await showDialog(
-        context: context,
-        builder: (context) {
-          if (Platform.isIOS) {
-            return GuideFirstPermission(
-              title: context.l10n.pleaseShareLocation,
-              subTitle: context.l10n.permissionsGreateSub,
-              backgroundColor: Colors.white.withOpacity(0.95),
-              confirmTap: () => context.popRoute(true),
-              confirmText: context.l10n.continueText,
-            );
-          }
-          return GuideFirstPermissionAndroid(
-            title: context.l10n.pleaseShareLocation,
-            subTitle: context.l10n.subLocation,
-            confirmTap: () => context.popRoute(true),
-            confirmText: context.l10n.allow,
-          );
-        },
-      );
-      return status;
-    }
-
     return Scaffold(
       body: PermissionContent(
         locationCubit: locationCubit,

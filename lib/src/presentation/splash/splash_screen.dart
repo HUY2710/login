@@ -312,12 +312,6 @@ class _SplashScreenState extends State<SplashScreen>
       Global.instance.user = Global.instance.user?.copyWith(location: location);
       Global.instance.serverLocation = LatLng(location.lat, location.lng);
       Global.instance.currentLocation = LatLng(location.lat, location.lng);
-    } else {
-      final currentLocation =
-          await getIt<LocationService>().getCurrentLocation();
-      Global.instance.user = Global.instance.user?.copyWith(location: location);
-      Global.instance.serverLocation = currentLocation;
-      Global.instance.currentLocation = currentLocation;
     }
   }
 

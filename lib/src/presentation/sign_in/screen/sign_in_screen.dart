@@ -193,11 +193,11 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ItemSignIn(
-                    onTap: () async {
-                      signInCubit.signInWithFacebook();
-                    },
-                  ),
+                  // ItemSignIn(
+                  //   onTap: () async {
+                  //     signInCubit.signInWithFacebook();
+                  //   },
+                  // ),
                   ItemSignIn(
                     onTap: () async {
                       signInCubit.signInWithGoogle();
@@ -216,7 +216,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
                 ],
               ),
             ),
-            const Expanded(child: SizedBox()),
+            20.verticalSpace,
             GestureDetector(
               onTap: signInAnonymous,
               child: Text(

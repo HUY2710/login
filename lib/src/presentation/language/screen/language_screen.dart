@@ -139,8 +139,8 @@ class _LanguageScreenState extends State<LanguageScreen> with PermissionMixin {
           //nếu lần thứ 2 trở đi
           if (!isFirstLaunch) {
             //xem có đầy đủ thông tin của user chưa
-            if (Global.instance.user?.userName != '' && context.mounted) {
-              context.replaceRoute(PermissionRoute(fromMapScreen: false));
+            if (Global.instance.user?.userName == '' && context.mounted) {
+              context.replaceRoute(const CreateUsernameRoute());
               return;
             }
             //Nếu đã qua màn intro và đã tạo thông tin user rồi

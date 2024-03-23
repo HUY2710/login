@@ -57,7 +57,6 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
           .limit(1)
           .get();
       if (result.docs.isNotEmpty) {
-        // ignore: use_build_context_synchronously
         final QueryDocumentSnapshot<Map<String, dynamic>> document =
             result.docs.first;
         final StoreUser storeUser = StoreUser.fromJson(document.data());
@@ -172,13 +171,13 @@ class _SignInFromSettingScreenState extends State<SignInFromSettingScreen>
                       color: const Color(0xff343434)),
                 ),
                 18.verticalSpace,
-                ItemSignIn(
-                  onTap: () async {
-                    await SharedPreferencesManager.saveIsLogin(false);
-                    signInCubit.signInWithFacebook();
-                  },
-                  haveShadow: true,
-                ),
+                // ItemSignIn(
+                //   onTap: () async {
+                //     await SharedPreferencesManager.saveIsLogin(false);
+                //     signInCubit.signInWithFacebook();
+                //   },
+                //   haveShadow: true,
+                // ),
                 ItemSignIn(
                   onTap: () async {
                     await SharedPreferencesManager.saveIsLogin(false);
