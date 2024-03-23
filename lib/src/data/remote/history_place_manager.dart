@@ -32,18 +32,39 @@ class HistoryPlacesManager {
       {required String idGroup,
       required StoreHistoryPlace historyPlace,
       Map<String, dynamic>? field}) async {
-    CollectionStore.groups
-        .doc(idGroup)
+    final history = await FirebaseFirestore.instance
         .collection(CollectionStoreConstant.historyPlacesOfUser)
-        .doc(Global.instance.user?.code) //lấy iduser để làm doc
-        .collection(CollectionStoreConstant.historyPlaces)
-        .doc(historyPlace.idHistoryPlace)
-        .update(field ?? historyPlace.toJson())
-        .then((_) => LoggerUtils.logInfo('Update history place: $historyPlace'))
-        .catchError((error) {
-      LoggerUtils.logError('Failed to updateHistoryPlace : $error');
-      throw Exception(error);
-    });
+        .doc(Global.instance.user?.code)
+        .get();
+    if (history.exists) {
+      CollectionStore.groups
+          .doc(idGroup)
+          .collection(CollectionStoreConstant.historyPlacesOfUser)
+          .doc(Global.instance.user?.code) //lấy iduser để làm doc
+          .collection(CollectionStoreConstant.historyPlaces)
+          .doc(historyPlace.idHistoryPlace)
+          .update(field ?? historyPlace.toJson())
+          .then(
+              (_) => LoggerUtils.logInfo('Update history place: $historyPlace'))
+          .catchError((error) {
+        LoggerUtils.logError('Failed to updateHistoryPlace : $error');
+        throw Exception(error);
+      });
+    } else {
+      CollectionStore.groups
+          .doc(idGroup)
+          .collection(CollectionStoreConstant.historyPlacesOfUser)
+          .doc(Global.instance.user?.code) //lấy iduser để làm doc
+          .collection(CollectionStoreConstant.historyPlaces)
+          .doc(historyPlace.idHistoryPlace)
+          .set(historyPlace.toJson())
+          .then(
+              (_) => LoggerUtils.logInfo('Update history place: $historyPlace'))
+          .catchError((error) {
+        LoggerUtils.logError('Failed to updateHistoryPlace : $error');
+        throw Exception(error);
+      });
+    }
   }
 
   static Future<StoreHistoryPlace?> getDetailHistoryPlace(

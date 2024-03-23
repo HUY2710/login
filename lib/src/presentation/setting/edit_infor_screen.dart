@@ -13,6 +13,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
+import '../../../app/cubit/last_place_cubit.dart';
 import '../../../app/cubit/loading_cubit.dart';
 import '../../../app/cubit/native_ad_status_cubit.dart';
 import '../../../module/admob/app_ad_id_manager.dart';
@@ -255,6 +256,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                           onTapButton1: () async {
                             context.read<AuthCubit>().loggedOut();
                             await GoogleSignIn().signOut();
+                            getIt<LastPlaceCubit>().update(null);
                             await FirebaseAuth.instance
                                 .signOut()
                                 .then((value) async {
@@ -327,6 +329,7 @@ class _EditInfoScreenState extends State<EditInfoScreen> {
                     titleButton2: context.l10n.cancel,
                     isTextRed: true,
                     onTapButton1: () async {
+                      getIt<LastPlaceCubit>().update(null);
                       Global.instance.group = StoreGroup(
                         idGroup: 24.randomString(),
                         passCode: 6.randomUpperCaseString().toUpperCase(),
