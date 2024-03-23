@@ -13,6 +13,7 @@ import '../../../config/navigation/app_router.dart';
 import '../../../config/remote_config.dart';
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../gen/gens.dart';
+import '../../../global/global.dart';
 import '../../../shared/constants/app_constants.dart';
 import '../../../shared/cubit/value_cubit.dart';
 import '../../../shared/enum/language.dart';
@@ -137,6 +138,11 @@ class _LanguageScreenState extends State<LanguageScreen> with PermissionMixin {
 
           //nếu lần thứ 2 trở đi
           if (!isFirstLaunch) {
+            //xem có đầy đủ thông tin của user chưa
+            if (Global.instance.user?.userName != '' && context.mounted) {
+              context.replaceRoute(PermissionRoute(fromMapScreen: false));
+              return;
+            }
             //Nếu đã qua màn intro và đã tạo thông tin user rồi
             final bool allowPermission = await checkAllPermission();
             if (!allowPermission && context.mounted) {

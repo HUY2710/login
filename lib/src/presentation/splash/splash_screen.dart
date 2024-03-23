@@ -35,6 +35,7 @@ import '../../data/models/store_user/store_user.dart';
 import '../../data/remote/firestore_client.dart';
 import '../../gen/assets.gen.dart';
 import '../../global/global.dart';
+import '../../services/location_service.dart';
 import '../../services/my_background_service.dart';
 import '../../services/tracking_history_place_service.dart';
 import '../../shared/constants/app_constants.dart';
@@ -311,6 +312,12 @@ class _SplashScreenState extends State<SplashScreen>
       Global.instance.user = Global.instance.user?.copyWith(location: location);
       Global.instance.serverLocation = LatLng(location.lat, location.lng);
       Global.instance.currentLocation = LatLng(location.lat, location.lng);
+    } else {
+      final currentLocation =
+          await getIt<LocationService>().getCurrentLocation();
+      Global.instance.user = Global.instance.user?.copyWith(location: location);
+      Global.instance.serverLocation = currentLocation;
+      Global.instance.currentLocation = currentLocation;
     }
   }
 
