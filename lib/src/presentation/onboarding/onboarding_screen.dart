@@ -56,30 +56,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
         body: Column(
           children: [
             Expanded(
-              child: Stack(
-                children: [
-                  OnboardingCarousel(pageController: _pageController),
-                  Positioned(
-                      top: ScreenUtil().statusBarHeight,
-                      right: 10,
-                      child: TextButton(
-                        onPressed: navigateToNextScreen,
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.zero,
-                          ),
-                        ),
-                        child: Text(
-                          context.l10n.skip,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16.sp,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ))
-                ],
-              ),
+              child: OnboardingCarousel(pageController: _pageController),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),

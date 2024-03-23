@@ -79,7 +79,7 @@ class CreateUserAvatarScreen extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 36.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
         child: AppButton(
           title: context.l10n.save,
           onTap: () async {
