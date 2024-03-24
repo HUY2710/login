@@ -211,7 +211,7 @@ class _SplashScreenState extends State<SplashScreen>
 
       if (isPremium) {
         if (!isPermissionAllow) {
-          AutoRouter.of(context).replace(PermissionRoute(fromMapScreen: false));
+          AutoRouter.of(context).replace(const PermissionRoute());
           return;
         }
         if (isLogin) {

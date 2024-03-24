@@ -193,7 +193,8 @@ class _CreateEditGroupState extends State<CreateEditGroup> {
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 16.sp,
-                                color: groupNameController.text.isNotEmpty
+                                color: groupNameController.text.isNotEmpty &&
+                                        state != ''
                                     ? const Color(0xff8E52FF)
                                     : const Color(0xffABABAB),
                               ),

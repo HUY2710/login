@@ -30,6 +30,10 @@
   "onboarding_title_1": "Track the location of loved ones all the time",
   "onboarding_title_2": "Daily history of locations visited",
   "onboarding_title_3": "Simplify location sharing with loved ones",
+  "onboarding_title_4": "Effortlessly monitor by swiping through your list of friends",
+  "onboarding_title_5_1":"Instantly alert friends with an ",
+  "onboarding_title_5_2":"in emergencies for quick response ",
+  "sos": "SOS ",
   "chatGroupEmptyTitle": "Add members to send messages",
   "chatGroupEmptySub": "At least one more person is needed \nto start a chat",
   "addNewMember": "Add a new members",
@@ -219,5 +223,9 @@
   "titleDelete": "Are you sure you want to log out? Your infomation will be removed",
   "yes": "Yes",
   "no": "No",
-  "titleLogout": "Are you sure you want to log out?"
+  "titleLogout": "Are you sure you want to log out?",
+  "subtitleSignInBlack1": "This account has been previously created.Sign in to your ",
+  "existingAccount": "existing account ",
+  "subtitleSignInBlack2": "or reset all data to ",
+  "createNew": "create a new one."
 }

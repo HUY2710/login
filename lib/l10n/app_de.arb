@@ -40,6 +40,10 @@
   "onboarding_title_1": "Verfolgen Sie jederzeit den Standort Ihrer Lieben",
   "onboarding_title_2": "Tägliche Historie der besuchten Orte",
   "onboarding_title_3": "Vereinfachen Sie das Teilen des Standorts mit Ihren Lieben",
+  "onboarding_title_4": "Überwachen Sie ganz einfach, indem Sie durch Ihre Liste von Freunden wischen",
+  "onboarding_title_5_1": "Benachrichtigen Sie Freunde sofort mit einem ",
+  "onboarding_title_5_2": "im Notfall für eine schnelle Reaktion ",
+  "sos": "SOS ",
   "addNewMember": "Neues Mitglied hinzufügen",
   "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten!",
   "alreadyOwnError": "Es scheint, als hätten Sie diesen Artikel bereits gekauft. Bitte klicken Sie auf \"Wiederherstellen\", um fortzufahren.",
@@ -219,5 +223,9 @@
   "titleDelete": "Sind Sie sicher, dass Sie sich abmelden möchten? Ihre Informationen werden gelöscht",
   "yes": "Ja",
   "no": "Nein",
-  "titleLogout": "Sind Sie sicher, dass Sie sich abmelden möchten?"
+  "titleLogout": "Sind Sie sicher, dass Sie sich abmelden möchten?",
+  "subtitleSignInBlack1": "Dieses Konto wurde bereits zuvor erstellt. Melden Sie sich bei Ihrem ",
+  "existingAccount": "bestehenden Konto ",
+  "subtitleSignInBlack2": "an oder setzen Sie alle Daten zurück, um ",
+  "createNew": "ein neues zu erstellen."
 }

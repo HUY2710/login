@@ -30,6 +30,10 @@
   "onboarding_title_1": "Rastrea la ubicación de tus seres queridos todo el tiempo",
   "onboarding_title_2": "Historial diario de lugares visitados",
   "onboarding_title_3": "Simplifica compartir la ubicación con tus seres queridos",
+  "onboarding_title_4": "Supervise fácilmente deslizando por tu lista de amigos",
+  "onboarding_title_5_1": "Alerta instantáneamente a los amigos con un ",
+  "onboarding_title_5_2": "en caso de emergencia para obtener una respuesta rápida ",
+  "sos": "SOS ",
   "chatGroupEmptyTitle": "Agrega miembros para enviar mensajes",
   "chatGroupEmptySub": "Se necesita al menos una persona más \npara iniciar un chat",
   "addNewMember": "Agregar nuevos miembros",
@@ -219,5 +223,9 @@
   "titleDelete": "¿Estás seguro de que quieres cerrar sesión? Tus información será eliminada",
   "yes": "Sí",
   "no": "No",
-  "titleLogout": "¿Estás seguro de que quieres cerrar sesión?"
+  "titleLogout": "¿Estás seguro de que quieres cerrar sesión?",
+  "subtitleSignInBlack1": "Esta cuenta ya ha sido creada anteriormente. Inicie sesión en su ",
+  "existingAccount": "cuenta existente ",
+  "subtitleSignInBlack2": "o restablezca todos los datos para ",
+  "createNew": "crear una nueva."
 }

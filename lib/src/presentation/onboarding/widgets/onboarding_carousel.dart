@@ -28,6 +28,15 @@ class OnboardingCarousel extends StatelessWidget {
           image: Assets.images.onboarding.onboarding3,
           title: context.l10n.onboarding_title_3,
         ),
+        ContentPageWidget(
+          image: Assets.images.onboarding.onboarding4,
+          title: context.l10n.onboarding_title_4,
+        ),
+        ContentPageWidget(
+          image: Assets.images.onboarding.onboarding5,
+          title: context.l10n.onboarding_title_3,
+          isRichText: true,
+        ),
       ],
     );
   }

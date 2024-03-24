@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../app/cubit/loading_cubit.dart';
 import '../../../config/di/di.dart';
 import '../../../config/navigation/app_router.dart';
+import '../../../config/remote_config.dart';
 import '../../../data/local/shared_preferences_manager.dart';
 import '../../../data/models/store_sos/store_sos.dart';
 import '../../../data/models/store_user/store_user.dart';
@@ -84,7 +85,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
           .then((value) async {
         final bool statusLocation = await checkAllPermission();
         if (!statusLocation && context.mounted) {
-          context.replaceRoute(PermissionRoute(fromMapScreen: false));
+          context.replaceRoute(const PermissionRoute());
           return;
         } else if (context.mounted) {
           final showGuide = await SharedPreferencesManager.getGuide();
@@ -109,7 +110,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
     }
     final bool statusPermission = await checkAllPermission();
     if (!statusPermission && context.mounted) {
-      context.replaceRoute(PermissionRoute(fromMapScreen: false));
+      context.replaceRoute(const PermissionRoute());
       return;
     }
 
@@ -193,11 +194,12 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ItemSignIn(
-                    onTap: () async {
-                      signInCubit.signInWithFacebook();
-                    },
-                  ),
+                  if (RemoteConfigManager.instance.showFB())
+                    ItemSignIn(
+                      onTap: () async {
+                        signInCubit.signInWithFacebook();
+                      },
+                    ),
                   ItemSignIn(
                     onTap: () async {
                       signInCubit.signInWithGoogle();
@@ -216,7 +218,7 @@ class _SignInScreenState extends State<SignInScreen> with PermissionMixin {
                 ],
               ),
             ),
-            const Expanded(child: SizedBox()),
+            20.verticalSpace,
             GestureDetector(
               onTap: signInAnonymous,
               child: Text(

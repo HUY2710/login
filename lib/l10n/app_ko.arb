@@ -30,6 +30,10 @@
   "onboarding_title_1": "언제나 사랑하는 사람들의 위치를 추적하세요",
   "onboarding_title_2": "방문한 위치의 일일 기록",
   "onboarding_title_3": "사랑하는 사람들과의 위치 공유를 간편하게",
+  "onboarding_title_4": "친구 목록을 스와이프하여 쉽게 모니터링하세요",
+  "onboarding_title_5_1": "긴급 상황에서 친구들에게 즉시 경고 ",
+  "onboarding_title_5_2": "을 보내 빠른 대응 가능",
+  "sos": "SOS ",
   "chatGroupEmptyTitle": "메시지를 보낼 멤버 추가",
   "chatGroupEmptySub": "채팅을 시작하려면 최소한 한 명 이상의 사람이 필요합니다",
   "addNewMember": "새로운 멤버 추가",
@@ -219,5 +223,9 @@
   "titleDelete": "로그아웃 하시겠습니까? 정보가 삭제됩니다",
   "yes": "예",
   "no": "아니요",
-  "titleLogout": "로그아웃 하시겠습니까?"
+  "titleLogout": "로그아웃 하시겠습니까?",
+  "subtitleSignInBlack1": "이 계정은 이미 이전에 생성되었습니다. 귀하의 ",
+  "existingAccount": "기존 계정 ",
+  "subtitleSignInBlack2": "으로 로그인하거나 모든 데이터를 재설정하여 ",
+  "createNew": "새로운 계정을 생성하십시오."
 }

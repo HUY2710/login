@@ -40,6 +40,10 @@
   "onboarding_title_1": "Lacak lokasi orang yang Anda cintai setiap saat",
   "onboarding_title_2": "Histori harian lokasi yang dikunjungi",
   "onboarding_title_3": "Sederhanakan berbagi lokasi dengan orang yang Anda cintai",
+  "onboarding_title_4": "Monitor dengan mudah dengan menggeser daftar teman Anda",
+  "onboarding_title_5_1": "Segera memberi peringatan kepada teman dengan ",
+  "onboarding_title_5_2": "dalam keadaan darurat untuk respons cepat ",
+  "sos": "SOS ",
   "addNewMember": "Tambah Anggota Baru",
   "unexpectedError": "Terjadi kesalahan yang tidak terduga!",
   "alreadyOwnError": "Sepertinya Anda sudah memiliki item ini.\nSilakan klik \"Pulihkan pembelian\" untuk melanjutkan.",
@@ -219,5 +223,9 @@
   "titleDelete": "Apakah Anda yakin ingin keluar? Informasi Anda akan dihapus",
   "yes": "Ya",
   "no": "Tidak",
-  "titleLogout": "Apakah Anda yakin ingin keluar?"
+  "titleLogout": "Apakah Anda yakin ingin keluar?",
+  "subtitleSignInBlack1": "Akun ini telah dibuat sebelumnya. Masuk ke ",
+  "existingAccount": "akun yang sudah ada ",
+  "subtitleSignInBlack2": "atau reset semua data untuk ",
+  "createNew": "membuat yang baru."
 }

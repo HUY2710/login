@@ -196,7 +196,7 @@ class _ChatScreenState extends State<ChatScreen> {
         default:
           return (group.storeUser?.code == userCode)
               ? '${context.l10n.you} ${context.l10n.createdGroup}'
-              : '$userName ${context.l10n.createGroup}';
+              : '$userName ${context.l10n.createdGroup}';
       }
     } else {
       return (group.storeUser?.code == userCode)

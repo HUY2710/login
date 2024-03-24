@@ -27,7 +27,6 @@ class GroupItem extends StatefulWidget {
 }
 
 class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
-
   @override
   Widget build(BuildContext context) {
     return CustomInkWell(
@@ -57,12 +56,15 @@ class _GroupItemState extends State<GroupItem> with AutoRouteAwareStateMixin {
                   4.verticalSpace,
                   Row(
                     children: [
-                      Text(
-                        widget.groupName,
-                        style: TextStyle(
-                            color: MyColors.black34,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w500),
+                      Expanded(
+                        child: Text(
+                          widget.groupName,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: MyColors.black34,
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ),
                       6.horizontalSpace,
                       if (widget.seen)

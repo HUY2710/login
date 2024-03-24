@@ -9,3 +9,10 @@ extension ContextExtension on BuildContext {
       Theme.of(this).inputDecorationTheme;
   Color get primary => Theme.of(this).primaryColor;
 }
+
+extension StringExtensions on String {
+  String capitalize() {
+    // ignore: prefer_single_quotes
+    return "${this[0].toUpperCase()}${substring(1)}";
+  }
+}

@@ -12,7 +12,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../config/di/di.dart';
-import '../../config/navigation/app_router.dart';
 import '../../data/models/store_group/store_group.dart';
 import '../../data/models/store_location/store_location.dart';
 import '../../data/models/store_place/store_place.dart';
@@ -126,11 +125,6 @@ class MapScreenState extends State<MapScreen>
     }
   }
 
-  // move đến màn permission nếu chưa cấp phép
-  Future<void> navigateToPermission() async {
-    await context.pushRoute(PermissionRoute(fromMapScreen: true));
-  }
-
   Future<void> _initStart() async {
     getIt<BannerCollapseAdCubit>().update(false);
     final PermissionStatus statusLocation = await checkPermissionLocation();
@@ -164,6 +158,14 @@ class MapScreenState extends State<MapScreen>
 
   Future<void> _init() async {
     if (!_isInit) {
+      final statusNotify = await statusNotification();
+      if (!statusNotify) {
+        await requestNotification();
+      }
+      final statusActivity = await statusActivityRecognition();
+      if (!statusActivity) {
+        await requestActivityRecognition();
+      }
       _listenLocation();
       _isInit = true;
     }
@@ -224,7 +226,8 @@ class MapScreenState extends State<MapScreen>
                 },
                 confirmText: context.l10n.goToSettings,
               );
-            }).then((value) => getIt<BannerCollapseAdCubit>().update(true));
+            });
+        getIt<BannerCollapseAdCubit>().update(true);
       }
     }
   }

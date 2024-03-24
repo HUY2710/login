@@ -28,7 +28,7 @@ class _ActionRowState extends State<ActionRow> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: buildIndicator(
               context,
-              3,
+              5,
               currentIndex,
             ),
           ),
@@ -36,7 +36,7 @@ class _ActionRowState extends State<ActionRow> {
           AppButton(
             title: context.l10n.continueText,
             onTap: () {
-              if (currentIndex < 2) {
+              if (currentIndex < 4) {
                 _pressNextButton(currentIndex);
               } else {
                 widget.onStartedTap();
@@ -50,9 +50,9 @@ class _ActionRowState extends State<ActionRow> {
   }
 
   void _pressNextButton(int currentIndex) {
-    if (currentIndex < 2) {
+    if (currentIndex < 4) {
       context.read<ValueCubit<int>>().update(currentIndex + 1);
-      if (currentIndex < 3) {
+      if (currentIndex < 5) {
         widget._pageController.nextPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeIn,
